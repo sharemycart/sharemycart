@@ -1,6 +1,6 @@
 # Bring-it-along
 
-> Everybody not willing to even think about Corona / Sars-Cov-2 / Covid 19. Should skip this message. Everybody willing to contribute software to help might want to continue reading.
+> Everybody not willing to even think about Corona / Sars-Cov-2 / Covid 19. Should skip this project. Everybody willing to contribute software to help might want to continue reading.
 
 tl;dr: Let's build an app for collaborative neigbourhood groceries shopping.
 
@@ -16,5 +16,9 @@ It's really a simple process which is a (small) solution to a universal problem 
 
 ## Implementation
 
-I'm thinking of implementing this in JAM-stack with OpenFaaS Backend.
-I'll probably pick `node-express` since it's easiest to contribute to.
+Thee are sketches with respect to [ui](./src/ui/Readme.md) and [backend technology](./src/backend/Readme.md).
+
+## Current state
+
+This project is in a very early stage. It's 2020, March 18 and Sars-Cov-2 is spreading like crazy in Europe.
+Though it sounds a bit miniscule (and maybe even rediculous compared to other initiatives like [3D-printing respirator valves for those already fighting death](https://www.fastcompany.com/90477940/these-good-samaritans-with-a-3d-printer-are-saving-lives-by-making-new-respirator-valves-for-free), but it's something- And it's something I can do.
