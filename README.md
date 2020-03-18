@@ -1,7 +1,5 @@
 # Bring-it-along
 
-A webapp for collaboratively buying groceries
-
 > Everybody not willing to even think about Corona / Sars-Cov-2 / Covid 19. Should skip this message. Everybody willing to contribute software to help might want to continue reading.
 
 tl;dr: Let's build an app for collaborative neigbourhood groceries shopping.
