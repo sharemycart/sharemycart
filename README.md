@@ -21,4 +21,10 @@ Thee are sketches with respect to [ui](./src/ui/Readme.md) and [backend technolo
 ## Current state
 
 This project is in a very early stage. It's 2020, March 18 and Sars-Cov-2 is spreading like crazy in Europe.
-Though it sounds a bit miniscule (and maybe even rediculous compared to other initiatives like [3D-printing respirator valves for those already fighting death](https://www.fastcompany.com/90477940/these-good-samaritans-with-a-3d-printer-are-saving-lives-by-making-new-respirator-valves-for-free), but it's something- And it's something I can do.
+Though it sounds a bit miniscule (and maybe even rediculous compared to other initiatives like [3D-printing respirator valves for those already fighting death](https://www.fastcompany.com/90477940/these-good-samaritans-with-a-3d-printer-are-saving-lives-by-making-new-respirator-valves-for-free), but it's something -- And it's something I can do.
+
+## How to contribute?
+
+So you really would like to join? Awesome!
+Have a look at the [issues](https://github.com/mrsimpson/collaborative-shopping/issues), best start with the [epics](https://github.com/mrsimpson/collaborative-shopping/issues?q=is%3Aopen+is%3Aissue+label%3Aepic).
+Then, you can get in tough with the very new team on [a channel on the open Rocket.Chat server](https://open.rocket.chat/channel/collaborative-shopping-app)
