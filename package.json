@@ -1,0 +1,27 @@
+{
+  "name": "sharemycart",
+  "version": "0.0.1",
+  "description": "Stay safe. Stay home. I'll bring your groceries along as I get mine",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"None. This package.json is only for providing scripts\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrsimpson/ShareMyCart.git"
+  },
+  "keywords": [
+    "coronavirus",
+    "containment",
+    "shopping list",
+    "social"
+  ],
+  "author": "Oliver Jägle",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mrsimpson/ShareMyCart/issues"
+  },
+  "homepage": "https://open.rocket.chat/channel/share-my-cart"
+}
