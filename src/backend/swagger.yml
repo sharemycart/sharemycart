@@ -24,7 +24,7 @@ tags:
   description: Create, Retrieve, Update and Delete operations on shopping list items
 
 paths:
-  /auth/register:
+  /accounts:
     post:
       tags:
       - authentication
@@ -37,42 +37,16 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Registration'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Login'
       responses:
         201:
           description: user created and a json object returned with created user
-        200:
+        400:
           description: an error occurred, a json object is returned with an "error" field with an error message
   
-  /auth/login:
-    post:
-      tags:
-      - authentication
-      summary: log user into the system
-      operationId: userLogin
-      description: Allows a legitimate user access privileged info
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              schema:
-              $ref: '#/components/schemas/Login'
-      responses:
-        200:
-          description: With json object that has "success" and "token" attributes signify a successful login request. With json object that has "error" attribute signifies a failed login request
-        
-  /auth/logout:
-    post:
-      tags:
-      - authentication
-      summary: invalidate a users token
-      operationId: logoutUser
-      description: Ensures the token used can no longer be used
-      responses:
-        200:
-          description: user token invalidated
-  
-  /auth/reset-password:
+  /accounts/verifications:
     post:
       tags:
       - authentication
@@ -80,17 +54,19 @@ paths:
       operationId: emailVerification
       description: Begins passowd reset procedure in case a user has forgotten their password
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/EmailVerify'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EmailVerify'
       responses:
         200:
-          description: an email has been sent to the provided email address with t alink that will allow them update their password
-        404:
-          description: something went wrong, a json object is sent back with an error message
-  
-  /auth/reset-password/{token}:
+          description: an email has been sent to the provided email address with a link that will allow them to update their password, if the email is known. If it is not, no email is sent, but the result of the request stays the same to prevent finding out which users are known.
+
+  /accounts/verifications/{token}:
     post:
       tags:
       - authentication
@@ -108,6 +84,9 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PasswordReset'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordReset'
       responses:
         200:
           description: with a "success" key signifies a successful password reset and an "error" key signifies a failed password reset
@@ -116,6 +95,38 @@ paths:
         401:
           description: token has been used past the 10 minute expiry time
           
+  /sessions:
+    post:
+      tags:
+      - authentication
+      summary: log user into the system
+      operationId: userLogin
+      description: Allows a legitimate user access privileged info
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Login'
+      responses:
+        200:
+          description: With json object that has "success" and "token" attributes signify a successful login request.
+        401:
+          description: With json object that has "error" attribute signifies a failed login request
+        
+    delete:
+      tags:
+      - authentication
+      summary: invalidate a users token
+      operationId: logoutUser
+      description: Ensures the token used can no longer be used
+      responses:
+        200:
+          description: user token invalidated
+  
   /lists:
     get:
       tags:
@@ -170,8 +181,17 @@ paths:
         in: path
         required: true
         schema:
-          type: integer
+          type: string
+          format: uuid
         description: The id of the shopping list to retrieve
+      - name: $expand
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+            - items
+
       responses:
         200:
           description: successful retrieval
@@ -179,12 +199,12 @@ paths:
             application/json:
               schema: 
                 $ref: '#/components/schemas/ShoppingList'
+        400:
+          description: id in url is not a valid identifier
         404:
           description: the id provided does not belong to any existing list
         401:
           description: unauthorized access to the resources, you need to log in
-        500:
-          description: id in url is not a valid identifier (not a valid integer)
     put:
       tags:
       - shopping list
@@ -197,7 +217,8 @@ paths:
         in: path
         required: true
         schema:
-          type: integer
+          type: string
+          format: uuid
         description: The id of the shopping list to update
       requestBody:
         content:
@@ -216,7 +237,7 @@ paths:
         401:
           description: unauthorized access to the resources, you need to log in
         500:
-          description: id in url is not a valid identifier (not a valid integer)
+          description: id in url is not a valid identifier
     delete:
       tags:
       - shopping list
@@ -229,7 +250,8 @@ paths:
         in: path
         required: true
         schema:
-          type: integer
+          type: string
+          format: uuid
         description: The id of the shopping list to delete
       responses:
         200:
@@ -242,7 +264,7 @@ paths:
           description: the id provided does not belong to any existing list
         401:
           description: unauthorized access to the resources, you need to log in
-        500:
+        400:
           description: id in url is not a valid identifier (not a valid integer)
           
   /lists/{id}/items:
@@ -257,7 +279,8 @@ paths:
       - in: path
         name: id
         schema:
-          type: integer
+          type: string
+          format: uuid
         required: true
         description: The id of the shopping list to add an item to
       requestBody:
@@ -278,8 +301,8 @@ paths:
           description: the id provided does not belong to any existing list
         401:
           description: unauthorized access to the resources, you need to log in
-        500:
-          description: id in url is not a valid identifier (not a valid integer)
+        400:
+          description: id in url is not a valid identifier
   
   /lists/{id}/items/{item_id}:
     put:
@@ -293,13 +316,15 @@ paths:
       - in: path
         name: id
         schema: 
-          type: integer
+          type: string
+          format: uuid
         required: true
         description: The id of the shopping list the item belongs to
       - in: path
         name: item_id
         schema: 
-          type: integer
+          type: string
+          format: uuid
         required: true
         description: The id of the shopping list item to update
       requestBody:
@@ -331,13 +356,15 @@ paths:
       - in: path
         name: id
         schema:
-          type: integer
+          type: string
+          format: uuid
         required: true
         description: The id of the shopping list the item belongs to
       - in: path
         name: item_id
         schema:
-          type: integer
+          type: string
+          format: uuid
         required: true
         description: The id of the shopping list item to delete
       responses:
@@ -353,6 +380,7 @@ paths:
           description: unauthorized access to the resources, you need to log in
         500:
           description: id or item_id in url is not a valid identifier for a list or list item respectively (not a valid integer)
+
 components:
   securitySchemes:
     bearer-auth:
@@ -416,21 +444,44 @@ components:
       type: object
       required:
       - name
+      - type
       properties:
+        id:
+          type: string
+          format: uuid
         name:
           type: string
           example: Baby Stuff
-          
+        type:
+          type: string
+          enum: [need, shopping]
+          default: need
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShoppingListItem'
+
     ShoppingListItem:
       type: object
       required:
       - name
       - amount
       properties:
+        id:
+          type: string
+          format: uuid
         name:
           type: string
           example: Pampers
         amount:
-          type: integer
-          format: int32
+          type: number
+          format: float
           example: 2000
+        unit:
+          type: string
+          enum:
+            - pc
+            - l
+            - ml
+            - kg
+            - g
