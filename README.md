@@ -27,6 +27,7 @@ Though it sounds a bit miniscule (and maybe even rediculous compared to other in
 
 So you really would like to join? Awesome!
 Have a look at the [issues](https://github.com/mrsimpson/collaborative-shopping/issues), best start with the [epics](https://github.com/mrsimpson/collaborative-shopping/issues?q=is%3Aopen+is%3Aissue+label%3Aepic).
+There is also an [issue board](https://github.com/mrsimpson/collaborative-shopping/projects/1) outlining the next todos
 Then, you can get in tough with the very new team on [a channel on the open Rocket.Chat server](https://open.rocket.chat/channel/collaborative-shopping-app)
 
 *You are not a coder but still want to help*
