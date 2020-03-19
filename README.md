@@ -1,8 +1,6 @@
-# Bring-it-along
+# Home Service in my contained neighborhood.
 
-> Everybody not willing to even think about Corona / Sars-Cov-2 / Covid 19. Should skip this project. Everybody willing to contribute software to help might want to continue reading.
-
-tl;dr: Let's build an app for collaborative neigbourhood groceries shopping.
+> tl;dr: Let's build an app for collaborative neigbourhood groceries shopping, so we can stay contained and help not spread viruses
 
 ## Motivation
 
@@ -14,19 +12,20 @@ It would be easy for me to add another item for my neighbours if I only knew the
 
 It's really a simple process which is a (small) solution to a universal problem worldwide.
 
-## Implementation
-
-Thee are sketches with respect to [ui](./src/ui/Readme.md) and [backend technology](./src/backend/Readme.md).
-
 ## Current state
 
 This project is in a very early stage. It's 2020, March 18 and Sars-Cov-2 is spreading like crazy in Europe.
-Though it sounds a bit miniscule (and maybe even rediculous compared to other initiatives like [3D-printing respirator valves for those already fighting death](https://www.fastcompany.com/90477940/these-good-samaritans-with-a-3d-printer-are-saving-lives-by-making-new-respirator-valves-for-free), but it's something -- And it's something I can do.
+Though this project sounds a bit miniscule (and maybe even ridiculous compared to other initiatives like [3D-printing respirator valves for those already fighting death](https://www.fastcompany.com/90477940/these-good-samaritans-with-a-3d-printer-are-saving-lives-by-making-new-respirator-valves-for-free) ), but it's something for the better. And it's something I can do.
 
+## Implementation
+
+Thee are sketches with respect to [ui](./src/ui/Readme.md) and [backend technology](./src/backend/Readme.md).
+Everything is still very open, so feel free to bring in your ideas!
 ## How to contribute?
 
 So you really would like to join? Awesome!
 Have a look at the [issues](https://github.com/mrsimpson/collaborative-shopping/issues), best start with the [epics](https://github.com/mrsimpson/collaborative-shopping/issues?q=is%3Aopen+is%3Aissue+label%3Aepic).
+There is also an [issue board](https://github.com/mrsimpson/collaborative-shopping/projects/1) outlining the next todos
 Then, you can get in tough with the very new team on [a channel on the open Rocket.Chat server](https://open.rocket.chat/channel/collaborative-shopping-app)
 
 *You are not a coder but still want to help*
