@@ -3,6 +3,7 @@
 ## Paradigms
 
 JAM-stack
+Mobile enabled, ideally PWA capable framework for offline usage (=> probably React, Vue)
 
 ## Tooling
 
