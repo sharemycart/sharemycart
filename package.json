@@ -1,7 +1,7 @@
 {
   "name": "sharemycart",
   "version": "0.0.1",
-  "description": "Stay safe. Stay home. I'll bring your groceries along as I get mine",
+  "description": "Stay home. Stay safe. I'll bring your groceries along as I get mine",
   "directories": {
     "doc": "docs"
   },
