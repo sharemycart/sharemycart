@@ -6,6 +6,7 @@
     "doc": "docs"
   },
   "scripts": {
+    "mock-backend": "prism mock -p 8082 -d src/backend/swagger.yml",
     "test": "echo \"None. This package.json is only for providing scripts\" && exit 1"
   },
   "repository": {
@@ -23,5 +24,8 @@
   "bugs": {
     "url": "https://github.com/mrsimpson/ShareMyCart/issues"
   },
-  "homepage": "https://open.rocket.chat/channel/share-my-cart"
+  "homepage": "https://open.rocket.chat/channel/share-my-cart",
+  "devDependencies": {
+    "@stoplight/prism-cli": "^3.3.2"
+  }
 }
