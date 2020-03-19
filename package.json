@@ -7,6 +7,7 @@
   },
   "scripts": {
     "mock-backend": "prism mock -p 8082 -d src/backend/swagger.yml",
+    "mock-backend-dynamic": "prism mock -d -p 8082 -d src/backend/swagger.yml",
     "test": "echo \"None. This package.json is only for providing scripts\" && exit 1"
   },
   "repository": {
