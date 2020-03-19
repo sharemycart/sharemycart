@@ -1,0 +1,436 @@
+openapi: 3.0.0
+info:
+  description: | 
+    Collaboratively go shopping. Create shopping lists, share them with others, bring their needs along
+  version: 1.0.0
+  title: Collaborative shopping
+  contact:
+    email: collaborative-shopping@beimir.net
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+# tags are used for organizing operations
+tags:
+- name: implemented
+  description: |
+    Indicates that this is relevant to the current target of the application
+    Everything not tagged like this is only modeled
+- name: authentication
+  description: Operations that affect/perform authentication
+- name: shopping list
+  description: Create, Retrieve, Update and Delete operations on shopping lists
+- name: shopping list item
+  description: Create, Retrieve, Update and Delete operations on shopping list items
+
+paths:
+  /auth/register:
+    post:
+      tags:
+      - authentication
+      summary: adds an user object
+      operationId: addUser
+      description: Registers a user to the system
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Registration'
+      responses:
+        201:
+          description: user created and a json object returned with created user
+        200:
+          description: an error occurred, a json object is returned with an "error" field with an error message
+  
+  /auth/login:
+    post:
+      tags:
+      - authentication
+      summary: log user into the system
+      operationId: userLogin
+      description: Allows a legitimate user access privileged info
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              schema:
+              $ref: '#/components/schemas/Login'
+      responses:
+        200:
+          description: With json object that has "success" and "token" attributes signify a successful login request. With json object that has "error" attribute signifies a failed login request
+        
+  /auth/logout:
+    post:
+      tags:
+      - authentication
+      summary: invalidate a users token
+      operationId: logoutUser
+      description: Ensures the token used can no longer be used
+      responses:
+        200:
+          description: user token invalidated
+  
+  /auth/reset-password:
+    post:
+      tags:
+      - authentication
+      summary: allows user begin password reset process
+      operationId: emailVerification
+      description: Begins passowd reset procedure in case a user has forgotten their password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailVerify'
+      responses:
+        200:
+          description: an email has been sent to the provided email address with t alink that will allow them update their password
+        404:
+          description: something went wrong, a json object is sent back with an error message
+  
+  /auth/reset-password/{token}:
+    post:
+      tags:
+      - authentication
+      summary: updates a user's password
+      operationId: resetPassword
+      description: Resets a user's password
+      parameters: 
+        - in: path
+          name: token
+          schema:
+            type: string
+          required: true
+      requestBody:       
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordReset'
+      responses:
+        200:
+          description: with a "success" key signifies a successful password reset and an "error" key signifies a failed password reset
+        404:
+          description: the token used is not valid
+        401:
+          description: token has been used past the 10 minute expiry time
+          
+  /lists:
+    get:
+      tags:
+      - shopping list
+      - implemented
+      summary: get all the shopping lists
+      operationId: getShoppingLists
+      description: Gets all the shopping lists belonging to the user
+      responses:
+        200:
+          description: successful retrieval of list objects
+          content:
+            application/json:
+              schema:
+                type: array 
+                items: 
+                  $ref: "#/components/schemas/ShoppingList"
+        401:
+          description: you are not authorized to see the lists, you need to log in
+    post:
+      tags:
+      - shopping list
+      - implemented
+      summary: adds a shopping list
+      operationId: addShoppingList
+      description: Adds a shopping list to the system
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShoppingList'
+      responses:
+        201:
+          description: list created, shopping list object returned
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ShoppingList'
+        401:
+          description: unauthorized access to the resources, you need to log in
+          
+  /lists/{id}:
+    get:
+      tags:
+      - shopping list item
+      - implemented
+      summary: gets all items under shopping list with id = <id>
+      operationId: getShoppingListItems
+      description: Gets all items under shopping list with id = <id>
+      parameters: 
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: The id of the shopping list to retrieve
+      responses:
+        200:
+          description: successful retrieval
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ShoppingList'
+        404:
+          description: the id provided does not belong to any existing list
+        401:
+          description: unauthorized access to the resources, you need to log in
+        500:
+          description: id in url is not a valid identifier (not a valid integer)
+    put:
+      tags:
+      - shopping list
+      - implemented
+      summary: updates a shopping list
+      operationId: updateShoppingList
+      description: Updates a shopping list that exists
+      parameters: 
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: The id of the shopping list to update
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShoppingList'
+      responses:
+        200:
+          description: successful update
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ShoppingList'
+        404:
+          description: the id provided does not belong to any existing list
+        401:
+          description: unauthorized access to the resources, you need to log in
+        500:
+          description: id in url is not a valid identifier (not a valid integer)
+    delete:
+      tags:
+      - shopping list
+      - implemented
+      summary: deletes a shopping list
+      operationId: deleteShoppingList
+      description: Deletes a shopping list from the system
+      parameters: 
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: The id of the shopping list to delete
+      responses:
+        200:
+          description: successful deletion
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ShoppingList'
+        404:
+          description: the id provided does not belong to any existing list
+        401:
+          description: unauthorized access to the resources, you need to log in
+        500:
+          description: id in url is not a valid identifier (not a valid integer)
+          
+  /lists/{id}/items:
+    post:
+      tags:
+      - shopping list item
+      - implemented
+      summary: adds a shopping list item
+      operationId: addShoppingListItem
+      description: Adds a shopping list item to the system
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+        description: The id of the shopping list to add an item to
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShoppingListItem'
+      responses:
+        201:
+          description: successful addition, created object in json is returned
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ShoppingListItem'
+        200:
+          description: request was properly processed but something went wrong
+        404:
+          description: the id provided does not belong to any existing list
+        401:
+          description: unauthorized access to the resources, you need to log in
+        500:
+          description: id in url is not a valid identifier (not a valid integer)
+  
+  /lists/{id}/items/{item_id}:
+    put:
+      tags:
+      - shopping list item
+      - implemented
+      summary: updates an existing shopping list item
+      operationId: updateShoppingListItem
+      description: Updates a shopping ist item
+      parameters:
+      - in: path
+        name: id
+        schema: 
+          type: integer
+        required: true
+        description: The id of the shopping list the item belongs to
+      - in: path
+        name: item_id
+        schema: 
+          type: integer
+        required: true
+        description: The id of the shopping list item to update
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShoppingListItem'
+      responses:
+        200:
+          description: successful update
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ShoppingListItem'
+        404:
+          description: the id or item_id provided does not belong to any existing list or list item respectively
+        401:
+          description: unauthorized access to the resources, you need to log in
+        500:
+          description: id or item_id in url is not a valid identifier for a list or list item respectively (not a valid integer)
+    delete:
+      tags:
+      - shopping list item
+      - implemented
+      summary: deletes an existing shopping list item
+      operationId: deleteShoppingListItem
+      description: Deletes an existing shopping list item
+      parameters: 
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+        description: The id of the shopping list the item belongs to
+      - in: path
+        name: item_id
+        schema:
+          type: integer
+        required: true
+        description: The id of the shopping list item to delete
+      responses:
+        200:
+          description: successful deletion
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ShoppingListItem'
+        404:
+          description: the id or item_id provided does not belong to any existing list or list item respectively
+        401:
+          description: unauthorized access to the resources, you need to log in
+        500:
+          description: id or item_id in url is not a valid identifier for a list or list item respectively (not a valid integer)
+components:
+  securitySchemes:
+    bearer-auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Registration:
+      type: object
+      required:
+      - username
+      - email
+      - password
+      properties:
+        username:
+          type: string
+          example: vince112
+        email:
+          type: string
+          example: username@gmail.com
+        password:
+          type: string
+          example: my-really-really-strong-passsword
+    
+    Login:
+      type: object
+      required:
+      - username
+      - password
+      properties:
+        username:
+          type: string
+          example: vince112
+        password:
+          type: string
+          example: my-really-really-strong-passsword
+    
+    EmailVerify:
+      type: object
+      required:
+      - email
+      properties:
+        email:
+          type: string
+          example: username@gmail.com
+    
+    PasswordReset:
+      type: object
+      required:
+      - password
+      - password_confirm
+      properties:
+        password:
+          type: string
+          example: my-new-really-really-strong-passsword
+        password_confirm:
+          type: string
+          example: my-new-really-really-strong-passsword
+          
+    ShoppingList:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          example: Baby Stuff
+          
+    ShoppingListItem:
+      type: object
+      required:
+      - name
+      - amount
+      properties:
+        name:
+          type: string
+          example: Pampers
+        amount:
+          type: integer
+          format: int32
+          example: 2000
