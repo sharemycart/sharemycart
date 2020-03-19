@@ -129,6 +129,8 @@ paths:
       summary: get all need lists
       operationId: getNeedLists
       description: Gets all the need lists belonging to the user
+      parameters:
+      - $ref: "#/components/parameters/isDefault"
       responses:
         200:
           description: successful retrieval of list objects
@@ -326,6 +328,8 @@ paths:
       summary: get all the shopping lists
       operationId: getShoppingLists
       description: Gets all the shopping lists belonging to the user
+      parameters:
+      - $ref: "#/components/parameters/isDefault"
       responses:
         200:
           description: successful retrieval of list objects
@@ -613,6 +617,14 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+  parameters:
+    isDefault:
+      name: isDefault
+      in: query
+      description: Filters the lists to those which are the default for each type
+      required: false
+      schema:
+        type: boolean
   schemas:
     Registration:
       type: object
@@ -682,6 +694,13 @@ components:
           type: string
           enum: [need, shopping]
           default: need
+        isDefault:
+          type: boolean
+          default: false
+          description: |
+            indicates that a shopping list or a need list is the default list.
+            This is particularly important when creating a needed item for a shopping list: 
+            The needed item will be created in the default need list.
         items:
           type: array
           items:
