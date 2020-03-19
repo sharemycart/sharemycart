@@ -10,7 +10,12 @@ info:
     name: MIT
     url: https://opensource.org/licenses/MIT
 
-# tags are used for organizing operations
+servers:
+  - url: ""
+    description: local
+  - url: http://localhost:4010
+    description: Mock server
+
 tags:
 - name: implemented
   description: |
