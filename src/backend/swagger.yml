@@ -170,13 +170,7 @@ paths:
       operationId: getNeeds
       description: Retrieves all items which are needed to be supplied with with id = <id>
       parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        required: true
-        description: The id of the need list the item belongs to
+      - $ref: '#/components/parameters/id'
       responses:
         200:
           description: successful retrieval
@@ -191,17 +185,11 @@ paths:
     delete:
       tags:
       - implemented
-      summary: removes all needed items
-      operationId: deleteNeeds
-      description: removes all needed items
+      summary: deletes a need list
+      operationId: deleteNeedList
+      description: Deletes a list removing all needed items
       parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        required: true
-        description: The id of the need list the item belongs to
+      - $ref: '#/components/parameters/id'
       responses:
         200:
           description: successful deletion
@@ -219,13 +207,7 @@ paths:
       operationId: addNeededItem
       description: Adds a needed item to the system
       parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        required: true
-        description: The id of the need list the item belongs to
+      - $ref: '#/components/parameters/id'
       requestBody:
         content:
           application/json:
@@ -247,7 +229,7 @@ paths:
         400:
           description: id in url is not a valid identifier
   
-  /needs/{item_id}:
+  /needs/{id}/items/{item_id}:
     put:
       tags:
       - implemented
@@ -255,20 +237,8 @@ paths:
       operationId: updateNeededItem
       description: Updates a needed item
       parameters:
-      - in: header
-        name: id
-        schema:
-          type: string
-          format: uuid
-        required: true
-        description: The id of the need list the item belongs to
-      - in: path
-        name: item_id
-        schema: 
-          type: string
-          format: uuid
-        required: true
-        description: The id of the needed item to update
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/itemId'
       requestBody:
         content:
           application/json:
@@ -294,20 +264,8 @@ paths:
       operationId: deleteNeededItem
       description: Deletes an existing needed item
       parameters: 
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        required: true
-        description: The id of the need list the item belongs to
-      - in: path
-        name: item_id
-        schema:
-          type: string
-          format: uuid
-        required: true
-        description: The id of the needed item to delete
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/itemId'
       responses:
         200:
           description: successful deletion
@@ -370,13 +328,7 @@ paths:
       operationId: getShoppingListItems
       description: Gets all items under shopping list with id = <id>
       parameters: 
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-        description: The id of the shopping list to retrieve
+      - $ref: '#/components/parameters/id'
       - name: $expand
         in: query
         required: false
@@ -384,7 +336,6 @@ paths:
           type: string
           enum:
             - items
-
       responses:
         200:
           description: successful retrieval
@@ -405,13 +356,7 @@ paths:
       operationId: updateShoppingList
       description: Updates a shopping list that exists
       parameters: 
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-        description: The id of the shopping list to update
+      - $ref: '#/components/parameters/id'
       requestBody:
         content:
           application/json:
@@ -437,13 +382,7 @@ paths:
       operationId: deleteShoppingList
       description: Deletes a shopping list from the system
       parameters: 
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-        description: The id of the shopping list to delete
+      - $ref: '#/components/parameters/id'
       responses:
         200:
           description: successful deletion
@@ -466,13 +405,7 @@ paths:
       operationId: addShoppingListItem
       description: Adds a shopping list item to the system
       parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        required: true
-        description: The id of the shopping list to add an item to
+      - $ref: '#/components/parameters/id'
       requestBody:
         content:
           application/json:
@@ -502,20 +435,8 @@ paths:
       operationId: updateShoppingListItem
       description: Updates a shopping list item
       parameters:
-      - in: path
-        name: id
-        schema: 
-          type: string
-          format: uuid
-        required: true
-        description: The id of the shopping list the item belongs to
-      - in: path
-        name: item_id
-        schema: 
-          type: string
-          format: uuid
-        required: true
-        description: The id of the shopping list item to update
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/itemId'
       requestBody:
         content:
           application/json:
@@ -541,20 +462,8 @@ paths:
       operationId: deleteShoppingListItem
       description: Deletes an existing shopping list item
       parameters: 
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        required: true
-        description: The id of the shopping list the item belongs to
-      - in: path
-        name: item_id
-        schema:
-          type: string
-          format: uuid
-        required: true
-        description: The id of the shopping list item to delete
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/itemId'
       responses:
         200:
           description: successful deletion
@@ -577,20 +486,8 @@ paths:
       operationId: addNeededItemToShoppingListItem
       description: Adds a needed item similar like one which already exists on another shopping list
       parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        required: true
-        description: The id of the shopping list the item belongs to
-      - in: path
-        name: item_id
-        schema:
-          type: string
-          format: uuid
-        required: true
-        description: The id of the shopping list item which serves as template for the new need
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/itemId'
       requestBody:
         content:
           application/json:
@@ -618,9 +515,23 @@ components:
       scheme: bearer
       bearerFormat: JWT
   parameters:
+    id:
+      in: path
+      name: id
+      schema:
+        type: string
+        format: uuid
+      required: true
+    itemId:
+      in: path
+      name: item_id
+      schema:
+        type: string
+        format: uuid
+      required: true
     isDefault:
-      name: isDefault
       in: query
+      name: isDefault
       description: Filters the lists to those which are the default for each type
       required: false
       schema:
