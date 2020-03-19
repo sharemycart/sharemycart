@@ -1,8 +1,11 @@
-# Bring-it-along - Home Service in my neighborhood
+# Bring-it-along - Home Service in my contained neighborhood.
 
 > Everybody not willing to even think about Corona / Sars-Cov-2 / Covid-19. Should skip this project. Everybody willing to contribute software to help might want to continue reading.
 
-tl;dr: Let's build an app for collaborative neigbourhood groceries shopping.
+```
+tl;dr: Let's build an app for collaborative neigbourhood groceries shopping,
+So we can stay contained and help not spread viruses
+```
 
 ## Motivation
 
