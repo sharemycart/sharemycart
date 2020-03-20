@@ -35,32 +35,47 @@ describe('GET /shoppinglists', () => {
 })
 
 describe('POST /shoppinglists', () => {
+  it('should add the given list')
 })
 
 describe('GET /shoppinglists/{id}', () => {
-  
+  it('should return the list with the given id')
+
+  it('should report 404 if the list was not found')
 })
 
 describe('PUT /shoppinglists/{id}', () => {
-  
+  it('should change an existing list')
+
+  it('should report 404 if the specified list was not found')
 })
 
 describe('DELETE /shoppinglists/{id}', () => {
-  
+  it('should remove the specified list')
+
+  it('should report 404 if the specified list was not found')
 })
 
 describe('POST /shoppinglists/{id}/items', () => {
-  
+  it('should create a new entry in the items list')
 })
 
 describe('PUT /shoppinglists/{id}/items/{item_id}', () => {
-  
+  it('should update the specified item')
+
+  it('should report 404 if the item cannot be found in the list')
 })
 
 describe('DELETE /shoppinglists/{id}/items/{item_id}', () => {
-  
+  it('should remove the specified item from the item list')
+
+  it('should report 404 if the item cannot be found in the list')
 })
 
 describe('POST /shoppinglists/{id}/items/{item_id}/need', () => {
+  it('should increase the amount of the specified item')
+
+  it('should report 404 if the item cannot be found in the list')
   
+  it('should fail with an appropiate message if the unit is incompatible')
 })
