@@ -74,7 +74,7 @@ describe('DELETE /shoppinglists/{id}/items/{item_id}', () => {
 })
 
 describe('POST /shoppinglists/{id}/items/{item_id}/need', () => {
-  it('should increase the amount of the specified item', async () => {
+  async function createList() {
     const listResponse = await request.post('/shoppinglists')
       .send({
         name: 'Baby Stuff',
@@ -83,19 +83,27 @@ describe('POST /shoppinglists/{id}/items/{item_id}/need', () => {
         items: [{name: 'Pampers', amount: 2000, unit: 'pc'}]
       })
     listResponse.status.should.equal(200)
-    const {id, items: [{itemId}]} = listResponse.body
+    return listResponse.body
+  }
+
+  it('should increase the amount of the specified item', async () => {
+    const {id, items: [{itemId}]} = await createList()
     
-    const needResponse = await request.post(`/shoppinglists/${id}/items/${itemId}/need`)
-      .send({amount: 500})
+    const needResponse = await request.post(`/shoppinglists/${id}/items/${itemId}/need`).send({amount: 500})
     needResponse.status.should(201)
 
     const itemResponse = await request.get(`/shoppinglists/${id}`)
     itemResponse.body.items[0].amount.should.equal(2500)
   })
 
-  it('should report 400 if the it in the path is not a valid uuid')
+  it('should report 400 if the it in the path is not a valid uuid', async () => {
+    const needResponse = await request.post(`/shoppinglists/abc/items/1/need`).send({amount: 500})
+    needResponse.status.should.equal(400)
+  })
 
-  it('should report 404 if the item cannot be found in the list')
-
-  it('should fail with an appropiate message if the unit is incompatible')
+  it('should report 404 if the item cannot be found in the list', async () => {
+    const {id} = await createList()
+    const needResponse = await request.post(`/shoppinglists/${id}/items/1/need`).send({amount: 500})
+    needResponse.status.should.equal(404)
+  })
 })
