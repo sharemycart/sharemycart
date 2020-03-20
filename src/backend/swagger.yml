@@ -11,8 +11,6 @@ info:
     url: https://opensource.org/licenses/MIT
 
 servers:
-  - url: ""
-    description: local
   - url: http://localhost:4010
     description: Mock server
 
