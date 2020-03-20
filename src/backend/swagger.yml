@@ -501,10 +501,8 @@ paths:
           description: successful addition, created object in json is returned
           content:
             application/json:
-              schema:
-                $ref: "#/components/schemas/ListItem"
-        "200":
-          description: request was properly processed but something went wrong
+              schema: 
+                $ref: '#/components/schemas/ListItem'
         "404":
           description: the id provided does not belong to any existing list
         "401":
