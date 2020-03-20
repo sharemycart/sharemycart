@@ -1,0 +1,646 @@
+openapi: 3.0.0
+info:
+  description: | 
+    Stay home. Stay safe. I'll bring your groceries along as I get mine.
+  version: 0.1.0
+  title: Share my Cart
+  contact:
+    email: sharemycart@beimir.net
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:4010
+    description: Mock server
+
+tags:
+- name: implemented
+  description: |
+    Indicates that this is relevant to the current target of the application
+    Everything not tagged like this is only modeled
+- name: authentication
+  description: Operations that affect/perform authentication
+
+paths:
+  /accounts:
+    post:
+      tags:
+      - authentication
+      summary: adds an user object
+      operationId: addUser
+      description: Registers a user to the system
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Registration'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Login'
+      responses:
+        201:
+          description: user created and a json object returned with created user
+        400:
+          description: an error occurred, a json object is returned with an "error" field with an error message
+  
+  /accounts/verifications:
+    post:
+      tags:
+      - authentication
+      summary: allows user begin password reset process
+      operationId: emailVerification
+      description: Begins password reset procedure in case a user has forgotten their password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailVerify'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EmailVerify'
+      responses:
+        200:
+          description: an email has been sent to the provided email address with a link that will allow them to update their password, if the email is known. If it is not, no email is sent, but the result of the request stays the same to prevent finding out which users are known.
+
+  /accounts/verifications/{token}:
+    post:
+      tags:
+      - authentication
+      summary: updates a user's password
+      operationId: resetPassword
+      description: Resets a user's password
+      parameters: 
+        - in: path
+          name: token
+          schema:
+            type: string
+          required: true
+      requestBody:       
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordReset'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordReset'
+      responses:
+        200:
+          description: with a "success" key signifies a successful password reset and an "error" key signifies a failed password reset
+        404:
+          description: the token used is not valid
+        401:
+          description: token has been used past the 10 minute expiry time
+          
+  /sessions:
+    post:
+      tags:
+      - authentication
+      summary: log user into the system
+      operationId: userLogin
+      description: Allows a legitimate user access privileged info
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Login'
+      responses:
+        200:
+          description: With json object that has "success" and "token" attributes signify a successful login request.
+        401:
+          description: With json object that has "error" attribute signifies a failed login request
+        
+    delete:
+      tags:
+      - authentication
+      summary: invalidate a users token
+      operationId: logoutUser
+      description: Ensures the token used can no longer be used
+      responses:
+        200:
+          description: user token invalidated
+  /needs:
+    get:
+      tags:
+      - implemented
+      summary: get all need lists
+      operationId: getNeedLists
+      description: Gets all the need lists belonging to the user
+      parameters:
+      - $ref: "#/components/parameters/isDefault"
+      responses:
+        200:
+          description: successful retrieval of list objects
+          content:
+            application/json:
+              schema:
+                type: array 
+                items: 
+                  $ref: "#/components/schemas/List"
+        401:
+          description: you are not authorized to see the lists, you need to log in
+    post:
+      tags:
+      - implemented
+      summary: adds a need list
+      operationId: addNeedList
+      description: Adds a need list to the system
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/List'
+      responses:
+        201:
+          description: list created, need list object returned
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/List'
+        401:
+          description: unauthorized access to the resources, you need to log in
+  /needs/{id}:
+    get:
+      tags:
+      - implemented
+      summary: Retrieves all items which are needed to be supplied with with id = <id>
+      operationId: getNeeds
+      description: Retrieves all items which are needed to be supplied with with id = <id>
+      parameters:
+      - $ref: '#/components/parameters/id'
+      responses:
+        200:
+          description: successful retrieval
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/List'
+        404:
+          description: No needs recorded yet
+        401:
+          description: unauthorized access to the resources, you need to log in
+    delete:
+      tags:
+      - implemented
+      summary: deletes a need list
+      operationId: deleteNeedList
+      description: Deletes a list removing all needed items
+      parameters:
+      - $ref: '#/components/parameters/id'
+      responses:
+        200:
+          description: successful deletion
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/List'
+        400:
+          description: id in url is not a valid identifier (not a valid integer)
+          
+    post:
+      tags:
+      - implemented
+      summary: adds a needed item
+      operationId: addNeededItem
+      description: Adds a needed item to the system
+      parameters:
+      - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListItem'
+      responses:
+        201:
+          description: successful addition, created object in json is returned
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ListItem'
+        200:
+          description: request was properly processed but something went wrong
+        404:
+          description: the id provided does not belong to any existing list
+        401:
+          description: unauthorized access to the resources, you need to log in
+        400:
+          description: id in url is not a valid identifier
+  
+  /needs/{id}/items/{item_id}:
+    put:
+      tags:
+      - implemented
+      summary: updates an existing needed item
+      operationId: updateNeededItem
+      description: Updates a needed item
+      parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/itemId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListItem'
+      responses:
+        200:
+          description: successful update
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ListItem'
+        404:
+          description: The item_id provided does not belong to the needs
+        401:
+          description: unauthorized access to the resources, you need to log in
+        500:
+          description: id or item_id in url is not a valid identifier for a list or list item respectively
+    delete:
+      tags:
+      - implemented
+      summary: deletes an existing needed item
+      operationId: deleteNeededItem
+      description: Deletes an existing needed item
+      parameters: 
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/itemId'
+      responses:
+        200:
+          description: successful deletion
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ListItem'
+        404:
+          description: the id or item_id provided does not belong to any existing list or list item respectively
+        401:
+          description: unauthorized access to the resources, you need to log in
+        500:
+          description: id or item_id in url is not a valid identifier for a list or list item respectively
+  /shoppinglists:
+    get:
+      tags:
+      - implemented
+      summary: get all the shopping lists
+      operationId: getShoppingLists
+      description: Gets all the shopping lists belonging to the user
+      parameters:
+      - $ref: "#/components/parameters/isDefault"
+      responses:
+        200:
+          description: successful retrieval of list objects
+          content:
+            application/json:
+              schema:
+                type: array 
+                items: 
+                  $ref: "#/components/schemas/List"
+        401:
+          description: you are not authorized to see the lists, you need to log in
+    post:
+      tags:
+      - implemented
+      summary: adds a shopping list
+      operationId: addShoppingList
+      description: Adds a shopping list to the system
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/List'
+      responses:
+        201:
+          description: list created, shopping list object returned
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/List'
+        401:
+          description: unauthorized access to the resources, you need to log in
+          
+  /shoppinglists/{id}:
+    get:
+      tags:
+      - implemented
+      summary: gets all items under shopping list with id = <id>
+      operationId: getShoppingListItems
+      description: Gets all items under shopping list with id = <id>
+      parameters: 
+      - $ref: '#/components/parameters/id'
+      - name: $expand
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+            - items
+      responses:
+        200:
+          description: successful retrieval
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/List'
+        400:
+          description: id in url is not a valid identifier
+        404:
+          description: the id provided does not belong to any existing list
+        401:
+          description: unauthorized access to the resources, you need to log in
+    put:
+      tags:
+      - implemented
+      summary: updates a shopping list
+      operationId: updateShoppingList
+      description: Updates a shopping list that exists
+      parameters: 
+      - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/List'
+      responses:
+        200:
+          description: successful update
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/List'
+        404:
+          description: the id provided does not belong to any existing list
+        401:
+          description: unauthorized access to the resources, you need to log in
+        500:
+          description: id in url is not a valid identifier
+    delete:
+      tags:
+      - implemented
+      summary: deletes a shopping list
+      operationId: deleteShoppingList
+      description: Deletes a shopping list from the system
+      parameters: 
+      - $ref: '#/components/parameters/id'
+      responses:
+        200:
+          description: successful deletion
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/List'
+        404:
+          description: the id provided does not belong to any existing list
+        401:
+          description: unauthorized access to the resources, you need to log in
+        400:
+          description: id in url is not a valid identifier
+          
+  /shoppinglists/{id}/items:
+    post:
+      tags:
+      - implemented
+      summary: adds a shopping list item
+      operationId: addShoppingListItem
+      description: Adds a shopping list item to the system
+      parameters:
+      - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListItem'
+      responses:
+        201:
+          description: successful addition, created object in json is returned
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ListItem'
+        404:
+          description: the id provided does not belong to any existing list
+        401:
+          description: unauthorized access to the resources, you need to log in
+        400:
+          description: id in url is not a valid identifier
+        500:
+          description: request was properly processed but something went wrong
+  
+  /shoppinglists/{id}/items/{item_id}:
+    put:
+      tags:
+      - implemented
+      summary: updates an existing shopping list item
+      operationId: updateShoppingListItem
+      description: Updates a shopping list item
+      parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/itemId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListItem'
+      responses:
+        200:
+          description: successful update
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ListItem'
+        404:
+          description: the id or item_id provided does not belong to any existing list or list item respectively
+        401:
+          description: unauthorized access to the resources, you need to log in
+        500:
+          description: id or item_id in url is not a valid identifier for a list or list item respectively
+    delete:
+      tags:
+      - implemented
+      summary: deletes an existing shopping list item
+      operationId: deleteShoppingListItem
+      description: Deletes an existing shopping list item
+      parameters: 
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/itemId'
+      responses:
+        200:
+          description: successful deletion
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ListItem'
+        404:
+          description: the id or item_id provided does not belong to any existing list or list item respectively
+        401:
+          description: unauthorized access to the resources, you need to log in
+        500:
+          description: id or item_id in url is not a valid identifier for a list or list item respectively
+  
+  /shoppinglists/{id}/items/{item_id}/need:
+    post:
+      tags:
+      - implemented
+      summary: creates a needed item based upon a shopping list item
+      operationId: addNeededItemToShoppingListItem
+      description: Adds a needed item similar like one which already exists on another shopping list
+      parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/itemId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListItem'
+      responses:
+        201:
+          description: successful addition, created object in json is returned
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ListItem'
+        200:
+          description: request was properly processed but something went wrong
+        404:
+          description: the id provided does not belong to any existing list
+        401:
+          description: unauthorized access to the resources, you need to log in
+        400:
+          description: id in url is not a valid identifier
+components:
+  securitySchemes:
+    bearer-auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    id:
+      in: path
+      name: id
+      schema:
+        type: string
+        format: uuid
+      required: true
+    itemId:
+      in: path
+      name: item_id
+      schema:
+        type: string
+        format: uuid
+      required: true
+    isDefault:
+      in: query
+      name: isDefault
+      description: Filters the lists to those which are the default for each type
+      required: false
+      schema:
+        type: boolean
+  schemas:
+    Registration:
+      type: object
+      required:
+      - username
+      - email
+      - password
+      properties:
+        username:
+          type: string
+          example: vince112
+        email:
+          type: string
+          example: username@gmail.com
+        password:
+          type: string
+          example: my-really-really-strong-passsword
+    
+    Login:
+      type: object
+      required:
+      - username
+      - password
+      properties:
+        username:
+          type: string
+          example: vince112
+        password:
+          type: string
+          example: my-really-really-strong-passsword
+    
+    EmailVerify:
+      type: object
+      required:
+      - email
+      properties:
+        email:
+          type: string
+          example: username@gmail.com
+    
+    PasswordReset:
+      type: object
+      required:
+      - password
+      - password_confirm
+      properties:
+        password:
+          type: string
+          example: my-new-really-really-strong-passsword
+        password_confirm:
+          type: string
+          example: my-new-really-really-strong-passsword
+          
+    List:
+      type: object
+      required:
+      - name
+      - type
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: Baby Stuff
+        type:
+          type: string
+          enum: [need, shopping]
+          default: need
+        isDefault:
+          type: boolean
+          default: false
+          description: |
+            indicates that a shopping list or a need list is the default list.
+            This is particularly important when creating a needed item for a shopping list: 
+            The needed item will be created in the default need list.
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ListItem'
+
+    ListItem:
+      type: object
+      required:
+      - name
+      - amount
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: Pampers
+        amount:
+          type: number
+          format: float
+          example: 2000
+        unit:
+          type: string
+          enum:
+            - pc
+            - l
+            - ml
+            - kg
+            - g
