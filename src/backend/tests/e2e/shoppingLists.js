@@ -10,10 +10,31 @@ describe('GET /shoppinglists', () => {
     result.body.length.should.be.greaterThan(0)
     result.body[0].should.be.an.Object
   })
+
+  describe('returned shopping lists', () => {
+    it('should have a name', async () => {
+      const result = await request.get('/shoppinglists')
+      should(result.body[0].name).exists
+    })
+
+    it('should have a type', async () => {
+      const result = await request.get('/shoppinglists')
+      should(result.body[0].type).exists
+    })
+
+    // it('should contain an item list', async () => {
+    //   const result = await request.get('/shoppinglists')
+    //   console.log(result.body[0])
+    //   should(result.body[0].items).exists
+    //   const items = result.body[0].items
+    //   items.should.be.an.Array
+    //   items.length.should.be.greaterThan(0)
+    //   Object.keys(items[0]).should.deepEqual(['id', 'name', 'amount', 'unit'])
+    // })
+  })
 })
 
 describe('POST /shoppinglists', () => {
-  
 })
 
 describe('GET /shoppinglists/{id}', () => {
