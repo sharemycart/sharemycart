@@ -503,14 +503,14 @@ paths:
             application/json:
               schema: 
                 $ref: '#/components/schemas/ListItem'
-        200:
-          description: request was properly processed but something went wrong
         404:
           description: the id provided does not belong to any existing list
         401:
           description: unauthorized access to the resources, you need to log in
         400:
           description: id in url is not a valid identifier
+        500:
+          description: request was properly processed but something went wrong
 components:
   securitySchemes:
     bearer-auth:
