@@ -8,7 +8,7 @@
   "scripts": {
     "mock-backend": "prism mock -p 4010 -d src/backend/swagger.yml",
     "mock-backend-dynamic": "prism mock -d -p 4010 -d src/backend/swagger.yml",
-    "test": "echo \"None. This package.json is only for providing scripts\" && exit 1"
+    "test": "mocha src/backend/tests/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,9 @@
   },
   "homepage": "https://open.rocket.chat/channel/share-my-cart",
   "devDependencies": {
-    "@stoplight/prism-cli": "^3.3.2"
+    "@stoplight/prism-cli": "^3.3.2",
+    "mocha": "^7.1.1",
+    "should": "^13.2.3",
+    "supertest": "^4.0.2"
   }
 }
