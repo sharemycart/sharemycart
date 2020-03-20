@@ -1,4 +1,4 @@
-module github.com/utsavanand2/sharemycart
+module github.com/mrsimpson/sharemycart
 
 go 1.13
 
