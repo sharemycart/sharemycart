@@ -21,7 +21,12 @@ Though this project sounds a bit miniscule (and maybe even ridiculous compared t
 
 Thee are sketches with respect to [ui](./src/ui/Readme.md) and [backend technology](./src/backend/Readme.md).
 Everything is still very open, so feel free to bring in your ideas!
-## How to contribute?
+
+## Run tests
+
+To run the tests, just `npm install` and `npm test`.
+
+## How to contribute
 
 So you really would like to join? Awesome!
 Have a look at the [issues](https://github.com/mrsimpson/collaborative-shopping/issues), best start with the [epics](https://github.com/mrsimpson/collaborative-shopping/issues?q=is%3Aopen+is%3Aissue+label%3Aepic).
