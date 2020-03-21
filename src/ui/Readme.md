@@ -46,7 +46,7 @@ npm install
 
 Last but not least, serve your app locally.
 ```bash
-ionic serve
+npm start
 #enjoy the magic :)
 ```
 For more instructions in ionic build see here: https://ionicframework.com/docs/cli/commands/build
