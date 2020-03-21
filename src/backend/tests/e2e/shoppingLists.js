@@ -1,9 +1,21 @@
 require('should')
 const supertest = require('supertest')
 
-const request = supertest(process.env.SERVER_URL || 'http://localhost:4010')
+const request = supertest(process.env.SERVER_URL || 'http://localhost:8080')
 
-describe('GET /shoppinglists', () => {
+async function createList(name = 'Baby Stuff') {
+  const listResponse = await request.post('/shoppinglists')
+    .send({
+      name,
+      type: 'shopping',
+      isDefault: false,
+      items: [{name: 'Pampers', amount: 2000, unit: 'pc'}]
+    })
+  listResponse.status.should.equal(201)
+  return listResponse.body
+}
+
+describe('getting the shopping lists', () => {
   it('should return an array of objects', async () => {
     const result = await request.get('/shoppinglists')
     result.status.should.equal(200)
@@ -23,26 +35,30 @@ describe('GET /shoppinglists', () => {
       should(result.body[0].type).exists
     })
 
-    // it('should contain an item list', async () => {
-    //   const result = await request.get('/shoppinglists')
-    //   console.log(result.body[0])
-    //   should(result.body[0].items).exists
-    //   const items = result.body[0].items
-    //   items.should.be.an.Array
-    //   items.length.should.be.greaterThan(0)
-    //   Object.keys(items[0]).should.deepEqual(['id', 'name', 'amount', 'unit'])
-    // })
+    it('should contain an item list', async () => {
+      const result = await request.get('/shoppinglists')
+      console.log(result.body[0])
+      should(result.body[0].items).exists
+      const items = result.body[0].items
+      items.should.be.an.Array
+      items.length.should.be.greaterThan(0)
+      Object.keys(items[0]).should.containDeep(['id', 'name', 'amount', 'unit'])
+    })
   })
 })
 
-describe('POST /shoppinglists', () => {
-  it('should add the given list')
-})
+describe('getting and posting lists', () => {
+  it('should add the given list', async () => {
+    const name = 'Baby Stuff #' + (+ new Date())
+    const created = await createList(name)
+    const result = await request.get(`/shoppinglists/${created.id}`)
+    result.body.name.should.equal(name)
+  })
 
-describe('GET /shoppinglists/{id}', () => {
-  it('should return the list with the given id')
-
-  it('should report 404 if the list was not found')
+  it('should report 404 if trying to get a non-existing list', async () => {
+    const result = await request.get(`/shoppinglists/non-existing`)
+    result.status.should.equal(404)
+  })
 })
 
 describe('PUT /shoppinglists/{id}', () => {
@@ -73,19 +89,7 @@ describe('DELETE /shoppinglists/{id}/items/{item_id}', () => {
   it('should report 404 if the item cannot be found in the list')
 })
 
-describe('POST /shoppinglists/{id}/items/{item_id}/need', () => {
-  async function createList() {
-    const listResponse = await request.post('/shoppinglists')
-      .send({
-        name: 'Baby Stuff',
-        type: 'shopping',
-        isDefault: false,
-        items: [{name: 'Pampers', amount: 2000, unit: 'pc'}]
-      })
-    listResponse.status.should.equal(201)
-    return listResponse.body
-  }
-
+describe('when adding needed items to a list', () => {
   it('should increase the amount of the specified item', async () => {
     const {id, items: [{itemId}]} = await createList()
     
