@@ -1,0 +1,8 @@
+{
+  "appId": "io.ionic.starter",
+  "appName": "share-my-cart",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "build",
+  "cordova": {}
+}
