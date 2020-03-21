@@ -87,7 +87,7 @@ describe('Change shopping lists', () => {
 })
 
 describe('DELETE /shoppinglists/{id}', () => {
-  it('should remove the specified list', () => {
+  it('should remove the specified list', async () => {
     const name = createListName()
     const created = await createList(name)
 
@@ -103,12 +103,29 @@ describe('DELETE /shoppinglists/{id}', () => {
   })
 })
 
-describe('POST /shoppinglists/{id}/items', () => {
-  it('should create a new entry in the items list')
+describe('Adding items to a list', () => {
+  it('should make the new item be in the list', async () => {
+    const {id} = await createList(createListName())
+    const result = await request.post(`/shoppinglists/${id}/items`)
+      .send({name: 'Soother', amount: 2, unit: 'pc'})
+    result.status.should.equal(201)
+    result.items.length.should.equal(2)
+    result.items.some(item => item.name === 'Soother').should.be.true
+  })
 })
 
-describe('PUT /shoppinglists/{id}/items/{item_id}', () => {
-  it('should update the specified item')
+describe('changing an item', () => {
+  it('should update the specified item', async () => {
+    const {id, items: [{itemId}]} = await createList(createListName())
+
+    const result = await request.put(`/shoppinglists/${id}/items/${itemId}`)
+      .send({name: 'Soother', amount: 3, unit: 'pc'})
+    result.status.should.equal(200)
+
+    const result2 = await request.get(`/shoppinglists/${created.id}`)
+    result2.items[0].name.should.equal('Soother')
+    result2.items[0].amount.should.equal(3)
+  })
 
   it('should report 404 if the item cannot be found in the list')
 })
