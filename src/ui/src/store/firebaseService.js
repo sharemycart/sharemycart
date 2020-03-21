@@ -2,13 +2,13 @@ import * as firebase from 'firebase'; // 4.3.0
 require('firebase/firestore');
 
 var firebaseConfig = {
-	apiKey: 'AIzaSyDGyWWNgTKBFCGrpM5LJChw3ri-Ly_3K7I',
-	authDomain: 'collabshop19.firebaseapp.com',
-	databaseURL: 'https://collabshop19.firebaseio.com',
-	projectId: 'collabshop19',
-	storageBucket: 'collabshop19.appspot.com',
-	messagingSenderId: '1087758219181',
-	appId: '1:1087758219181:web:0c39be0124e309b4121324'
+	apiKey: process.env.BACKEND_API_KEY,
+	authDomain: process.env.BACKEND_AUTH_DOMAIN,
+	databaseURL: process.env.BACKEND_DATABASE_URL,
+	projectId: process.env.BACKEND_PROJECT_ID,
+	storageBucket: process.env.BACKEND_STORAGE_BUCKET,
+	messagingSenderId: process.env.BACKEND_MESSAGE_SENDER_ID,
+	appId: process.env.BACKEND_SENDER_APP_ID
 };
 
 // Ensure that you do not login twice.
