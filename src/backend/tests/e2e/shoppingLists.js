@@ -82,7 +82,7 @@ describe('POST /shoppinglists/{id}/items/{item_id}/need', () => {
         isDefault: false,
         items: [{name: 'Pampers', amount: 2000, unit: 'pc'}]
       })
-    listResponse.status.should.equal(200)
+    listResponse.status.should.equal(201)
     return listResponse.body
   }
 
@@ -90,7 +90,7 @@ describe('POST /shoppinglists/{id}/items/{item_id}/need', () => {
     const {id, items: [{itemId}]} = await createList()
     
     const needResponse = await request.post(`/shoppinglists/${id}/items/${itemId}/need`).send({amount: 500})
-    needResponse.status.should(201)
+    needResponse.status.should.equal(201)
 
     const itemResponse = await request.get(`/shoppinglists/${id}`)
     itemResponse.body.items[0].amount.should.equal(2500)
