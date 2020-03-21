@@ -3,6 +3,10 @@ const supertest = require('supertest')
 
 const request = supertest(process.env.SERVER_URL || 'http://localhost:8080')
 
+function createListName() {
+  return 'Baby Stuff #' + (+ new Date())
+}
+
 async function createList(name = 'Baby Stuff') {
   const listResponse = await request.post('/shoppinglists')
     .send({
@@ -49,7 +53,7 @@ describe('getting the shopping lists', () => {
 
 describe('getting and posting lists', () => {
   it('should add the given list', async () => {
-    const name = 'Baby Stuff #' + (+ new Date())
+    const name = createListName()
     const created = await createList(name)
     const result = await request.get(`/shoppinglists/${created.id}`)
     result.body.name.should.equal(name)
@@ -61,16 +65,42 @@ describe('getting and posting lists', () => {
   })
 })
 
-describe('PUT /shoppinglists/{id}', () => {
-  it('should change an existing list')
+describe('Change shopping lists', () => {
+  it('should change an existing list', async () => {
+    const name = createListName()
+    const created = await createList(name)
 
-  it('should report 404 if the specified list was not found')
+    const changedName = name + ' - changed'
+    const result = await request.put(`/shoppinglists/${created.id}`).send({name: changedName})
+    result.status.should.equal(200)
+    result.body.name.should.equal(changedName)
+
+    const result2 = await request.get(`/shoppinglists/${created.id}`)
+    result2.status.should.equal(200)
+    result2.body.name.should.equal(changedName)
+  })
+
+  it('should report 404 if the specified list was not found', async () => {
+    const result = await request.put(`/shoppinglists/non-existing`).send({name: 'changed name'})
+    result.status.should.equal(404)
+  })
 })
 
 describe('DELETE /shoppinglists/{id}', () => {
-  it('should remove the specified list')
+  it('should remove the specified list', () => {
+    const name = createListName()
+    const created = await createList(name)
 
-  it('should report 404 if the specified list was not found')
+    await request.delete(`/shoppinglists/${created.id}`)
+
+    const result2 = await request.get(`/shoppinglists/${created.id}`)
+    result2.status.should.equal(404)
+  })
+
+  it('should report 404 if the specified list was not found', async () => {
+    const result = await request.delete(`/shoppinglists/non-existing`)
+    result.status.should.equal(404)
+  })
 })
 
 describe('POST /shoppinglists/{id}/items', () => {
