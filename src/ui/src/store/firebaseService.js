@@ -2,13 +2,13 @@ import * as firebase from 'firebase'; // 4.3.0
 require('firebase/firestore');
 
 var firebaseConfig = {
-	apiKey: process.env.BACKEND_API_KEY,
-	authDomain: process.env.BACKEND_AUTH_DOMAIN,
-	databaseURL: process.env.BACKEND_DATABASE_URL,
-	projectId: process.env.BACKEND_PROJECT_ID,
-	storageBucket: process.env.BACKEND_STORAGE_BUCKET,
-	messagingSenderId: process.env.BACKEND_MESSAGE_SENDER_ID,
-	appId: process.env.BACKEND_SENDER_APP_ID
+	apiKey: process.env.REACT_APP_BACKEND_API_KEY,
+	authDomain: process.env.REACT_APP_BACKEND_AUTH_DOMAIN,
+	databaseURL: process.env.REACT_APP_BACKEND_DATABASE_URL,
+	projectId: process.env.REACT_APP_BACKEND_PROJECT_ID,
+	storageBucket: process.env.REACT_APP_BACKEND_STORAGE_BUCKET,
+	messagingSenderId: process.env.REACT_APP_BACKEND_MESSAGE_SENDER_ID,
+	appId: process.env.REACT_APP_BACKEND_SENDER_APP_ID
 };
 
 // Ensure that you do not login twice.
