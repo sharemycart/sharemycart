@@ -107,3 +107,14 @@ dist
 
 
 secrets/
+.idea/
+
+# UI
+src/ui/build/
+src/ui/node_modules/
+src/ui/coverage/
+src/ui/.pnp
+src/ui/.pnp.js
+src/ui/npm-debug.log*
+src/ui/yarn-debug.log*
+src/ui/yarn-error.log*
