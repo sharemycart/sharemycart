@@ -8,7 +8,9 @@
   "scripts": {
     "mock-backend": "prism mock -p 4010 -d src/backend/swagger.yml",
     "mock-backend-dynamic": "prism mock -d -p 4010 -d src/backend/swagger.yml",
-    "test": "mocha src/backend/tests/**/*.js"
+    "pretest": "./scripts/start-server.sh",
+    "test": "mocha src/backend/tests/**/*.js || :",
+    "posttest": "./scripts/stop-server.sh"
   },
   "repository": {
     "type": "git",
