@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { IonItem, IonLabel, IonButton, IonInput, IonToast } from "@ionic/react";
-import BasicPage from "../components/BasicPage";
+import BasicPage from "../BasicPage";
 
 import { inject, observer } from "mobx-react";
 /**

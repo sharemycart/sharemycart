@@ -8,7 +8,7 @@ import {
   IonToast,
   IonText
 } from "@ionic/react";
-import BasicPage from "../components/BasicPage";
+import BasicPage from "../BasicPage";
 
 import { inject, observer } from "mobx-react";
 /**

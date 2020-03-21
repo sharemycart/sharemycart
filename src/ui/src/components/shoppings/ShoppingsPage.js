@@ -12,10 +12,10 @@ import {
 
 // MOBX
 import { inject, observer } from "mobx-react";
-import TabContainer from "../components/TabContainer";
+import TabContainer from "../TabContainer";
 // import CatalogHeader from "../components/CatalogHeader";
 
-class HomePage extends Component {
+class ShoppingsPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -76,4 +76,4 @@ class HomePage extends Component {
   }
 }
 
-export default withRouter(inject("store")(observer(HomePage)));
+export default withRouter(inject("store")(observer(ShoppingsPage)));

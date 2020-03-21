@@ -2,7 +2,6 @@ import React from "react";
 
 import TabOnePage from "../pages/TabOnePage";
 import TabTwoPage from "../pages/TabTwoPage";
-import { IonTabs } from "@ionic/react";
 
 //
 // value is used to let us know what view to render
