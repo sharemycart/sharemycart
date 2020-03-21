@@ -22,9 +22,15 @@ Though this project sounds a bit miniscule (and maybe even ridiculous compared t
 Thee are sketches with respect to [ui](./src/ui/Readme.md) and [backend technology](./src/backend/Readme.md).
 Everything is still very open, so feel free to bring in your ideas!
 
+## Run the server locally
+
+Go to src/backend and run `make dist`, then go back to project root.
+You need a database access credentials file which should be placed in a folder named `secrets` and should be named `collabshop19.json`
+Now run `scripts/start-server.sh` to start the server. It can be stopped by calling `scripts/stop-server.sh`
+
 ## Run tests
 
-To run the tests, just `npm install` and `npm test`.
+To run the tests, `npm install` first, then [run the server locally](#run-the-server-locally) and then `npm test`.
 
 ## How to contribute
 
