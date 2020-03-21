@@ -1,0 +1,39 @@
+name: CI/CD
+
+on:
+  push:
+    paths-ignore:
+      - '**.md'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Execute tests
+        run: echo "Add tests" && exit 1
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: OpenFaaS build and push
+        uses: mrsimpson/action-openfaas-build@master
+        with:
+          # The OpenFaaS function definition file
+          stack-file: backend/stack.yml
+          # Your docker username with push authorization
+          docker-username: ${{ secrets.DOCKER_USERNAME }}
+          # Your docker username with push authorization
+          docker-password: ${{ secrets.DOCKER_PASSWORD }}
+          # the platform abbreviations to build for, e. g. linux/amd64,linux/arm/v7
+          platforms: linux/amd64,linux/arm/v7
+          # Whether the built image shall be deployed (false=no, true=yes)
+          deploy: ${{ github.ref == 'refs/heads/master' }}
+          # OpenFaaS gateway URL (http(s)://my-public-gateway.tld)
+          openfaas-gateway: ${{ secrets.OPENFAAS_GATEWAY }}
+          # User for authenticating at OpenFaaS gateway
+          openfaas-username: ${{ secrets.OPENFAAS_USERNAME }}
+          # Password for authenticating at OpenFaaS gateway
+          openfaas-password: ${{ secrets.OPENFAAS_PASSWORD }}
