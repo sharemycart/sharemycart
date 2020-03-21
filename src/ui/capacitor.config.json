@@ -1,6 +1,6 @@
 {
-  "appId": "com.aks.reactionicfb",
-  "appName": "reactionicfb",
+  "appId": "com.sharemycart.app",
+  "appName": "share-my-cart",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "build"

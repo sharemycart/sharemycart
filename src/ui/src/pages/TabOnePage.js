@@ -5,7 +5,6 @@ import {
   IonText,
   IonList,
   IonLabel,
-  IonButton,
   IonItemSliding,
   IonItemOption,
   IonItemOptions
