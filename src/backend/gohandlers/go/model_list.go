@@ -1,3 +1,4 @@
+// Package swagger ...
 /*
  * Share my Cart
  *
@@ -11,11 +12,11 @@ package swagger
 
 // List is an struct that holds the list items in a slice
 type List struct {
-	Id string `json:"id,omitempty"`
+	ID string `json:"id,omitempty"`
 
 	Name string `json:"name"`
 
-	Type_ string `json:"type"`
+	Type string `json:"type"`
 	// indicates that a shopping list or a need list is the default list. This is particularly important when creating a needed item for a shopping list:  The needed item will be created in the default need list.
 	IsDefault bool `json:"isDefault,omitempty"`
 

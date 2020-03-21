@@ -1,4 +1,4 @@
-// Package swagger ...s
+// Package swagger ...
 /*
  * Share my Cart
  *
@@ -23,7 +23,7 @@ import (
 )
 
 type response struct {
-	Body    string `json:"body",omitempty`
+	Body    string `json:"body,omitempty"`
 	UserUID string `json:"uid,omitempty"`
 	Err     error  `json:"err,omitempty"`
 }
