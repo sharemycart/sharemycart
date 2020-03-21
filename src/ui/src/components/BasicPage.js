@@ -19,7 +19,7 @@ import {
  */
 const BasicPage = ({ title, renderContent, history, hasMenu, backAction }) => {
   return (
-    <div>
+    <>
       <IonHeader>
         <IonToolbar color="primary">
           <IonButtons slot="start">
@@ -30,9 +30,10 @@ const BasicPage = ({ title, renderContent, history, hasMenu, backAction }) => {
         </IonToolbar>
       </IonHeader>
       <IonContent padding>{renderContent(history)}</IonContent>
-    </div>
+    </>
   );
 };
+
 BasicPage.propTypes = {
   title: PropTypes.string.isRequired,
   hasMenu: PropTypes.bool,
