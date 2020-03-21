@@ -1,8 +1,7 @@
 {
-  "appId": "io.ionic.starter",
-  "appName": "share-my-cart",
+  "appId": "com.aks.reactionicfb",
+  "appName": "reactionicfb",
   "bundledWebRuntime": false,
   "npmClient": "npm",
-  "webDir": "build",
-  "cordova": {}
+  "webDir": "build"
 }

@@ -1,7 +1,0 @@
-{
-  "name": "share-my-cart",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "react"
-}
