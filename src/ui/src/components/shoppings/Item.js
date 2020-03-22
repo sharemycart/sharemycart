@@ -53,7 +53,7 @@ class Item extends Component {
         <IonLabel onClick={() => this.onItemClick()}
                   style={{
                     cursor: 'pointer',
-                    'text-decoration': (this.props.item.checked ? 'line-through' : 'none'),
+                    textDecoration: (this.props.item.checked ? 'line-through' : 'none'),
                     color: (this.props.item.checked ? 'grey' : 'black')
                   }}>
           {this.props.item.name}
