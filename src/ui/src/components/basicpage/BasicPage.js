@@ -14,8 +14,6 @@ import {
 } from '@ionic/react';
 import ProfileButton from '../profile/ProfileButton';
 
-import md5 from 'md5';
-
 /**
  * helper Ionic Page which laysout the framework of the page so
  * we dont need to repeat the boilerplate code. We also include
@@ -25,7 +23,6 @@ import md5 from 'md5';
  */
 const BasicPage = ({ title, renderContent, history, hasMenu, backAction, className }) => {
 	let layout = '';
-	let hash = '';
 
 	if (title) {
 		layout = <IonHeader>

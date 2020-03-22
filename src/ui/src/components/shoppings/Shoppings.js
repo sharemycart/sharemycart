@@ -10,7 +10,7 @@ import { inject, observer } from 'mobx-react';
 import TabContainer from '../tabs/TabContainer';
 import BasicPage from '../basicpage/BasicPage';
 
-class ShoppingsPage extends Component {
+class Shoppings extends Component {
 
 	render () {
 		return (
@@ -30,4 +30,4 @@ class ShoppingsPage extends Component {
 	}
 }
 
-export default withRouter(inject('store')(observer(ShoppingsPage)));
+export default withRouter(inject('store')(observer(Shoppings)));

@@ -14,8 +14,6 @@ import { inject, observer } from 'mobx-react';
 import TabContainer from '../tabs/TabContainer';
 import { logOut } from 'ionicons/icons';
 
-import md5 from 'md5';
-
 class ProfileButton extends Component {
 	constructor (props) {
 		super(props);
@@ -24,8 +22,8 @@ class ProfileButton extends Component {
 		this.state = { showPopover: false };
 	}
 
-	setShowPopover = () => {
-		this.setState({ showPopover: !this.state.showPopover });
+	setShowPopover = (showPopover) => {
+		this.setState({ showPopover: showPopover });
 	};
 
 	_onLogoutClick = async e => {
@@ -38,16 +36,15 @@ class ProfileButton extends Component {
 
 	render () {
 		let user = this.props.store.activeUser;
-		let hash = '';
-		let activeUser = user ? user.email : null;
-		if (activeUser) {
-			hash = md5(activeUser);
-		}
-		let src = 'https://s.gravatar.com/avatar/' + hash + '?s=32';
+		const size = 32;
+		let userImage = user ? user.photoURL : null;
+		let src = userImage ? userImage : ('https://www.gravatar.com/avatar?d=monsterid&s=' + size);
+
+		console.log('user.firstName', user);
 		return (
 			<>
 				<IonButton onClick={() => this.setShowPopover(true)}>
-					<IonAvatar style={{ width: 32, height: 32 }}>
+					<IonAvatar style={{ width: size, height: size }}>
 						<img src={src}/>
 					</IonAvatar>
 				</IonButton>
@@ -69,7 +66,6 @@ class ProfileButton extends Component {
 						<IonLabel position="fixed">Last Name</IonLabel>
 						{user.lastName}
 					</IonItem>
-
 					<IonItem text-wrap lines="none" style={{ padding: 10 }}>
 						{user.bio}
 					</IonItem>
@@ -79,6 +75,13 @@ class ProfileButton extends Component {
 					>
 						LOGOUT
 						<IonIcon slot="end" icon={logOut}/>
+					</IonButton>
+					<IonButton
+						color="danger"
+						expand="full"
+						onClick={e => this.setShowPopover(false)}
+					>
+						CLOSE
 					</IonButton>
 				</IonPopover>
 			</>

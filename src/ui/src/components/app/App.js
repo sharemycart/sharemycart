@@ -9,13 +9,13 @@ import {
 } from '@ionic/react';
 
 import PrivateRoute from '../basicpage/PrivateRoute';
-import ShoppingsPage from '../shoppings/ShoppingsPage';
+import Shoppings from '../shoppings/Shoppings';
 import Login from '../auth/Login';
 import RegistrationPage from '../auth/RegistrationPage';
 
 import { inject, observer } from 'mobx-react';
-import NeedsPage from '../needs/NeedsPage';
-import ProfilePage from '../profile/ProfilePage';
+import Needs from '../needs/Needs';
+import Profile from '../profile/Profile';
 
 class App extends Component {
 	render () {
@@ -38,9 +38,9 @@ class App extends Component {
 						<Route path="/login" component={Login}/>
 						<IonRouterOutlet>
 							<Route path="/register" component={RegistrationPage}/>
-							<PrivateRoute name="home" path="/home" component={ShoppingsPage}/>
-							<PrivateRoute name="needs" path="/needs" component={NeedsPage}/>
-							<PrivateRoute name="profile" path="/profile" component={ProfilePage}/>
+							<PrivateRoute name="home" path="/home" component={Shoppings}/>
+							<PrivateRoute name="needs" path="/needs" component={Needs}/>
+							<PrivateRoute name="profile" path="/profile" component={Profile}/>
 						</IonRouterOutlet>
 					</Switch>
 				</IonApp>
