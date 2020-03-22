@@ -49,7 +49,7 @@ class EditItem extends Component {
         </IonSelect>
       </IonItem>
 
-      <IonButton onClick={this.props.onClose}>Close</IonButton>
+      <IonButton onClick={this.props.onClose}>Done</IonButton>
     </IonList>
   }
 }
