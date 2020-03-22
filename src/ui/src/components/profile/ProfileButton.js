@@ -40,7 +40,6 @@ class ProfileButton extends Component {
 		let userImage = user ? user.photoURL : null;
 		let src = userImage ? userImage : ('https://www.gravatar.com/avatar?d=monsterid&s=' + size);
 
-		console.log('user.firstName', user);
 		return (
 			<>
 				<IonButton onClick={() => this.setShowPopover(true)}>
@@ -59,13 +58,19 @@ class ProfileButton extends Component {
 
 					<IonItem text-wrap>
 						<IonLabel position="fixed">First Name</IonLabel>
-						{user.firstName}
+						{user.firstName || user.displayName}
 					</IonItem>
 
 					<IonItem text-wrap>
 						<IonLabel position="fixed">Last Name</IonLabel>
 						{user.lastName}
 					</IonItem>
+
+					<IonItem text-wrap>
+						<IonLabel position="fixed">Phone Number</IonLabel>
+						{user.phoneNumber}
+					</IonItem>
+
 					<IonItem text-wrap lines="none" style={{ padding: 10 }}>
 						{user.bio}
 					</IonItem>
