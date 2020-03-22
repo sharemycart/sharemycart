@@ -13,7 +13,7 @@ import {
 import { inject, observer } from 'mobx-react';
 import TabContainer from '../TabContainer';
 
-class ShoppingsPage extends Component {
+class NeedsPage extends Component {
 	constructor (props) {
 		super(props);
 	}
@@ -23,15 +23,17 @@ class ShoppingsPage extends Component {
 			<IonPage>
 				<IonHeader>
 					<IonToolbar color="primary">
-						<IonTitle>My Shoppings</IonTitle>
+						<IonTitle>My Needs</IonTitle>
 					</IonToolbar>
 				</IonHeader>
 				<IonContent>
-					<TabContainer history={this.props.history}/>
+					<TabContainer
+						history={this.props.history}
+					/>
 				</IonContent>
 			</IonPage>
 		);
 	}
 }
 
-export default withRouter(inject('store')(observer(ShoppingsPage)));
+export default withRouter(inject('store')(observer(NeedsPage)));

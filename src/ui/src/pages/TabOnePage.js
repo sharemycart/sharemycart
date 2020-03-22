@@ -36,7 +36,7 @@ class TabOnePage extends Component {
                 return;
               }
               e.preventDefault();
-              this.props.history.push("/tab1-detail/" + key);
+              this.props.history.push("/shoppings-detail/" + key);
             }}
           >
             <IonLabel text-wrap>
