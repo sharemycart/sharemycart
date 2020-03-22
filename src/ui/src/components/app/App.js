@@ -10,7 +10,7 @@ import {
 
 import PrivateRoute from '../basicpage/PrivateRoute';
 import ShoppingsPage from '../shoppings/ShoppingsPage';
-import LoginPage from '../auth/LoginPage';
+import Login from '../auth/Login';
 import RegistrationPage from '../auth/RegistrationPage';
 
 import { inject, observer } from 'mobx-react';
@@ -35,7 +35,7 @@ class App extends Component {
 				<IonApp>
 					<Switch>
 						<Redirect exact from="/" to="home"/>
-						<Route path="/login" component={LoginPage}/>
+						<Route path="/login" component={Login}/>
 						<IonRouterOutlet>
 							<Route path="/register" component={RegistrationPage}/>
 							<PrivateRoute name="home" path="/home" component={ShoppingsPage}/>

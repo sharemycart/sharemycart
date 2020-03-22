@@ -52,6 +52,25 @@ export const loginWithEmail = (email, password) => {
 	return firebase.auth().signInWithEmailAndPassword(email, password);
 };
 
+export const loginWithFacebook = () => {
+	var provider = new firebase.auth.FacebookAuthProvider();
+	provider.setCustomParameters({
+		'display': 'popup'
+	});
+	return firebase.auth().signInWithPopup(provider);
+};
+
+export const loginWithGoogle = () => {
+	var provider = new firebase.auth.GoogleAuthProvider();
+	// @todo: in the future invite contacts to the app via email
+	//	provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+	provider.setCustomParameters({
+		'login_hint': 'johnsnow@thewallserver.com'
+	});
+
+	return firebase.auth().signInWithPopup(provider);
+};
+
 export const getCurrentUser = () => {
 	return firebase.auth().currentUser;
 };

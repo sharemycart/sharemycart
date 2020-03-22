@@ -3,13 +3,6 @@ import { IonItem, IonLabel, IonButton, IonInput, IonToast } from "@ionic/react";
 import BasicPage from "../basicpage/BasicPage";
 
 import { inject, observer } from "mobx-react";
-/**
- * sets the `title` and property hasMenu = true so that the menu for the side
- * drawer is displayed
- *
- * sets the `renderContent` propety to render the contents of the page
- */
-//const LoginPage = ({ isAuth, doLogin }) => {
 
 class RegistrationPage extends Component {
   constructor(props) {

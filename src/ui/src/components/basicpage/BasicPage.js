@@ -19,17 +19,21 @@ import {
  *
  */
 const BasicPage = ({ title, renderContent, history, hasMenu, backAction, className }) => {
+	let layout = '';
+	if (title) {
+		layout = <IonHeader>
+			<IonToolbar color="primary">
+				<IonButtons slot="start">
+					{hasMenu ? <IonMenuButton/> : null}
+					{backAction ? <IonBackButton defaultHref="/" text="" goBack={() => {}}/> : null}
+				</IonButtons>
+				<IonTitle>{title}</IonTitle>
+			</IonToolbar>
+		</IonHeader>;
+	}
 	return (
 		<>
-			<IonHeader>
-				<IonToolbar color="primary">
-					<IonButtons slot="start">
-						{hasMenu ? <IonMenuButton/> : null}
-						{backAction ? <IonBackButton defaultHref="/" text="" goBack={() => {}}/> : null}
-					</IonButtons>
-					<IonTitle>{title}</IonTitle>
-				</IonToolbar>
-			</IonHeader>
+			{layout}
 			<IonContent className={className || ''} padding>{renderContent(history)}</IonContent>
 		</>
 	);
