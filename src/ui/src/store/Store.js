@@ -209,6 +209,10 @@ export class Store {
 		return firebaseService.addItem(_data);
 	}
 
+	async editItem (id, _data) {
+		return firebaseService.editItem(id, _data);
+	}
+
 	/**
 	 *
 	 * @param {String} id The id of the item to add
@@ -264,5 +268,6 @@ decorate(Store, {
 	loadData: action,
 	itemByKey: action,
 	addItem: action,
+	editItem: action,
 	deleteItem: action
 });

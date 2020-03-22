@@ -204,6 +204,15 @@ export const addItem = async (item) => {
 	return item;
 };
 
+export const editItem = async (id, data) => {
+	let firstList = await getMyFirstListDocument();
+	if (firstList) {
+		let newItems = (firstList.data().Items || []).map(i => i.id === id ? data : i);
+		await firstList.ref.set({ Items: newItems });
+	}
+	return data;
+};
+
 export const getMyItems = async () => {
 	let firstList = await getMyFirstListDocument();
 	console.log('firstlist', firstList);

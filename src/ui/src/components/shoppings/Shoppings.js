@@ -87,6 +87,10 @@ class Shoppings extends Component {
 		this.setState(state => ({
 			items: state.items.map(i => i.id === item.id ? item : i)
 		}));
+		this.props.store.editItem(item.id, item)
+			.then(() => {
+				console.log('item updated successfully');
+			});
 	}
 
 	onDeleteItem (item) {
