@@ -4,39 +4,60 @@ import {
 	IonContent,
 	IonList,
 	IonSearchbar,
+	IonItem
 } from '@ionic/react';
 import Item from './Item';
 import { cart } from 'ionicons/icons';
 
 // MOBX
 import { inject, observer } from 'mobx-react';
-import TabContainer from '../tabs/TabContainer';
 import BasicPage from '../basicpage/BasicPage';
 
 const ENTER_KEY = 13;
-// @todo: load this from the server
-const items = [{
-	id: 1,
-	name: 'Tomatoes',
-	unit: 'kg',
-	quantity: 5
-}, {
-	id: 2,
-	name: 'Avocado',
-	unit: 'pc',
-	quantity: 1
-}, {
-	id: 3,
-	name: 'Flour',
-	unit: 'g',
-	quantity: 500
-}];
+
+// const items = [{
+// 	id: 1,
+// 	name: 'Tomatoes',
+// 	unit: 'kg',
+// 	quantity: 5
+// }, {
+// 	id: 2,
+// 	name: 'Avocado',
+// 	unit: 'pc',
+// 	quantity: 1
+// }, {
+// 	id: 3,
+// 	name: 'Flour',
+// 	unit: 'g',
+// 	quantity: 500
+// }];
 
 class Shoppings extends Component {
 
 	constructor (props) {
 		super(props);
-		this.state = { searchText: '', items: items };
+		this._hasUnmounted = false;
+		this.state = { searchText: '', items: [] };
+	}
+
+	componentDidMount () {
+		if (this._hasUnmounted) {
+			return;
+		}
+		this.props.store.getMyItems()
+			.then(items => {
+				if (!this._hasUnmounted) {
+					this.setState({ items: items });
+				}
+			})
+			.catch(error => {
+				console.error('error found', error);
+			})
+		;
+	}
+
+	componentWillUnmount () {
+		this._hasUnmounted = true;
 	}
 
 	createItemFromText (text) {
@@ -58,6 +79,7 @@ class Shoppings extends Component {
 		this.setState({
 			items: newItems
 		});
+
 		// @todo: connect here
 		// this.props.store.addItem({ text: text })
 		// 	.then(() => {
@@ -89,6 +111,21 @@ class Shoppings extends Component {
 				title="My Shoppings"
 				store={this.props.store}
 				renderContent={history => {
+					let view = '';
+					if (this.state.items.length > 0) {
+						view = this.state.items.map(item => (<Item
+							key={item.id}
+							item={item}
+							onUpdateItem={text => this.onUpdateItem(item, text)}
+							onDeleteItem={() => this.onDeleteItem(item)}
+						/>));
+					} else{
+						view = <>
+							<IonItem>No items in your list yet</IonItem>
+						</>;
+
+					}
+
 					return (
 						<>
 							<IonSearchbar
@@ -97,12 +134,7 @@ class Shoppings extends Component {
 								onKeyPress={this.onAddItem}
 								placeholder="Type to add new products"></IonSearchbar>
 							<IonList>
-								{this.state.items.map(item => (<Item
-									key={item.id}
-									item={item}
-									onUpdateItem={text => this.onUpdateItem(item, text)}
-									onDeleteItem={() => this.onDeleteItem(item)}
-								/>))}
+								{view}
 							</IonList>
 						</>
 					);

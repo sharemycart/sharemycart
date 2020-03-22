@@ -5,7 +5,7 @@ import App from "./components/app/App";
 
 import { Provider } from 'mobx-react'
 
-import { Store } from './store';
+import { Store } from './store/Store';
 
 import "@ionic/core/css/core.css";
 import "@ionic/core/css/ionic.bundle.css";
