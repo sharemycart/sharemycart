@@ -208,7 +208,7 @@ export const editItem = async (id, data) => {
 	let firstList = await getMyFirstListDocument();
 	if (firstList) {
 		let newItems = (firstList.data().Items || []).map(i => i.id === id ? data : i);
-		await firstList.ref.set({ Items: newItems });
+		await firstList.ref.set({ Items: newItems }, {merge: true});
 	}
 	return data;
 };
