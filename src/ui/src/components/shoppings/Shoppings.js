@@ -16,8 +16,6 @@ import { inject, observer } from 'mobx-react';
 import BasicPage from '../basicpage/BasicPage';
 import { v4 as uuidv4 } from 'uuid';
 
-const ENTER_KEY = 13;
-
 // const items = [{
 // 	id: 1,
 // 	name: 'Tomatoes',
