@@ -93,7 +93,7 @@ class Login extends Component {
 	};
 
 	render () {
-		let { isAuth, initializationError, activeUser } = this.props.store;
+		let { initializationError, activeUser } = this.props.store;
 
 		if (activeUser) {
 			return <Redirect to="/home"/>;
@@ -107,9 +107,9 @@ class Login extends Component {
 						title=''
 						className="login-page"
 						hasMenu
+						store={this.props.store}
 						renderContent={history => {
-							const { email, password, error, showForgotPasswordAlert } = this.state;
-							const isInvalid = password === '' || email === '';
+							const { email, password, error } = this.state;
 							return (
 								<IonContent>
 									<IonImg className="image-login" src="../../assets/images/login-center.png"/>
@@ -125,7 +125,7 @@ class Login extends Component {
 										</IonRow>
 									</IonGrid>
 									<br/>
-									<IonGrid class="padding" style={{maxWidth: 500}}>
+									<IonGrid class="padding" style={{ maxWidth: 500 }}>
 										<IonRow>
 											<IonCol>
 												<IonInput
@@ -206,34 +206,6 @@ class Login extends Component {
 										</IonRow>
 									</IonGrid>
 								</IonContent>
-								// <IonList>
-								// 	<IonItem>
-								// 		<IonLabel position="floating">Email Address</IonLabel>
-								// 		<IonInput type="email" ref={this.email} name="email"/>
-								// 	</IonItem>
-								// 	<IonItem>
-								// 		<IonLabel position="floating">Password</IonLabel>
-								// 		<IonInput
-								// 			type="password"
-								// 			ref={this.password}
-								// 			name="password"
-								// 		/>
-								// 	</IonItem>
-								// 	<IonButton
-								// 		expand="full"
-								// 		style={{ margin: 14 }}
-								// 		onClick={e => {
-								// 			if (!e.currentTarget) {
-								// 				return;
-								// 			}
-								// 			e.preventDefault();
-								// 			this._doLogin(history);
-								// 		}}
-								// 	>
-								// 		{isAuth ? 'Logged In' : 'Login'}
-								// 	</IonButton>
-								//
-								// </IonList>
 							);
 						}}
 					/>

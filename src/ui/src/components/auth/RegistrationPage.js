@@ -45,6 +45,7 @@ class RegistrationPage extends Component {
         <BasicPage
           title="Create Account Page"
           hasMenu
+          store={this.props.store}
           backAction={() => {}}
           renderContent={history => {
             return (

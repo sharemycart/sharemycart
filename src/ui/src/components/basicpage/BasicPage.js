@@ -8,8 +8,13 @@ import {
 	IonContent,
 	IonButtons,
 	IonMenuButton,
-	IonBackButton
+	IonButton,
+	IonBackButton,
+	IonIcon
 } from '@ionic/react';
+import ProfileButton from '../profile/ProfileButton';
+
+import md5 from 'md5';
 
 /**
  * helper Ionic Page which laysout the framework of the page so
@@ -20,12 +25,17 @@ import {
  */
 const BasicPage = ({ title, renderContent, history, hasMenu, backAction, className }) => {
 	let layout = '';
+	let hash = '';
+
 	if (title) {
 		layout = <IonHeader>
 			<IonToolbar color="primary">
 				<IonButtons slot="start">
 					{hasMenu ? <IonMenuButton/> : null}
 					{backAction ? <IonBackButton defaultHref="/" text="" goBack={() => {}}/> : null}
+				</IonButtons>
+				<IonButtons slot="end">
+					<ProfileButton/>
 				</IonButtons>
 				<IonTitle>{title}</IonTitle>
 			</IonToolbar>

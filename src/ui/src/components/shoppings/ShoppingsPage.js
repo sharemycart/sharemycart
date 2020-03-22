@@ -2,31 +2,30 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 
 import {
-	IonPage,
-	IonContent,
-	IonHeader,
-	IonTitle,
-	IonToolbar
+	IonContent
 } from '@ionic/react';
 
 // MOBX
 import { inject, observer } from 'mobx-react';
 import TabContainer from '../tabs/TabContainer';
+import BasicPage from '../basicpage/BasicPage';
 
 class ShoppingsPage extends Component {
 
 	render () {
 		return (
-			<IonPage>
-				<IonHeader>
-					<IonToolbar color="primary">
-						<IonTitle>My Shoppings</IonTitle>
-					</IonToolbar>
-				</IonHeader>
-				<IonContent>
-					<TabContainer history={this.props.history}/>
-				</IonContent>
-			</IonPage>
+			<BasicPage
+				title="My Shoppings"
+				store={this.props.store}
+				renderContent={history => {
+					return (
+						<IonContent>
+							<TabContainer history={this.props.history}/>
+						</IonContent>
+					);
+				}}
+			>
+			</BasicPage>
 		);
 	}
 }
