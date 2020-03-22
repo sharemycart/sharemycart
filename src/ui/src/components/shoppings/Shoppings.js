@@ -97,8 +97,11 @@ class Shoppings extends Component {
 
 	render () {
 		const newItem = this.state.inNewMode
-			? <EditItem item={this.state.newItem} onChange={item => this.onCreateItem(item)}
-									onClose={() => this.onCreateComplete()}/>
+			? <EditItem item={this.state.newItem} 
+						onChange={item => this.onCreateItem(item)}
+						onClose={() => this.onCreateComplete()}
+						mode="shopping"
+						/>
 			: <IonItem style={{ color: 'grey' }}>
 				<IonIcon icon={add}/>
 				<IonLabel onClick={() => this.setState({ inNewMode: true })}>Click here to add item</IonLabel>

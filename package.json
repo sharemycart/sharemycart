@@ -34,5 +34,7 @@
     "should": "^13.2.3",
     "supertest": "^4.0.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "uuid": "^7.0.2"
+  }
 }
