@@ -178,25 +178,38 @@ export const queryObjectCollection = ({ collection }) => {
 	);
 };
 
-export const getMyItems = async () => {
+export const getMyFirstListDocument = async () => {
 	let currentUser = await getCurrentUserAsync();
 	let db = firebase.firestore();
 	if (!currentUser) {
-		return;
+		return null;
 	}
 	let userDocument = await db.collection('Users').doc(currentUser.uid);
-	// @todo: add error handling
 
 	let allLists = await userDocument.collection('Lists').where('Type', '==', 'shopping').get();
 	let firstList = null;
 	allLists.forEach(doc => {
-		firstList = {
-			id: doc.id,
-			...doc.data()
-		};
+		firstList = doc;
 		return false;
 	});
-	return firstList ? firstList.Items : [];
+	return firstList;
+};
+
+export const addItem = async (item) => {
+	let firstList = await getMyFirstListDocument();
+	if (firstList) {
+		let newItems = (firstList.data().Items || []).concat(item);
+		await firstList.ref.set({ Items: newItems }, { merge: true });
+	}
+	return item;
+};
+
+export const getMyItems = async () => {
+	let firstList = await getMyFirstListDocument();
+	console.log('firstlist', firstList);
+	let items = firstList ? firstList.data().Items : [];
+	console.log('items', items);
+	return items || [];
 };
 
 /**

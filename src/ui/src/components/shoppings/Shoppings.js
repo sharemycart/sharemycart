@@ -15,6 +15,7 @@ import EditItem from './EditItem';
 // MOBX
 import { inject, observer } from 'mobx-react';
 import BasicPage from '../basicpage/BasicPage';
+import { v4 as uuidv4 } from 'uuid';
 
 const ENTER_KEY = 13;
 
@@ -68,7 +69,18 @@ class Shoppings extends Component {
 	}
 
 	onCreateComplete () {
-		this.setState({ items: this.state.items.concat(this.state.newItem), newItem: {}, inNewMode: false });
+		let newItem = this.state.newItem;
+		if (!newItem.name) {
+			return;
+		}
+		if (!newItem.id) {
+			newItem.id = uuidv4();
+		}
+		this.props.store.addItem(newItem)
+			.then(() => {
+				console.log('item added successfully');
+			});
+		this.setState({ items: this.state.items.concat(newItem), newItem: {}, inNewMode: false });
 	}
 
 	onUpdateItem (item) {

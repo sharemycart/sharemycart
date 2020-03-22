@@ -205,26 +205,8 @@ export class Store {
 	// 		});
 	// }
 
-	addItem (_data) {
-		return firebaseService
-			.addObjectToCollection({ collection: 'Items', objectData: _data })
-			.then(
-				_result => {
-					// create the user object based on the data retrieved...
-					return runInAction(() => {
-						set(this.items, _result.id, _result);
-						return _result;
-					});
-				},
-				err => {
-					console.log(err);
-					return err;
-				}
-			)
-			.catch(e => {
-				console.log(e);
-				return e;
-			});
+	async addItem (_data) {
+		return firebaseService.addItem(_data);
 	}
 
 	/**
