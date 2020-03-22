@@ -247,6 +247,10 @@ export class Store {
 	async getNeedListsForSharedShoppingLists() {
 		return firebaseService.getNeedListsForSharedShoppingLists()
 	}
+
+	async getItemsOfList(userId, listId) {
+		return firebaseService.getItemsOfList(userId, listId)
+	}
 }
 
 decorate(Store, {
@@ -263,6 +267,7 @@ decorate(Store, {
 	itemEntries: computed,
 	getMyItems: action,
 	getMyNeedLists: action,
+	getItemsOfList: action,
 
 	// ACTIONS
 	doCreateUser: action,

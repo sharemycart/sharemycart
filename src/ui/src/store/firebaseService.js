@@ -210,6 +210,26 @@ export const getNeedListsForSharedShoppingLists = async (originListId = null) =>
 	return needListQuery.get();
 };
 
+
+export const getItemsOfList = async (userId, listId) => {
+	let currentUserId = userId
+	let db = firebase.firestore();
+
+	if (!currentUserId) {
+		let currentUser = await getCurrentUserAsync();
+		if (!currentUser) {
+			return null;
+		}
+		currentUserId = currentUser.uid
+	}
+	let userDocument = await db.collection('Users').doc(currentUserId);
+
+	const list = await userDocument.collection('Lists').doc(listId).get()
+	return list.exists
+		? list.data().Items
+		: []
+};
+
 export const addItem = async (item) => {
 	let firstList = await getMyFirstListDocument();
 	if (firstList) {

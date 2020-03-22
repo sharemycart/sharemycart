@@ -39,25 +39,28 @@ class Needs extends Component {
 		try {
 			const sharedListsSnapshot = await this.props.store.getNeedListsForSharedShoppingLists()
 			const sharedLists = []
-			sharedListsSnapshot.forEach(doc=>sharedLists.push(doc.data()))
-			if (sharedLists && sharedLists.length)
+			let potentiallyNeededItems = []
 
-				if (!this._hasUnmounted) {
-					this.setState({ 
-						sharedLists: sharedLists || [],
-						needs: sharedLists[0].items
-					});
-				}
+			sharedListsSnapshot.forEach(doc => sharedLists.push(doc.data()))
+			if (sharedLists && sharedLists.length) {
+				potentiallyNeededItems = await this.props.store.getItemsOfList(sharedLists[0].originUid, sharedLists[0].originListId)
+			}
+			if (!this._hasUnmounted) {
+				this.setState({
+					sharedLists: sharedLists || [],
+					potentiallyNeededItems
+				});
+			}
 		} catch (error) {
 			console.error('error found', error);
 		}
 	}
 
-	onCreateNeed(potentialNeed) {
+	onCreateNeed(potentialNeeds) {
 		// create a new needed item and remove the now needed item from the potential needs
 		this.setState({
-			neededItems: this.state.neededItems.concat(Object.assign(potentialNeed, { quantity: null, id: uuid() })),
-			potentiallyNeededItems: this.state.potentiallyNeededItems.filter(item => item.id !== potentialNeed.id)
+			neededItems: this.state.neededItems.concat(Object.assign(potentialNeeds, { quantity: null, id: uuid() })),
+			potentiallyNeededItems: this.state.potentiallyNeededItems.filter(item => item.id !== potentialNeeds.id)
 		})
 
 	}
@@ -103,7 +106,7 @@ class Needs extends Component {
 									onUpdateItem={item => this.onUpdateItem(item)}
 									onDeleteItem={() => this.onDeleteItem(item)}
 									onCreateNeed={() => this.onCreateNeed(item)}
-									mode={'potentialNeed'}
+									mode={'potentialNeeds'}
 								/>))}
 							</IonList>
 						</>
