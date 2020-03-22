@@ -1,7 +1,7 @@
 import * as firebase from 'firebase'; // 4.3.0
 require('firebase/firestore');
 
-var firebaseConfig = {
+const FIREBASE_CONFIG = {
 	apiKey: process.env.REACT_APP_BACKEND_API_KEY,
 	authDomain: process.env.REACT_APP_BACKEND_AUTH_DOMAIN,
 	databaseURL: process.env.REACT_APP_BACKEND_DATABASE_URL,
@@ -13,7 +13,7 @@ var firebaseConfig = {
 
 // Ensure that you do not login twice.
 if (!firebase.apps.length) {
-	firebase.initializeApp(firebaseConfig);
+	firebase.initializeApp(FIREBASE_CONFIG);
 }
 
 // const firestore = firebase.firestore();
@@ -72,6 +72,10 @@ export const loginWithGoogle = () => {
 };
 
 export const getCurrentUser = () => {
+	return firebase.auth().currentUser;
+};
+
+export const getCurrentUserAsync = async () => {
 	return firebase.auth().currentUser;
 };
 /**
@@ -172,6 +176,27 @@ export const queryObjectCollection = ({ collection }) => {
 				return error;
 			})
 	);
+};
+
+export const getMyItems = async () => {
+	let currentUser = await getCurrentUserAsync();
+	let db = firebase.firestore();
+	if (!currentUser) {
+		return;
+	}
+	let userDocument = await db.collection('Users').doc(currentUser.uid);
+	// @todo: add error handling
+
+	let allLists = await userDocument.collection('Lists').where('Type', '==', 'shopping').get();
+	let firstList = null;
+	allLists.forEach(doc => {
+		firstList = {
+			id: doc.id,
+			...doc.data()
+		};
+		return false;
+	});
+	return firstList ? firstList.Items : [];
 };
 
 /**

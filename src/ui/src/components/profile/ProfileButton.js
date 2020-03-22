@@ -11,7 +11,6 @@ import {
 
 // MOBX
 import { inject, observer } from 'mobx-react';
-import TabContainer from '../tabs/TabContainer';
 import { logOut } from 'ionicons/icons';
 
 class ProfileButton extends Component {

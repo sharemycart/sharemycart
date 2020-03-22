@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { IonList, IonLabel, IonItem, IonIcon } from '@ionic/react';
+import {
+	IonContent,
+	IonSearchbar,
+	IonItem,
+	IonList,
+	IonLabel,
+	IonIcon
+} from '@ionic/react';
 import { add } from 'ionicons/icons';
 import Item from './Item';
 import EditItem from './EditItem';
@@ -10,37 +17,58 @@ import { inject, observer } from 'mobx-react';
 import BasicPage from '../basicpage/BasicPage';
 
 const ENTER_KEY = 13;
-// @todo: load this from the server
-const items = [{
-	id: 1,
-	name: 'Tomatoes',
-	unit: 'kg',
-	quantity: 5
-}, {
-	id: 2,
-	name: 'Avocado',
-	unit: 'pc',
-	quantity: 1
-}, {
-	id: 3,
-	name: 'Flour',
-	unit: 'g',
-	quantity: 500
-}];
+
+// const items = [{
+// 	id: 1,
+// 	name: 'Tomatoes',
+// 	unit: 'kg',
+// 	quantity: 5
+// }, {
+// 	id: 2,
+// 	name: 'Avocado',
+// 	unit: 'pc',
+// 	quantity: 1
+// }, {
+// 	id: 3,
+// 	name: 'Flour',
+// 	unit: 'g',
+// 	quantity: 500
+// }];
 
 class Shoppings extends Component {
 
 	constructor (props) {
 		super(props);
-		this.state = { items, inNewMode: false, newItem: {} };
+		this._hasUnmounted = false;
+		this.state = { items: [], inNewMode: false, newItem: {} };
 	}
 
-	onCreateItem(newItem) {
-		this.setState({newItem})
+	componentDidMount () {
+		if (this._hasUnmounted) {
+			return;
+		}
+		this.props.store.getMyItems()
+			.then(items => {
+				if (!this._hasUnmounted) {
+					this.setState({ items: items });
+				}
+			})
+			.catch(error => {
+				console.error('error found', error);
+			})
+		;
 	}
 
-	onCreateComplete() {
-		this.setState({items: this.state.items.concat(this.state.newItem), newItem: {}, inNewMode: false})
+	componentWillUnmount () {
+		this._hasUnmounted = true;
+	}
+
+	onCreateItem (newItem) {
+		this.setState({ newItem });
+	}
+
+	onCreateComplete () {
+		this.setState({ items: this.state.items.concat(this.state.newItem), newItem: {}, inNewMode: false });
 	}
 
 	onUpdateItem (item) {
@@ -57,11 +85,12 @@ class Shoppings extends Component {
 
 	render () {
 		const newItem = this.state.inNewMode
-	 		? <EditItem item={this.state.newItem} onChange={item => this.onCreateItem(item)} onClose={() => this.onCreateComplete()} />
-		 	: <IonItem style={{color: 'grey'}}>
-				 	<IonIcon icon={add} />
-				 	<IonLabel onClick={() => this.setState({inNewMode: true})}>Click here to add item</IonLabel>
-				</IonItem>
+			? <EditItem item={this.state.newItem} onChange={item => this.onCreateItem(item)}
+									onClose={() => this.onCreateComplete()}/>
+			: <IonItem style={{ color: 'grey' }}>
+				<IonIcon icon={add}/>
+				<IonLabel onClick={() => this.setState({ inNewMode: true })}>Click here to add item</IonLabel>
+			</IonItem>;
 
 		return (
 			<BasicPage
@@ -72,8 +101,8 @@ class Shoppings extends Component {
 						<>
 							{newItem}
 							<IonList>
-								{this.state.items.map(item => (<Item
-									key={item.id}
+								{this.state.items.map((item, key) => (<Item
+									key={item.id || key}
 									item={item}
 									ownList={true}
 									onUpdateItem={item => this.onUpdateItem(item)}

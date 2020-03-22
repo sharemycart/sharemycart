@@ -177,36 +177,37 @@ export class Store {
 		return firebaseService.logOut();
 	}
 
-	// DATA CRUD
-	loadData () {
-		return firebaseService
-			.queryObjectCollection({ collection: 'items' })
-			.then(
-				_result => {
-					// create the user object based on the data retrieved...
-					return runInAction(() => {
-						let resultMap = _result.reduce((map, obj) => {
-							map[obj.id] = obj;
-							return map;
-						}, {});
-						this.items = resultMap;
-						return resultMap;
-					});
-				},
-				err => {
-					console.log(err);
-					return err;
-				}
-			)
-			.catch(e => {
-				console.log(e);
-				return e;
-			});
-	}
+	//
+	// // DATA CRUD
+	// loadData () {
+	// 	return firebaseService
+	// 		.queryObjectCollection({ collection: 'items' })
+	// 		.then(
+	// 			_result => {
+	// 				// create the user object based on the data retrieved...
+	// 				return runInAction(() => {
+	// 					let resultMap = _result.reduce((map, obj) => {
+	// 						map[obj.id] = obj;
+	// 						return map;
+	// 					}, {});
+	// 					this.items = resultMap;
+	// 					return resultMap;
+	// 				});
+	// 			},
+	// 			err => {
+	// 				console.log(err);
+	// 				return err;
+	// 			}
+	// 		)
+	// 		.catch(e => {
+	// 			console.log(e);
+	// 			return e;
+	// 		});
+	// }
 
 	addItem (_data) {
 		return firebaseService
-			.addObjectToCollection({ collection: 'items', objectData: _data })
+			.addObjectToCollection({ collection: 'Items', objectData: _data })
 			.then(
 				_result => {
 					// create the user object based on the data retrieved...
@@ -226,14 +227,19 @@ export class Store {
 			});
 	}
 
-	deleteItem (_data) {
+	/**
+	 *
+	 * @param {String} id The id of the item to add
+	 * @returns {Promise<boolean>}
+	 */
+	deleteItem (id) {
 		return firebaseService
-			.removeObjectFromCollection({ collection: 'items', objectId: _data.id })
+			.removeObjectFromCollection({ collection: 'Items', objectId: id })
 			.then(
 				_result => {
 					// create the user object based on the data retrieved...
 					return runInAction(() => {
-						remove(this.items, _data.id);
+						remove(this.items, id);
 						return true;
 					});
 				},
@@ -246,6 +252,10 @@ export class Store {
 				console.log(e);
 				return e;
 			});
+	}
+
+	async getMyItems () {
+		return firebaseService.getMyItems();
 	}
 }
 
@@ -261,6 +271,7 @@ decorate(Store, {
 	authenticatedUser: computed,
 	doCheckAuth: computed,
 	itemEntries: computed,
+	getMyItems: action,
 
 	// ACTIONS
 	doCreateUser: action,
