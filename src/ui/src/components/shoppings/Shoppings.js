@@ -2,15 +2,11 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import {
 	IonContent,
-	IonIcon,
-	IonBadge,
-	IonLabel,
-	IonButton,
-	IonItem,
 	IonList,
 	IonSearchbar,
 } from '@ionic/react';
-import { trash, cart, add } from 'ionicons/icons';
+import Item from './Item';
+import { cart } from 'ionicons/icons';
 
 // MOBX
 import { inject, observer } from 'mobx-react';
@@ -74,6 +70,15 @@ class Shoppings extends Component {
 		// });
 	};
 
+	onUpdateItem(item, text) {
+		const modified = this.createItemFromText(text)
+		this.setState(state => {
+			return {
+				items: state.items.map(i => i.id === item.id ? modified : i)
+			}
+		})
+	}
+
 	render () {
 		return (
 			<BasicPage
@@ -90,17 +95,11 @@ class Shoppings extends Component {
 									onKeyPress={this.onAddItem}
 									placeholder="Type to add new products"></IonSearchbar>
 								<IonList>
-									{this.state.items.map(item => {
-										// @todo: add the handlers for the buttons plus and remove
-										return (<IonItem key={item.id}>
-											<IonLabel>{item.name}</IonLabel>
-											<IonBadge slot="end" color="dark">{item.quantity}{item.unit}</IonBadge>
-											<IonButton fill="add" size="large" slot="end" color="primary"><IonIcon
-												icon={add}/></IonButton>
-											<IonButton className="button-end" fill="clear" size="large" slot="end" color="danger"><IonIcon
-												icon={trash}/></IonButton>
-										</IonItem>);
-									})}
+									{this.state.items.map(item => (<Item
+											key={item.id}
+											item={item}
+											onUpdateItem={text => this.onUpdateItem(item, text)}
+									 />))}
 								</IonList>
 							</IonContent>
 						</>
