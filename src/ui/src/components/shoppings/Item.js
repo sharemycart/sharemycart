@@ -6,13 +6,13 @@ import { inject, observer } from "mobx-react";
 import { trash, add } from 'ionicons/icons';
 
 class Item extends Component {
-	constructor (props) {
-		super(props);
-		this.state = { inEdit: false };
+  constructor(props) {
+    super(props);
+    this.state = { inEdit: false };
   }
-  
+
   setEditMode(inEdit) {
-    this.setState({inEdit})
+    this.setState({ inEdit })
   }
 
   render() {
@@ -30,7 +30,9 @@ class Item extends Component {
       <>
         <IonLabel onClick={() => this.setEditMode(true)}>{this.props.item.name}</IonLabel>
         <IonBadge>
-          {this.props.item.quantity} {this.props.item.unit}
+          <IonLabel onClick={() => this.setEditMode(true)}>
+            {this.props.item.quantity} {this.props.item.unit}
+          </IonLabel>
         </IonBadge>
         {needIcon}
         <IonButton className="button-end" fill="clear" size="large" slot="end" color="danger" onClick={this.props.onDeleteItem}>
