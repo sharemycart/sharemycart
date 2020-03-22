@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Redirect } from 'react-router-dom';
 
 import {
 	IonPage,
@@ -9,12 +9,14 @@ import {
 	IonToolbar,
 	IonButton,
 	IonItem,
-	IonLabel
+	IonLabel,
+	IonIcon
 } from '@ionic/react';
 
 // MOBX
 import { inject, observer } from 'mobx-react';
 import TabContainer from '../TabContainer';
+import { logOut } from 'ionicons/icons';
 
 class ProfilePage extends Component {
 	constructor (props) {
@@ -31,6 +33,9 @@ class ProfilePage extends Component {
 
 	render () {
 		let user = this.props.store.activeUser;
+		if (!user) {
+			return <Redirect to="/login"/>;
+		}
 		return (
 			<IonPage>
 				<IonHeader>
@@ -39,6 +44,7 @@ class ProfilePage extends Component {
 					</IonToolbar>
 				</IonHeader>
 				<IonContent padding>
+					<TabContainer/>
 					<IonItem>
 						<IonLabel position="fixed">Email</IonLabel>
 						<IonLabel>{user.email}</IonLabel>
@@ -57,15 +63,14 @@ class ProfilePage extends Component {
 					<IonItem text-wrap lines="none" style={{ padding: 10 }}>
 						{user.bio}
 					</IonItem>
-
 					<IonButton
 						expand="full"
 						onClick={this._onLogoutClick}
 					>
 						LOGOUT
+						<IonIcon slot="end" icon={logOut}/>
 					</IonButton>
 				</IonContent>
-				<TabContainer/>
 			</IonPage>
 		);
 	}
