@@ -39,7 +39,7 @@ class Item extends Component {
       <IonButton fill="add" size="large" slot="end" color="primary">
         <IonIcon icon={add} />
       </IonButton>
-      <IonButton className="button-end" fill="clear" size="large" slot="end" color="danger">
+      <IonButton className="button-end" fill="clear" size="large" slot="end" color="danger" onClick={this.props.onDeleteItem}>
         <IonIcon icon={trash} />
       </IonButton>
     </IonItem>

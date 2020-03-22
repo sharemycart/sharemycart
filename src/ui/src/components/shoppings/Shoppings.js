@@ -72,11 +72,15 @@ class Shoppings extends Component {
 
 	onUpdateItem(item, text) {
 		const modified = this.createItemFromText(text)
-		this.setState(state => {
-			return {
-				items: state.items.map(i => i.id === item.id ? modified : i)
-			}
-		})
+		this.setState(state => ({
+			items: state.items.map(i => i.id === item.id ? modified : i)
+		}))
+	}
+
+	onDeleteItem(item) {
+		this.setState(state => ({
+			items: state.items.filter(i => i.id !== item.id)
+		}))
 	}
 
 	render () {
@@ -99,6 +103,7 @@ class Shoppings extends Component {
 											key={item.id}
 											item={item}
 											onUpdateItem={text => this.onUpdateItem(item, text)}
+											onDeleteItem={() => this.onDeleteItem(item)}
 									 />))}
 								</IonList>
 							</IonContent>
