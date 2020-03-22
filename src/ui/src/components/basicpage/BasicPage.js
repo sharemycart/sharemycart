@@ -13,6 +13,7 @@ import {
 	IonIcon
 } from '@ionic/react';
 import ProfileButton from '../profile/ProfileButton';
+import TabContainer from '../tabs/TabContainer';
 
 /**
  * helper Ionic Page which laysout the framework of the page so
@@ -21,7 +22,7 @@ import ProfileButton from '../profile/ProfileButton';
  *
  *
  */
-const BasicPage = ({ title, renderContent, history, hasMenu, backAction, className }) => {
+const BasicPage = ({ title, renderContent, history, hasMenu, backAction, className, hideBottomBar }) => {
 	let layout = '';
 
 	if (title) {
@@ -38,10 +39,15 @@ const BasicPage = ({ title, renderContent, history, hasMenu, backAction, classNa
 			</IonToolbar>
 		</IonHeader>;
 	}
+	let bottomBar = '';
+	if (!hideBottomBar) {
+		bottomBar = <TabContainer history={history}/>;
+	}
 	return (
 		<>
 			{layout}
 			<IonContent className={className || ''} padding>{renderContent(history)}</IonContent>
+			{bottomBar}
 		</>
 	);
 };

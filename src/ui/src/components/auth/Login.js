@@ -107,6 +107,7 @@ class Login extends Component {
 						title=''
 						className="login-page"
 						hasMenu
+						hideBottomBar={true}
 						store={this.props.store}
 						renderContent={history => {
 							const { email, password, error } = this.state;

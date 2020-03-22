@@ -18,7 +18,6 @@ import {
 
 // MOBX
 import { inject, observer } from 'mobx-react';
-import TabContainer from '../tabs/TabContainer';
 import { logOut } from 'ionicons/icons';
 import BasicPage from '../basicpage/BasicPage';
 
@@ -52,7 +51,6 @@ class Profile extends Component {
 				renderContent={history => {
 					return (
 						<>
-							<TabContainer/>
 							<IonItem>
 								<IonAvatar style={{ width: size, height: size }}>
 									<img src={src} title="Image from Gravatar"/>

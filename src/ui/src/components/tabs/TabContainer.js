@@ -5,7 +5,9 @@ import {
 	IonLabel,
 	IonTabBar,
 	IonTabButton,
-	IonTabs
+	IonTabs,
+	IonContent,
+	IonFooter
 } from '@ionic/react';
 import { cart, magnet, person } from 'ionicons/icons';
 
@@ -15,8 +17,8 @@ import { cart, magnet, person } from 'ionicons/icons';
 // 0 = SHOES, 1 = SOCKS, 2 = CART
 const TabContainer = () => {
 	return (
-		<IonTabs>
-			<IonTabBar slot="bottom">
+		<IonFooter>
+			<IonTabBar>
 				<IonTabButton tab="home" href="/home">
 					<IonIcon icon={cart}/>
 					<IonLabel>Shoppings</IonLabel>
@@ -30,7 +32,7 @@ const TabContainer = () => {
 					<IonLabel>Profile</IonLabel>
 				</IonTabButton>
 			</IonTabBar>
-		</IonTabs>
+		</IonFooter>
 	);
 };
 
