@@ -9,6 +9,7 @@ class Item extends Component {
   constructor(props) {
     super(props);
     this.state = { inEdit: false };
+    this.mode = { mode: props.mode}
   }
 
   setEditMode(inEdit) {

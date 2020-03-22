@@ -102,6 +102,7 @@ class Shoppings extends Component {
 									ownList={true}
 									onUpdateItem={item => this.onUpdateItem(item)}
 									onDeleteItem={() => this.onDeleteItem(item)}
+									mode={'shopping'}
 								/>))}
 							</IonList>
 						</>
