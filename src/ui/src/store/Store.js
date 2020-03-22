@@ -251,6 +251,10 @@ export class Store {
 	async getItemsOfList(userId, listId) {
 		return firebaseService.getItemsOfList(userId, listId)
 	}
+
+	async getCurrentList(userId, listId) {
+		return firebaseService.getCurrentList(userId, listId)
+	}
 }
 
 decorate(Store, {
@@ -277,6 +281,7 @@ decorate(Store, {
 	doLogout: action,
 	loadData: action,
 	itemByKey: action,
+	getCurrentList: action,
 	addItem: action,
 	editItem: action,
 	deleteItem: action

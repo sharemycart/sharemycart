@@ -203,16 +203,15 @@ export const getNeedListsForSharedShoppingLists = async (originListId = null) =>
 	}
 	let userDocument = await db.collection('Users').doc(currentUser.uid);
 
-	const needListQuery = await userDocument.collection('Lists').where('type', '==', 'need')
+	const needListQuery = await userDocument.collection('Lists').where('type', '==', 'need');
 	if (originListId) {
-		needListQuery.where('originListId', '==', originListId)
+		needListQuery.where('originListId', '==', originListId);
 	}
 	return needListQuery.get();
 };
 
-
 export const getItemsOfList = async (userId, listId) => {
-	let currentUserId = userId
+	let currentUserId = userId;
 	let db = firebase.firestore();
 
 	if (!currentUserId) {
@@ -220,14 +219,14 @@ export const getItemsOfList = async (userId, listId) => {
 		if (!currentUser) {
 			return null;
 		}
-		currentUserId = currentUser.uid
+		currentUserId = currentUser.uid;
 	}
 	let userDocument = await db.collection('Users').doc(currentUserId);
 
-	const list = await userDocument.collection('Lists').doc(listId).get()
+	const list = await userDocument.collection('Lists').doc(listId).get();
 	return list.exists
 		? list.data().Items
-		: []
+		: [];
 };
 
 export const addItem = async (item) => {
@@ -237,6 +236,17 @@ export const addItem = async (item) => {
 		await firstList.ref.set({ Items: newItems }, { merge: true });
 	}
 	return item;
+};
+
+export const getCurrentList = async (item) => {
+	let firstList = await getMyFirstListDocument();
+	if (firstList) {
+		return {
+			id: firstList.id,
+			...firstList.data()
+		};
+	}
+	return null;
 };
 
 export const editItem = async (id, data) => {
