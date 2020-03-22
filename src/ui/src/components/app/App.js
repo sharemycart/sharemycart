@@ -8,15 +8,14 @@ import {
 	IonReactRouter
 } from '@ionic/react';
 
-import PrivateRoute from './components/PrivateRoute';
-import ShoppingsPage from './components/shoppings/ShoppingsPage';
-import LoginPage from './components/auth/LoginPage';
-import RegistrationPage from './components/auth/RegistrationPage';
-import TabOneDetailPage from './pages/TabOneDetailPage';
+import PrivateRoute from '../basicpage/PrivateRoute';
+import ShoppingsPage from '../shoppings/ShoppingsPage';
+import LoginPage from '../auth/LoginPage';
+import RegistrationPage from '../auth/RegistrationPage';
 
 import { inject, observer } from 'mobx-react';
-import NeedsPage from './components/needs/NeedsPage';
-import ProfilePage from './components/profile/ProfilePage';
+import NeedsPage from '../needs/NeedsPage';
+import ProfilePage from '../profile/ProfilePage';
 
 class App extends Component {
 	render () {
@@ -42,10 +41,6 @@ class App extends Component {
 							<PrivateRoute name="home" path="/home" component={ShoppingsPage}/>
 							<PrivateRoute name="needs" path="/needs" component={NeedsPage}/>
 							<PrivateRoute name="profile" path="/profile" component={ProfilePage}/>
-							<PrivateRoute
-								path="/tab1-detail/:id"
-								component={TabOneDetailPage}
-							/>
 						</IonRouterOutlet>
 					</Switch>
 				</IonApp>

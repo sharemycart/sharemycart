@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { IonButton, IonInput, IonItem, IonLabel, IonList, IonText, IonToast } from '@ionic/react';
-import BasicPage from '../BasicPage';
+import BasicPage from '../basicpage/BasicPage';
+import './Login.scss';
 
 import { inject, observer } from 'mobx-react';
 
@@ -11,7 +12,6 @@ import { inject, observer } from 'mobx-react';
  *
  * sets the `renderContent` propety to render the contents of the page
  */
-//const LoginPage = ({ isAuth, doLogin }) => {
 
 class LoginPage extends Component {
 	constructor (props) {
@@ -28,9 +28,6 @@ class LoginPage extends Component {
 
 	componentDidMount () {}
 
-	/**
-	 *
-	 */
 	_doLogin = async history => {
 		try {
 			let r = await this.props.store.doLogin(
@@ -59,6 +56,7 @@ class LoginPage extends Component {
 					</IonText>
 					<BasicPage
 						title="Login Page"
+						className="login-page"
 						hasMenu
 						renderContent={history => {
 							return (

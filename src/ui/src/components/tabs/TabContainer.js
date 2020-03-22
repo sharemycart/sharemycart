@@ -13,7 +13,7 @@ import { cart, magnet, person } from 'ionicons/icons';
 // value is used to let us know what view to render
 //
 // 0 = SHOES, 1 = SOCKS, 2 = CART
-const TabContainer = ({}) => {
+const TabContainer = () => {
 	return (
 		<IonTabs>
 			<IonTabBar slot="bottom">

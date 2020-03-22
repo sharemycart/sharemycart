@@ -11,12 +11,9 @@ import {
 
 // MOBX
 import { inject, observer } from 'mobx-react';
-import TabContainer from '../TabContainer';
+import TabContainer from '../tabs/TabContainer';
 
 class ShoppingsPage extends Component {
-	constructor (props) {
-		super(props);
-	}
 
 	render () {
 		return (
