@@ -46,7 +46,7 @@ class Profile extends Component {
 						<>
 							<IonItem>
 								<IonAvatar style={{ width: size, height: size }}>
-									<img src={src} alt="User Photo"/>
+									<img src={src} alt="User Profile"/>
 								</IonAvatar>
 							</IonItem>
 							<IonItem>

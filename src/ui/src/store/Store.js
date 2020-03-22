@@ -1,5 +1,5 @@
 import { observable, computed, action, decorate, runInAction } from 'mobx';
-import { get, set, entries, remove } from 'mobx';
+import { get, entries, remove } from 'mobx';
 import * as firebaseService from './firebaseService';
 
 export class Store {

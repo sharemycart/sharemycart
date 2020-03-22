@@ -4,7 +4,6 @@ import BasicPage from '../basicpage/BasicPage';
 import './Login.scss';
 
 import {
-	IonContent,
 	IonButton,
 	IonCol,
 	IonRow,
@@ -112,7 +111,7 @@ class Login extends Component {
 						renderContent={history => {
 							const { email, password, error } = this.state;
 							return (
-								<IonContent>
+								<>
 									<IonImg className="image-login" src="../../assets/images/logo.png"/>
 									<IonGrid>
 										<IonRow className="logo-text">
@@ -203,7 +202,7 @@ class Login extends Component {
 											</IonCol>
 										</IonRow>
 									</IonGrid>
-								</IonContent>
+								</>
 							);
 						}}
 					/>
