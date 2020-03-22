@@ -15,6 +15,7 @@ import EditItem from './EditItem';
 import { inject, observer } from 'mobx-react';
 import BasicPage from '../basicpage/BasicPage';
 import { v4 as uuidv4 } from 'uuid';
+import ShareListFab from './ShareListFab';
 
 // const items = [{
 // 	id: 1,
@@ -98,17 +99,17 @@ class Shoppings extends Component {
 
 	render () {
 		const newItem = this.state.inNewMode
-			? <EditItem item={this.state.newItem} 
-						onChange={item => this.onCreateItem(item)}
-						onClose={() => this.onCreateComplete()}
-						mode="shopping"
-						/>
+			? <EditItem item={this.state.newItem}
+									onChange={item => this.onCreateItem(item)}
+									onClose={() => this.onCreateComplete()}
+									mode="shopping"
+			/>
 			: <IonItem style={{ color: 'grey' }}>
 				<IonIcon icon={add}/>
 				<IonLabel onClick={() => this.setState({ inNewMode: true })}>Click here to add item</IonLabel>
 			</IonItem>;
 
-		const goShoppingButton = <IonButton href="/goshopping">Go <IonIcon icon={cart} /></IonButton>
+		const goShoppingButton = <IonButton href="/goshopping">Go <IonIcon icon={cart}/></IonButton>;
 
 		return (
 			<BasicPage
@@ -129,6 +130,7 @@ class Shoppings extends Component {
 									mode={'shopping'}
 								/>))}
 							</IonList>
+							<ShareListFab/>
 						</>
 					);
 				}}
