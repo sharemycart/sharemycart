@@ -8,7 +8,7 @@ import { trash, add } from 'ionicons/icons';
 class Item extends Component {
   constructor(props) {
     super(props);
-    this.state = { inEdit: false };
+    this.state = { inEdit: !props.item.quantity };
     this.mode = { mode: props.mode }
   }
 
@@ -18,11 +18,11 @@ class Item extends Component {
 
   render() {
     const needIcon = !this.props.ownList &&
-      <IonButton fill="add" size="large" slot="end" color="primary">
+      <IonButton onClick={this.props.onCreateNeed} fill="add" size="large" slot="end" color="primary">
         <IonIcon icon={add} />
       </IonButton>
 
-    const quantityLabel = this.props.mode === "shopping" && <IonBadge>
+    const quantityLabel = (this.props.mode === "shopping" || this.props.mode === "need") && <IonBadge>
       <IonLabel onClick={() => this.setEditMode(true)}>
         {this.props.item.quantity} {this.props.item.unit}
       </IonLabel>
