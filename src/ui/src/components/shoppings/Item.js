@@ -9,7 +9,7 @@ class Item extends Component {
   constructor(props) {
     super(props);
     this.state = { inEdit: false };
-    this.mode = { mode: props.mode}
+    this.mode = { mode: props.mode }
   }
 
   setEditMode(inEdit) {
@@ -22,6 +22,16 @@ class Item extends Component {
         <IonIcon icon={add} />
       </IonButton>
 
+    const quantityLabel = this.props.mode === "shopping" && <IonBadge>
+      <IonLabel onClick={() => this.setEditMode(true)}>
+        {this.props.item.quantity} {this.props.item.unit}
+      </IonLabel>
+    </IonBadge>
+
+    const deleteIcon = this.props.ownList === true && <IonButton className="button-end" fill="clear" size="large" slot="end" color="danger" onClick={this.props.onDeleteItem}>
+      <IonIcon icon={trash} />
+    </IonButton>
+
     const itemDisplay = this.state.inEdit ?
       <EditItem item={this.props.item}
         onChange={this.props.onUpdateItem}
@@ -30,15 +40,9 @@ class Item extends Component {
       :
       <>
         <IonLabel onClick={() => this.setEditMode(true)}>{this.props.item.name}</IonLabel>
-        <IonBadge>
-          <IonLabel onClick={() => this.setEditMode(true)}>
-            {this.props.item.quantity} {this.props.item.unit}
-          </IonLabel>
-        </IonBadge>
+        {quantityLabel}
         {needIcon}
-        <IonButton className="button-end" fill="clear" size="large" slot="end" color="danger" onClick={this.props.onDeleteItem}>
-          <IonIcon icon={trash} />
-        </IonButton>
+        {deleteIcon}
       </>
 
     return <IonItem>
