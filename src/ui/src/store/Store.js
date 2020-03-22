@@ -3,7 +3,7 @@ import { get, set, entries, remove } from 'mobx';
 import * as firebaseService from './firebaseService';
 
 export class Store {
-	constructor () {
+	constructor() {
 		this.activeUser = null;
 		this.loading = false;
 		this.authCheckComplete = false;
@@ -36,7 +36,7 @@ export class Store {
 	/**
 	 * check to see if we have a user before starting up
 	 */
-	async initializeStore () {
+	async initializeStore() {
 		return firebaseService
 			.authCheck(this.handleAuthedUser)
 			.then(_user => {
@@ -49,7 +49,7 @@ export class Store {
 			});
 	}
 
-	get doCheckAuth () {
+	get doCheckAuth() {
 		if (firebaseService.getCurrentUser()) {
 			return this.activeUser;
 		} else {
@@ -60,14 +60,14 @@ export class Store {
 	/**
 	 * here we check to see if ionic saved a user for us
 	 */
-	get authenticatedUser () {
+	get authenticatedUser() {
 		return this.activeUser || null;
 	}
 
 	/**
 	 * gets all of the items as an array from the map
 	 */
-	get itemEntries () {
+	get itemEntries() {
 		return entries(this.items);
 	}
 
@@ -75,14 +75,14 @@ export class Store {
 	 * get a specific item based on its key
 	 * @param {*} _key
 	 */
-	itemByKey (_key) {
+	itemByKey(_key) {
 		return get(this.items, _key);
 	}
 
 	/**
 	 * login using a username and password
 	 */
-	doLogin (_username, _password) {
+	doLogin(_username, _password) {
 		if (_username.length) {
 			return firebaseService
 				.loginWithEmail(_username, _password)
@@ -105,7 +105,7 @@ export class Store {
 	/**
 	 * login using facebook
 	 */
-	doFacebookLogin () {
+	doFacebookLogin() {
 		return firebaseService
 			.loginWithFacebook()
 			.then(
@@ -126,7 +126,7 @@ export class Store {
 	/**
 	 * login using google
 	 */
-	doGoogleLogin () {
+	doGoogleLogin() {
 		return firebaseService
 			.loginWithGoogle()
 			.then(
@@ -147,7 +147,7 @@ export class Store {
 	/**
 	 * create the user with the information and set the user object
 	 */
-	async doCreateUser (_params) {
+	async doCreateUser(_params) {
 		try {
 			let newUser = await firebaseService.registerUser({
 				email: _params.email,
@@ -172,7 +172,7 @@ export class Store {
 	/**
 	 * logout and remove the user...
 	 */
-	doLogout () {
+	doLogout() {
 		this.activeUser = null;
 		return firebaseService.logOut();
 	}
@@ -205,11 +205,11 @@ export class Store {
 	// 		});
 	// }
 
-	async addItem (_data) {
+	async addItem(_data) {
 		return firebaseService.addItem(_data);
 	}
 
-	async editItem (id, _data) {
+	async editItem(id, _data) {
 		return firebaseService.editItem(id, _data);
 	}
 
@@ -218,7 +218,7 @@ export class Store {
 	 * @param {String} id The id of the item to add
 	 * @returns {Promise<boolean>}
 	 */
-	deleteItem (id) {
+	deleteItem(id) {
 		return firebaseService
 			.removeObjectFromCollection({ collection: 'Items', objectId: id })
 			.then(
@@ -240,8 +240,12 @@ export class Store {
 			});
 	}
 
-	async getMyItems () {
+	async getMyItems() {
 		return firebaseService.getMyItems();
+	}
+
+	async getNeedListsForSharedShoppingLists() {
+		return firebaseService.getNeedListsForSharedShoppingLists()
 	}
 }
 
@@ -258,6 +262,7 @@ decorate(Store, {
 	doCheckAuth: computed,
 	itemEntries: computed,
 	getMyItems: action,
+	getMyNeedLists: action,
 
 	// ACTIONS
 	doCreateUser: action,

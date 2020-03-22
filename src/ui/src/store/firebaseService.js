@@ -195,6 +195,21 @@ export const getMyFirstListDocument = async () => {
 	return firstList;
 };
 
+export const getNeedListsForSharedShoppingLists = async (originListId = null) => {
+	let currentUser = await getCurrentUserAsync();
+	let db = firebase.firestore();
+	if (!currentUser) {
+		return null;
+	}
+	let userDocument = await db.collection('Users').doc(currentUser.uid);
+
+	const needListQuery = await userDocument.collection('Lists').where('type', '==', 'need')
+	if (originListId) {
+		needListQuery.where('originListId', '==', originListId)
+	}
+	return needListQuery.get();
+};
+
 export const addItem = async (item) => {
 	let firstList = await getMyFirstListDocument();
 	if (firstList) {
@@ -208,7 +223,7 @@ export const editItem = async (id, data) => {
 	let firstList = await getMyFirstListDocument();
 	if (firstList) {
 		let newItems = (firstList.data().Items || []).map(i => i.id === id ? data : i);
-		await firstList.ref.set({ Items: newItems }, {merge: true});
+		await firstList.ref.set({ Items: newItems }, { merge: true });
 	}
 	return data;
 };

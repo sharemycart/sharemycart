@@ -8,47 +8,69 @@ import { IonList } from '@ionic/react';
 import Item from '../shoppings/Item';
 import { v4 as uuid } from 'uuid';
 
-const potentiallyNeededItems = [{
-	id: 1,
-	name: 'Tomatoes',
-	unit: 'kg',
-	quantity: 5
-}, {
-	id: 2,
-	name: 'Avocado',
-	unit: 'pc',
-	quantity: 1
-}, {
-	id: 3,
-	name: 'Flour',
-	unit: 'g',
-	quantity: 500
-}];
+// const potentiallyNeededItems = [{
+// 	id: 1,
+// 	name: 'Tomatoes',
+// 	unit: 'kg',
+// 	quantity: 5
+// }, {
+// 	id: 2,
+// 	name: 'Avocado',
+// 	unit: 'pc',
+// 	quantity: 1
+// }, {
+// 	id: 3,
+// 	name: 'Flour',
+// 	unit: 'g',
+// 	quantity: 500
+// }];
 
 class Needs extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { potentiallyNeededItems, neededItems: [] };
+		this._hasUnmounted = false;
+		this.state = { potentiallyNeededItems: [], sharedLists: [], neededItems: [] };
+	}
+
+	async componentDidMount() {
+		if (this._hasUnmounted) {
+			return;
+		}
+		try {
+			const sharedListsSnapshot = await this.props.store.getNeedListsForSharedShoppingLists()
+			const sharedLists = []
+			sharedListsSnapshot.forEach(doc=>sharedLists.push(doc.data()))
+			if (sharedLists && sharedLists.length)
+
+				if (!this._hasUnmounted) {
+					this.setState({ 
+						sharedLists: sharedLists || [],
+						needs: sharedLists[0].items
+					});
+				}
+		} catch (error) {
+			console.error('error found', error);
+		}
 	}
 
 	onCreateNeed(potentialNeed) {
 		// create a new needed item and remove the now needed item from the potential needs
 		this.setState({
-			neededItems: this.state.neededItems.concat(Object.assign(potentialNeed, {quantity: null, id: uuid()})),
-			potentiallyNeededItems: this.state.potentiallyNeededItems.filter(item=>item.id !== potentialNeed.id )
+			neededItems: this.state.neededItems.concat(Object.assign(potentialNeed, { quantity: null, id: uuid() })),
+			potentiallyNeededItems: this.state.potentiallyNeededItems.filter(item => item.id !== potentialNeed.id)
 		})
 
 	}
 
-	onUpdateItem (item) {
+	onUpdateItem(item) {
 		this.setState(state => ({
 			neededItems: state.neededItems.map(i => i.id === item.id ? item : i)
 		}));
 	}
 
-	onDeleteItem (need) {
+	onDeleteItem(need) {
 		this.setState({
-			neededItems: this.state.neededItems.filter(item=>item.id !== need.id ),
+			neededItems: this.state.neededItems.filter(item => item.id !== need.id),
 			potentiallyNeededItems: this.state.potentiallyNeededItems.concat(need)
 		})
 	}
