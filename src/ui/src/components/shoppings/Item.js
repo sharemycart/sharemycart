@@ -36,6 +36,7 @@ class Item extends Component {
       <EditItem item={this.props.item}
         onChange={this.props.onUpdateItem}
         onClose={() => this.setEditMode(false)}
+        mode={this.props.mode}
       />
       :
       <>
