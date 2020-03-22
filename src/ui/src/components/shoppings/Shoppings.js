@@ -43,17 +43,22 @@ class Shoppings extends Component {
 		this.state = { searchText: '', items: items };
 	}
 
+	createItemFromText(text) {
+		const parts = text.split(/^(\d+)\s*(g|kg|pc|l|ml)\s*(.*)$/i)
+		parts.shift()
+		const quantity = parts.shift()
+		const unit = parts.shift()
+		const name = parts.join(' ')
+		return {quantity, unit, name}
+	}
+
 	onAddItem = (evt) => {
 		if (evt.which !== ENTER_KEY) {
 			return;
 		}
-		let text = evt.target.value;
-		console.log(text);
-		let newItems = this.state.items;
-		newItems.push({
-			id: 123,
-			name: text
-		});
+		const item = this.createItemFromText(evt.target.value);
+		const newItems = this.state.items;
+		newItems.push(item);
 		this.setState({
 			items: newItems
 		});
