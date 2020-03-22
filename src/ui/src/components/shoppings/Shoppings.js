@@ -112,15 +112,16 @@ class Shoppings extends Component {
 				renderContent={history => {
 					let view = '';
 					if (this.state.items.length > 0) {
-						view = this.state.items.map(item => (<Item
-							key={item.id}
-							item={item}
-							ownList={true}
-							onUpdateItem={item => this.onUpdateItem(item)}
-							onDeleteItem={() => this.onDeleteItem(item)}
-							mode={'shopping'}
-						/>));
-					} else{
+						view = this.state.items.map((item, key) => (
+							<Item
+								key={item.id || key}
+								item={item}
+								ownList={true}
+								onUpdateItem={item => this.onUpdateItem(item)}
+								onDeleteItem={() => this.onDeleteItem(item)}
+								mode={'shopping'}
+							/>));
+					} else {
 						view = <>
 							<IonItem>No items in your list yet</IonItem>
 						</>;
