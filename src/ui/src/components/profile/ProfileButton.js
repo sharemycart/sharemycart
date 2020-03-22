@@ -39,6 +39,9 @@ class ProfileButton extends Component {
 		const size = 32;
 		let userImage = user ? user.photoURL : null;
 		let src = userImage ? userImage : ('https://www.gravatar.com/avatar?d=monsterid&s=' + size);
+		if (!user) {
+			return '';
+		}
 
 		return (
 			<>
