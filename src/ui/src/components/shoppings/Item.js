@@ -41,6 +41,8 @@ class Item extends Component {
       <IonIcon icon={trash} />
     </IonButton>
 
+    const checkIcon = this.props.item.checked && <IonIcon icon={checkmark}/>
+
     const itemDisplay = this.state.inEdit ?
       <EditItem item={this.props.item}
         onChange={this.props.onUpdateItem}
@@ -50,10 +52,10 @@ class Item extends Component {
       :
       <>
         <IonLabel onClick={() => this.onItemClick()}
-                  style={this.props.item.checked ? {'text-decoration': 'line-through'} : {}}
-          >{this.props.item.name}
-          {this.props.item.checked && <IonIcon icon={checkmark}/>}
+                  style={{cursor: 'pointer', 'text-decoration': (this.props.item.checked ? 'line-through' : 'none')}}>
+          {this.props.item.name}
         </IonLabel>
+        {checkIcon}
         {quantityLabel}
         {needIcon}
         {deleteIcon}
