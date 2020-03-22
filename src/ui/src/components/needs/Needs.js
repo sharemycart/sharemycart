@@ -44,7 +44,7 @@ class Needs extends Component {
 									ownList={false}
 									onUpdateItem={item => this.onUpdateItem(item)}
 									onDeleteItem={() => this.onDeleteItem(item)}
-									mode={'shopping'}
+									mode={'potentialNeed'}
 								/>))}
 							</IonList>
 						</>
