@@ -33,7 +33,7 @@ const BasicPage = ({ title, renderContent, history, hasMenu, backAction, classNa
 					{backAction ? <IonBackButton defaultHref="/" text="" goBack={() => {}}/> : null}
 				</IonButtons>
 				<IonButtons slot="end">
-					<ProfileButton/>
+					{/* <ProfileButton/> */}
 				</IonButtons>
 				<IonTitle>{title}</IonTitle>
 			</IonToolbar>

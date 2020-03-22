@@ -31,12 +31,12 @@ const INITIAL_STATE = {
 };
 
 class Login extends Component {
-	constructor (props) {
+	constructor(props) {
 		super(props);
 		this.state = { ...INITIAL_STATE };
 	}
 
-	componentDidMount () {}
+	componentDidMount() { }
 
 	_doLogin = async history => {
 		try {
@@ -92,11 +92,11 @@ class Login extends Component {
 
 	};
 
-	render () {
+	render() {
 		let { initializationError, activeUser } = this.props.store;
 
 		if (activeUser) {
-			return <Redirect to="/home"/>;
+			return <Redirect to="/home" />;
 		} else {
 			return (
 				<>
@@ -113,19 +113,16 @@ class Login extends Component {
 							const { email, password, error } = this.state;
 							return (
 								<IonContent>
-									<IonImg className="image-login" src="../../assets/images/login-center.png"/>
+									<IonImg className="image-login" src="../../assets/images/logo.png"/>
 									<IonGrid>
 										<IonRow className="logo-text">
-											<IonCol size="100px">
-												<IonImg src="../../assets/images/logo.png"/>
-											</IonCol>
 											<IonCol className="ion-align-self-center">
 												<IonLabel style={{ color: '#707070' }}>Share</IonLabel>
 												<IonLabel style={{ color: '#FA3D04' }}>MyCart</IonLabel>
 											</IonCol>
 										</IonRow>
 									</IonGrid>
-									<br/>
+									<br />
 									<IonGrid class="padding" style={{ maxWidth: 500 }}>
 										<IonRow>
 											<IonCol>
@@ -195,14 +192,14 @@ class Login extends Component {
 										<IonRow>
 											<IonCol>
 												<IonButton onClick={this._doFacebookLogin} type="submit" expand="block"><IonIcon
-													icon={logoFacebook}/><span
-													className="social-button-text">Sign In with Facebook</span></IonButton>
+													icon={logoFacebook} /><span
+														className="social-button-text">Sign In with Facebook</span></IonButton>
 											</IonCol>
 										</IonRow>
 										<IonRow>
 											<IonCol>
 												<IonButton onClick={this._doGoogleLogin} type="submit" expand="block" color="light"><IonIcon
-													icon={logoGoogle}/><span className="social-button-text">Sign In with Google</span></IonButton>
+													icon={logoGoogle} /><span className="social-button-text">Sign In with Google</span></IonButton>
 											</IonCol>
 										</IonRow>
 									</IonGrid>
