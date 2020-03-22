@@ -3,7 +3,7 @@ import { IonItem, IonLabel, IonButton, IonIcon, IonBadge } from "@ionic/react";
 import EditItem from './EditItem';
 import { withRouter } from "react-router";
 import { inject, observer } from "mobx-react";
-import { trash, add, checkmark } from 'ionicons/icons';
+import { trash, add } from 'ionicons/icons';
 
 class Item extends Component {
   constructor(props) {
@@ -30,7 +30,8 @@ class Item extends Component {
         <IonIcon icon={add} />
       </IonButton>
 
-    const quantityLabel = (this.props.mode === "shopping" || this.props.mode === "need") && <IonBadge>
+    const showQuantityLabel = ['shopping', 'need', 'goshopping'].includes(this.props.mode)
+    const quantityLabel = showQuantityLabel && <IonBadge>
       <IonLabel onClick={() => this.setEditMode(true)}>
         {this.props.item.quantity} {this.props.item.unit}
       </IonLabel>
@@ -41,8 +42,6 @@ class Item extends Component {
       <IonIcon icon={trash} />
     </IonButton>
 
-    const checkIcon = this.props.item.checked && <IonIcon icon={checkmark}/>
-
     const itemDisplay = this.state.inEdit ?
       <EditItem item={this.props.item}
         onChange={this.props.onUpdateItem}
@@ -52,10 +51,13 @@ class Item extends Component {
       :
       <>
         <IonLabel onClick={() => this.onItemClick()}
-                  style={{cursor: 'pointer', 'text-decoration': (this.props.item.checked ? 'line-through' : 'none')}}>
+                  style={{
+                    cursor: 'pointer',
+                    'text-decoration': (this.props.item.checked ? 'line-through' : 'none'),
+                    color: (this.props.item.checked ? 'grey' : 'black')
+                  }}>
           {this.props.item.name}
         </IonLabel>
-        {checkIcon}
         {quantityLabel}
         {needIcon}
         {deleteIcon}
