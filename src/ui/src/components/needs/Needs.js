@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 // MOBX
 import { inject, observer } from 'mobx-react';
 import BasicPage from '../basicpage/BasicPage';
-import { IonList } from '@ionic/react';
+import { IonList, IonLabel, IonItem } from '@ionic/react';
 import Item from '../shoppings/Item';
 import { v4 as uuid } from 'uuid';
 
@@ -37,7 +37,7 @@ class Needs extends Component {
 			return;
 		}
 		try {
-			const sharedListsSnapshot = await this.props.store.getNeedListsForSharedShoppingLists()
+			const sharedListsSnapshot = await this.props.store.getNeedListsForSharedShoppingLists(this.props.match.params.listid)
 			const sharedLists = []
 			let potentiallyNeededItems = []
 
@@ -99,6 +99,12 @@ class Needs extends Component {
 							</IonList>
 
 							<IonList>
+								{!this.state.potentiallyNeededItems.length && !this.state.neededItems.length &&
+									<IonItem>
+										<IonLabel>No items in list</IonLabel>
+									</IonItem>
+								}
+
 								{this.state.potentiallyNeededItems.map(item => (<Item
 									key={item.id}
 									item={item}

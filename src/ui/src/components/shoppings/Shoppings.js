@@ -7,7 +7,7 @@ import {
 	IonLabel,
 	IonIcon
 } from '@ionic/react';
-import { add } from 'ionicons/icons';
+import { add, cart } from 'ionicons/icons';
 import Item from './Item';
 import EditItem from './EditItem';
 
@@ -108,7 +108,7 @@ class Shoppings extends Component {
 				<IonLabel onClick={() => this.setState({ inNewMode: true })}>Click here to add item</IonLabel>
 			</IonItem>;
 
-		const goShoppingButton = <IonButton color="danger" href="/goshopping">Go Shopping</IonButton>
+		const goShoppingButton = <IonButton href="/goshopping">Go <IonIcon icon={cart} /></IonButton>
 
 		return (
 			<BasicPage
