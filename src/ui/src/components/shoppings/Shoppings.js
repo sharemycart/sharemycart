@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import {
-	IonContent,
-	IonSearchbar,
+	IonButton,
 	IonItem,
 	IonList,
 	IonLabel,
@@ -111,10 +110,13 @@ class Shoppings extends Component {
 				<IonLabel onClick={() => this.setState({ inNewMode: true })}>Click here to add item</IonLabel>
 			</IonItem>;
 
+		const goShoppingButton = <IonButton color="danger" href="/goshopping">Go Shopping</IonButton>
+
 		return (
 			<BasicPage
 				title="My Shoppings"
 				store={this.props.store}
+				titleButtons={goShoppingButton}
 				renderContent={history => {
 					return (
 						<>

@@ -10,6 +10,7 @@ import {
 
 import PrivateRoute from '../basicpage/PrivateRoute';
 import Shoppings from '../shoppings/Shoppings';
+import GoShoppingList from '../shoppings/GoShoppingList';
 import Login from '../auth/Login';
 import RegistrationPage from '../auth/RegistrationPage';
 
@@ -40,6 +41,7 @@ class App extends Component {
 							<Route path="/register" component={RegistrationPage}/>
 							<PrivateRoute name="home" path="/home" component={Shoppings}/>
 							<PrivateRoute name="needs" path="/needs" component={Needs}/>
+							<PrivateRoute name="goshopping" path="/goshopping" component={GoShoppingList}/>
 							<PrivateRoute name="profile" path="/profile" component={Profile}/>
 						</IonRouterOutlet>
 					</Switch>

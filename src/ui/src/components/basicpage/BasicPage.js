@@ -9,10 +9,8 @@ import {
 	IonButtons,
 	IonMenuButton,
 	IonButton,
-	IonBackButton,
-	IonIcon
+	IonBackButton
 } from '@ionic/react';
-import ProfileButton from '../profile/ProfileButton';
 import TabContainer from '../tabs/TabContainer';
 
 /**
@@ -22,27 +20,22 @@ import TabContainer from '../tabs/TabContainer';
  *
  *
  */
-const BasicPage = ({ title, renderContent, history, hasMenu, backAction, className, hideBottomBar }) => {
-	let layout = '';
-
-	if (title) {
-		layout = <IonHeader>
+const BasicPage = ({ title, renderContent, history, hasMenu, backAction, className, hideBottomBar, titleButtons }) => {	
+	const layout = title && <IonHeader>
 			<IonToolbar color="primary">
 				<IonButtons slot="start">
 					{hasMenu ? <IonMenuButton/> : null}
 					{backAction ? <IonBackButton defaultHref="/" text="" goBack={() => {}}/> : null}
 				</IonButtons>
 				<IonButtons slot="end">
-					{/* <ProfileButton/> */}
+					{titleButtons}
 				</IonButtons>
 				<IonTitle>{title}</IonTitle>
 			</IonToolbar>
 		</IonHeader>;
-	}
-	let bottomBar = '';
-	if (!hideBottomBar) {
-		bottomBar = <TabContainer history={history}/>;
-	}
+
+	const bottomBar = !hideBottomBar && <TabContainer history={history}/>;
+
 	return (
 		<>
 			{layout}
