@@ -40,7 +40,7 @@ class Shoppings extends Component {
 	constructor (props) {
 		super(props);
 		this._hasUnmounted = false;
-		this.state = { searchText: '', items: [] };
+		this.state = { items: [], inNewMode: false, newItem: {} };
 	}
 
 	componentDidMount () {
@@ -97,28 +97,18 @@ class Shoppings extends Component {
 				title="My Shoppings"
 				store={this.props.store}
 				renderContent={history => {
-					let view = '';
-					if (this.state.items.length > 0) {
-						view = this.state.items.map((item, key) => (<Item
-							key={item.id || key}
-							item={item}
-							ownList={true}
-							onUpdateItem={item => this.onUpdateItem(item)}
-							onDeleteItem={() => this.onDeleteItem(item)}
-							mode={'shopping'}
-						/>));
-					} else {
-						view = <>
-							<IonItem>No items in your list yet</IonItem>
-						</>;
-
-					}
-
 					return (
 						<>
 							{newItem}
 							<IonList>
-								{view}
+								{this.state.items.map((item, key) => (<Item
+									key={item.id || key}
+									item={item}
+									ownList={true}
+									onUpdateItem={item => this.onUpdateItem(item)}
+									onDeleteItem={() => this.onDeleteItem(item)}
+									mode={'shopping'}
+								/>))}
 							</IonList>
 						</>
 					);
