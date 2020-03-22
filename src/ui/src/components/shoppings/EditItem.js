@@ -58,7 +58,7 @@ class EditItem extends Component {
         {unitOfMeasure}
       </IonItem>
 
-      <IonButton onClick={this.props.onClose}>Done</IonButton>
+      <IonButton onClick={this.props.onClose} style={{'margin': '8px 8px 0'}}>Done</IonButton>
     </IonList>
   }
 }
