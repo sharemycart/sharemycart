@@ -2,18 +2,11 @@ import React, { Component } from 'react';
 import { withRouter, Redirect } from 'react-router-dom';
 
 import {
-	IonPage,
-	IonContent,
-	IonHeader,
-	IonTitle,
-	IonToolbar,
 	IonButton,
 	IonItem,
 	IonLabel,
 	IonIcon,
-	IonAvatar,
-	IonCol,
-	IonRow
+	IonAvatar
 } from '@ionic/react';
 
 // MOBX
@@ -53,7 +46,7 @@ class Profile extends Component {
 						<>
 							<IonItem>
 								<IonAvatar style={{ width: size, height: size }}>
-									<img src={src} title="Image from Gravatar"/>
+									<img src={src} alt="User Photo"/>
 								</IonAvatar>
 							</IonItem>
 							<IonItem>

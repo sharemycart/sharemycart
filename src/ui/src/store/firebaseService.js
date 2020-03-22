@@ -250,9 +250,7 @@ export const editItem = async (id, data) => {
 
 export const getMyItems = async () => {
 	let firstList = await getMyFirstListDocument();
-	console.log('firstlist', firstList);
 	let items = firstList ? firstList.data().Items : [];
-	console.log('items', items);
 	return items || [];
 };
 

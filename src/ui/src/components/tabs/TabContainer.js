@@ -5,8 +5,6 @@ import {
 	IonLabel,
 	IonTabBar,
 	IonTabButton,
-	IonTabs,
-	IonContent,
 	IonFooter
 } from '@ionic/react';
 import { cart, magnet, person } from 'ionicons/icons';

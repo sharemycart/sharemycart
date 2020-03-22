@@ -8,7 +8,6 @@ import {
 	IonContent,
 	IonButtons,
 	IonMenuButton,
-	IonButton,
 	IonBackButton
 } from '@ionic/react';
 import TabContainer from '../tabs/TabContainer';
