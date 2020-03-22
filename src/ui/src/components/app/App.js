@@ -43,6 +43,7 @@ class App extends Component {
 							<PrivateRoute name="needs" path="/needs" component={Needs}/>
 							<PrivateRoute name="goshopping" path="/goshopping" component={GoShoppingList}/>
 							<PrivateRoute name="profile" path="/profile" component={Profile}/>
+							<PrivateRoute name="share" path="/share/:uid/:listid" component={Needs}/>
 						</IonRouterOutlet>
 					</Switch>
 				</IonApp>
