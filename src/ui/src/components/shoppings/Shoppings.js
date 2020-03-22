@@ -2,12 +2,15 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import {
 	IonContent,
-	IonList,
 	IonSearchbar,
-	IonItem
+	IonItem,
+	IonList,
+	IonLabel,
+	IonIcon
 } from '@ionic/react';
+import { add } from 'ionicons/icons';
 import Item from './Item';
-import { cart } from 'ionicons/icons';
+import EditItem from './EditItem';
 
 // MOBX
 import { inject, observer } from 'mobx-react';
@@ -60,37 +63,13 @@ class Shoppings extends Component {
 		this._hasUnmounted = true;
 	}
 
-	createItemFromText (text) {
-		const parts = text.split(/^(\d+)\s*(g|kg|pc|l|ml)\s*(.*)$/i);
-		parts.shift();
-		const quantity = parts.shift();
-		const unit = parts.shift();
-		const name = parts.join(' ');
-		return { quantity, unit, name };
+	onCreateItem (newItem) {
+		this.setState({ newItem });
 	}
 
-	onAddItem = (evt) => {
-		if (evt.which !== ENTER_KEY) {
-			return;
-		}
-		const item = this.createItemFromText(evt.target.value);
-		const newItems = this.state.items;
-		newItems.push(item);
-		this.setState({
-			items: newItems
-		});
-
-		// @todo: connect here
-		// this.props.store.addItem({ text: text })
-		// 	.then(() => {
-		// 		// clear the search input
-		// 		this.setState({ searchText: '' });
-		// 		// @todo: reload the store
-		// 	}).catch(err => {
-		// 	console.error(err);
-		// 	// @todo: handle exception here with a toast
-		// });
-	};
+	onCreateComplete () {
+		this.setState({ items: this.state.items.concat(this.state.newItem), newItem: {}, inNewMode: false });
+	}
 
 	onUpdateItem (item) {
 		this.setState(state => ({
@@ -105,6 +84,14 @@ class Shoppings extends Component {
 	}
 
 	render () {
+		const newItem = this.state.inNewMode
+			? <EditItem item={this.state.newItem} onChange={item => this.onCreateItem(item)}
+									onClose={() => this.onCreateComplete()}/>
+			: <IonItem style={{ color: 'grey' }}>
+				<IonIcon icon={add}/>
+				<IonLabel onClick={() => this.setState({ inNewMode: true })}>Click here to add item</IonLabel>
+			</IonItem>;
+
 		return (
 			<BasicPage
 				title="My Shoppings"
@@ -112,15 +99,14 @@ class Shoppings extends Component {
 				renderContent={history => {
 					let view = '';
 					if (this.state.items.length > 0) {
-						view = this.state.items.map((item, key) => (
-							<Item
-								key={item.id || key}
-								item={item}
-								ownList={true}
-								onUpdateItem={item => this.onUpdateItem(item)}
-								onDeleteItem={() => this.onDeleteItem(item)}
-								mode={'shopping'}
-							/>));
+						view = this.state.items.map((item, key) => (<Item
+							key={item.id || key}
+							item={item}
+							ownList={true}
+							onUpdateItem={item => this.onUpdateItem(item)}
+							onDeleteItem={() => this.onDeleteItem(item)}
+							mode={'shopping'}
+						/>));
 					} else {
 						view = <>
 							<IonItem>No items in your list yet</IonItem>
@@ -130,11 +116,7 @@ class Shoppings extends Component {
 
 					return (
 						<>
-							<IonSearchbar
-								searchIcon={cart}
-								value={this.state.searchText}
-								onKeyPress={this.onAddItem}
-								placeholder="Type to add new products"></IonSearchbar>
+							{newItem}
 							<IonList>
 								{view}
 							</IonList>
