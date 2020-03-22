@@ -17,20 +17,11 @@ It's really a simple process which is a (small) solution to a universal problem 
 This project is in a very early stage. It's 2020, March 18 and Sars-Cov-2 is spreading like crazy in Europe.
 Though this project sounds a bit miniscule (and maybe even ridiculous compared to other initiatives like [3D-printing respirator valves for those already fighting death](https://www.fastcompany.com/90477940/these-good-samaritans-with-a-3d-printer-are-saving-lives-by-making-new-respirator-valves-for-free) ), but it's something for the better. And it's something I can do.
 
+A fist website (in German) is online at [sharemycart.com](http://www.sharemycart.com/).
+
 ## Implementation
 
-Thee are sketches with respect to [ui](./src/ui/Readme.md) and [backend technology](./src/backend/Readme.md).
-Everything is still very open, so feel free to bring in your ideas!
-
-## Run the server locally
-
-Go to src/backend and run `make dist`, then go back to project root.
-You need a database access credentials file which should be placed in a folder named `secrets` and should be named `collabshop19.json`
-Now run `scripts/start-server.sh` to start the server. It can be stopped by calling `scripts/stop-server.sh`
-
-## Run tests
-
-To run the tests, `npm install` first, then [run the server locally](#run-the-server-locally) and then `npm test`.
+The UI is implemented using [Ionic Framework](https://ionicframework.com/) find out more in the [ui readme](./src/ui/Readme.md). For the backend [Firebase](https://firebase.google.com/) is used.
 
 ## How to contribute
 
