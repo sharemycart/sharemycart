@@ -19,7 +19,11 @@ class Item extends Component {
   onKeyPress(event) {
     if (event.which !== ENTER_KEY) {
 			return;
-		}
+    }
+    this.onBlur(event)
+  }
+
+  onBlur(event) {
     this.props.onUpdateItem(event.target.value)
     this.setState({inEdit: false})
   }
@@ -29,6 +33,7 @@ class Item extends Component {
       (<IonInput
         value={`${this.props.item.quantity} ${this.props.item.unit} ${this.props.item.name}`}
         onKeyPress={event => this.onKeyPress(event)}
+        onBlur={event => this.onBlur(event)}
         style={{border: "1px solid grey"}}
       />)
       :
