@@ -70,10 +70,9 @@ class Shoppings extends Component {
 		// });
 	};
 
-	onUpdateItem (item, text) {
-		const modified = this.createItemFromText(text);
+	onUpdateItem (item) {
 		this.setState(state => ({
-			items: state.items.map(i => i.id === item.id ? modified : i)
+			items: state.items.map(i => i.id === item.id ? item : i)
 		}));
 	}
 
@@ -100,7 +99,8 @@ class Shoppings extends Component {
 								{this.state.items.map(item => (<Item
 									key={item.id}
 									item={item}
-									onUpdateItem={text => this.onUpdateItem(item, text)}
+									ownList={true}
+									onUpdateItem={item => this.onUpdateItem(item)}
 									onDeleteItem={() => this.onDeleteItem(item)}
 								/>))}
 							</IonList>
