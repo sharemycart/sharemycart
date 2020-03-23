@@ -241,6 +241,15 @@ export class Store {
 	}
 
 	async getMyItems() {
+
+		// firebaseService.getUser()
+
+		// firebaseService.queryLists(user)
+
+		// get the first list
+
+		// firebaseService.getItemsOfList(list)
+
 		return firebaseService.getMyItems();
 	}
 

@@ -145,73 +145,96 @@ export const getUserProfile = () => {
 		});
 };
 
-/****************    Queries    ******************/
+/****************    Find    ******************/
 
 /**
- * This is generic method retrieve data from the database.
- * @param restrictions[0].fieldPath: string | FieldPath,
- * @param restrictions[0].operation: WhereFilterOp,
- * @param restrictions[0].value: any
+ * @param {CollectionReference} collectionRef
+ * @param {Object[]} restrictions
+ * @param {string} restrictions[].fieldPath
+ * @param {string} restrictions[].operation
+ * @param {string} restrictions[].value
  */
-export const _queryFromCollectionRef = ({ collectionRef, restrictions }, resolveData = false) => {
+const _findFromRef = async ({ collectionRef, restrictions }, data = false) => {
 	let results = [];
 
-	restrictions.forEach((restriction) => {
-		collectionRef = collectionRef.where(...restriction)
-	})
+	if (restrictions) {
+		restrictions.forEach((restriction) => {
+			collectionRef = collectionRef.where(restriction.fieldPath, restriction.operation, restriction.value)
+		})
+	}
 
-	return (
-		collectionRef
-			.get()
-			.then(querySnapshot => {
-				querySnapshot.forEach(doc => {
-					if (resolveData) {
-						results.push({
-							id: doc.id,
-							...doc.data()
-						})
-					} else {
-						results.push({
-							id: doc.id,
-							...doc
-						})
-					};
-				});
-				return results;
-			})
-			.catch(error => {
-				console.log('Error getting documents: ', error);
-				return error;
-			})
-	);
+	try {
+		(await collectionRef.get()).forEach(doc => {
+			if (data) {
+				results.push({
+					id: doc.id,
+					...doc.data()
+				})
+			} else {
+				results.push(doc)
+			};
+		});
+	} catch (e) {
+		console.error('_findFromRef', e);
+	}
+	return results;
 };
 
-
 /**
- * This is generic method retrieve data from the database.
+ * @param collection: string
  * @param restrictions[0].fieldPath: string | FieldPath,
  * @param restrictions[0].operation: WhereFilterOp,
  * @param restrictions[0].value: any
  */
-export const _queryFromCollection = ({ collection, restrictions }, resolveData = false) => {
+const _find = async ({ collection, restrictions }, data = false) => {
 	let collectionRef = firebase.firestore().collection(collection);
-	return _queryFromCollectionRef({ collectionRef, restrictions }, resolveData)
+	return await _findFromRef({ collectionRef, restrictions }, data)
 };
 
-export const getMyFirstListDocument = async () => {
+/****************    Get    ******************/
+
+const getCurrentUserDoc = async () => {
 	let currentUser = await getCurrentUserAsync();
 	let db = firebase.firestore();
 	if (!currentUser) {
 		return null;
 	}
+	return db.collection('Users').doc(currentUser.uid);
+}
 
-	let allLists = await userDocument.collection('Lists').where('Type', '==', 'shopping').get();
+
+export const findLists = async (uid, restrictions, data) => {
+	const currentUserDoc = await getCurrentUserDoc()
+	const collectionRef = await currentUserDoc.collection('Lists')
+	return _findFromRef({
+		collectionRef,
+		restrictions
+	}, data)
+}
+
+export const getLists = async (uid, restrictions) => {
+	return findLists(uid, restrictions, true)
+}
+
+export const findShoppingLists = await findLists(currentUser.uid, [{
+	fieldPath: 'Type',
+	operation: '==',
+	value: 'shopping'
+}], data)
+
+export const findMyCurrentShoppingList = async (data) => {
+	const currentUser = await getCurrentUserAsync()
+	let allLists = findShoppingLists
 	let firstList = null;
 	allLists.forEach(doc => {
 		firstList = doc;
 		return false;
 	});
 	return firstList;
+}
+
+export const getMyCurrentShoppingList = async () => {
+	return findMyCurrentShoppingList(true)
 };
 
 export const getNeedListsForSharedShoppingLists = async (originListId = null) => {
@@ -225,10 +248,10 @@ export const getNeedListsForSharedShoppingLists = async (originListId = null) =>
 	const restrictions = [{
 		fieldPath: 'type',
 		operation: '==',
-		value: need
+		value: 'need'
 	}]
 
-	if(originListId){
+	if (originListId) {
 		restrictions.push({
 			fieldPath: 'originListId',
 			operation: '==',
@@ -236,7 +259,7 @@ export const getNeedListsForSharedShoppingLists = async (originListId = null) =>
 		})
 	}
 
-	return _queryFromCollectionRef({
+	return _findFromRef({
 		collectionRef: userDocument.collection('Lists'),
 		restrictions,
 	}, true)
@@ -267,7 +290,7 @@ export const getItemsOfList = async (userId, listId) => {
 };
 
 export const addItem = async (item) => {
-	let firstList = await getMyFirstListDocument();
+	let firstList = await getMyCurrentShoppingList();
 	if (firstList) {
 		let newItems = (firstList.data().Items || []).concat(item);
 		await firstList.ref.set({ Items: newItems }, { merge: true });
@@ -276,28 +299,28 @@ export const addItem = async (item) => {
 };
 
 export const getCurrentList = async (item) => {
-	let firstList = await getMyFirstListDocument();
+	let firstList = await getMyCurrentShoppingList();
 	if (firstList) {
 		return {
 			id: firstList.id,
-			...firstList.data()
+			...firstList
 		};
 	}
 	return null;
 };
 
 export const editItem = async (id, data) => {
-	let firstList = await getMyFirstListDocument();
+	let firstList = await findMyCurrentShoppingList();
 	if (firstList) {
-		let newItems = (firstList.data().Items || []).map(i => i.id === id ? data : i);
+		let newItems = (firstList.Items || []).map(i => i.id === id ? data : i);
 		await firstList.ref.set({ Items: newItems }, { merge: true });
 	}
 	return data;
 };
 
 export const getMyItems = async () => {
-	let firstList = await getMyFirstListDocument();
-	let items = firstList ? firstList.data().Items : [];
+	let firstList = await getMyCurrentShoppingList();
+	let items = firstList ? firstList.Items : [];
 	return items || [];
 };
 
