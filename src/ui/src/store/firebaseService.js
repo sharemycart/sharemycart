@@ -153,7 +153,7 @@ export const getUserProfile = () => {
  * @param restrictions[0].operation: WhereFilterOp,
  * @param restrictions[0].value: any
  */
-export const _queryFromCollectionRef = ({ collection, restrictions }, resolveData = false) => {
+export const _queryFromCollectionRef = ({ collectionRef, restrictions }, resolveData = false) => {
 	let results = [];
 
 	restrictions.forEach((restriction) => {
@@ -195,7 +195,7 @@ export const _queryFromCollectionRef = ({ collection, restrictions }, resolveDat
  */
 export const _queryFromCollection = ({ collection, restrictions }, resolveData = false) => {
 	let collectionRef = firebase.firestore().collection(collection);
-	return _queryFromCollectionRef({collectionRef, restrictions}, resolveData)
+	return _queryFromCollectionRef({ collectionRef, restrictions }, resolveData)
 };
 
 export const getMyFirstListDocument = async () => {
@@ -222,13 +222,23 @@ export const getNeedListsForSharedShoppingLists = async (originListId = null) =>
 	}
 	let userDocument = await db.collection('Users').doc(currentUser.uid);
 
-	return _query({
-		collection: 'Lists',
-		restrictions: [{
+	const restrictions = [{
+		fieldPath: 'type',
+		operation: '==',
+		value: need
+	}]
+
+	if(originListId){
+		restrictions.push({
 			fieldPath: 'originListId',
 			operation: '==',
 			value: originListId
-		}],
+		})
+	}
+
+	return _queryFromCollectionRef({
+		collectionRef: userDocument.collection('Lists'),
+		restrictions,
 	}, true)
 	// const needListQuery = await userDocument.collection('Lists').where('type', '==', 'need');
 	// if (originListId) {
