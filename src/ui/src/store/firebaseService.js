@@ -43,6 +43,7 @@ export const authCheck = async _handleAuthedUser => {
 	});
 };
 
+/****************    Authentication    ******************/
 /**
  *
  * @param {*} email
@@ -115,9 +116,6 @@ export const registerUser = userInfo => {
 		});
 };
 
-/**
- *
- */
 export const getUserProfile = () => {
 	let user = firebase.auth().currentUser;
 	console.log(user);
@@ -147,27 +145,37 @@ export const getUserProfile = () => {
 		});
 };
 
-/**
- *
- * @param {*} param0
- */
-export const queryObjectCollection = ({ collection }) => {
-	//let currentUserId = firebase.auth().currentUser.uid;
-	let collectionRef = firebase.firestore().collection(collection);
+/****************    Queries    ******************/
 
+/**
+ * This is generic method retrieve data from the database.
+ * @param restrictions[0].fieldPath: string | FieldPath,
+ * @param restrictions[0].operation: WhereFilterOp,
+ * @param restrictions[0].value: any
+ */
+export const _queryFromCollectionRef = ({ collection, restrictions }, resolveData = false) => {
 	let results = [];
+
+	restrictions.forEach((restriction) => {
+		collectionRef = collectionRef.where(...restriction)
+	})
 
 	return (
 		collectionRef
-			//.where('owner', '==', currentUserId)
 			.get()
 			.then(querySnapshot => {
 				querySnapshot.forEach(doc => {
-					// doc.data() is never undefined for query doc snapshots
-					results.push({
-						id: doc.id,
-						...doc.data()
-					});
+					if (resolveData) {
+						results.push({
+							id: doc.id,
+							...doc.data()
+						})
+					} else {
+						results.push({
+							id: doc.id,
+							...doc
+						})
+					};
 				});
 				return results;
 			})
@@ -178,13 +186,24 @@ export const queryObjectCollection = ({ collection }) => {
 	);
 };
 
+
+/**
+ * This is generic method retrieve data from the database.
+ * @param restrictions[0].fieldPath: string | FieldPath,
+ * @param restrictions[0].operation: WhereFilterOp,
+ * @param restrictions[0].value: any
+ */
+export const _queryFromCollection = ({ collection, restrictions }, resolveData = false) => {
+	let collectionRef = firebase.firestore().collection(collection);
+	return _queryFromCollectionRef({collectionRef, restrictions}, resolveData)
+};
+
 export const getMyFirstListDocument = async () => {
 	let currentUser = await getCurrentUserAsync();
 	let db = firebase.firestore();
 	if (!currentUser) {
 		return null;
 	}
-	let userDocument = await db.collection('Users').doc(currentUser.uid);
 
 	let allLists = await userDocument.collection('Lists').where('Type', '==', 'shopping').get();
 	let firstList = null;
@@ -203,11 +222,19 @@ export const getNeedListsForSharedShoppingLists = async (originListId = null) =>
 	}
 	let userDocument = await db.collection('Users').doc(currentUser.uid);
 
-	const needListQuery = await userDocument.collection('Lists').where('type', '==', 'need');
-	if (originListId) {
-		needListQuery.where('originListId', '==', originListId);
-	}
-	return needListQuery.get();
+	return _query({
+		collection: 'Lists',
+		restrictions: [{
+			fieldPath: 'originListId',
+			operation: '==',
+			value: originListId
+		}],
+	}, true)
+	// const needListQuery = await userDocument.collection('Lists').where('type', '==', 'need');
+	// if (originListId) {
+	// 	needListQuery.where('originListId', '==', originListId);
+	// }
+	// return needListQuery.get();
 };
 
 export const getItemsOfList = async (userId, listId) => {
