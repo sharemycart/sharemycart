@@ -4,6 +4,13 @@ import { IonItem, IonButton, IonInput, IonList, IonSelect, IonSelectOption, IonL
 const ENTER_KEY = 13;
 
 class EditItem extends Component {
+  constructor(props) {
+    super(props);
+    if (!props.item.unit) {
+      props.onChange({ ...this.props.item, unit: 'pc'})
+    }
+  }
+
   onKeyPress(event) {
     if (event.which === ENTER_KEY) {
       this.onBlur(event)
@@ -22,10 +29,11 @@ class EditItem extends Component {
 
   render() {
     const unitOfMeasure = this.props.mode === 'shopping'
-      ? <IonSelect value={this.props.item.unit}
-        placeholder="Select"
-        onIonChange={e => this.setUnit(e.detail.value)
-        }>
+      ? <IonSelect
+          value={this.props.item.unit}
+          required="true"
+          onIonChange={e => this.setUnit(e.detail.value)}
+        >
         <IonSelectOption>pc</IonSelectOption>
         <IonSelectOption>g</IonSelectOption>
         <IonSelectOption>kg</IonSelectOption>
@@ -44,16 +52,19 @@ class EditItem extends Component {
           onKeyPress={event => this.onKeyPress(event)}
           onBlur={event => this.onBlur(event)}
           disabled={this.props.mode === "need"}
+          required="true"
         />
-      </IonItem>
-      <IonItem>
         <IonInput
           autofocus={this.props.mode === "need"}
           placeholder="Quantity"
           name="quantity"
+          type="number"
+          min="0"
+          pattern="\d+,?\d*"
           value={this.props.item.quantity}
           onKeyPress={event => this.onKeyPress(event)}
           onBlur={event => this.onBlur(event)}
+          required="true"
         />
         {unitOfMeasure}
       </IonItem>
