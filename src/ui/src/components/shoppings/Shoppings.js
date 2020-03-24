@@ -38,11 +38,12 @@ class Shoppings extends Component {
 	constructor(props) {
 		super(props);
 		this._hasUnmounted = false;
-		this.state = { 
+		this.state = {
 			list: null,
-			items: [], 
-			inNewMode: false, 
-			newItem: {} };
+			items: [],
+			inNewMode: false,
+			newItem: {}
+		};
 	}
 
 	async componentDidMount() {
@@ -77,17 +78,21 @@ class Shoppings extends Component {
 	onUpdateItem(item) {
 		this.setState(state => ({
 			items: state.items.map(i => i.id === item.id ? item : i)
-		}));
+		}))
 		this.props.store.editItem(this.state.list.id, item)
 			.then(() => {
-				console.log('item updated successfully');
+				console.log('item updated successfully')
 			});
 	}
 
 	onDeleteItem(item) {
 		this.setState(state => ({
 			items: state.items.filter(i => i.id !== item.id)
-		}));
+		}))
+		this.props.store.deleteItem(this.state.list.id, item)
+			.then(() => {
+				console.log('item deleted successfully')
+			})
 	}
 
 	render() {

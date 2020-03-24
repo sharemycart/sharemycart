@@ -213,49 +213,26 @@ export class Store {
 
 	/// Item
 	async addItem(listId, item) {
-		const newItem = item
 		// we can only add items to our own lists
+		const newItem = item
 		if (!newItem.id) {
 			newItem.id = uuid()
 		}
 		const currentUser = await firebaseService.getCurrentUserAsync()
 
-		firebaseService.editItem(currentUser.uid, listId, newItem)
+		firebaseService.addItem(currentUser.uid, listId, newItem)
 	}
 
 	async editItem(listId, item) {
 		// we can only edit our own items
 		const currentUser = await firebaseService.getCurrentUserAsync()
-
 		firebaseService.editItem(currentUser.uid, listId, item);
 	}
 
-	/**
-	 *
-	 * @param {String} id The id of the item to add
-	 * @returns {Promise<boolean>}
-	 */
-	deleteItem(id) {
-		return id
-		// return firebaseService
-		// 	.removeObjectFromCollection({ collection: 'Items', objectId: id })
-		// 	.then(
-		// 		_result => {
-		// 			// create the user object based on the getData retrieved...
-		// 			return runInAction(() => {
-		// 				remove(this.items, id);
-		// 				return true;
-		// 			});
-		// 		},
-		// 		err => {
-		// 			console.log(err);
-		// 			return err;
-		// 		}
-		// 	)
-		// 	.catch(e => {
-		// 		console.log(e);
-		// 		return e;
-		// 	});
+	async deleteItem(listId, item) {
+		// we can only edit our own items
+		const currentUser = await firebaseService.getCurrentUserAsync()
+		firebaseService.deleteItem(currentUser.uid, listId, item);
 	}
 
 	/************    Business functions    *************/
@@ -280,9 +257,7 @@ export class Store {
 
 	async getMyCurrentNeedListItems(originListId = null) {
 		return this.state.Lists.friendNeed1.Items
-		
 	}
-
 
 	async getMyCurrentNeedListItems(uid, listId) {
 		// TODO:
@@ -316,5 +291,5 @@ decorate(Store, {
 	getCurrentList: action,
 	addItem: action,
 	editItem: action,
-	// deleteItem: action
+	deleteItem: action
 });

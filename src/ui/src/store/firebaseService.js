@@ -272,6 +272,20 @@ export const findItemById = async (uid, listId, itemId) => {
 /****************    Edit    ******************/
 
 // Items
+export const addItem = async (uid, listId, newItem) => {
+	const db = firebase.firestore();
+
+	const list = await findListById(uid, listId)
+	if (!list) {
+		console.error('addItem: no such list')
+		return null
+	}
+	return db.collection('Users').doc(uid)
+				.collection('Lists').doc(listId)
+				.collection('Items').doc(newItem.id)
+				.set(newItem)
+}
+
 export const editItem = async (uid, listId, editedItem) => {
 	const db = firebase.firestore();
 
@@ -281,14 +295,24 @@ export const editItem = async (uid, listId, editedItem) => {
 		console.error('editItem: no such item')
 		return null
 	}
-
-	const list = await findListById(uid, listId)
-	if (!list) {
-		console.error('editItem: no such list')
-		return null
-	}
 	return  db.collection('Users').doc(uid)
 				.collection('Lists').doc(listId)
 				.collection('Items').doc(item.id)
 				.set(editedItem)
-};
+}
+
+export const deleteItem = async (uid, listId, deletedItem) => {
+	const db = firebase.firestore();
+
+	const item = await findItemById(uid, listId, deletedItem.id)
+
+	if (!item) {
+		console.error('deleteItem: no such item')
+		return null
+	}
+
+	return  db.collection('Users').doc(uid)
+				.collection('Lists').doc(listId)
+				.collection('Items').doc(item.id)
+				.delete()
+}
