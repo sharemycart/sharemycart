@@ -8,7 +8,6 @@ import {
 } from '@ionic/react';
 
 import Item from './Item';
-import ShareListFab from './ShareListFab';
 
 class GoShoppingList extends Component {
 	constructor (props) {
