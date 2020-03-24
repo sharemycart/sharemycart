@@ -68,7 +68,7 @@ class Shoppings extends Component {
 		if (!newItem.name) {
 			return;
 		}
-		this.props.store.addItem(this.state.list.id, newItem)
+		this.props.store.addItem({listId: this.state.list.id, item: newItem})
 			.then(() => {
 				console.log('item added successfully');
 			});
@@ -79,7 +79,7 @@ class Shoppings extends Component {
 		this.setState(state => ({
 			items: state.items.map(i => i.id === item.id ? item : i)
 		}))
-		this.props.store.editItem(this.state.list.id, item)
+		this.props.store.editItem({listId: this.state.list.id, item})
 			.then(() => {
 				console.log('item updated successfully')
 			});
@@ -89,7 +89,7 @@ class Shoppings extends Component {
 		this.setState(state => ({
 			items: state.items.filter(i => i.id !== item.id)
 		}))
-		this.props.store.deleteItem(this.state.list.id, item)
+		this.props.store.deleteItem({listId: this.state.list.id, item})
 			.then(() => {
 				console.log('item deleted successfully')
 			})

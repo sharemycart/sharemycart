@@ -212,7 +212,7 @@ export class Store {
 	/****************** CRUD *****************/
 
 	/// Item
-	async addItem(listId, item) {
+	async addItem({listId, item}) {
 		// we can only add items to our own lists
 		const newItem = item
 		if (!newItem.id) {
@@ -220,33 +220,38 @@ export class Store {
 		}
 		const currentUser = await firebaseService.getCurrentUserAsync()
 
-		firebaseService.addItem(currentUser.uid, listId, newItem)
+		firebaseService.addItem({uid: currentUser.uid, listId, item: newItem})
 	}
 
-	async editItem(listId, item) {
+	async editItem({listId, item}) {
 		// we can only edit our own items
 		const currentUser = await firebaseService.getCurrentUserAsync()
-		firebaseService.editItem(currentUser.uid, listId, item);
+		firebaseService.editItem({uid: currentUser.uid, listId, item});
 	}
 
-	async deleteItem(listId, item) {
+	async deleteItem({listId, item}) {
 		// we can only edit our own items
 		const currentUser = await firebaseService.getCurrentUserAsync()
-		firebaseService.deleteItem(currentUser.uid, listId, item);
+		firebaseService.deleteItem({uid: currentUser.uid, listId, item});
 	}
 
 	/************    Business functions    *************/
 
 	async getMyCurrentShoppingList(getData) {
 		const currentUser = await firebaseService.getCurrentUserAsync()
-		return firebaseService.getFirstShoppingList(currentUser.uid)
+		return firebaseService.getFirstShoppingList({uid: currentUser.uid})
 	}
+
+	// async getMyCurrentNeedList(getData) {
+	// 	const currentUser = await firebaseService.getCurrentUserAsync()
+	// 	return firebaseService.getFirstNeedsList(currentUser.uid)
+	// }
 
 	async getMyCurrentShoppingListItems() {
 		const currentUser = await firebaseService.getCurrentUserAsync()
 		const currentShoppingList = await this.getMyCurrentShoppingList()
 
-		return firebaseService.getListItems(currentUser.uid, currentShoppingList.id)
+		return firebaseService.getListItems({uid: currentUser.uid, listId: currentShoppingList.id})
 	}
 
 	async getMyCurrentNeedList() {
