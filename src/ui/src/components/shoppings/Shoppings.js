@@ -14,7 +14,6 @@ import EditItem from './EditItem';
 // MOBX
 import { inject, observer } from 'mobx-react';
 import BasicPage from '../basicpage/BasicPage';
-import { v4 as uuidv4 } from 'uuid';
 import ShareListFab from './ShareListFab';
 
 // const items = [{
@@ -68,10 +67,7 @@ class Shoppings extends Component {
 		if (!newItem.name) {
 			return;
 		}
-		if (!newItem.id) {
-			newItem.id = uuidv4();
-		}
-		this.props.store.addItem(newItem)
+		this.props.store.addItem(this.state.list.id, newItem)
 			.then(() => {
 				console.log('item added successfully');
 			});

@@ -1,6 +1,7 @@
 import { observable, computed, action, decorate, runInAction } from 'mobx';
 import { get, entries, remove } from 'mobx';
 import * as firebaseService from './firebaseService';
+import { v4 as uuid } from 'uuid';
 
 export class Store {
 	constructor() {
@@ -211,9 +212,15 @@ export class Store {
 	/****************** CRUD *****************/
 
 	/// Item
-	async addItem(item) {
-		return this.state.Lists.myShopping1.items.push(item)
-		// return firebaseService.addItem(item);
+	async addItem(listId, item) {
+		const newItem = item
+		// we can only add items to our own lists
+		if (!newItem.id) {
+			newItem.id = uuid()
+		}
+		const currentUser = await firebaseService.getCurrentUserAsync()
+
+		firebaseService.editItem(currentUser.uid, listId, newItem)
 	}
 
 	async editItem(listId, item) {
@@ -307,7 +314,7 @@ decorate(Store, {
 	loadData: action,
 	itemByKey: action,
 	getCurrentList: action,
-	// addItem: action,
+	addItem: action,
 	editItem: action,
 	// deleteItem: action
 });
