@@ -54,9 +54,9 @@ class ShareListFab extends Component {
 			return;
 		}
 		try {
-			this.setState({
-				currentList: await this.props.store.getCurrentList()
-			});
+			// this.setState({
+			// 	currentList: await this.props.store.getCurrentList()
+			// });
 		} catch (error) {
 			console.error('error found', error);
 		}

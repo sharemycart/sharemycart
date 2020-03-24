@@ -36,37 +36,34 @@ import ShareListFab from './ShareListFab';
 
 class Shoppings extends Component {
 
-	constructor (props) {
+	constructor(props) {
 		super(props);
 		this._hasUnmounted = false;
-		this.state = { items: [], inNewMode: false, newItem: {} };
+		this.state = { 
+			list: null,
+			items: [], 
+			inNewMode: false, 
+			newItem: {} };
 	}
 
-	componentDidMount () {
+	async componentDidMount() {
 		if (this._hasUnmounted) {
 			return;
 		}
-		this.props.store.getMyItems()
-			.then(items => {
-				if (!this._hasUnmounted) {
-					this.setState({ items: items });
-				}
-			})
-			.catch(error => {
-				console.error('error found', error);
-			})
-		;
+		const list = await this.props.store.getMyCurrentShoppingList()
+		const items = await this.props.store.getMyCurrentShoppingListItems()
+		this.setState({ list, items });
 	}
 
-	componentWillUnmount () {
+	componentWillUnmount() {
 		this._hasUnmounted = true;
 	}
 
-	onCreateItem (newItem) {
+	onCreateItem(newItem) {
 		this.setState({ newItem });
 	}
 
-	onCreateComplete () {
+	onCreateComplete() {
 		let newItem = this.state.newItem;
 		if (!newItem.name) {
 			return;
@@ -81,35 +78,35 @@ class Shoppings extends Component {
 		this.setState({ items: this.state.items.concat(newItem), newItem: {}, inNewMode: false });
 	}
 
-	onUpdateItem (item) {
+	onUpdateItem(item) {
 		this.setState(state => ({
 			items: state.items.map(i => i.id === item.id ? item : i)
 		}));
-		this.props.store.editItem(item.id, item)
+		this.props.store.editItem(this.state.list.id, item)
 			.then(() => {
 				console.log('item updated successfully');
 			});
 	}
 
-	onDeleteItem (item) {
+	onDeleteItem(item) {
 		this.setState(state => ({
 			items: state.items.filter(i => i.id !== item.id)
 		}));
 	}
 
-	render () {
+	render() {
 		const newItem = this.state.inNewMode
 			? <EditItem item={this.state.newItem}
-									onChange={item => this.onCreateItem(item)}
-									onClose={() => this.onCreateComplete()}
-									mode="shopping"
+				onChange={item => this.onCreateItem(item)}
+				onClose={() => this.onCreateComplete()}
+				mode="shopping"
 			/>
 			: <IonItem style={{ color: 'grey' }}>
-				<IonIcon icon={add}/>
+				<IonIcon icon={add} />
 				<IonLabel onClick={() => this.setState({ inNewMode: true })}>Click here to add item</IonLabel>
 			</IonItem>;
 
-		const goShoppingButton = <IonButton href="/goshopping">Go <IonIcon icon={cart}/></IonButton>;
+		const goShoppingButton = <IonButton href="/goshopping">Go <IonIcon icon={cart} /></IonButton>;
 
 		return (
 			<BasicPage
@@ -130,7 +127,7 @@ class Shoppings extends Component {
 									mode={'shopping'}
 								/>))}
 							</IonList>
-							<ShareListFab/>
+							<ShareListFab />
 						</>
 					);
 				}}

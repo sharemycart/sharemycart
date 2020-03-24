@@ -154,7 +154,7 @@ export const getUserProfile = () => {
  * @param {string} restrictions[].operation
  * @param {string} restrictions[].value
  */
-const _findFromRef = async ({ collectionRef, restrictions }, data = false) => {
+const _findFromRef = async ({ collectionRef, restrictions }, getData = false) => {
 	let results = [];
 
 	if (restrictions) {
@@ -165,7 +165,7 @@ const _findFromRef = async ({ collectionRef, restrictions }, data = false) => {
 
 	try {
 		(await collectionRef.get()).forEach(doc => {
-			if (data) {
+			if (getData) {
 				results.push({
 					id: doc.id,
 					...doc.data()
@@ -180,258 +180,115 @@ const _findFromRef = async ({ collectionRef, restrictions }, data = false) => {
 	return results;
 };
 
-/**
- * @param collection: string
- * @param restrictions[0].fieldPath: string | FieldPath,
- * @param restrictions[0].operation: WhereFilterOp,
- * @param restrictions[0].value: any
- */
-const _find = async ({ collection, restrictions }, data = false) => {
-	let collectionRef = firebase.firestore().collection(collection);
-	return await _findFromRef({ collectionRef, restrictions }, data)
-};
+/****************    Retrieval    ******************/
 
-/****************    Get    ******************/
+/// User
+const getUser = async (uid) => {
+	if (!uid) return null
 
-const getCurrentUserDoc = async () => {
-	let currentUser = await getCurrentUserAsync();
-	let db = firebase.firestore();
-	if (!currentUser) {
-		return null;
-	}
-	return db.collection('Users').doc(currentUser.uid);
+	const db = firebase.firestore();
+	return db.collection('Users').doc(uid).data();
 }
 
+/// Lists
 
-export const findLists = async (uid, restrictions, data) => {
-	const currentUserDoc = await getCurrentUserDoc()
-	const collectionRef = await currentUserDoc.collection('Lists')
+/// Queries
+export const findLists = async (uid, restrictions, getData = false) => {
+	const db = firebase.firestore();
+
+	const userDoc = await db.collection('Users').doc(uid)
+	const collectionRef = await userDoc.collection('Lists')
+
 	return _findFromRef({
 		collectionRef,
 		restrictions
-	}, data)
+	}, getData)
 }
 
 export const getLists = async (uid, restrictions) => {
+	if (!uid) return []
 	return findLists(uid, restrictions, true)
 }
 
-export const findShoppingLists = await findLists(currentUser.uid, [{
-	fieldPath: 'Type',
-	operation: '==',
-	value: 'shopping'
-}], data)
+export const findShoppingLists = async (uid, restrictions, getData = false) => {
+	const db = firebase.firestore();
+	let fullRestrictions = restrictions || []
 
-export const findMyCurrentShoppingList = async (data) => {
-	const currentUser = await getCurrentUserAsync()
-	let allLists = findShoppingLists
-	let firstList = null;
-	allLists.forEach(doc => {
-		firstList = doc;
-		return false;
-	});
-	return firstList;
+	fullRestrictions.push({
+		fieldPath: 'Type',
+		operation: '==',
+		value: 'shopping'
+	})
+
+	const userDoc = await db.collection('Users').doc(uid)
+	if (userDoc) {
+		return findLists(userDoc.id, fullRestrictions, getData)
+	}
 }
 
-export const getMyCurrentShoppingList = async () => {
-	return findMyCurrentShoppingList(true)
-};
+export const getFirstShoppingList = async (uid, restrictions) => {
+	if (!uid) return []
 
-export const getNeedListsForSharedShoppingLists = async (originListId = null) => {
-	let currentUser = await getCurrentUserAsync();
-	let db = firebase.firestore();
-	if (!currentUser) {
-		return null;
-	}
-	let userDocument = await db.collection('Users').doc(currentUser.uid);
+	const shoppingLists = await findShoppingLists(uid, restrictions, true)
+	return shoppingLists[0]
+}
 
-	const restrictions = [{
-		fieldPath: 'type',
-		operation: '==',
-		value: 'need'
-	}]
+// ID Access
+export const findListById = async (uid, listId) => {
+	const db = firebase.firestore();
 
-	if (originListId) {
-		restrictions.push({
-			fieldPath: 'originListId',
-			operation: '==',
-			value: originListId
-		})
-	}
+	const userDoc = await db.collection('Users').doc(uid)
+	return userDoc.collection('Lists').doc(listId)
+}
+
+export const getListById = async (uid, listId) => {
+	return findListById(uid, listId).data()
+}
+
+/// Items
+export const findListItems = async (uid, listId, restrictions, getData) => {
+	if (!(uid && listId)) return [];
+	const db = firebase.firestore();
+
+	const userDoc = await db.collection('Users').doc(uid)
+	const collectionRef = await userDoc.collection('Lists').doc(listId).collection('Items')
 
 	return _findFromRef({
-		collectionRef: userDocument.collection('Lists'),
-		restrictions,
-	}, true)
-	// const needListQuery = await userDocument.collection('Lists').where('type', '==', 'need');
-	// if (originListId) {
-	// 	needListQuery.where('originListId', '==', originListId);
-	// }
-	// return needListQuery.get();
-};
+		collectionRef,
+		restrictions
+	}, getData)
+}
 
-export const getItemsOfList = async (userId, listId) => {
-	let currentUserId = userId;
-	let db = firebase.firestore();
+export const getListItems = async (userId, listId) => findListItems(userId, listId, [], true)
 
-	if (!currentUserId) {
-		let currentUser = await getCurrentUserAsync();
-		if (!currentUser) {
-			return null;
-		}
-		currentUserId = currentUser.uid;
+// ID access
+export const findItemById = async (uid, listId, itemId) => {
+	const db = firebase.firestore();
+
+	const userDoc = await db.collection('Users').doc(uid)
+	return userDoc.collection('Lists').doc(listId).collection('Items').doc(itemId)
+}
+
+/****************    Edit    ******************/
+
+// Items
+export const editItem = async (uid, listId, editedItem) => {
+	const db = firebase.firestore();
+
+	const item = await findItemById(uid, listId, editedItem.id)
+
+	if (!item) {
+		console.error('editItem: no such item')
+		return null
 	}
-	let userDocument = await db.collection('Users').doc(currentUserId);
 
-	const list = await userDocument.collection('Lists').doc(listId).get();
-	return list.exists
-		? list.data().Items
-		: [];
-};
-
-export const addItem = async (item) => {
-	let firstList = await getMyCurrentShoppingList();
-	if (firstList) {
-		let newItems = (firstList.data().Items || []).concat(item);
-		await firstList.ref.set({ Items: newItems }, { merge: true });
+	const list = await findListById(uid, listId)
+	if (!list) {
+		console.error('editItem: no such list')
+		return null
 	}
-	return item;
-};
-
-export const getCurrentList = async (item) => {
-	let firstList = await getMyCurrentShoppingList();
-	if (firstList) {
-		return {
-			id: firstList.id,
-			...firstList
-		};
-	}
-	return null;
-};
-
-export const editItem = async (id, data) => {
-	let firstList = await findMyCurrentShoppingList();
-	if (firstList) {
-		let newItems = (firstList.Items || []).map(i => i.id === id ? data : i);
-		await firstList.ref.set({ Items: newItems }, { merge: true });
-	}
-	return data;
-};
-
-export const getMyItems = async () => {
-	let firstList = await getMyCurrentShoppingList();
-	let items = firstList ? firstList.Items : [];
-	return items || [];
-};
-
-/**
- *
- * @param {*} _collection - name of collection to add object to
- * @param {*} _objectData - data to add to the collection
- */
-export const addObjectToCollection = ({ collection, objectData }) => {
-	let currentUserId = firebase.auth().currentUser.uid;
-	let collectionRef = firebase.firestore().collection(collection);
-
-	return collectionRef
-		.add({
-			owner: currentUserId,
-			content: { ...objectData },
-			created: new Date().getTime(),
-			updated: new Date().getTime()
-		})
-		.then(
-			async doc => {
-				console.log(`addObjectToCollection ${collection} ${doc}`);
-
-				let docData = await getByRef(doc);
-				return docData;
-			},
-			error => {
-				console.log(`ERROR: addObjectToCollection ${collection} ${error}`);
-				return error;
-			}
-		)
-		.catch(e => {
-			console.log(`ERROR: addObjectToCollection ${collection} ${e}`);
-			return e;
-		});
-};
-
-/**
- *
- * @param {*} collection - name of collection
- * @param {*} objectId - id of data to remove from the collection
- */
-export const removeObjectFromCollection = ({ collection, objectId }) => {
-	// let currentUserId = firebase.auth().currentUser.uid;
-	let collectionRef = firebase.firestore().collection(collection);
-
-	return collectionRef.doc(objectId).delete()
-		.then(
-			async doc => {
-				console.log(`removeObjectFromCollection ${collection} ${objectId}`);
-				return true;
-			},
-			error => {
-				console.log(`ERROR: removeObjectFromCollection ${collection} ${error}`);
-				return error;
-			}
-		)
-		.catch(e => {
-			console.log(`ERROR: removeObjectFromCollection ${collection} ${e}`);
-			return e;
-		});
-};
-
-export const getByRef = _documentRef => {
-	return _documentRef
-		.get()
-		.then(doc => {
-			if (doc.exists) {
-				return { ...doc.data(), id: _documentRef.id };
-			} else {
-				// doc.data() will be undefined in this case
-				console.log('No such document!');
-				return null;
-			}
-		})
-		.catch(error => {
-			console.log('Error getting document:', error);
-			return error;
-		});
-};
-
-/**
- *
- * @param {*} blob
- */
-export const uploadImage = blob => {
-	return new Promise((resolve, reject) => {
-		let currentUserId = firebase.auth().currentUser.uid;
-		const ref = firebase
-			.storage()
-			.ref(currentUserId)
-			.child(new Date().getTime() + '-' + currentUserId + '.jpeg');
-
-		const task = ref.put(blob);
-
-		task.on(
-			firebase.storage.TaskEvent.STATE_CHANGED,
-			snapshot =>
-				console.log((snapshot.bytesTransferred / snapshot.totalBytes) * 100),
-			error => {
-				console.log('error', error);
-				return reject(error);
-			},
-			result => {
-				return resolve({
-					url: task.snapshot.downloadURL,
-					contentType: task.snapshot.metadata.contentType,
-					name: task.snapshot.metadata.name,
-					size: task.snapshot.metadata.size
-				});
-			}
-		);
-	});
+	return  db.collection('Users').doc(uid)
+				.collection('Lists').doc(listId)
+				.collection('Items').doc(item.id)
+				.set(editedItem)
 };

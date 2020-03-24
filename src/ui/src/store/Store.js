@@ -14,6 +14,38 @@ export class Store {
 			this.activeUser = u;
 			this.authCheckComplete = true;
 		});
+
+
+		/////////// Mock state for dev. time
+		this.state = {
+			Users: {
+				myUid: 'myUid',
+				friendUid: 'friendUid'
+			},
+			Lists: {
+				myShopping1: {
+					objectId: 'myShopping1',
+					name: 'Harry\'s Shopping list',
+					Items: [
+						{
+							name: 'Bananas',
+							quantity: 5,
+							unit: 'pc'
+						}
+					]
+				},
+				friendShopping1: {
+					objectId: 'friendShopping1',
+					name: 'Sally\'s Shopping list',
+					Items: []
+				},
+				friendNeed1: {
+					objectId: 'friendNeed1',
+					name: 'Oliver\'s Shopping list',
+					Items: []
+				},
+			},
+		}
 	}
 
 	/**
@@ -22,7 +54,7 @@ export class Store {
 	 * user
 	 * @param {*} _authUser
 	 */
-	handleAuthedUser = async _authUser => {
+	handleAuthorizedUser = async _authUser => {
 		if (_authUser) {
 			let userAcctInfo = await firebaseService.getUserProfile();
 			console.log('setting active user');
@@ -38,7 +70,7 @@ export class Store {
 	 */
 	async initializeStore() {
 		return firebaseService
-			.authCheck(this.handleAuthedUser)
+			.authCheck(this.handleAuthorizedUser)
 			.then(_user => {
 				return _user;
 			})
@@ -157,8 +189,7 @@ export class Store {
 			});
 			return newUser;
 		} catch (err) {
-			console.log(err);
-			return err;
+			console.error(err);
 			// for (let e of err.details) {
 			//   if (e === "conflict_email") {
 			//     alert("Email already exists.");
@@ -177,40 +208,19 @@ export class Store {
 		return firebaseService.logOut();
 	}
 
-	//
-	// // DATA CRUD
-	// loadData () {
-	// 	return firebaseService
-	// 		.queryObjectCollection({ collection: 'items' })
-	// 		.then(
-	// 			_result => {
-	// 				// create the user object based on the data retrieved...
-	// 				return runInAction(() => {
-	// 					let resultMap = _result.reduce((map, obj) => {
-	// 						map[obj.id] = obj;
-	// 						return map;
-	// 					}, {});
-	// 					this.items = resultMap;
-	// 					return resultMap;
-	// 				});
-	// 			},
-	// 			err => {
-	// 				console.log(err);
-	// 				return err;
-	// 			}
-	// 		)
-	// 		.catch(e => {
-	// 			console.log(e);
-	// 			return e;
-	// 		});
-	// }
+	/****************** CRUD *****************/
 
-	async addItem(_data) {
-		return firebaseService.addItem(_data);
+	/// Item
+	async addItem(item) {
+		return this.state.Lists.myShopping1.items.push(item)
+		// return firebaseService.addItem(item);
 	}
 
-	async editItem(id, _data) {
-		return firebaseService.editItem(id, _data);
+	async editItem(listId, item) {
+		// we can only edit our own items
+		const currentUser = await firebaseService.getCurrentUserAsync()
+
+		firebaseService.editItem(currentUser.uid, listId, item);
 	}
 
 	/**
@@ -219,50 +229,57 @@ export class Store {
 	 * @returns {Promise<boolean>}
 	 */
 	deleteItem(id) {
-		return firebaseService
-			.removeObjectFromCollection({ collection: 'Items', objectId: id })
-			.then(
-				_result => {
-					// create the user object based on the data retrieved...
-					return runInAction(() => {
-						remove(this.items, id);
-						return true;
-					});
-				},
-				err => {
-					console.log(err);
-					return err;
-				}
-			)
-			.catch(e => {
-				console.log(e);
-				return e;
-			});
+		return id
+		// return firebaseService
+		// 	.removeObjectFromCollection({ collection: 'Items', objectId: id })
+		// 	.then(
+		// 		_result => {
+		// 			// create the user object based on the getData retrieved...
+		// 			return runInAction(() => {
+		// 				remove(this.items, id);
+		// 				return true;
+		// 			});
+		// 		},
+		// 		err => {
+		// 			console.log(err);
+		// 			return err;
+		// 		}
+		// 	)
+		// 	.catch(e => {
+		// 		console.log(e);
+		// 		return e;
+		// 	});
 	}
 
-	async getMyItems() {
+	/************    Business functions    *************/
 
-		// firebaseService.getUser()
-
-		// firebaseService.queryLists(user)
-
-		// get the first list
-
-		// firebaseService.getItemsOfList(list)
-
-		return firebaseService.getMyItems();
+	async getMyCurrentShoppingList(getData) {
+		const currentUser = await firebaseService.getCurrentUserAsync()
+		return firebaseService.getFirstShoppingList(currentUser.uid)
 	}
 
-	async getNeedListsForSharedShoppingLists() {
-		return firebaseService.getNeedListsForSharedShoppingLists()
+	async getMyCurrentShoppingListItems() {
+		const currentUser = await firebaseService.getCurrentUserAsync()
+		const currentShoppingList = await this.getMyCurrentShoppingList()
+
+		return firebaseService.getListItems(currentUser.uid, currentShoppingList.id)
 	}
 
-	async getItemsOfList(userId, listId) {
-		return firebaseService.getItemsOfList(userId, listId)
+	async getMyCurrentNeedList() {
+		return this.state.Lists.friendNeed1
+
+		// return this.findMyCurrentShoppingList(true)
+	};
+
+	async getMyCurrentNeedListItems(originListId = null) {
+		return this.state.Lists.friendNeed1.Items
+		
 	}
 
-	async getCurrentList(userId, listId) {
-		return firebaseService.getCurrentList(userId, listId)
+
+	async getMyCurrentNeedListItems(uid, listId) {
+		// TODO:
+		return this.state.Lists.myShopping1.Items
 	}
 }
 
@@ -278,11 +295,10 @@ decorate(Store, {
 	authenticatedUser: computed,
 	doCheckAuth: computed,
 	itemEntries: computed,
-	getMyItems: action,
-	getMyNeedLists: action,
-	getItemsOfList: action,
 
 	// ACTIONS
+	getMyCurrentShoppingListItems: action,
+	getMyNeedLists: action,
 	doCreateUser: action,
 	doLogin: action,
 	doFacebookLogin: action,
@@ -291,7 +307,7 @@ decorate(Store, {
 	loadData: action,
 	itemByKey: action,
 	getCurrentList: action,
-	addItem: action,
+	// addItem: action,
 	editItem: action,
-	deleteItem: action
+	// deleteItem: action
 });
