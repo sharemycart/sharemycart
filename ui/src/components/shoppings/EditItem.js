@@ -26,11 +26,11 @@ class EditItem extends Component {
         placeholder="Select"
         onIonChange={e => this.setUnit(e.detail.value)
         }>
+        <IonSelectOption>pc</IonSelectOption>
         <IonSelectOption>g</IonSelectOption>
         <IonSelectOption>kg</IonSelectOption>
         <IonSelectOption>l</IonSelectOption>
         <IonSelectOption>ml</IonSelectOption>
-        <IonSelectOption>pc</IonSelectOption>
       </IonSelect>
       : <IonLabel>{this.props.item.unit}</IonLabel>
 
