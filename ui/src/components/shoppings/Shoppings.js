@@ -59,13 +59,13 @@ class Shoppings extends Component {
 		this._hasUnmounted = true;
 	}
 
-	onCreateItem(newItem) {
+	onChangeNewItem (newItem) {
 		this.setState({ newItem });
 	}
 
 	onCreateComplete() {
 		let newItem = this.state.newItem;
-		if (!newItem.name) {
+		if (!newItem.name || !newItem.quantity || !newItem.unit) {
 			return;
 		}
 		this.props.store.addItem({listId: this.state.list.id, item: newItem})
@@ -98,9 +98,9 @@ class Shoppings extends Component {
 	render() {
 		const newItem = this.state.inNewMode
 			? <EditItem item={this.state.newItem}
-				onChange={item => this.onCreateItem(item)}
-				onClose={() => this.onCreateComplete()}
-				mode="shopping"
+									onChange={item => this.onChangeNewItem(item)}
+									onClose={() => this.onCreateComplete()}
+									mode="shopping"
 			/>
 			: <IonItem style={{ color: 'grey' }}>
 				<IonIcon icon={add} />
