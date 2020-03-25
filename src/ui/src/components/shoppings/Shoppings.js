@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import {
 	IonButton,
-	IonItem,
 	IonList,
-	IonLabel,
 	IonIcon
 } from '@ionic/react';
 import { add, cart } from 'ionicons/icons';
@@ -15,23 +13,6 @@ import EditItem from './EditItem';
 import { inject, observer } from 'mobx-react';
 import BasicPage from '../basicpage/BasicPage';
 import ShareListFab from './ShareListFab';
-
-// const items = [{
-// 	id: 1,
-// 	name: 'Tomatoes',
-// 	unit: 'kg',
-// 	quantity: 5
-// }, {
-// 	id: 2,
-// 	name: 'Avocado',
-// 	unit: 'pc',
-// 	quantity: 1
-// }, {
-// 	id: 3,
-// 	name: 'Flour',
-// 	unit: 'g',
-// 	quantity: 500
-// }];
 
 class Shoppings extends Component {
 
