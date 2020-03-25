@@ -42,7 +42,7 @@ class EditItem extends Component {
       </IonSelect>
       : <IonLabel>{this.props.item.unit}</IonLabel>
 
-    return <IonList style={{ width: "100%", border: "1px solid lightgrey" }}>
+    return <IonList style={{ width: "100%" }}>
       <IonItem>
         <IonInput
           autofocus={this.props.mode === "shopping"}
@@ -67,9 +67,9 @@ class EditItem extends Component {
           required="true"
         />
         {unitOfMeasure}
+        <IonButton onClick={this.props.onClose} style={{'margin-left': '10px'}}>Add</IonButton>
       </IonItem>
 
-      <IonButton onClick={this.props.onClose} style={{'margin': '8px 8px 0'}}>Done</IonButton>
     </IonList>
   }
 }

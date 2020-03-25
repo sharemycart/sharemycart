@@ -38,12 +38,7 @@ class Shoppings extends Component {
 	constructor(props) {
 		super(props);
 		this._hasUnmounted = false;
-		this.state = {
-			list: null,
-			items: [],
-			inNewMode: false,
-			newItem: {}
-		};
+		this.state = { list: null, items: [], newItem: {} };
 	}
 
 	async componentDidMount() {
@@ -72,7 +67,7 @@ class Shoppings extends Component {
 			.then(() => {
 				console.log('item added successfully');
 			});
-		this.setState({ items: this.state.items.concat(newItem), newItem: {}, inNewMode: false });
+		this.setState({ items: this.state.items.concat(newItem), newItem: {} });
 	}
 
 	onUpdateItem(item) {
@@ -95,19 +90,8 @@ class Shoppings extends Component {
 			})
 	}
 
-	render() {
-		const newItem = this.state.inNewMode
-			? <EditItem item={this.state.newItem}
-									onChange={item => this.onChangeNewItem(item)}
-									onClose={() => this.onCreateComplete()}
-									mode="shopping"
-			/>
-			: <IonItem style={{ color: 'grey' }}>
-				<IonIcon icon={add} />
-				<IonLabel onClick={() => this.setState({ inNewMode: true })}>Click here to add item</IonLabel>
-			</IonItem>;
-
-		const goShoppingButton = <IonButton href="/goshopping">Go <IonIcon icon={cart} /></IonButton>;
+	render () {
+		const goShoppingButton = <IonButton href="/goshopping">Go <IonIcon icon={cart}/></IonButton>;
 
 		return (
 			<BasicPage
@@ -117,7 +101,11 @@ class Shoppings extends Component {
 				renderContent={history => {
 					return (
 						<>
-							{newItem}
+							<EditItem item={this.state.newItem}
+									onChange={item => this.onChangeNewItem(item)}
+									onClose={() => this.onCreateComplete()}
+									mode="shopping"
+							/>
 							<IonList>
 								{this.state.items.map((item, key) => (<Item
 									key={item.id || key}
