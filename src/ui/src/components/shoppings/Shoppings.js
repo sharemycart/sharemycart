@@ -5,7 +5,7 @@ import {
 	IonList,
 	IonIcon
 } from '@ionic/react';
-import { add, cart } from 'ionicons/icons';
+import { cart } from 'ionicons/icons';
 import Item from './Item';
 import EditItem from './EditItem';
 
