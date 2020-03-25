@@ -254,20 +254,49 @@ export class Store {
 		return firebaseService.getListItems({uid: currentUser.uid, listId: currentShoppingList.id})
 	}
 
-	async getMyCurrentNeedList() {
-		return this.state.Lists.friendNeed1
+	/**
+	 * 
+	 * @param {string} uid The id of the user owning the shopping list
+	 * @param {string} shoppingListId The id of the shopping list which is being shopped
+	 */
+	async getJoinedNeeds({uid, shoppingListId}) {
 
-		// return this.findMyCurrentShoppingList(true)
-	};
-
-	async getMyCurrentNeedListItems(originListId = null) {
-		return this.state.Lists.friendNeed1.Items
+		// Mock data
+		return [
+			{
+				uid: 'utsavsuid',
+				userFirstName: 'Utsav',
+				userLastName: 'Anand',
+				neededItems: {
+					Bananas: 5,
+					Tomatoes: 3
+				}
+			},
+			{
+				uid: 'oliversuid',
+				userFirstName: 'Oliver',
+				userLastName: 'Jägle',				
+				neededItems: {
+					Whiskey: 1,
+				}
+			}
+		]
 	}
 
-	async getMyCurrentNeedListItems(uid, listId) {
-		// TODO:
-		return this.state.Lists.myShopping1.Items
-	}
+	// async getMyCurrentNeedList() {
+	// 	return this.state.Lists.friendNeed1
+
+	// 	// return this.findMyCurrentShoppingList(true)
+	// };
+
+	// async getMyCurrentNeedListItems(originListId = null) {
+	// 	return this.state.Lists.friendNeed1.Items
+	// }
+
+	// async getMyCurrentNeedListItems(uid, listId) {
+	// 	// TODO:
+	// 	return this.state.Lists.myShopping1.Items
+	// }
 }
 
 decorate(Store, {
