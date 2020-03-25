@@ -34,7 +34,7 @@ class ProfileButton extends Component {
 	};
 
 	render () {
-		let user = this.props.store.activeUser;
+		let user = this.props.store.currentUser;
 		const size = 32;
 		let userImage = user ? user.photoURL : null;
 		let src = userImage ? userImage : ('https://www.gravatar.com/avatar?d=monsterid&s=' + size);

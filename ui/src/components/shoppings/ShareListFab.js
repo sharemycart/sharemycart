@@ -40,7 +40,7 @@ class ShareListFab extends Component {
 	};
 
 	generateShareLink = async () => {
-		let uid = this.props.store.activeUser.uid;
+		let uid = this.props.store.currentUser.uid;
 		let activeList = this.state.activeList || await this.props.store.getCurrentList();
 		let newLink = `${window.location.origin}/share/${uid}/${activeList.id}`;
 
