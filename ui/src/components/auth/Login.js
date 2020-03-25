@@ -93,9 +93,9 @@ class Login extends Component {
 	};
 
 	render() {
-		let { initializationError, activeUser } = this.props.store;
+		let { initializationError, currentUser } = this.props.store;
 
-		if (activeUser) {
+		if (currentUser) {
 			return <Redirect to="/home" />;
 		} else {
 			return (

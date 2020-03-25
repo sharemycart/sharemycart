@@ -15,7 +15,7 @@ import { logOut } from 'ionicons/icons';
 import BasicPage from '../basicpage/BasicPage';
 
 class Profile extends Component {
-	constructor (props) {
+	constructor(props) {
 		super(props);
 		this.state = {};
 		this._onLogoutClick = this._onLogoutClick.bind(this);
@@ -27,10 +27,10 @@ class Profile extends Component {
 		this.props.history.push('/login');
 	};
 
-	render () {
-		let user = this.props.store.activeUser;
+	render() {
+		let user = this.props.store.currentUser;
 		if (!user) {
-			return <Redirect to="/login"/>;
+			return <Redirect to="/login" />;
 		}
 
 		const size = 200;
@@ -46,7 +46,7 @@ class Profile extends Component {
 						<>
 							<IonItem>
 								<IonAvatar style={{ width: size, height: size }}>
-									<img src={src} alt="User Profile"/>
+									<img src={src} alt="User Profile" />
 								</IonAvatar>
 							</IonItem>
 							<IonItem>
@@ -77,7 +77,7 @@ class Profile extends Component {
 								onClick={this._onLogoutClick}
 							>
 								LOGOUT
-								<IonIcon slot="end" icon={logOut}/>
+								<IonIcon slot="end" icon={logOut} />
 							</IonButton>
 						</>
 					);

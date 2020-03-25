@@ -251,7 +251,7 @@ export class Store {
 
 decorate(Store, {
 	// OBSERVABLES
-	activeUser: observable,
+	currentUser: observable,
 	loading: observable,
 	authCheckComplete: observable,
 	items: observable,
