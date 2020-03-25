@@ -8,14 +8,12 @@ export class Store {
 		this.activeUser = null;
 		this.loading = false;
 		this.authCheckComplete = false;
-		this.items = new Map();
 		this.initializationError = null;
 
 		this.initializeStore().then(u => {
 			this.activeUser = u;
 			this.authCheckComplete = true;
 		});
-
 
 		/////////// Mock state for dev. time
 		this.state = {
@@ -238,8 +236,7 @@ export class Store {
 	/************    Business functions    *************/
 
 	async getMyCurrentShoppingList(getData) {
-		const currentUser = await firebaseService.getCurrentUserAsync()
-		return firebaseService.getFirstShoppingList({uid: currentUser.uid})
+		return firebaseService.getFirstShoppingList({uid: this.activeUser.uid})
 	}
 
 	// async getMyCurrentNeedList(getData) {
@@ -248,10 +245,9 @@ export class Store {
 	// }
 
 	async getMyCurrentShoppingListItems() {
-		const currentUser = await firebaseService.getCurrentUserAsync()
 		const currentShoppingList = await this.getMyCurrentShoppingList()
 
-		return firebaseService.getListItems({uid: currentUser.uid, listId: currentShoppingList.id})
+		return firebaseService.getListItems({uid: this.activeUser.uid, listId: currentShoppingList.id})
 	}
 
 	/**
@@ -313,16 +309,19 @@ decorate(Store, {
 	itemEntries: computed,
 
 	// ACTIONS
-	getMyCurrentShoppingListItems: action,
-	getMyNeedLists: action,
+
+	// Authentication
 	doCreateUser: action,
 	doLogin: action,
 	doFacebookLogin: action,
 	doGoogleLogin: action,
 	doLogout: action,
-	loadData: action,
-	itemByKey: action,
-	getCurrentList: action,
+	
+	// Lists
+	getMyCurrentShoppingListItems: action,
+	getMyNeedLists: action,
+
+	// Items
 	addItem: action,
 	editItem: action,
 	deleteItem: action
