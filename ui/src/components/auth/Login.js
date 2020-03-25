@@ -47,6 +47,7 @@ class Login extends Component {
 			if (response.code) {
 				throw response;
 			}
+			history.push('/')
 		} catch (e) {
 			this.setState(() => ({ showErrorToast: true, errMsg: e.message }));
 		}

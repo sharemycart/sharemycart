@@ -19,7 +19,9 @@ import Needs from '../needs/Needs';
 import Profile from '../profile/Profile';
 
 class App extends Component {
-	render () {
+	render() {
+		const isLoggedIn = !!this.props.store.currentUser
+
 		return !this.props.store.authCheckComplete ? (
 			<div
 				style={{
@@ -29,26 +31,26 @@ class App extends Component {
 					transform: 'translate(-50%, -50%)'
 				}}
 			>
-				<IonSpinner name="circles"/>
+				<IonSpinner name="circles" />
 			</div>
 		) : (
-			<IonReactRouter>
-				<IonApp>
-					<Switch>
-						<Redirect exact from="/" to="home"/>
-						<Route path="/login" component={Login}/>
-						<IonRouterOutlet>
-							<Route path="/register" component={RegistrationPage}/>
-							<PrivateRoute name="home" path="/home" component={Shoppings}/>
-							<PrivateRoute name="needs" path="/needs" component={Needs}/>
-							<PrivateRoute name="goshopping" path="/goshopping" component={GoShoppingList}/>
-							<PrivateRoute name="profile" path="/profile" component={Profile}/>
-							<PrivateRoute name="share" path="/share/:uid/:listid" component={Needs}/>
-						</IonRouterOutlet>
-					</Switch>
-				</IonApp>
-			</IonReactRouter>
-		);
+				<IonReactRouter>
+					<IonApp>
+						<Switch>
+							<Redirect exact from="/" to="home" />
+							<Route path="/login" component={Login} />
+							<IonRouterOutlet>
+								<Route path="/register" component={RegistrationPage} />
+								<PrivateRoute name="home" path="/home" component={isLoggedIn ? Shoppings : Login} />
+								<PrivateRoute name="needs" path="/needs" component={isLoggedIn ? Needs : Login} />
+								<PrivateRoute name="goshopping" path="/goshopping" component={isLoggedIn ? GoShoppingList : Login} />
+								<PrivateRoute name="profile" path="/profile" component={isLoggedIn ? Profile : Login} />
+								<PrivateRoute name="share" path="/share/:uid/:listid" component={isLoggedIn ? Needs : Login} />
+							</IonRouterOutlet>
+						</Switch>
+					</IonApp>
+				</IonReactRouter>
+			);
 	}
 }
 
