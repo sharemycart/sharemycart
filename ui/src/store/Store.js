@@ -1,50 +1,18 @@
 import { observable, computed, action, decorate, runInAction } from 'mobx';
 import { get, entries, remove } from 'mobx';
 import * as firebaseService from './firebaseService';
-import { v4 as uuid } from 'uuid';
 
 export class Store {
 	constructor() {
-		this.activeUser = null;
+		this.currentUser = null;
 		this.loading = false;
 		this.authCheckComplete = false;
 		this.initializationError = null;
 
 		this.initializeStore().then(u => {
-			this.activeUser = u;
+			this.currentUser = u;
 			this.authCheckComplete = true;
 		});
-
-		/////////// Mock state for dev. time
-		this.state = {
-			Users: {
-				myUid: 'myUid',
-				friendUid: 'friendUid'
-			},
-			Lists: {
-				myShopping1: {
-					objectId: 'myShopping1',
-					name: 'Harry\'s Shopping list',
-					Items: [
-						{
-							name: 'Bananas',
-							quantity: 5,
-							unit: 'pc'
-						}
-					]
-				},
-				friendShopping1: {
-					objectId: 'friendShopping1',
-					name: 'Sally\'s Shopping list',
-					Items: []
-				},
-				friendNeed1: {
-					objectId: 'friendNeed1',
-					name: 'Oliver\'s Shopping list',
-					Items: []
-				},
-			},
-		}
 	}
 
 	/**
@@ -57,11 +25,11 @@ export class Store {
 		if (_authUser) {
 			let userAcctInfo = await firebaseService.getUserProfile();
 			console.log('setting active user');
-			this.activeUser = { ..._authUser, ...userAcctInfo };
+			this.currentUser = { ..._authUser, ...userAcctInfo };
 		} else {
-			this.activeUser = _authUser;
+			this.currentUser = _authUser;
 		}
-		return this.activeUser;
+		return this.currentUser;
 	};
 
 	/**
@@ -82,7 +50,7 @@ export class Store {
 
 	get doCheckAuth() {
 		if (firebaseService.getCurrentUser()) {
-			return this.activeUser;
+			return this.currentUser;
 		} else {
 			return null;
 		}
@@ -92,7 +60,7 @@ export class Store {
 	 * here we check to see if ionic saved a user for us
 	 */
 	get authenticatedUser() {
-		return this.activeUser || null;
+		return this.currentUser || null;
 	}
 
 	/**
@@ -179,64 +147,50 @@ export class Store {
 	 * create the user with the information and set the user object
 	 */
 	async doCreateUser(_params) {
-		try {
-			let newUser = await firebaseService.registerUser({
-				email: _params.email,
-				password: _params.password,
-				firstName: _params.firstName,
-				lastName: _params.lastName
-			});
-			return newUser;
-		} catch (err) {
-			console.error(err);
-			// for (let e of err.details) {
-			//   if (e === "conflict_email") {
-			//     alert("Email already exists.");
-			//   } else {
-			//     // handle other errors
-			//   }
-			// }
-		}
+		let newUser = await firebaseService.registerUser({
+			email: _params.email,
+			password: _params.password,
+			firstName: _params.firstName,
+			lastName: _params.lastName
+		});
+		return newUser;
 	}
 
 	/**
 	 * logout and remove the user...
 	 */
 	doLogout() {
-		this.activeUser = null;
+		this.currentUser = null;
 		return firebaseService.logOut();
 	}
 
 	/****************** CRUD *****************/
 
+	/// List
+	async addShoppingList(list) {
+		return firebaseService.createShoppingList({ uid: this.currentUser.uid, list })
+	}
+
 	/// Item
-	async addItem({listId, item}) {
+	async addItem({ listId, item }) {
 		// we can only add items to our own lists
-		const newItem = item
-		if (!newItem.id) {
-			newItem.id = uuid()
-		}
-		const currentUser = await firebaseService.getCurrentUserAsync()
-
-		firebaseService.addItem({uid: currentUser.uid, listId, item: newItem})
+		firebaseService.createItem({ uid: this.currentUser.uid, listId, item: item })
 	}
 
-	async editItem({listId, item}) {
+	async editItem({ listId, item }) {
 		// we can only edit our own items
-		const currentUser = await firebaseService.getCurrentUserAsync()
-		firebaseService.editItem({uid: currentUser.uid, listId, item});
+		firebaseService.updateItem({ uid: this.currentUser.uid, listId, item });
 	}
 
-	async deleteItem({listId, item}) {
+	async deleteItem({ listId, item }) {
 		// we can only edit our own items
-		const currentUser = await firebaseService.getCurrentUserAsync()
-		firebaseService.deleteItem({uid: currentUser.uid, listId, item});
+		firebaseService.deleteItem({ uid: this.currentUser.uid, listId, item });
 	}
 
 	/************    Business functions    *************/
 
 	async getMyCurrentShoppingList(getData) {
-		return firebaseService.getFirstShoppingList({uid: this.activeUser.uid})
+		return firebaseService.getFirstShoppingList({ uid: this.currentUser.uid })
 	}
 
 	// async getMyCurrentNeedList(getData) {
@@ -247,7 +201,7 @@ export class Store {
 	async getMyCurrentShoppingListItems() {
 		const currentShoppingList = await this.getMyCurrentShoppingList()
 
-		return firebaseService.getListItems({uid: this.activeUser.uid, listId: currentShoppingList.id})
+		return firebaseService.getListItems({ uid: this.currentUser.uid, listId: currentShoppingList.id })
 	}
 
 	/**
@@ -255,7 +209,7 @@ export class Store {
 	 * @param {string} uid The id of the user owning the shopping list
 	 * @param {string} shoppingListId The id of the shopping list which is being shopped
 	 */
-	async getJoinedNeeds({uid, shoppingListId}) {
+	async getJoinedNeeds({ uid, shoppingListId }) {
 
 		// Mock data
 		return [
@@ -271,7 +225,7 @@ export class Store {
 			{
 				uid: 'oliversuid',
 				userFirstName: 'Oliver',
-				userLastName: 'Jägle',				
+				userLastName: 'Jägle',
 				neededItems: {
 					Whiskey: 1,
 				}
@@ -316,8 +270,9 @@ decorate(Store, {
 	doFacebookLogin: action,
 	doGoogleLogin: action,
 	doLogout: action,
-	
+
 	// Lists
+	addShoppingList: action,
 	getMyCurrentShoppingListItems: action,
 	getMyNeedLists: action,
 

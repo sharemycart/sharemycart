@@ -26,8 +26,15 @@ class Shoppings extends Component {
 		if (this._hasUnmounted) {
 			return;
 		}
-		const list = await this.props.store.getMyCurrentShoppingList()
-		const items = await this.props.store.getMyCurrentShoppingListItems()
+		let items = []
+		let list = null
+
+		list = await this.props.store.getMyCurrentShoppingList()
+		if (!list) {
+			list = await this.props.store.addShoppingList()
+		} else {
+			items = await this.props.store.getMyCurrentShoppingListItems()
+		}
 		this.setState({ list, items });
 	}
 
@@ -35,16 +42,16 @@ class Shoppings extends Component {
 		this._hasUnmounted = true;
 	}
 
-	onChangeNewItem (newItem) {
+	onChangeNewItem(newItem) {
 		this.setState({ newItem });
 	}
 
 	onCreateComplete() {
 		let newItem = this.state.newItem;
-		if (!newItem.name || !newItem.quantity || !newItem.unit) {
+		if (!newItem.name || !newItem.quantity || !newItem.unit) {
 			return;
 		}
-		this.props.store.addItem({listId: this.state.list.id, item: newItem})
+		this.props.store.addItem({ listId: this.state.list.id, item: newItem })
 			.then(() => {
 				console.log('item added successfully');
 			});
@@ -55,7 +62,7 @@ class Shoppings extends Component {
 		this.setState(state => ({
 			items: state.items.map(i => i.id === item.id ? item : i)
 		}))
-		this.props.store.editItem({listId: this.state.list.id, item})
+		this.props.store.editItem({ listId: this.state.list.id, item })
 			.then(() => {
 				console.log('item updated successfully')
 			});
@@ -65,14 +72,14 @@ class Shoppings extends Component {
 		this.setState(state => ({
 			items: state.items.filter(i => i.id !== item.id)
 		}))
-		this.props.store.deleteItem({listId: this.state.list.id, item})
+		this.props.store.deleteItem({ listId: this.state.list.id, item })
 			.then(() => {
 				console.log('item deleted successfully')
 			})
 	}
 
-	render () {
-		const goShoppingButton = <IonButton href="/goshopping">Go <IonIcon icon={cart}/></IonButton>;
+	render() {
+		const goShoppingButton = <IonButton href="/goshopping">Go <IonIcon icon={cart} /></IonButton>;
 
 		return (
 			<BasicPage
@@ -83,9 +90,9 @@ class Shoppings extends Component {
 					return (
 						<>
 							<EditItem item={this.state.newItem}
-									onChange={item => this.onChangeNewItem(item)}
-									onClose={() => this.onCreateComplete()}
-									mode="shopping"
+								onChange={item => this.onChangeNewItem(item)}
+								onClose={() => this.onCreateComplete()}
+								mode="shopping"
 							/>
 							<IonList>
 								{this.state.items.map((item, key) => (<Item

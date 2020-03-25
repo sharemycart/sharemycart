@@ -1,4 +1,6 @@
 import * as firebase from 'firebase'; // 4.3.0
+import { v4 as uuid } from 'uuid';
+
 require('firebase/firestore');
 
 const FIREBASE_CONFIG = {
@@ -103,7 +105,7 @@ export const registerUser = userInfo => {
 
 			return firebase
 				.firestore()
-				.collection('users')
+				.collection('Users')
 				.doc(newUser.user.uid)
 				.set({
 					email,
@@ -193,7 +195,7 @@ const getUser = async (uid) => {
 /// Lists
 
 /// Queries
-export const findLists = async ({uid, restrictions, getData = false}) => {
+export const findLists = async ({ uid, restrictions, getData = false }) => {
 	const db = firebase.firestore();
 
 	const userDoc = await db.collection('Users').doc(uid)
@@ -205,12 +207,12 @@ export const findLists = async ({uid, restrictions, getData = false}) => {
 	}, getData)
 }
 
-export const getLists = async ({uid, restrictions}) => {
+export const getLists = async ({ uid, restrictions }) => {
 	if (!uid) return []
-	return findLists({uid, restrictions}, true)
+	return findLists({ uid, restrictions }, true)
 }
 
-export const findShoppingLists = async ({uid, restrictions, getData = false}) => {
+export const findShoppingLists = async ({ uid, restrictions, getData = false }) => {
 	const db = firebase.firestore();
 	let fullRestrictions = restrictions || []
 
@@ -222,31 +224,31 @@ export const findShoppingLists = async ({uid, restrictions, getData = false}) =>
 
 	const userDoc = await db.collection('Users').doc(uid)
 	if (userDoc) {
-		return findLists({uid: userDoc.id, fullRestrictions, getData})
+		return findLists({ uid: userDoc.id, fullRestrictions, getData })
 	}
 }
 
-export const getFirstShoppingList = async ({uid, restrictions}) => {
+export const getFirstShoppingList = async ({ uid, restrictions }) => {
 	if (!uid) return []
 
-	const shoppingLists = await findShoppingLists({uid, restrictions, getData: true})
+	const shoppingLists = await findShoppingLists({ uid, restrictions, getData: true })
 	return shoppingLists[0]
 }
 
 // ID Access
-export const findListById = async ({uid, listId}) => {
+export const findListById = async ({ uid, listId }) => {
 	const db = firebase.firestore();
 
 	const userDoc = await db.collection('Users').doc(uid)
 	return userDoc.collection('Lists').doc(listId)
 }
 
-export const getListById = async ({uid, listId}) => {
-	return findListById({uid, listId}).data()
+export const getListById = async ({ uid, listId }) => {
+	return findListById({ uid, listId }).data()
 }
 
 /// Items
-export const findListItems = async ({uid, listId, restrictions, getData}) => {
+export const findListItems = async ({ uid, listId, restrictions, getData }) => {
 	if (!(uid && listId)) return [];
 	const db = firebase.firestore();
 
@@ -259,60 +261,77 @@ export const findListItems = async ({uid, listId, restrictions, getData}) => {
 	}, getData)
 }
 
-export const getListItems = async ({uid, listId}) => findListItems({uid, listId, getData: true})
+export const getListItems = async ({ uid, listId }) => findListItems({ uid, listId, getData: true })
 
 // ID access
-export const findItemById = async ({uid, listId, itemId}) => {
+export const findItemById = async ({ uid, listId, itemId }) => {
 	const db = firebase.firestore();
 
 	const userDoc = await db.collection('Users').doc(uid)
 	return userDoc.collection('Lists').doc(listId).collection('Items').doc(itemId)
 }
 
-/****************    Edit    ******************/
+/****************    CRUD    ******************/
 
-// Items
-export const addItem = async ({uid, listId, item}) => {
+// List
+export const createShoppingList = async ({ uid, list = {} }) => {
 	const db = firebase.firestore();
 
-	const list = await findListById({uid, listId})
+	const id = list.id || uuid()
+	list.type = 'shopping'
+
+	const userDoc = await db.collection('Users').doc(uid)
+	await userDoc.collection('Lists').doc(id).set(list)
+	return list
+}
+
+// Item
+export const createItem = async ({ uid, listId, item }) => {
+	const db = firebase.firestore();
+
+	const list = await findListById({ uid, listId })
 	if (!list) {
-		console.error('addItem: no such list')
+		console.error('createItems: no such list')
+		return null
+	}
+
+	const id = item.id || uuid()
+
+	await db.collection('Users').doc(uid)
+		.collection('Lists').doc(listId)
+		.collection('Items').doc(id)
+		.set(item)
+
+	return item
+}
+
+export const updateItem = async ({ uid, listId, item }) => {
+	const db = firebase.firestore();
+
+	const editedItem = await findItemById({ uid, listId, itemId: item.id })
+
+	if (!editedItem) {
+		console.error('updateItem: no such item')
 		return null
 	}
 	return db.collection('Users').doc(uid)
-				.collection('Lists').doc(listId)
-				.collection('Items').doc(item.id)
-				.set(item)
+		.collection('Lists').doc(listId)
+		.collection('Items').doc(item.id)
+		.set(item)
 }
 
-export const editItem = async ({uid, listId, item}) => {
+export const deleteItem = async ({ uid, listId, item }) => {
 	const db = firebase.firestore();
 
-	const editedItem = await findItemById({uid, listId, itemId: item.id})
-
-	if (!editedItem) {
-		console.error('editItem: no such item')
-		return null
-	}
-	return  db.collection('Users').doc(uid)
-				.collection('Lists').doc(listId)
-				.collection('Items').doc(item.id)
-				.set(item)
-}
-
-export const deleteItem = async ({uid, listId, item}) => {
-	const db = firebase.firestore();
-
-	const deletedItem = await findItemById({uid, listId, itemId: item.id})
+	const deletedItem = await findItemById({ uid, listId, itemId: item.id })
 
 	if (!deletedItem) {
 		console.error('deleteItem: no such item')
 		return null
 	}
 
-	return  db.collection('Users').doc(uid)
-				.collection('Lists').doc(listId)
-				.collection('Items').doc(item.id)
-				.delete()
+	return db.collection('Users').doc(uid)
+		.collection('Lists').doc(listId)
+		.collection('Items').doc(item.id)
+		.delete()
 }
