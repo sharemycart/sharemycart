@@ -1,20 +1,7 @@
 # Code for the serverless backend
 
-## Paradigms
+Currently, what we call "backend" is just the functions implemented as DB stored procedures in Firestore.
 
-### API-driven
+There are plans to move to OpenFaaS and Postgres at a later point in time, but for time-to-market-reasons, Firebase is the current choice.
 
-Provide an OAS3 (swagger) file first
-
-### Serverless
-
-Use OpenFaaS as runtime infrastructure.
-Each API path (at least each first level path) should be resolved by an own function.
-
-## Persistence
-
-Cloud offering. A relational DB is probably most adequate, so probably go for Postgres.
-
-## Deployment
-
-OpenFaaS community cluster.
+The downside of this is that you cannot easily run the app 100% locally: You need a connection to our Google Cloud account. Please get in touch with the dev. team viw the team's [public chat channel](https://open.rocket.chat/channel/share-my-cart) if you want to contribute and thus need the credentials for the dev. environment.
