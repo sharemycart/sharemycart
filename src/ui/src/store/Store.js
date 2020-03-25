@@ -239,7 +239,12 @@ export class Store {
 
 	async getMyCurrentShoppingList(getData) {
 		const currentUser = await firebaseService.getCurrentUserAsync()
-		return firebaseService.getFirstShoppingList({uid: currentUser.uid})
+		const list = await firebaseService.getFirstShoppingList({uid: currentUser.uid})
+		if (list) {
+			return list
+		}
+
+		return firebaseService.createShoppingList({uid: currentUser.uid, listId: uuid(), name: 'My shopping list'})
 	}
 
 	// async getMyCurrentNeedList(getData) {

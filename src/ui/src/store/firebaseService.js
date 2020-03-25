@@ -233,6 +233,13 @@ export const getFirstShoppingList = async ({uid, restrictions}) => {
 	return shoppingLists[0]
 }
 
+export const createShoppingList = async ({uid, listId, name}) => {
+	return firebase.firestore()
+		.collection('Users').doc(uid)
+		.collection('Lists').doc(listId)
+		.set({name});
+}
+
 // ID Access
 export const findListById = async ({uid, listId}) => {
 	const db = firebase.firestore();
