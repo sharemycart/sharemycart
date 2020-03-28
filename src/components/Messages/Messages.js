@@ -12,6 +12,7 @@ class Messages extends Component {
     this.state = {
       text: '',
       loading: false,
+      limit: 50,
     };
   }
 
@@ -30,19 +31,28 @@ class Messages extends Component {
   }
 
   onListenForMessages = () => {
-    this.props.firebase
+    this.unsubscribe = this.props.firebase
       .messages()
-      .orderByChild('createdAt')
-      .limitToLast(this.props.messageStore.limit)
-      .on('value', snapshot => {
-        this.props.messageStore.setMessages(snapshot.val());
+      .orderBy('createdAt', 'desc')
+      .limit(this.state.limit)
+      .onSnapshot(snapshot => {
+        if (snapshot.size) {
+          let messages = [];
+          snapshot.forEach(doc =>
+            messages.push({ ...doc.data(), uid: doc.id }),
+          );
 
-        this.setState({ loading: false });
+          this.props.messageStore.setMessages(messages);
+
+          this.setState({ loading: false });
+        } else {
+          this.setState({ messages: null, loading: false });
+        }
       });
   };
 
   componentWillUnmount() {
-    this.props.firebase.messages().off();
+    this.unsubscribe();
   }
 
   onChangeText = event => {
@@ -50,10 +60,10 @@ class Messages extends Component {
   };
 
   onCreateMessage = (event, authUser) => {
-    this.props.firebase.messages().push({
+    this.props.firebase.messages().add({
       text: this.state.text,
       userId: authUser.uid,
-      createdAt: this.props.firebase.serverValue.TIMESTAMP,
+      createdAt: this.props.firebase.fieldValue.serverTimestamp(),
     });
 
     this.setState({ text: '' });

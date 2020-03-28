@@ -109,7 +109,9 @@ class SignInGoogleBase extends Component {
           username: socialAuthUser.user.displayName,
           email: socialAuthUser.user.email,
           roles: {},
-        });
+        },
+          { merge: true },
+        );
       })
       .then(() => {
         this.setState({ error: null });
@@ -155,7 +157,9 @@ class SignInFacebookBase extends Component {
           username: socialAuthUser.additionalUserInfo.profile.name,
           email: socialAuthUser.additionalUserInfo.profile.email,
           roles: {},
-        });
+        },
+          { merge: true },
+        );
       })
       .then(() => {
         this.setState({ error: null });
@@ -201,7 +205,9 @@ class SignInTwitterBase extends Component {
           username: socialAuthUser.additionalUserInfo.profile.name,
           email: socialAuthUser.additionalUserInfo.profile.email,
           roles: {},
-        });
+        },
+          { merge: true },
+        );
       })
       .then(() => {
         this.setState({ error: null });
