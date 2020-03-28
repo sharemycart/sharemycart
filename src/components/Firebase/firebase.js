@@ -1,6 +1,7 @@
 import app from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
+import { LIST_TYPE_SHOPPING } from '../../constants/lists';
 
 const config = {
   apiKey: process.env.REACT_APP_BACKEND_API_KEY,
@@ -104,6 +105,18 @@ class Firebase {
 
   message = uid => this.db.doc(`messages/${uid}`);
   messages = () => this.db.collection('messages');
+
+  // *** Lists API ***
+  list = uid => this.db.doc(`lists/${uid}`);
+  lists = () => this.db.collection('/lists');
+
+  currentShoppingList = () => this.db.collection('/lists')
+                                .where('type', '==', LIST_TYPE_SHOPPING)
+                                .where('isCurrent', '==', true)
+                                .limit(1)
+
+  listItem = (listUid, uid) => this.db.doc(`lists/${listUid}/items/${uid}`);
+  listItems = listUid => this.db.doc(`lists/${listUid}/items`);
 }
 
 export default Firebase;
