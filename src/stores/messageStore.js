@@ -1,4 +1,6 @@
 import { observable, action, computed } from 'mobx';
+import toObject from '../lib/convertArrayToObject';
+
 
 class MessageStore {
   @observable messages = null;
@@ -9,7 +11,7 @@ class MessageStore {
   }
 
   @action setMessages = messages => {
-    this.messages = messages;
+    this.messages = toObject(messages);
   };
 
   @action setLimit = limit => {

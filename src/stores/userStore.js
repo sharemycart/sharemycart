@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-
+import toObject from '../lib/convertArrayToObject';
 class UserStore {
   @observable users = null;
 
@@ -8,7 +8,7 @@ class UserStore {
   }
 
   @action setUsers = users => {
-    this.users = users;
+    this.users = toObject(users);
   };
 
   @action setUser = (user, uid) => {
