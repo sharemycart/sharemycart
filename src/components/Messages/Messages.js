@@ -46,6 +46,8 @@ class Messages extends Component {
 
           this.setState({ loading: false });
         } else {
+          this.props.messageStore.setMessages([]);
+
           this.setState({ messages: null, loading: false });
         }
       });
@@ -77,12 +79,12 @@ class Messages extends Component {
     this.props.firebase.message(message.uid).set({
       ...messageSnapshot,
       text,
-      editedAt: this.props.firebase.serverValue.TIMESTAMP,
+      editedAt: this.props.firebase.fieldValue.serverTimestamp(),
     });
   };
 
   onRemoveMessage = uid => {
-    this.props.firebase.message(uid).remove();
+    this.props.firebase.message(uid).delete();
   };
 
   onNextPage = () => {
