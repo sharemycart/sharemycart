@@ -59,8 +59,7 @@ class Shopping extends Component {
   // listeners to the database
   onListenForShoppingLists = () => {
     this.unsubscribeLists = this.props.firebase
-      .lists()
-      .where('type', '==', LIST_TYPE_SHOPPING)
+      .myShoppingLists()
       .orderBy('createdAt', 'desc')
       // .limit(this.state.limit)
       .onSnapshot(snapshot => {
@@ -88,7 +87,6 @@ class Shopping extends Component {
 
   onListenForCurrentShoppingListItems = () => {
     const { currentShoppingList } = this.props.shoppingStore;
-    console.log('listening to items of', currentShoppingList)
     if (currentShoppingList) {
       this.unsubscribeItems = this.props.firebase
         .listItems(currentShoppingList.uid)

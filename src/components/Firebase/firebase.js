@@ -3,6 +3,8 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import { LIST_TYPE_SHOPPING, LIST_TYPE_NEED } from '../../constants/lists';
 
+const INVALID_DUMMY_UID = 'idonotexist'; // can be used in order to create queries which intentionally don't match anything
+
 const config = {
   apiKey: process.env.REACT_APP_BACKEND_API_KEY,
   authDomain: process.env.REACT_APP_BACKEND_AUTH_DOMAIN,
@@ -110,14 +112,10 @@ class Firebase {
   list = uid => this.db.doc(`lists/${uid}`);
   lists = () => this.db.collection('/lists');
 
-
   currentList = (type) => this.db.collection('/lists')
     .where('type', '==', type)
     .where('isCurrent', '==', true)
     .limit(1);
-
-  currentShoppingList = () => this.currentList(LIST_TYPE_SHOPPING);
-  currentNeedsList = () => this.currentList(LIST_TYPE_NEED);
 
   listItems = listUid => this.db.doc(`lists/${listUid}`)
     .collection('items'); // don't use a nested path expression for the sub-collection!
@@ -126,6 +124,24 @@ class Firebase {
     .collection('/items/')
     .doc(uid);
 
+
+  // *** Shopping API ***
+  currentShoppingList = () => this.currentList(LIST_TYPE_SHOPPING);
+
+  myShoppingLists = () => this.lists()
+    .where('userId', '==', this.auth.currentUser
+      ? this.auth.currentUser.uid
+      : INVALID_DUMMY_UID)
+    .where('type', '==', LIST_TYPE_SHOPPING)
+
+  // *** Needs API ***
+  currentNeedsList = () => this.currentList(LIST_TYPE_NEED);
+
+  myNeedsLists = () => this.lists()
+    .where('userId', '==', this.auth.currentUser
+      ? this.auth.currentUser.uid
+      : INVALID_DUMMY_UID)
+    .where('type', '==', LIST_TYPE_NEED)
 }
 
 export default Firebase;

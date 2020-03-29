@@ -59,7 +59,7 @@ class Needs extends Component {
   // listeners to the database
   onListenForNeedsLists = () => {
     this.unsubscribeLists = this.props.firebase
-      .lists()
+      .myNeedsLists()
       .where('type', '==', LIST_TYPE_NEED)
       .orderBy('createdAt', 'desc')
       // .limit(this.state.limit)
@@ -88,7 +88,6 @@ class Needs extends Component {
 
   onListenForCurrentNeedsListItems = () => {
     const { currentNeedsList } = this.props.needsStore;
-    console.log('listening to items of', currentNeedsList)
     if (currentNeedsList) {
       this.unsubscribeItems = this.props.firebase
         .listItems(currentNeedsList.uid)
