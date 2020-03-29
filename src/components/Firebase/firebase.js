@@ -116,7 +116,7 @@ class Firebase {
                                 .limit(1)
 
   listItem = (listUid, uid) => this.db.doc(`lists/${listUid}/items/${uid}`);
-  listItems = listUid => this.db.doc(`lists/${listUid}/items`);
+  listItems = listUid => this.db.collection(`lists/${listUid}/items`);
 }
 
 export default Firebase;

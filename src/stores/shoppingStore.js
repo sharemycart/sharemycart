@@ -6,6 +6,7 @@ import toObject from '../lib/convertArrayToObject';
 
 class ShoppingStore {
   @observable shoppingLists = null;
+  @observable currentShoppingListItems = null;
 
   constructor(rootStore) {
     this.rootStore = rootStore;
@@ -15,20 +16,22 @@ class ShoppingStore {
     this.shoppingLists = shoppingLists;
   };
 
-  @action setItemsOfShoppingList = (shoppingListUid, items) => {
-    this.shoppingLists[shoppingListUid].items = toObject(items);
+  @action setCurrentShoppingListItems = (items) => {
+    this.currentShoppingListItems = toObject(items);
   }
 
   @computed get shoppingListsArray() {
     return Object.keys(this.shoppingLists || {}).map(key => ({
       ...this.shoppingLists[key],
       uid: this.shoppingLists[key].uid,
-      // items: Object.keys(this.shoppingLists[key].items || {}).map(key => ({
-      //   ...this.shoppingLists[key].items[key],
-      //   uid: key
-      // }))
     }));
   }
+
+  @computed get currentShoppingList() {
+    const currentShoppingLists = this.shoppingListsArray.filter( shoppingList => !!shoppingList.isCurrent);
+    return (currentShoppingLists.length > 0 && currentShoppingLists[0]) || null
+  }
+
 }
 
 export default ShoppingStore;
