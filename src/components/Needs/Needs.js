@@ -3,9 +3,9 @@ import { inject, observer } from 'mobx-react';
 import { compose } from 'recompose';
 
 import { withFirebase } from '../Firebase';
-import ShoppingLists from './ShoppingLists';
-import { LIST_TYPE_SHOPPING } from '../../constants/lists';
-import ShoppingItems from './ShoppingItems';
+import NeedsLists from './NeedsLists';
+import { LIST_TYPE_SHOPPING, LIST_TYPE_NEED } from '../../constants/lists';
+import NeededItems from './NeededItems';
 
 /**
  * This component represent the complete state of the needs section of the app.
@@ -19,7 +19,7 @@ import ShoppingItems from './ShoppingItems';
  *   subordinate components are being passed functions to manipulate it.
  *   This might get messy as the application grows and might be refactored, but it's not that simple to do.
  */
-class Shopping extends Component {
+class Needs extends Component {
   constructor(props) {
     super(props);
 
@@ -33,21 +33,21 @@ class Shopping extends Component {
 
   // React lifecycle methods
   componentDidMount() {
-    if (!this.props.shoppingStore.shoppingListsArray.length) {
+    if (!this.props.needsStore.needsListsArray.length) {
       this.setState({
         listsLoading: true,
         itemsLoading: true
       });
     }
 
-    this.onListenForShoppingLists();
-    this.onListenForCurrentShoppingListItems();
+    this.onListenForNeedsLists();
+    this.onListenForCurrentNeedsListItems();
   }
 
   componentDidUpdate(props) {
-    if (props.shoppingStore.limit !== this.props.shoppingStore.limit) {
-      this.onListenForShoppingLists();
-      this.onListenForCurrentShoppingListItems();
+    if (props.needsStore.limit !== this.props.needsStore.limit) {
+      this.onListenForNeedsLists();
+      this.onListenForCurrentNeedsListItems();
     }
   }
 
@@ -57,55 +57,55 @@ class Shopping extends Component {
   }
 
   // listeners to the database
-  onListenForShoppingLists = () => {
+  onListenForNeedsLists = () => {
     this.unsubscribeLists = this.props.firebase
       .lists()
-      .where('type', '==', LIST_TYPE_SHOPPING)
+      .where('type', '==', LIST_TYPE_NEED)
       .orderBy('createdAt', 'desc')
       // .limit(this.state.limit)
       .onSnapshot(snapshot => {
         if (snapshot.size) {
-          let shoppingLists = [];
+          let needsLists = [];
           snapshot.forEach(doc =>
-            shoppingLists.push({ ...doc.data(), uid: doc.id }),
+            needsLists.push({ ...doc.data(), uid: doc.id }),
           );
 
-          this.props.shoppingStore.setShoppingLists(shoppingLists);
+          this.props.needsStore.setNeedsLists(needsLists);
 
           this.setState(Object.assign(this.state, { listsLoading: false }));
         } else {
-          this.props.shoppingStore.setShoppingLists([]);
+          this.props.needsStore.setNeedsLists([]);
 
           this.setState({ listsLoading: false, itemsLoading: false });
         }
 
         // trigger item updates - this should actually be done implicitly, but it seems it isn't
         this.unsubscribeItems && this.unsubscribeItems();
-        this.onListenForCurrentShoppingListItems()
+        this.onListenForCurrentNeedsListItems()
 
       });
   }
 
-  onListenForCurrentShoppingListItems = () => {
-    const { currentShoppingList } = this.props.shoppingStore;
-    console.log('listening to items of', currentShoppingList)
-    if (currentShoppingList) {
+  onListenForCurrentNeedsListItems = () => {
+    const { currentNeedsList } = this.props.needsStore;
+    console.log('listening to items of', currentNeedsList)
+    if (currentNeedsList) {
       this.unsubscribeItems = this.props.firebase
-        .listItems(currentShoppingList.uid)
+        .listItems(currentNeedsList.uid)
         // .orderBy('createdAt', 'desc')
         // .limit(this.state.limit)
         .onSnapshot(snapshot => {
           if (snapshot.size) {
-            let shoppingItems = [];
+            let neededItems = [];
             snapshot.forEach(doc =>
-              shoppingItems.push({ ...doc.data(), uid: doc.id }),
+              neededItems.push({ ...doc.data(), uid: doc.id }),
             );
 
-            this.props.shoppingStore.setCurrentShoppingListItems(shoppingItems);
+            this.props.needsStore.setCurrentNeedsListItems(neededItems);
 
             this.setState(Object.assign(this.state, { itemsLoading: false }));
           } else {
-            this.props.shoppingStore.setCurrentShoppingListItems([]);
+            this.props.needsStore.setCurrentNeedsListItems([]);
 
             this.setState({ itemsLoading: false });
           }
@@ -118,36 +118,36 @@ class Shopping extends Component {
     this.setState({ editingListName: event.target.value });
   };
 
-  onCreateShoppingList = (event, authUser) => {
+  onCreateNeedsList = (event, authUser) => {
     event.preventDefault();
 
     this.props.firebase.lists().add({
       name: this.state.editingListName,
-      type: LIST_TYPE_SHOPPING,
+      type: LIST_TYPE_NEED,
       userId: authUser.uid,
-      isCurrent: !this.props.shoppingStore.currentShoppingList,
+      isCurrent: !this.props.needsStore.currentNeedsList,
       createdAt: this.props.firebase.fieldValue.serverTimestamp(),
     });
 
     this.setState({ editingListName: '' });
   };
 
-  onEditShoppingList = (shoppingList, editingListName) => {
-    const { uid, ...shoppingListSnapshot } = shoppingList;
+  onEditNeedsList = (needsList, editingListName) => {
+    const { uid, ...needsListSnapshot } = needsList;
 
-    this.props.firebase.list(shoppingList.uid).set({
-      ...shoppingListSnapshot,
+    this.props.firebase.list(needsList.uid).set({
+      ...needsListSnapshot,
       name: editingListName,
       editedAt: this.props.firebase.fieldValue.serverTimestamp(),
     });
   };
 
-  onRemoveShoppingList = uid => {
+  onRemoveNeedsList = uid => {
     this.props.firebase.list(uid).delete();
   };
 
-  onSetCurrentShoppingList = uid => {
-    this.props.firebase.currentShoppingList().get()
+  onSetCurrentNeedsList = uid => {
+    this.props.firebase.currentNeedsList().get()
       .then((snapshot) => {
         snapshot.docs.forEach((s) => s.ref.update('isCurrent', false))
       })
@@ -155,72 +155,72 @@ class Shopping extends Component {
   }
 
   // event handlers for items
-  onCreateItemForCurrentShoppingList = (item) => {
-    const { currentShoppingList } = this.props.shoppingStore;
-    if (currentShoppingList) {
+  onCreateItemForCurrentNeedsList = (item) => {
+    const { currentNeedsList } = this.props.needsStore;
+    if (currentNeedsList) {
       this.props.firebase
-        .listItems(currentShoppingList.uid)
+        .listItems(currentNeedsList.uid)
         .add(Object.assign(item, { createdAt: this.props.firebase.fieldValue.serverTimestamp() }));
     } else {
-      console.error('Cannot create item for non-existing shoppingList');
+      console.error('Cannot create item for non-existing needsList');
     }
   };
 
-  onEditShoppingItem = (item) => {
-    const { currentShoppingList } = this.props.shoppingStore;
-    if (currentShoppingList) {
+  onEditNeededItem = (item) => {
+    const { currentNeedsList } = this.props.needsStore;
+    if (currentNeedsList) {
       this.props.firebase
-        .listItem(currentShoppingList.uid, item.uid)
+        .listItem(currentNeedsList.uid, item.uid)
         .set(Object.assign(item, { editedAt: this.props.firebase.fieldValue.serverTimestamp() }));
     } else {
-      console.error('Cannot edit item in non-existing shoppingList');
+      console.error('Cannot edit item in non-existing needsList');
     }
   };
 
-  onRemoveShoppingItem = (uid) => {
-    const { currentShoppingList } = this.props.shoppingStore;
-    if (currentShoppingList) {
+  onRemoveNeededItem = (uid) => {
+    const { currentNeedsList } = this.props.needsStore;
+    if (currentNeedsList) {
       this.props.firebase
-        .listItem(currentShoppingList.uid, uid)
+        .listItem(currentNeedsList.uid, uid)
         .delete()
     } else {
-      console.error('Cannot remove item from non-existing shoppingList');
+      console.error('Cannot remove item from non-existing needsList');
     }
   };
 
   // onNextPage = () => {
-  //   this.props.shoppingStore.setLimit(
-  //     this.props.shoppingStore.limit + 5,
+  //   this.props.needsStore.setLimit(
+  //     this.props.needsStore.limit + 5,
   //   );
   // };
 
   render() {
-    const { shoppingStore, sessionStore } = this.props;
+    const { needsStore, sessionStore } = this.props;
     const { editingListName, listsLoading, itemsLoading } = this.state;
-    const shoppingLists = shoppingStore.shoppingListsArray;
-    const currentShoppingListItems = shoppingStore.currentShoppingListItemsArray;
+    const needsLists = needsStore.needsListsArray;
+    const currentNeedsListItems = needsStore.currentNeedsListItemsArray;
 
     return (
       <div>
-        <div id='shopping-lists'>
-          {listsLoading && <div>Loading shopping lists...</div>}
+        <div id='needs-lists'>
+          {listsLoading && <div>Loading needs lists...</div>}
           {itemsLoading && <div>Loading items...</div>}
 
-          {shoppingLists && (
-            <ShoppingLists
+          {needsLists && (
+            <NeedsLists
               authUser={sessionStore.authUser}
-              shoppingLists={shoppingLists}
-              onEditShoppingList={this.onEditShoppingList}
-              onRemoveShoppingList={this.onRemoveShoppingList}
-              onSetCurrentShoppingList={this.onSetCurrentShoppingList}
+              needsLists={needsLists}
+              onEditNeedsList={this.onEditNeedsList}
+              onRemoveNeedsList={this.onRemoveNeedsList}
+              onSetCurrentNeedsList={this.onSetCurrentNeedsList}
             />
           )}
 
-          {!shoppingLists && <div>There are no shoppingLists ...</div>}
+          {!needsLists && <div>There are no needsLists ...</div>}
 
           <form
             onSubmit={event =>
-              this.onCreateShoppingList(event, sessionStore.authUser)
+              this.onCreateNeedsList(event, sessionStore.authUser)
             }
           >
             <input
@@ -231,13 +231,13 @@ class Shopping extends Component {
             <button type="submit">Send</button>
           </form>
         </div>
-        <div id='current-shopping-list-items'>
-          <ShoppingItems
+        <div id='current-needs-list-items'>
+          <NeededItems
             authUser={sessionStore.authUser}
-            shoppingItems={currentShoppingListItems}
-            onEditShoppingItem={this.onEditShoppingItem}
-            onRemoveShoppingItem={this.onRemoveShoppingItem}
-            onCreateShoppingItem={this.onCreateItemForCurrentShoppingList}
+            neededItems={currentNeedsListItems}
+            onEditNeededItem={this.onEditNeededItem}
+            onRemoveNeededItem={this.onRemoveNeededItem}
+            onCreateNeededItem={this.onCreateItemForCurrentNeedsList}
           />
         </div>
       </div>
@@ -247,6 +247,6 @@ class Shopping extends Component {
 
 export default compose(
   withFirebase,
-  inject('shoppingStore', 'sessionStore'),
+  inject('needsStore', 'sessionStore'),
   observer,
-)(Shopping);
+)(Needs);

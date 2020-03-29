@@ -1,7 +1,7 @@
 import app from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-import { LIST_TYPE_SHOPPING } from '../../constants/lists';
+import { LIST_TYPE_SHOPPING, LIST_TYPE_NEED } from '../../constants/lists';
 
 const config = {
   apiKey: process.env.REACT_APP_BACKEND_API_KEY,
@@ -110,10 +110,14 @@ class Firebase {
   list = uid => this.db.doc(`lists/${uid}`);
   lists = () => this.db.collection('/lists');
 
-  currentShoppingList = () => this.db.collection('/lists')
-    .where('type', '==', LIST_TYPE_SHOPPING)
+
+  currentList = (type) => this.db.collection('/lists')
+    .where('type', '==', type)
     .where('isCurrent', '==', true)
-    .limit(1)
+    .limit(1);
+
+  currentShoppingList = () => this.currentList(LIST_TYPE_SHOPPING);
+  currentNeedsList = () => this.currentList(LIST_TYPE_NEED);
 
   listItems = listUid => this.db.doc(`lists/${listUid}`)
     .collection('items'); // don't use a nested path expression for the sub-collection!

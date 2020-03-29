@@ -1,4 +1,4 @@
-import { observable, action, computed, reaction } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import toObject from '../lib/convertArrayToObject';
 
 // This store holds all information needed to create and manage shopping lists 

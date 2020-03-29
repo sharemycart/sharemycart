@@ -2,6 +2,7 @@ import SessionStore from './sessionStore';
 import UserStore from './userStore';
 import MessageStore from './messageStore';
 import ShoppingStore from './shoppingStore';
+import NeedsStore from './needsStore';
 
 class RootStore {
   constructor() {
@@ -9,6 +10,7 @@ class RootStore {
     this.userStore = new UserStore(this);
     this.messageStore = new MessageStore(this);
     this.shoppingStore = new ShoppingStore(this);
+    this.needsStore = new NeedsStore(this);
   }
 }
 
