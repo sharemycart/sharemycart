@@ -22,7 +22,9 @@ class ShoppingItem extends Component {
   };
 
   onSaveEditText = () => {
-    this.props.onEditShoppingItem(this.props.shoppingItem, this.state.editText);
+    const item = this.props.shoppingItem;
+    item.name = this.state.editText;
+    this.props.onEditShoppingItem(item);
 
     this.setState({ editMode: false });
   };
@@ -41,13 +43,12 @@ class ShoppingItem extends Component {
           />
         ) : (
             <span>
-              <strong>{shoppingItem.userId}</strong> {shoppingItem.name}
+              {shoppingItem.name}
               {shoppingItem.editedAt && <span>(Edited)</span>}
-              {shoppingItem.isCurrent && <span>(Current)</span>}
             </span>
           )}
 
-        {authUser.uid === shoppingItem.userId && (
+        {authUser.uid && (
           <span>
             {editMode ? (
               <span>
@@ -65,12 +66,6 @@ class ShoppingItem extends Component {
                   onClick={() => onRemoveShoppingItem(shoppingItem.uid)}
                 >
                   Delete
-              </button>
-                <button
-                  type="button"
-                  onClick={() => onSetCurrentShoppingItem(shoppingItem.uid)}
-                >
-                  Current
               </button>
               </span>
             )}

@@ -16,15 +16,20 @@ const ShoppingItems = ({
             authUser={authUser}
             key={item.uid}
             shoppingItem={item}
-            // onEditShoppingItem={onEditShoppingItem}
-            // onRemoveShoppingItem={onRemoveShoppingItem}
+            onEditShoppingItem={onEditShoppingItem}
+            onRemoveShoppingItem={onRemoveShoppingItem}
           />
         ))}
       </ul>
       <form
         onSubmit={event => {
           event.preventDefault();
-          onCreateShoppingItem(event, authUser);
+          const item = {
+            name: 'Neuer',
+            quantity: 1,
+            unit: 'pc',
+          }
+          onCreateShoppingItem(item);
         }
         }
       >

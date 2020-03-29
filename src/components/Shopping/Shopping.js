@@ -32,6 +32,7 @@ class Shopping extends Component {
     };
   }
 
+  // React lifecycle methods
   componentDidMount() {
     if (!this.props.shoppingStore.shoppingListsArray.length) {
       this.setState({
@@ -46,11 +47,17 @@ class Shopping extends Component {
 
   componentDidUpdate(props) {
     if (props.shoppingStore.limit !== this.props.shoppingStore.limit) {
-    this.onListenForShoppingLists();
-    this.onListenForCurrentShoppingListItems();
+      this.onListenForShoppingLists();
+      this.onListenForCurrentShoppingListItems();
     }
   }
 
+  componentWillUnmount() {
+    this.unsubscribeLists();
+    this.unsubscribeItems && this.unsubscribeItems();
+  }
+
+  // listeners to the database
   onListenForShoppingLists = () => {
     this.unsubscribeLists = this.props.firebase
       .lists()
@@ -81,7 +88,7 @@ class Shopping extends Component {
   }
 
   onListenForCurrentShoppingListItems = () => {
-    const {currentShoppingList} = this.props.shoppingStore;
+    const { currentShoppingList } = this.props.shoppingStore;
     console.log('listening to items of', currentShoppingList)
     if (currentShoppingList) {
       this.unsubscribeItems = this.props.firebase
@@ -107,11 +114,7 @@ class Shopping extends Component {
     }
   };
 
-  componentWillUnmount() {
-    this.unsubscribeLists();
-    this.unsubscribeItems && this.unsubscribeItems();
-  }
-
+  // event handlers for lists
   onChangeText = event => {
     this.setState({ editingListName: event.target.value });
   };
@@ -128,23 +131,6 @@ class Shopping extends Component {
     });
 
     this.setState({ editingListName: '' });
-  };
-
-  onCreateItemForCurrentShoppingList = (event, authUser) => {
-    event.preventDefault();
-    const {currentShoppingList} = this.props.shoppingStore;
-    if (currentShoppingList) {
-      this.props.firebase.listItems(this.props.shoppingStore.currentShoppingList.uid).add({
-        name: 'Neu',
-        quantity: 1,
-        unit: 'pc',
-        createdAt: this.props.firebase.fieldValue.serverTimestamp(),
-      });
-    } else {
-      console.error('Cannot create item for non-existing shoppingList');
-    }
-
-
   };
 
   onEditShoppingList = (shoppingList, editingListName) => {
@@ -168,6 +154,40 @@ class Shopping extends Component {
       })
       .then(() => this.props.firebase.list(uid).update('isCurrent', true))
   }
+
+  // event handlers for items
+  onCreateItemForCurrentShoppingList = (item) => {
+    const { currentShoppingList } = this.props.shoppingStore;
+    if (currentShoppingList) {
+      this.props.firebase
+        .listItems(currentShoppingList.uid)
+        .add(Object.assign(item, { createdAt: this.props.firebase.fieldValue.serverTimestamp() }));
+    } else {
+      console.error('Cannot create item for non-existing shoppingList');
+    }
+  };
+
+  onEditShoppingItem = (item) => {
+    const { currentShoppingList } = this.props.shoppingStore;
+    if (currentShoppingList) {
+      this.props.firebase
+        .listItem(currentShoppingList.uid, item.uid)
+        .set(Object.assign(item, { editedAt: this.props.firebase.fieldValue.serverTimestamp() }));
+    } else {
+      console.error('Cannot edit item in non-existing shoppingList');
+    }
+  };
+
+  onRemoveShoppingItem = (uid) => {
+    const { currentShoppingList } = this.props.shoppingStore;
+    if (currentShoppingList) {
+      this.props.firebase
+        .listItem(currentShoppingList.uid, uid)
+        .delete()
+    } else {
+      console.error('Cannot remove item from non-existing shoppingList');
+    }
+  };
 
   // onNextPage = () => {
   //   this.props.shoppingStore.setLimit(
@@ -216,8 +236,8 @@ class Shopping extends Component {
           <ShoppingItems
             authUser={sessionStore.authUser}
             shoppingItems={currentShoppingListItems}
-            // onEditShoppingItem={this.onEditShoppingItem}
-            // onRemoveShoppingItem={this.onRemoveShoppingItem}
+            onEditShoppingItem={this.onEditShoppingItem}
+            onRemoveShoppingItem={this.onRemoveShoppingItem}
             onCreateShoppingItem={this.onCreateItemForCurrentShoppingList}
           />
         </div>
