@@ -4,6 +4,8 @@ import { Switch, Route } from 'react-router-dom';
 import * as ROUTES from '../../constants/routes';
 import ShoppingList from './ShoppingList';
 import Shopping from './Shopping';
+import { withEmailVerification, withAuthorization } from '../Session';
+import { compose } from 'recompose';
 
 const ShoppingPage = () => (
     <Switch>
@@ -13,4 +15,9 @@ const ShoppingPage = () => (
     </Switch>
 );
 
-export default ShoppingPage;
+const condition = authUser => !!authUser;
+
+export default compose(
+  withEmailVerification,
+  withAuthorization(condition),
+)(ShoppingPage);

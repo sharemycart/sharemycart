@@ -5,6 +5,8 @@ import { compose } from 'recompose';
 import { withFirebase } from '../Firebase';
 import ShoppingLists from './ShoppingLists';
 import { LIST_TYPE_SHOPPING } from '../../constants/lists';
+import ShoppingItems from './ShoppingItems';
+import { autorun } from 'mobx';
 
 /**
  * This component represent the complete state of the shopping section of the app.
@@ -39,12 +41,13 @@ class Shopping extends Component {
     }
 
     this.onListenForShoppingLists();
-    // this.onListenForShoppingListItems();
+    this.onListenForCurrentShoppingListItems();
   }
 
   componentDidUpdate(props) {
     if (props.shoppingStore.limit !== this.props.shoppingStore.limit) {
-      this.onListenForShoppingLists();
+    this.onListenForShoppingLists();
+    this.onListenForCurrentShoppingListItems();
     }
   }
 
@@ -69,13 +72,20 @@ class Shopping extends Component {
 
           this.setState({ listsLoading: false });
         }
+
+        // trigger item updates - this should actually be done implicitly, but it seems it isn't
+        this.unsubscribeItems && this.unsubscribeItems();
+        this.onListenForCurrentShoppingListItems()
+
       });
   }
 
   onListenForCurrentShoppingListItems = () => {
-    if (this.props.shoppingStore.currentShoppingList) {
+    const {currentShoppingList} = this.props.shoppingStore;
+    console.log('listening to items of', currentShoppingList)
+    if (currentShoppingList) {
       this.unsubscribeItems = this.props.firebase
-        .listItems(this.props.shoppingStore.currentShoppingList.uid)
+        .listItems(currentShoppingList.uid)
         // .orderBy('createdAt', 'desc')
         // .limit(this.state.limit)
         .onSnapshot(snapshot => {
@@ -107,16 +117,34 @@ class Shopping extends Component {
   };
 
   onCreateShoppingList = (event, authUser) => {
+    event.preventDefault();
+
     this.props.firebase.lists().add({
       name: this.state.editingListName,
       type: LIST_TYPE_SHOPPING,
       userId: authUser.uid,
+      isCurrent: !this.props.shoppingStore.currentShoppingList,
       createdAt: this.props.firebase.fieldValue.serverTimestamp(),
     });
 
     this.setState({ editingListName: '' });
+  };
 
+  onCreateItemForCurrentShoppingList = (event, authUser) => {
     event.preventDefault();
+    const {currentShoppingList} = this.props.shoppingStore;
+    if (currentShoppingList) {
+      this.props.firebase.listItems(this.props.shoppingStore.currentShoppingList.uid).add({
+        name: 'Neu',
+        quantity: 1,
+        unit: 'pc',
+        createdAt: this.props.firebase.fieldValue.serverTimestamp(),
+      });
+    } else {
+      console.error('Cannot create item for non-existing shoppingList');
+    }
+
+
   };
 
   onEditShoppingList = (shoppingList, editingListName) => {
@@ -149,37 +177,50 @@ class Shopping extends Component {
 
   render() {
     const { shoppingStore, sessionStore } = this.props;
-    const { editingListName, listsLoading } = this.state;
+    const { editingListName, listsLoading, itemsLoading } = this.state;
     const shoppingLists = shoppingStore.shoppingListsArray;
+    const currentShoppingListItems = shoppingStore.currentShoppingListItemsArray;
 
     return (
       <div>
-        {listsLoading && <div>Loading ...</div>}
+        <div id='shopping-lists'>
+          {listsLoading && <div>Loading shopping lists...</div>}
+          {itemsLoading && <div>Loading items...</div>}
 
-        {shoppingLists && (
-          <ShoppingLists
+          {shoppingLists && (
+            <ShoppingLists
+              authUser={sessionStore.authUser}
+              shoppingLists={shoppingLists}
+              onEditShoppingList={this.onEditShoppingList}
+              onRemoveShoppingList={this.onRemoveShoppingList}
+              onSetCurrentShoppingList={this.onSetCurrentShoppingList}
+            />
+          )}
+
+          {!shoppingLists && <div>There are no shoppingLists ...</div>}
+
+          <form
+            onSubmit={event =>
+              this.onCreateShoppingList(event, sessionStore.authUser)
+            }
+          >
+            <input
+              type="editingListName"
+              value={editingListName}
+              onChange={this.onChangeText}
+            />
+            <button type="submit">Send</button>
+          </form>
+        </div>
+        <div id='current-shopping-list-items'>
+          <ShoppingItems
             authUser={sessionStore.authUser}
-            shoppingLists={shoppingLists}
-            onEditShoppingList={this.onEditShoppingList}
-            onRemoveShoppingList={this.onRemoveShoppingList}
-            onSetCurrentShoppingList={this.onSetCurrentShoppingList}
+            shoppingItems={currentShoppingListItems}
+            // onEditShoppingItem={this.onEditShoppingItem}
+            // onRemoveShoppingItem={this.onRemoveShoppingItem}
+            onCreateShoppingItem={this.onCreateItemForCurrentShoppingList}
           />
-        )}
-
-        {!shoppingLists && <div>There are no shoppingLists ...</div>}
-
-        <form
-          onSubmit={event =>
-            this.onCreateShoppingList(event, sessionStore.authUser)
-          }
-        >
-          <input
-            type="editingListName"
-            value={editingListName}
-            onChange={this.onChangeText}
-          />
-          <button type="submit">Send</button>
-        </form>
+        </div>
       </div>
     );
   }

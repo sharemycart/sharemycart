@@ -111,12 +111,12 @@ class Firebase {
   lists = () => this.db.collection('/lists');
 
   currentShoppingList = () => this.db.collection('/lists')
-                                .where('type', '==', LIST_TYPE_SHOPPING)
-                                .where('isCurrent', '==', true)
-                                .limit(1)
+    .where('type', '==', LIST_TYPE_SHOPPING)
+    .where('isCurrent', '==', true)
+    .limit(1)
 
   listItem = (listUid, uid) => this.db.doc(`lists/${listUid}/items/${uid}`);
-  listItems = listUid => this.db.collection(`lists/${listUid}/items`);
+  listItems = listUid => this.db.doc(`lists/${listUid}`).collection('items'); // don't use a nested path expression for the sub-collection!
 }
 
 export default Firebase;
