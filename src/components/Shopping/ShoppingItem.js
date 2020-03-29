@@ -30,7 +30,7 @@ class ShoppingItem extends Component {
   };
 
   render() {
-    const { authUser, shoppingItem, onRemoveShoppingItem, onSetCurrentShoppingItem } = this.props;
+    const { authUser, shoppingItem, onRemoveShoppingItem } = this.props;
     const { editMode, editText } = this.state;
 
     return (

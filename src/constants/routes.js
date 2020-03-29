@@ -10,3 +10,4 @@ export const SHOPPING = '/shopping';
 export const SHOPPING_LIST = '/shopping/:id';
 export const NEEDS = '/needs';
 export const NEEDS_LIST = '/needs/:id';
+export const SHARED_SHOPPING_LIST = '/share/:id';

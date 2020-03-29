@@ -28,8 +28,6 @@ class Firebase {
 
     this.auth = app.auth();
     this.db = app.firestore()
-    const settings = { timestampsInSnapshots: true };
-    this.db.settings(settings);
 
     /* Social Sign In Method Provider */
 
@@ -142,6 +140,22 @@ class Firebase {
       ? this.auth.currentUser.uid
       : INVALID_DUMMY_UID)
     .where('type', '==', LIST_TYPE_NEED)
+
+  createNeedsListForShoppingList = shoppingListUid => {
+    this.currentNeedsList.get()
+      .then((snapshot) => {
+        snapshot.docs.forEach((s) => s.ref.update('isCurrent', false))
+      })
+    return this.lists()
+      .add({
+        type: LIST_TYPE_NEED,
+        shoppingListUid,
+        isCurrent: true
+      })
+  }
+
+  myNeedsListsForShoppingList = shoppingListUid => this.myNeedsLists()
+    .where('shoppingListUid', '==', shoppingListUid)
 }
 
 export default Firebase;
