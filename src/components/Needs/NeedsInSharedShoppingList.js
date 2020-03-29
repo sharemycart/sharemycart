@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { compose } from 'recompose';
 import { withFirebase } from '../Firebase';
 import { inject, observer } from 'mobx-react';
-
+import {NEEDS} from '../../constants/routes';
 
 class NeedsInSharedShoppingList extends Component {
     constructor(props) {
@@ -17,16 +17,16 @@ class NeedsInSharedShoppingList extends Component {
     }
 
     async componentDidMount() {
-        const location = window.location;
+        const { location } = this.props;
         const { pathname } = location;
         const shoppingListUid = pathname.replace('/share/', '')
 
         const snapshot = await this.props.firebase.list(shoppingListUid).get()
         const sharedShoppingList = snapshot.data();
-        const sharingUser = sharedShoppingList 
+        const sharingUser = sharedShoppingList
             ? (await this.props.firebase.user(sharedShoppingList.userId).get()).data()
             : null
-        
+
         this.setState({
             shoppingListUid,
             sharedShoppingList,
@@ -34,6 +34,14 @@ class NeedsInSharedShoppingList extends Component {
             isValid: snapshot.exists,
             loading: false
         })
+    }
+
+    onCreateNeedsListForShoppingList(shoppingListUid, name) {
+        this.props.firebase.createNeedsListForShoppingList(shoppingListUid, name)
+            .then((needsListRef) => {
+                console.log("New needs list has been created: ", needsListRef.id);
+                this.props.history.push(NEEDS)
+            })
     }
 
     render() {
@@ -45,7 +53,19 @@ class NeedsInSharedShoppingList extends Component {
 
                 {!loading && !isValid && <div>The list with id {shoppingListUid} does not exist</div>}
 
-                {!loading && isValid && <div>you received shopping list {shoppingListUid} from {sharingUser.username}</div>}
+                {!loading && isValid && <div><div>you received shopping list {shoppingListUid} from {sharingUser.username}</div>
+
+                    <span>
+                        <button
+                            type="button"
+                            onClick={() => this.onCreateNeedsListForShoppingList(shoppingListUid, sharingUser.username)}
+                        >
+                            Add to my needs
+                        </button>
+                    </span>
+                </div>
+
+                }
             </div>
         )
     };

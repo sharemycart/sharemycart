@@ -141,8 +141,8 @@ class Firebase {
       : INVALID_DUMMY_UID)
     .where('type', '==', LIST_TYPE_NEED)
 
-  createNeedsListForShoppingList = shoppingListUid => {
-    this.currentNeedsList.get()
+  createNeedsListForShoppingList = (shoppingListUid, name) => {
+    this.currentNeedsList().get()
       .then((snapshot) => {
         snapshot.docs.forEach((s) => s.ref.update('isCurrent', false))
       })
@@ -150,7 +150,10 @@ class Firebase {
       .add({
         type: LIST_TYPE_NEED,
         shoppingListUid,
-        isCurrent: true
+        isCurrent: true,
+        name,
+        userId: this.auth.currentUser.uid,
+        createdAt: this.fieldValue.serverTimestamp()
       })
   }
 
