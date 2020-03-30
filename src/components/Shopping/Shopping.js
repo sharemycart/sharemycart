@@ -139,11 +139,7 @@ class Shopping extends Component {
   };
 
   onSetCurrentShoppingList = uid => {
-    this.props.firebase.currentShoppingList().get()
-      .then((snapshot) => {
-        snapshot.docs.forEach((s) => s.ref.update('isCurrent', false))
-      })
-      .then(() => this.props.firebase.list(uid).update('isCurrent', true))
+    this.props.firebase.setCurrentShoppingList(uid);
   }
 
   // event handlers for items

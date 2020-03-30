@@ -115,15 +115,34 @@ class Firebase {
     .where('isCurrent', '==', true)
     .limit(1);
 
-
   editList = (uid, list) => this.list(uid)
     .set(Object.assign(list,
       {
         editedAt: this.fieldValue.serverTimestamp()
       }));
-  
-  deleteList = (uid) => this.list(uid)
-      .delete()
+
+  deleteList = async uid => {
+    const toBeDeleted = await this.list(uid).get()
+
+    if (toBeDeleted.exists) {
+      const deleted = toBeDeleted.data();
+
+      await this.list(uid).delete()
+
+      if ( deleted.isCurrent) {
+        // make sure there's a new current list
+        const otherListOfSameType = await this.lists()
+          .where('userId', '==', deleted.userId)
+          .where('type', '==', deleted.type)
+          .limit(1)
+          .get()
+
+        otherListOfSameType.docs.forEach(
+          (s) => s.ref.update('isCurrent', true)
+          )
+      }
+    }
+  }
 
   listItems = listUid => this.db.doc(`lists/${listUid}`)
     .collection('items'); // don't use a nested path expression for the sub-collection!
@@ -144,9 +163,9 @@ class Firebase {
       {
         editedAt: this.fieldValue.serverTimestamp()
       }));
-  
+
   deleteItem = (listUid, uid) => this.listItem(listUid, uid)
-      .delete()
+    .delete()
 
   // *** Shopping API ***
   currentShoppingList = () => this.currentList(LIST_TYPE_SHOPPING);
@@ -156,6 +175,14 @@ class Firebase {
       ? this.auth.currentUser.uid
       : INVALID_DUMMY_UID)
     .where('type', '==', LIST_TYPE_SHOPPING)
+
+  setCurrentShoppingList = uid => {
+    this.currentShoppingList().get()
+      .then((snapshot) => {
+        snapshot.docs.forEach((s) => s.ref.update('isCurrent', false))
+      })
+      .then(() => this.list(uid).update('isCurrent', true))
+  }
 
   createShoppingList = async ({ name }) => {
     const snapshot = await this.currentShoppingList().get()
