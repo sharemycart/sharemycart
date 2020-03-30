@@ -199,7 +199,27 @@ class Firebase {
 
   // *** Needs API ***
   currentNeedsList = () => this.currentList(LIST_TYPE_NEED);
+  
+  setCurrentNeedsList = uid => {
+    this.currentNeedsList().get()
+      .then((snapshot) => {
+        snapshot.docs.forEach((s) => s.ref.update('isCurrent', false))
+      })
+      .then(() => this.list(uid).update('isCurrent', true))
+  }
 
+  createNeedsList = async ({ name }) => {
+    const snapshot = await this.currentNeedsList().get()
+    snapshot.docs.forEach((s) => s.ref.update('isCurrent', false))
+
+    return this.lists().add({
+      name,
+      type: LIST_TYPE_NEED,
+      userId: this.auth.currentUser.uid,
+      isCurrent: true,
+      createdAt: this.fieldValue.serverTimestamp(),
+    })
+  };
   myNeedsLists = () => this.lists()
     .where('userId', '==', this.auth.currentUser
       ? this.auth.currentUser.uid

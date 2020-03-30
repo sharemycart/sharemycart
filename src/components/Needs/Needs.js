@@ -120,12 +120,8 @@ class Needs extends Component {
   onCreateNeedsList = (event, authUser) => {
     event.preventDefault();
 
-    this.props.firebase.lists().add({
+    this.props.firebase.createNeedsList({
       name: this.state.editingListName,
-      type: LIST_TYPE_NEED,
-      userId: authUser.uid,
-      isCurrent: !this.props.needsStore.currentNeedsList,
-      createdAt: this.props.firebase.fieldValue.serverTimestamp(),
     });
 
     this.setState({ editingListName: '' });
@@ -134,32 +130,25 @@ class Needs extends Component {
   onEditNeedsList = (needsList, editingListName) => {
     const { uid, ...needsListSnapshot } = needsList;
 
-    this.props.firebase.list(needsList.uid).set({
+    this.props.firebase.editList(needsList.uid, {
       ...needsListSnapshot,
       name: editingListName,
-      editedAt: this.props.firebase.fieldValue.serverTimestamp(),
     });
   };
 
   onRemoveNeedsList = uid => {
-    this.props.firebase.list(uid).delete();
+    this.props.firebase.deleteList(uid);
   };
 
   onSetCurrentNeedsList = uid => {
-    this.props.firebase.currentNeedsList().get()
-      .then((snapshot) => {
-        snapshot.docs.forEach((s) => s.ref.update('isCurrent', false))
-      })
-      .then(() => this.props.firebase.list(uid).update('isCurrent', true))
+    this.props.firebase.setCurrentNeedsList(uid);
   }
 
   // event handlers for items
   onCreateItemForCurrentNeedsList = (item) => {
     const { currentNeedsList } = this.props.needsStore;
     if (currentNeedsList) {
-      this.props.firebase
-        .listItems(currentNeedsList.uid)
-        .add(Object.assign(item, { createdAt: this.props.firebase.fieldValue.serverTimestamp() }));
+      this.props.firebase.createItem(currentNeedsList.uid, item);
     } else {
       console.error('Cannot create item for non-existing needsList');
     }
@@ -168,9 +157,7 @@ class Needs extends Component {
   onEditNeededItem = (item) => {
     const { currentNeedsList } = this.props.needsStore;
     if (currentNeedsList) {
-      this.props.firebase
-        .listItem(currentNeedsList.uid, item.uid)
-        .set(Object.assign(item, { editedAt: this.props.firebase.fieldValue.serverTimestamp() }));
+      this.props.firebase.editItem(currentNeedsList.uid, item)
     } else {
       console.error('Cannot edit item in non-existing needsList');
     }
