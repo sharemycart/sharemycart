@@ -41,7 +41,7 @@ class NeedsList extends Component {
           />
         ) : (
             <span>
-              <strong>{needsList.userId}</strong> {needsList.name}
+              <pre>{needsList.uid}</pre> {needsList.name}
               {needsList.editedAt && <span>(Edited)</span>}
               {needsList.isCurrent && <span>(Current)</span>}
             </span>

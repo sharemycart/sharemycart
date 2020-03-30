@@ -41,7 +41,7 @@ class ShoppingList extends Component {
           />
         ) : (
             <span>
-              <strong>{shoppingList.userId}</strong> {shoppingList.name}
+              <pre>{shoppingList.uid}</pre> {shoppingList.name}
               {shoppingList.editedAt && <span>(Edited)</span>}
               {shoppingList.isCurrent && <span>(Current)</span>}
             </span>
