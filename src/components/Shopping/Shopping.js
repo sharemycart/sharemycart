@@ -4,7 +4,6 @@ import { compose } from 'recompose';
 
 import { withFirebase } from '../Firebase';
 import ShoppingLists from './ShoppingLists';
-import { LIST_TYPE_SHOPPING } from '../../constants/lists';
 import ShoppingItems from './ShoppingItems';
 
 /**
@@ -116,15 +115,11 @@ class Shopping extends Component {
     this.setState({ editingListName: event.target.value });
   };
 
-  onCreateShoppingList = (event, authUser) => {
+  onCreateShoppingList = (event) => {
     event.preventDefault();
 
-    this.props.firebase.lists().add({
-      name: this.state.editingListName,
-      type: LIST_TYPE_SHOPPING,
-      userId: authUser.uid,
-      isCurrent: !this.props.shoppingStore.currentShoppingList,
-      createdAt: this.props.firebase.fieldValue.serverTimestamp(),
+    this.props.firebase.createShoppingList({
+      name: this.state.editingListName
     });
 
     this.setState({ editingListName: '' });
@@ -133,15 +128,14 @@ class Shopping extends Component {
   onEditShoppingList = (shoppingList, editingListName) => {
     const { uid, ...shoppingListSnapshot } = shoppingList;
 
-    this.props.firebase.list(shoppingList.uid).set({
+    this.props.firebase.editList(shoppingList.uid,{
       ...shoppingListSnapshot,
       name: editingListName,
-      editedAt: this.props.firebase.fieldValue.serverTimestamp(),
     });
   };
 
   onRemoveShoppingList = uid => {
-    this.props.firebase.list(uid).delete();
+    this.props.firebase.deleteList(uid);
   };
 
   onSetCurrentShoppingList = uid => {
@@ -156,9 +150,7 @@ class Shopping extends Component {
   onCreateItemForCurrentShoppingList = (item) => {
     const { currentShoppingList } = this.props.shoppingStore;
     if (currentShoppingList) {
-      this.props.firebase
-        .listItems(currentShoppingList.uid)
-        .add(Object.assign(item, { createdAt: this.props.firebase.fieldValue.serverTimestamp() }));
+      this.props.firebase.createItem(currentShoppingList.uid, item)
     } else {
       console.error('Cannot create item for non-existing shoppingList');
     }
@@ -167,9 +159,7 @@ class Shopping extends Component {
   onEditShoppingItem = (item) => {
     const { currentShoppingList } = this.props.shoppingStore;
     if (currentShoppingList) {
-      this.props.firebase
-        .listItem(currentShoppingList.uid, item.uid)
-        .set(Object.assign(item, { editedAt: this.props.firebase.fieldValue.serverTimestamp() }));
+      this.props.firebase.editItem(currentShoppingList.uid, item)
     } else {
       console.error('Cannot edit item in non-existing shoppingList');
     }
@@ -178,9 +168,7 @@ class Shopping extends Component {
   onRemoveShoppingItem = (uid) => {
     const { currentShoppingList } = this.props.shoppingStore;
     if (currentShoppingList) {
-      this.props.firebase
-        .listItem(currentShoppingList.uid, uid)
-        .delete()
+      this.props.firebase.deleteItem(currentShoppingList.uid, uid)
     } else {
       console.error('Cannot remove item from non-existing shoppingList');
     }

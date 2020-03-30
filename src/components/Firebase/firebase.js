@@ -115,6 +115,16 @@ class Firebase {
     .where('isCurrent', '==', true)
     .limit(1);
 
+
+  editList = (uid, list) => this.list(uid)
+    .set(Object.assign(list,
+      {
+        editedAt: this.fieldValue.serverTimestamp()
+      }));
+  
+  deleteList = (uid) => this.list(uid)
+      .delete()
+
   listItems = listUid => this.db.doc(`lists/${listUid}`)
     .collection('items'); // don't use a nested path expression for the sub-collection!
 
@@ -122,6 +132,21 @@ class Firebase {
     .collection('/items/')
     .doc(uid);
 
+  // CRUD
+  createItem = (listUid, item) => this.listItems(listUid)
+    .add(Object.assign(item,
+      {
+        createdAt: this.fieldValue.serverTimestamp()
+      }));
+
+  editItem = (listUid, item) => this.listItem(listUid, item.uid)
+    .set(Object.assign(item,
+      {
+        editedAt: this.fieldValue.serverTimestamp()
+      }));
+  
+  deleteItem = (listUid, uid) => this.listItem(listUid, uid)
+      .delete()
 
   // *** Shopping API ***
   currentShoppingList = () => this.currentList(LIST_TYPE_SHOPPING);
@@ -131,6 +156,19 @@ class Firebase {
       ? this.auth.currentUser.uid
       : INVALID_DUMMY_UID)
     .where('type', '==', LIST_TYPE_SHOPPING)
+
+  createShoppingList = async ({ name }) => {
+    const snapshot = await this.currentShoppingList().get()
+    snapshot.docs.forEach((s) => s.ref.update('isCurrent', false))
+
+    return this.lists().add({
+      name,
+      type: LIST_TYPE_SHOPPING,
+      userId: this.auth.currentUser.uid,
+      isCurrent: true,
+      createdAt: this.fieldValue.serverTimestamp(),
+    })
+  };
 
   // *** Needs API ***
   currentNeedsList = () => this.currentList(LIST_TYPE_NEED);
