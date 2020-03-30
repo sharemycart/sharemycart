@@ -5,9 +5,11 @@ import NeededItem from './NeededItem';
 const NeededItems = ({
   authUser,
   neededItems,
+  originShoppingList,
   onEditNeededItem,
   onRemoveNeededItem,
   onCreateNeededItem,
+  onAddFromShoppingListItem,
 }) => (
     <div>
       <ul>
@@ -16,12 +18,14 @@ const NeededItems = ({
             authUser={authUser}
             key={item.uid}
             neededItem={item}
+            originShoppingList={originShoppingList}
             onEditNeededItem={onEditNeededItem}
             onRemoveNeededItem={onRemoveNeededItem}
+            onAddFromShoppingListItem={onAddFromShoppingListItem}
           />
         ))}
       </ul>
-      <form
+      {originShoppingList && <form
         onSubmit={event => {
           event.preventDefault();
           const item = {
@@ -40,6 +44,7 @@ const NeededItems = ({
         /> */}
         <button type="submit">new needed item</button>
       </form>
+      }
     </div >
   );
 

@@ -30,7 +30,7 @@ class NeededItem extends Component {
   };
 
   render() {
-    const { authUser, neededItem, onRemoveNeededItem } = this.props;
+    const { authUser, neededItem, onRemoveNeededItem, originShoppingList, onAddFromShoppingListItem } = this.props;
     const { editMode, editText } = this.state;
 
     return (
@@ -50,14 +50,19 @@ class NeededItem extends Component {
 
         {authUser.uid && (
           <span>
-            {editMode ? (
-              <span>
-                <button onClick={this.onSaveEditText}>Save</button>
-                <button onClick={this.onToggleEditMode}>Reset</button>
-              </span>
-            ) : (
-                <button onClick={this.onToggleEditMode}>Edit</button>
-              )}
+            {
+              (() => {
+                if (originShoppingList)
+                  return (<button onClick={()=>{onAddFromShoppingListItem(neededItem)}}>Add</button>)
+                if (editMode)
+                  return (<span>
+                    <button onClick={this.onSaveEditText}>Save</button>
+                    <button onClick={this.onToggleEditMode}>Reset</button>
+                  </span>)
+                else 
+                return (<button onClick={this.onToggleEditMode}>Edit</button>)
+              })()
+            }
 
             {!editMode && (
               <span>

@@ -129,7 +129,7 @@ class Firebase {
 
       await this.list(uid).delete()
 
-      if ( deleted.isCurrent) {
+      if (deleted.isCurrent) {
         // make sure there's a new current list
         const otherListOfSameType = await this.lists()
           .where('userId', '==', deleted.userId)
@@ -139,7 +139,7 @@ class Firebase {
 
         otherListOfSameType.docs.forEach(
           (s) => s.ref.update('isCurrent', true)
-          )
+        )
       }
     }
   }
@@ -199,7 +199,7 @@ class Firebase {
 
   // *** Needs API ***
   currentNeedsList = () => this.currentList(LIST_TYPE_NEED);
-  
+
   setCurrentNeedsList = uid => {
     this.currentNeedsList().get()
       .then((snapshot) => {
@@ -219,7 +219,8 @@ class Firebase {
       isCurrent: true,
       createdAt: this.fieldValue.serverTimestamp(),
     })
-  };
+  }
+
   myNeedsLists = () => this.lists()
     .where('userId', '==', this.auth.currentUser
       ? this.auth.currentUser.uid
@@ -257,6 +258,16 @@ class Firebase {
     needsListsSnapshots.docs.forEach(sl => { needsListsRef = sl.ref; return false })
 
     return needsListsRef;
+  }
+
+  addNeededItemFromShoppingListItem = (needsListUid, shoppingListItem) => {
+    const neededItem = shoppingListItem;
+
+    neededItem.originShoppingItemUid = shoppingListItem.uid;
+    delete neededItem.createdAt;
+    delete neededItem.editedAt;
+    //TODO: prevent creation of duplicate needs
+    return this.createItem(needsListUid, shoppingListItem)
   }
 }
 

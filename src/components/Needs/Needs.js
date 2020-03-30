@@ -41,7 +41,6 @@ class Needs extends Component {
     }
 
     this.onListenForNeedsLists();
-    this.onListenForCurrentNeedsListItems();
   }
 
   componentDidUpdate(props) {
@@ -54,6 +53,8 @@ class Needs extends Component {
   componentWillUnmount() {
     this.unsubscribeLists();
     this.unsubscribeItems && this.unsubscribeItems();
+    this.unsubscribeOriginShoppingList && this.unsubscribeOriginShoppingList()
+    this.unsubscribeOriginShoppingListItems && this.unsubscribeOriginShoppingListItems()
   }
 
   // listeners to the database
@@ -64,10 +65,19 @@ class Needs extends Component {
       .orderBy('createdAt', 'desc')
       // .limit(this.state.limit)
       .onSnapshot(snapshot => {
+        let currentNeedsListUid = null;
+        let currentOriginShoppingListUid = null;
+
         if (snapshot.size) {
           let needsLists = [];
-          snapshot.forEach(doc =>
-            needsLists.push({ ...doc.data(), uid: doc.id }),
+          snapshot.forEach(doc => {
+            const needsList = doc.data();
+            needsLists.push({ ...needsList, uid: doc.id });
+            if (needsList.isCurrent && needsList.shoppingListUid) {
+              currentNeedsListUid = doc.id;
+              currentOriginShoppingListUid = needsList.shoppingListUid;
+            }
+          }
           );
 
           this.props.needsStore.setNeedsLists(needsLists);
@@ -79,37 +89,85 @@ class Needs extends Component {
           this.setState({ listsLoading: false, itemsLoading: false });
         }
 
-        // trigger item updates - this should actually be done implicitly, but it seems it isn't
+        // react on item updates - this should actually be done implicitly, but it seems it isn't
         this.unsubscribeItems && this.unsubscribeItems();
-        this.onListenForCurrentNeedsListItems()
+        currentNeedsListUid && this.onListenForCurrentNeedsListItems(currentNeedsListUid)
 
+        //* react on changes of the origin shopping list
+        //  remove obsolete listeners first (if exist)
+        this.unsubscribeOriginShoppingList && this.unsubscribeOriginShoppingList()
+        this.unsubscribeOriginShoppingListItems && this.unsubscribeOriginShoppingListItems()
+
+        // register for changes in the origin shopping list
+        this.unsubscribeOriginShoppingList = currentOriginShoppingListUid && this.onListenForOriginShoppingList(currentOriginShoppingListUid)
       });
   }
 
-  onListenForCurrentNeedsListItems = () => {
-    const { currentNeedsList } = this.props.needsStore;
-    if (currentNeedsList) {
+  onListenForCurrentNeedsListItems = uid => {
+    this.unsubscribeItems = this.props.firebase
+      .listItems(uid)
+      // .orderBy('createdAt', 'desc')
+      // .limit(this.state.limit)
+      .onSnapshot(snapshot => {
+        if (snapshot.size) {
+          let neededItems = [];
+          snapshot.forEach(doc =>
+            neededItems.push({ ...doc.data(), uid: doc.id }),
+          );
+
+          this.props.needsStore.setCurrentNeedsListItems(neededItems);
+
+          this.setState(Object.assign(this.state, { itemsLoading: false }));
+        } else {
+          this.props.needsStore.setCurrentNeedsListItems([]);
+
+          this.setState({ itemsLoading: false });
+        }
+      });
+  };
+
+  onListenForOriginShoppingList = (uid) => {
+    this.unsubscribeOriginShoppingList = this.props.firebase
+      .list(uid)
+      .onSnapshot(snapshot => {
+        if (snapshot.exists) {
+          const shoppingList = snapshot.data();
+          this.props.needsStore.setCurrentOriginShoppingList(shoppingList);
+
+          // register for changes in the origin shopping list
+          this.unsubscribeOriginShoppingListItems = this.onListenForOriginShoppingListItems(uid);
+        } else {
+          this.props.needsStore.setCurrentOriginShoppingList(null);
+        }
+
+        // trigger item updates - this should actually be done implicitly, but it seems it isn't
+        this.unsubscribeOriginShoppingListItems && this.unsubscribeOriginShoppingListItems();
+      });
+  }
+
+  onListenForOriginShoppingListItems = (originListUid) => {
+    if (originListUid) {
       this.unsubscribeItems = this.props.firebase
-        .listItems(currentNeedsList.uid)
+        .listItems(originListUid)
         // .orderBy('createdAt', 'desc')
         // .limit(this.state.limit)
         .onSnapshot(snapshot => {
           if (snapshot.size) {
-            let neededItems = [];
+            let originShoppingListItems = [];
             snapshot.forEach(doc =>
-              neededItems.push({ ...doc.data(), uid: doc.id }),
+              originShoppingListItems.push({ ...doc.data(), uid: doc.id }),
             );
 
-            this.props.needsStore.setCurrentNeedsListItems(neededItems);
+            this.props.needsStore.setCurrentOriginShoppingListItems(originShoppingListItems);
 
-            this.setState(Object.assign(this.state, { itemsLoading: false }));
           } else {
-            this.props.needsStore.setCurrentNeedsListItems([]);
-
-            this.setState({ itemsLoading: false });
+            this.props.needsStore.setCurrentOriginShoppingListItems([]);
           }
         });
+    } else {
+      debugger
     }
+
   };
 
   // event handlers for lists
@@ -174,6 +232,15 @@ class Needs extends Component {
     }
   };
 
+  onAddFromShoppingListItem = (item) => {
+    const { currentNeedsList } = this.props.needsStore;
+    if (currentNeedsList) {
+      this.props.firebase.addNeededItemFromShoppingListItem(currentNeedsList.uid, item)
+    } else {
+      console.error('Cannot add item to non-existing needsList');
+    }
+  }
+
   // onNextPage = () => {
   //   this.props.needsStore.setLimit(
   //     this.props.needsStore.limit + 5,
@@ -184,7 +251,11 @@ class Needs extends Component {
     const { needsStore, sessionStore } = this.props;
     const { editingListName, listsLoading, itemsLoading } = this.state;
     const needsLists = needsStore.needsListsArray;
-    const currentNeedsListItems = needsStore.currentNeedsListItemsArray;
+    const {
+      potentiallyNeededItemsArray: potentiallyNeededItems,
+      currentNeedsListItemsArray: currentNeedsListItems,
+      currentOriginShoppingList,
+    } = needsStore;
 
     return (
       <div>
@@ -218,13 +289,26 @@ class Needs extends Component {
           </form>
         </div>
         <div id='current-needs-list-items'>
-        <h2>Items of current needs list</h2>
+          <h2>Items of current needs list</h2>
           <NeededItems
             authUser={sessionStore.authUser}
             neededItems={currentNeedsListItems}
             onEditNeededItem={this.onEditNeededItem}
             onRemoveNeededItem={this.onRemoveNeededItem}
             onCreateNeededItem={this.onCreateItemForCurrentNeedsList}
+            onAddFromShoppingListItem={() => null}
+
+          />
+
+          <h2>Potentially needed</h2>
+          <NeededItems
+            authUser={sessionStore.authUser}
+            neededItems={potentiallyNeededItems}
+            originShoppingList={currentOriginShoppingList}
+            onEditNeededItem={this.onEditNeededItem}
+            onRemoveNeededItem={this.onRemoveNeededItem}
+            onCreateNeededItem={this.onCreateItemForCurrentNeedsList}
+            onAddFromShoppingListItem={this.onAddFromShoppingListItem}
           />
         </div>
       </div>
