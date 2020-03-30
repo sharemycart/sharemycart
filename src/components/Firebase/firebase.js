@@ -146,19 +146,33 @@ class Firebase {
       .then((snapshot) => {
         snapshot.docs.forEach((s) => s.ref.update('isCurrent', false))
       })
-    return this.lists()
-      .add({
-        type: LIST_TYPE_NEED,
-        shoppingListUid,
-        isCurrent: true,
-        name,
-        userId: this.auth.currentUser.uid,
-        createdAt: this.fieldValue.serverTimestamp()
-      })
+
+    return this.myNeedsListsForShoppingList(shoppingListUid)
+      .then((existingNeedsList) => existingNeedsList
+        ? existingNeedsList.update('isCurrent', true)
+        : this.lists()
+          .add({
+            type: LIST_TYPE_NEED,
+            shoppingListUid,
+            isCurrent: true,
+            name,
+            userId: this.auth.currentUser.uid,
+            createdAt: this.fieldValue.serverTimestamp()
+          })
+      )
   }
 
-  myNeedsListsForShoppingList = shoppingListUid => this.myNeedsLists()
-    .where('shoppingListUid', '==', shoppingListUid)
+  myNeedsListsForShoppingList = async shoppingListUid => {
+    let needsListsRef = null
+    const q = this.myNeedsLists()
+      .where('shoppingListUid', '==', shoppingListUid)
+      .limit(1)
+
+    const needsListsSnapshots = await q.get()
+    needsListsSnapshots.docs.forEach(sl => { needsListsRef = sl.ref; return false })
+
+    return needsListsRef;
+  }
 }
 
 export default Firebase;

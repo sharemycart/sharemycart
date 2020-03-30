@@ -38,8 +38,7 @@ class NeedsInSharedShoppingList extends Component {
 
     onCreateNeedsListForShoppingList(shoppingListUid, name) {
         this.props.firebase.createNeedsListForShoppingList(shoppingListUid, name)
-            .then((needsListRef) => {
-                console.log("New needs list has been created: ", needsListRef.id);
+            .then(() => {
                 this.props.history.push(NEEDS)
             })
     }
