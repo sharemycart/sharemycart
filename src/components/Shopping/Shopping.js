@@ -210,7 +210,7 @@ class Shopping extends Component {
               value={editingListName}
               onChange={this.onChangeText}
             />
-            <button type="submit">Send</button>
+            <button type="submit">Create shopping list</button>
           </form>
         </div>
         <div id='current-shopping-list-items'>

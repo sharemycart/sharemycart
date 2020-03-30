@@ -38,7 +38,7 @@ const ShoppingItems = ({
           value={editingListName}
           onChange={this.onChangeText}
         /> */}
-        <button type="submit">neu</button>
+        <button type="submit">new shopping item</button>
       </form>
     </div >
   );

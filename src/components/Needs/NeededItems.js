@@ -38,7 +38,7 @@ const NeededItems = ({
           value={editingListName}
           onChange={this.onChangeText}
         /> */}
-        <button type="submit">neu</button>
+        <button type="submit">new needed item</button>
       </form>
     </div >
   );

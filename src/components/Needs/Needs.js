@@ -214,7 +214,7 @@ class Needs extends Component {
               value={editingListName}
               onChange={this.onChangeText}
             />
-            <button type="submit">Send</button>
+            <button type="submit">create needs list</button>
           </form>
         </div>
         <div id='current-needs-list-items'>
