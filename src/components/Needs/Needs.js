@@ -231,6 +231,7 @@ class Needs extends Component {
           </form>
         </div>
         <div id='current-needs-list-items'>
+        <h2>Items of current needs list</h2>
           <NeededItems
             authUser={sessionStore.authUser}
             neededItems={currentNeedsListItems}

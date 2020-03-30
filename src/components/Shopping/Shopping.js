@@ -230,6 +230,7 @@ class Shopping extends Component {
           </form>
         </div>
         <div id='current-shopping-list-items'>
+        <h2>Items of current shopping list</h2>
           <ShoppingItems
             authUser={sessionStore.authUser}
             shoppingItems={currentShoppingListItems}

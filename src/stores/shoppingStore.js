@@ -41,3 +41,4 @@ class ShoppingStore {
 }
 
 export default ShoppingStore;
+
