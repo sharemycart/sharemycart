@@ -73,7 +73,10 @@ class Firebase {
         this.user(authUser.uid)
           .get()
           .then(snapshot => {
-            const dbUser = snapshot.data();
+
+            const dbUser = snapshot.exists
+              ? snapshot.data()
+              : {};
 
             // default empty roles
             if (!dbUser.roles) {
@@ -110,9 +113,12 @@ class Firebase {
   list = uid => this.db.doc(`lists/${uid}`);
   lists = () => this.db.collection('/lists');
 
-  currentList = (type) => this.db.collection('/lists')
+  myCurrentList = (type) => this.db.collection('/lists')
     .where('type', '==', type)
     .where('isCurrent', '==', true)
+    .where('userId', '==', this.auth.currentUser
+      ? this.auth.currentUser.uid
+      : INVALID_DUMMY_UID)
     .limit(1);
 
   editList = (uid, list) => this.list(uid)
@@ -168,7 +174,7 @@ class Firebase {
     .delete()
 
   // *** Shopping API ***
-  currentShoppingList = () => this.currentList(LIST_TYPE_SHOPPING);
+  myCurrentShoppingList = () => this.myCurrentList(LIST_TYPE_SHOPPING);
 
   myShoppingLists = () => this.lists()
     .where('userId', '==', this.auth.currentUser
@@ -177,7 +183,7 @@ class Firebase {
     .where('type', '==', LIST_TYPE_SHOPPING)
 
   setCurrentShoppingList = uid => {
-    this.currentShoppingList().get()
+    this.myCurrentShoppingList().get()
       .then((snapshot) => {
         snapshot.docs.forEach((s) => s.ref.update('isCurrent', false))
       })
@@ -185,7 +191,7 @@ class Firebase {
   }
 
   createShoppingList = async ({ name }) => {
-    const snapshot = await this.currentShoppingList().get()
+    const snapshot = await this.myCurrentShoppingList().get()
     snapshot.docs.forEach((s) => s.ref.update('isCurrent', false))
 
     return this.lists().add({
@@ -198,10 +204,10 @@ class Firebase {
   };
 
   // *** Needs API ***
-  currentNeedsList = () => this.currentList(LIST_TYPE_NEED);
+  myCurrentNeedsList = () => this.myCurrentList(LIST_TYPE_NEED);
 
   setCurrentNeedsList = uid => {
-    this.currentNeedsList().get()
+    this.myCurrentNeedsList().get()
       .then((snapshot) => {
         snapshot.docs.forEach((s) => s.ref.update('isCurrent', false))
       })
@@ -209,7 +215,7 @@ class Firebase {
   }
 
   createNeedsList = async ({ name }) => {
-    const snapshot = await this.currentNeedsList().get()
+    const snapshot = await this.myCurrentNeedsList().get()
     snapshot.docs.forEach((s) => s.ref.update('isCurrent', false))
 
     return this.lists().add({
