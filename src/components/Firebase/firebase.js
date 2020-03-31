@@ -237,7 +237,7 @@ class Firebase {
     .where('shoppingListUid', '==', shoppingListUid)
 
   createNeedsListForShoppingList = (shoppingListUid, name) => {
-    this.currentNeedsList().get()
+    this.myCurrentNeedsList().get()
       .then((snapshot) => {
         snapshot.docs.forEach((s) => s.ref.update('isCurrent', false))
       })

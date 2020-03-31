@@ -99,7 +99,12 @@ class Needs extends Component {
         this.unsubscribeOriginShoppingListItems && this.unsubscribeOriginShoppingListItems()
 
         // register for changes in the origin shopping list
-        this.unsubscribeOriginShoppingList = currentOriginShoppingListUid && this.onListenForOriginShoppingList(currentOriginShoppingListUid)
+        if(currentOriginShoppingListUid){
+          this.unsubscribeOriginShoppingList = this.onListenForOriginShoppingList(currentOriginShoppingListUid)
+        } else {
+          this.clearOriginShoppingListInStore()
+        }
+
       });
   }
 
@@ -138,7 +143,7 @@ class Needs extends Component {
           this.onListenForOriginShoppingListItems(uid);
           
         } else {
-          this.props.needsStore.setCurrentOriginShoppingList(null);
+          this.clearOriginShoppingListInStore();
         }
       });
   }
@@ -162,6 +167,11 @@ class Needs extends Component {
           }
         });
   };
+
+  clearOriginShoppingListInStore() {
+    this.props.needsStore.setCurrentOriginShoppingList(null);
+    this.props.needsStore.setCurrentOriginShoppingListItems([]);
+  }
 
   // event handlers for lists
   onChangeText = event => {
