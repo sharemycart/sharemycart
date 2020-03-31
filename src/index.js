@@ -6,7 +6,7 @@ import './index.css';
 import * as serviceWorker from './serviceWorker';
 
 import store from './stores';
-import App from './components/App';
+import App from './components/App/simple-ui';
 import Firebase, { FirebaseContext } from './components/Firebase';
 
 ReactDOM.render(

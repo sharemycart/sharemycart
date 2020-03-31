@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { compose } from 'recompose';
 
-import { withAuthorization, withEmailVerification } from '../Session';
-import { withFirebase } from '../Firebase';
-import { PasswordForgetForm } from '../PasswordForget';
-import PasswordChangeForm from '../PasswordChange';
+import { withAuthorization, withEmailVerification } from '../../Session';
+import { withFirebase } from '../../Firebase';
+import { PasswordForgetForm } from '../../PasswordForget/simple-ui';
+import PasswordChangeForm from '../../PasswordChange/simple-ui';
 
 const SIGN_IN_METHODS = [
   {

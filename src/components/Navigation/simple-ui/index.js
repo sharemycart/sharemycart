@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { compose } from 'recompose';
 
-import SignOutButton from '../SignOut';
-import * as ROUTES from '../../constants/routes';
-import * as ROLES from '../../constants/roles';
+import SignOutButton from '../../SignOut/simple-ui';
+import * as ROUTES from '../../../constants/routes';
+import * as ROLES from '../../../constants/roles';
 
 const Navigation = ({ sessionStore }) =>
   sessionStore.authUser ? (

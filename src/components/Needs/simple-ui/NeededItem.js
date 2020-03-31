@@ -64,7 +64,7 @@ class NeededItem extends Component {
               })()
             }
 
-            {!editMode && (
+            {!editMode && onRemoveNeededItem && (
               <span>
                 <button
                   type="button"

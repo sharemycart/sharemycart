@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { compose } from 'recompose';
 
-import { withFirebase } from '../Firebase';
+import { withFirebase } from '../../Firebase';
 import NeedsLists from './NeedsLists';
-import { LIST_TYPE_NEED } from '../../constants/lists';
+import { LIST_TYPE_NEED } from '../../../constants/lists';
 import NeededItems from './NeededItems';
 
 /**

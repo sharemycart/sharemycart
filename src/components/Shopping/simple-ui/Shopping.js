@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { compose } from 'recompose';
 
-import { withFirebase } from '../Firebase';
+import { withFirebase } from '../../Firebase';
 import ShoppingLists from './ShoppingLists';
 import ShoppingItems from './ShoppingItems';
 import DependentNeedsLists from './DependentNeedsLists';

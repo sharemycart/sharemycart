@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { compose } from 'recompose';
-import { withFirebase } from '../Firebase';
+import { withFirebase } from '../../Firebase';
 import { inject, observer } from 'mobx-react';
-import {NEEDS} from '../../constants/routes';
+import {NEEDS} from '../../../constants/routes';
 
 class NeedsInSharedShoppingList extends Component {
     constructor(props) {

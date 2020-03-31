@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { compose } from 'recompose';
 
-import { withFirebase } from '../Firebase';
-import * as ROUTES from '../../constants/routes';
+import { withFirebase } from '../../Firebase';
+import * as ROUTES from '../../../constants/routes';
 
 class UserList extends Component {
   constructor(props) {

@@ -1,11 +1,11 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import * as ROUTES from '../../constants/routes';
+import * as ROUTES from '../../../constants/routes';
 import NeedsList from './NeedsList';
 import Needs from './Needs';
 import NeedsInSharedShoppingList from './NeedsInSharedShoppingList';
-import { withEmailVerification, withAuthorization } from '../Session';
+import { withEmailVerification, withAuthorization } from '../../Session';
 import { compose } from 'recompose';
 
 const NeedsPage = () => (
