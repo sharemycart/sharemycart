@@ -227,6 +227,9 @@ class Firebase {
       : INVALID_DUMMY_UID)
     .where('type', '==', LIST_TYPE_NEED)
 
+  dependentNeedsListOfShoppingList = (shoppingListUid) => this.lists()
+    .where('shoppingListUid', '==', shoppingListUid)
+
   createNeedsListForShoppingList = (shoppingListUid, name) => {
     this.currentNeedsList().get()
       .then((snapshot) => {

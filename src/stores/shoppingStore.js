@@ -8,6 +8,8 @@ class ShoppingStore {
   @observable shoppingLists = null;
   @observable currentShoppingList = null;
   @observable currentShoppingListItems = null;
+  @observable currentDependentNeedsLists = null;
+  @observable currentDependentNeedsListsItems = null;
 
   constructor(rootStore) {
     this.rootStore = rootStore;
@@ -18,11 +20,18 @@ class ShoppingStore {
 
     const currentShoppingLists = shoppingLists.filter(shoppingList => !!shoppingList.isCurrent);
     this.currentShoppingList = (currentShoppingLists.length > 0 && currentShoppingLists[0]) || null
-
   };
 
   @action setCurrentShoppingListItems = (items) => {
     this.currentShoppingListItems = toObject(items);
+  }
+
+  @action setCurrentDependentNeedsLists = (lists) => {
+    this.currentDependentNeedsLists = toObject(lists);
+  }
+
+  @action setDependentNeedsListItems = (listUid, items) => {
+    this.currentDependentNeedsLists[listUid].items = items;
   }
 
   @computed get shoppingListsArray() {
@@ -36,6 +45,13 @@ class ShoppingStore {
     return Object.keys(this.currentShoppingListItems || {}).map(key => ({
       ...this.currentShoppingListItems[key],
       uid: this.currentShoppingListItems[key].uid,
+    }));
+  }
+
+  @computed get currentDependentNeedsListsArray() {
+    return Object.keys(this.currentDependentNeedsLists || {}).map(key => ({
+      ...this.currentDependentNeedsLists[key],
+      uid: this.currentDependentNeedsLists[key].uid,
     }));
   }
 }
