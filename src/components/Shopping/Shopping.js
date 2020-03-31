@@ -5,6 +5,7 @@ import { compose } from 'recompose';
 import { withFirebase } from '../Firebase';
 import ShoppingLists from './ShoppingLists';
 import ShoppingItems from './ShoppingItems';
+import DependentNeedsLists from './DependentNeedsLists';
 
 /**
  * This component represent the complete state of the needs section of the app.
@@ -53,8 +54,8 @@ class Shopping extends Component {
   componentWillUnmount() {
     this.unsubscribeLists && this.unsubscribeLists();
     this.unsubscribeItems && this.unsubscribeItems();
-    this.unsubscribeDependentNeedsLists && this.unsubscribeDependentNeedsLists()
-    this.unsubscribeDependentNeedsListsItems && this.unsubscribeDependentNeedsListsItems()
+    this.unsubscribeDependentNeedsLists && this.unsubscribeDependentNeedsLists();
+    this.unsubscribeAllDependentNeedsListItems();
   }
 
   // listeners to the database
@@ -90,7 +91,7 @@ class Shopping extends Component {
 
         // register for dependent needs list items
         this.unsubscribeDependentNeedsLists && this.unsubscribeDependentNeedsLists()
-        this.unsubscribeDependentNeedsListsItems && this.unsubscribeDependentNeedsListsItems()
+        this.unsubscribeAllDependentNeedsListItems()
         this.onListenForDependentNeedsLists(currentShoppingListUid)
 
       });
@@ -124,8 +125,7 @@ class Shopping extends Component {
       .dependentNeedsListOfShoppingList(originShoppingListUid)
       .onSnapshot(snapshot => {
         // remove observers for the lists items, they are going to be re-built for each needs list
-        this.unsubscribeDependentNeedsListsItems && this.unsubscribeDependentNeedsListsItems.length
-        && this.unsubscribeDependentNeedsListsItems.forEach(handler => handler());
+        this.unsubscribeAllDependentNeedsListItems();
 
         if (snapshot.size) {
           let dependentNeedsLists = [];
@@ -147,6 +147,11 @@ class Shopping extends Component {
       });
   }
 
+  unsubscribeAllDependentNeedsListItems() {
+    this.unsubscribeDependentNeedsListsItems && this.unsubscribeDependentNeedsListsItems.length
+      && this.unsubscribeDependentNeedsListsItems.forEach(handler => handler());
+  }
+
   onListenForDependentNeedsListsItems = (needsListUid) => {
     this.unsubscribeDependentNeedsListsItems.push(
       this.props.firebase
@@ -154,11 +159,11 @@ class Shopping extends Component {
         // .orderBy('createdAt', 'desc')
         // .limit(this.state.limit)
         .onSnapshot(snapshot => {
-            let dependentNeedsListsItems = [];
-            snapshot.forEach(doc =>
-              dependentNeedsListsItems.push({ ...doc.data(), uid: doc.id }),
-            );
-            this.props.shoppingStore.setDependentNeedsListItems(needsListUid, dependentNeedsListsItems);
+          let dependentNeedsListsItems = [];
+          snapshot.forEach(doc =>
+            dependentNeedsListsItems.push({ ...doc.data(), uid: doc.id }),
+          );
+          this.props.shoppingStore.setDependentNeedsListItems(needsListUid, dependentNeedsListsItems);
         })
     );
   }
@@ -232,8 +237,11 @@ class Shopping extends Component {
   render() {
     const { shoppingStore, sessionStore } = this.props;
     const { editingListName, listsLoading, itemsLoading } = this.state;
-    const shoppingLists = shoppingStore.shoppingListsArray;
-    const currentShoppingListItems = shoppingStore.currentShoppingListItemsArray;
+    const { 
+      shoppingListsArray: shoppingLists,
+      currentShoppingListItemsArray: currentShoppingListItems,
+      currentDependentNeedsListsArray: currentDependentNeedsLists
+     } = shoppingStore;
 
     return (
       <div>
@@ -276,6 +284,18 @@ class Shopping extends Component {
             onCreateShoppingItem={this.onCreateItemForCurrentShoppingList}
           />
         </div>
+        <div id='dependent-needs-lists'>
+        <h2>Dependent needs lists</h2>
+
+        {currentDependentNeedsLists && (
+            <DependentNeedsLists
+              authUser={sessionStore.authUser}
+              shoppingLists={currentDependentNeedsLists}
+            />
+          )}
+
+          {!shoppingLists && <div>There are no dependent needs lists ...</div>}
+          </div>
       </div>
     );
   }

@@ -21,7 +21,7 @@ const ShoppingItems = ({
           />
         ))}
       </ul>
-      <form
+      {onCreateShoppingItem && <form
         onSubmit={event => {
           event.preventDefault();
           const item = {
@@ -40,6 +40,7 @@ const ShoppingItems = ({
         /> */}
         <button type="submit">new shopping item</button>
       </form>
+      }
     </div >
   );
 
