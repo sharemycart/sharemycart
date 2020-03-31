@@ -1,7 +1,7 @@
 import app from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-import { LIST_TYPE_SHOPPING, LIST_TYPE_NEED } from '../../constants/lists';
+import { LIST_TYPE_SHOPPING, LIST_TYPE_NEED, LIFECYCLE_STATUS_OPEN } from '../../constants/lists';
 
 const INVALID_DUMMY_UID = 'idonotexist'; // can be used in order to create queries which intentionally don't match anything
 
@@ -120,7 +120,15 @@ class Firebase {
       ? this.auth.currentUser.uid
       : INVALID_DUMMY_UID)
     .limit(1);
-
+  
+  createList = ({name}, type) => this.lists().add({
+      name,
+      type,
+      userId: this.auth.currentUser.uid,
+      isCurrent: true,
+      lifecycleStatus: LIFECYCLE_STATUS_OPEN,
+      createdAt: this.fieldValue.serverTimestamp(),
+    })
   editList = (uid, list) => this.list(uid)
     .set(Object.assign(list,
       {
@@ -194,13 +202,7 @@ class Firebase {
     const snapshot = await this.myCurrentShoppingList().get()
     snapshot.docs.forEach((s) => s.ref.update('isCurrent', false))
 
-    return this.lists().add({
-      name,
-      type: LIST_TYPE_SHOPPING,
-      userId: this.auth.currentUser.uid,
-      isCurrent: true,
-      createdAt: this.fieldValue.serverTimestamp(),
-    })
+    return this.createList({name}, LIST_TYPE_SHOPPING);
   };
 
   // *** Needs API ***
@@ -218,13 +220,7 @@ class Firebase {
     const snapshot = await this.myCurrentNeedsList().get()
     snapshot.docs.forEach((s) => s.ref.update('isCurrent', false))
 
-    return this.lists().add({
-      name,
-      type: LIST_TYPE_NEED,
-      userId: this.auth.currentUser.uid,
-      isCurrent: true,
-      createdAt: this.fieldValue.serverTimestamp(),
-    })
+    return this.createList({name}, LIST_TYPE_NEED)
   }
 
   myNeedsLists = () => this.lists()
