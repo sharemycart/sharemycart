@@ -134,20 +134,17 @@ class Needs extends Component {
           const shoppingList = snapshot.data();
           this.props.needsStore.setCurrentOriginShoppingList(shoppingList);
 
-          // register for changes in the origin shopping list
-          this.unsubscribeOriginShoppingListItems = this.onListenForOriginShoppingListItems(uid);
+          this.unsubscribeOriginShoppingListItems && this.unsubscribeOriginShoppingListItems();
+          this.onListenForOriginShoppingListItems(uid);
+          
         } else {
           this.props.needsStore.setCurrentOriginShoppingList(null);
         }
-
-        // trigger item updates - this should actually be done implicitly, but it seems it isn't
-        this.unsubscribeOriginShoppingListItems && this.unsubscribeOriginShoppingListItems();
       });
   }
 
   onListenForOriginShoppingListItems = (originListUid) => {
-    if (originListUid) {
-      this.unsubscribeItems = this.props.firebase
+      this.unsubscribeOriginShoppingListItems = this.props.firebase
         .listItems(originListUid)
         // .orderBy('createdAt', 'desc')
         // .limit(this.state.limit)
@@ -164,10 +161,6 @@ class Needs extends Component {
             this.props.needsStore.setCurrentOriginShoppingListItems([]);
           }
         });
-    } else {
-      debugger
-    }
-
   };
 
   // event handlers for lists
