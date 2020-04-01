@@ -60,7 +60,9 @@ class App extends Component {
       <IonApp>
         <IonReactRouter>
 
-        {this.state.authenticated && <Navigation />}
+          <Navigation
+            dbAuthenticationCompleted={this.state.authenticated}
+          />
 
         </IonReactRouter>
       </IonApp>

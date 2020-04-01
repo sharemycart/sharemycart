@@ -22,8 +22,8 @@ import {
     IonTabs
 } from '@ionic/react';
 
-const Navigation = ({ sessionStore }) => (
-    sessionStore.authUser ? (
+const Navigation = ({ sessionStore, dbAuthenticationCompleted }) => (
+    dbAuthenticationCompleted && sessionStore.authUser ? (
         <NavigationAuth /*authUser={sessionStore.authUser}*/ />
     ) : (
             <NavigationNonAuth />
