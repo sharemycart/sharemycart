@@ -269,10 +269,11 @@ class Firebase {
     const neededItem = shoppingListItem;
 
     neededItem.originShoppingItemUid = shoppingListItem.uid;
+    neededItem.quantity = 0;
     delete neededItem.createdAt;
     delete neededItem.editedAt;
     //TODO: prevent creation of duplicate needs
-    return this.createItem(needsListUid, shoppingListItem)
+    return this.createItem(needsListUid, neededItem)
   }
 }
 
