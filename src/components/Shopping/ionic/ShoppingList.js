@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Item from '../../Item/ionic/Item';
 import EditItem from '../../Item/ionic/EditItem';
-import { IonList } from '@ionic/react';
+import { IonList, IonItem } from '@ionic/react';
 import { ITEM_TYPE_SHOPPING } from '../../../constants/items';
 
 class ShoppingList extends Component {
@@ -33,21 +33,21 @@ class ShoppingList extends Component {
   };
 
   onChangeNewItem(newItem) {
-		this.setState({ newItem });
-	}
+    this.setState({ newItem });
+  }
 
-	onCreateComplete() {
-    let {newItem} = this.state;
-    
-		if (!newItem.name || !newItem.quantity) {
-			return;
-		}
+  onCreateComplete() {
+    let { newItem } = this.state;
+
+    if (!newItem.name || !newItem.quantity) {
+      return;
+    }
 
     this.props.onCreateItem(newItem)
-			.then(() => {
+      .then(() => {
         this.setState({ newItem: {} });
-			});
-	}
+      });
+  }
 
   render() {
     const {
@@ -58,26 +58,30 @@ class ShoppingList extends Component {
       onEditItem,
       onDeleteItem
     } = this.props;
-    
+
     const { editMode, editName, newItem } = this.state;
 
     return (
       <>
-        <EditItem item={newItem}
-          onChange={this.onChangeNewItem.bind(this)}
-          onEditingConcluded={this.onCreateComplete.bind(this)}
-          mode={ITEM_TYPE_SHOPPING}
-        />
+        <IonList>
+          <IonItem>
+            <EditItem item={newItem}
+              onChange={this.onChangeNewItem.bind(this)}
+              onEditingConcluded={this.onCreateComplete.bind(this)}
+              mode={ITEM_TYPE_SHOPPING}
+            />
+          </IonItem>
+        </IonList>
         <IonList>
           {items.map((item, key) => (
             <Item
-            key={item.id || key}
-            item={item}
-            ownList={true}
-            onEditingConcluded={onEditItem}
-            onDeleteItem={onDeleteItem}
-            mode={ITEM_TYPE_SHOPPING}
-          />))}
+              key={item.id || key}
+              item={item}
+              ownList={true}
+              onEditingConcluded={onEditItem}
+              onDeleteItem={onDeleteItem}
+              mode={ITEM_TYPE_SHOPPING}
+            />))}
         </IonList>
       </>
     );

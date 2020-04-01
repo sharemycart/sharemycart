@@ -23,6 +23,16 @@ class EditItem extends Component {
     this.props.onChange({ ...this.props.item, [property]: value })
   }
 
+  onKeyPress = (event) => {
+    event.which === ENTER_KEY && this.concludeEditing(this.props.item)
+  }
+
+  onBlur(event){
+    if(event.target.parentElement !== event.srcElement.parentElement){
+      this.concludeEditing(this.props.item)
+    }
+  }
+
   setUnit(unit) {
     this.props.onChange({ ...this.props.item, unit })
   }
@@ -49,8 +59,9 @@ class EditItem extends Component {
           placeholder="Item name"
           name="name"
           value={this.props.item.name}
+          onIonInput={event => this.onKeyPress(event)}
           onIonChange={event => this.onChange(event)}
-          // onIonBlur={event => this.props.onClose()}
+          onIonBlur={event => this.onBlur(event)}
           disabled={this.props.mode === ITEM_TYPE_NEED}
           required="true"
         />
@@ -62,8 +73,9 @@ class EditItem extends Component {
           min="0"
           pattern="\d+,?\d*"
           value={this.props.item.quantity}
+          onKeyUp={this.onKeyPress}
           onIonChange={event => this.onChange(event)}
-          // onIonBlur={event => }
+          onIonBlur={event => this.onBlur(event)}
           required="true"
         />
         {unitOfMeasure}

@@ -24,6 +24,7 @@ class Item extends Component {
 
   onItemClick() {
     if (this.props.mode !== ITEM_TYPE_IN_SHOPPING) {
+      // this.props.onEditingConcluded(this.state.editingItem)
       this.setEditMode(true)
     } else {
       this.props.onItemClicked()
