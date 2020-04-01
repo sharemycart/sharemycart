@@ -7,13 +7,20 @@ import { ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_SHOPPING, ITEM_TYPE_NEED } from "../..
 class Item extends Component {
   constructor(props) {
     super(props);
-    this.state = { inEdit: !props.item.quantity };
+    this.state = { 
+      inEdit: !props.item.quantity ,
+      editingItem: props.item,
+    };
     this.mode = { mode: props.mode }
   }
 
   setEditMode(inEdit) {
     this.setState({ inEdit })
   }
+
+  onChangeEditingItem(editingItem) {
+		this.setState({ editingItem });
+	}
 
   onItemClick() {
     if (this.props.mode !== ITEM_TYPE_IN_SHOPPING) {
@@ -42,9 +49,13 @@ class Item extends Component {
     </IonButton>
 
     const itemDisplay = this.state.inEdit ?
-      <EditItem item={this.props.item}
-        onChange={this.props.onUpdateItem}
-        onClose={() => this.setEditMode(false)}
+      <EditItem item={this.state.editingItem}
+        onChange={this.onChangeEditingItem.bind(this)}
+        onEditingConcluded={() => {
+          this.setEditMode(false)
+          this.props.onEditingConcluded(this.state.editingItem)
+          }
+        }
         mode={this.props.mode}
       />
       :

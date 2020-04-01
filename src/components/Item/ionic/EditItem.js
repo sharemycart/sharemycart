@@ -13,7 +13,11 @@ class EditItem extends Component {
     }
   }
 
-  onBlur(event) {
+  concludeEditing(item){
+    this.props.onEditingConcluded(item)  
+  }
+
+  onChange(event) {
     const property = event.currentTarget.name
     const value = event.currentTarget.value
     this.props.onChange({ ...this.props.item, [property]: value })
@@ -45,8 +49,8 @@ class EditItem extends Component {
           placeholder="Item name"
           name="name"
           value={this.props.item.name}
-          onIonChange={event => this.onBlur(event)}
-          onIonBlur={event => this.props.onClose()}
+          onIonChange={event => this.onChange(event)}
+          // onIonBlur={event => this.props.onClose()}
           disabled={this.props.mode === ITEM_TYPE_NEED}
           required="true"
         />
@@ -58,12 +62,12 @@ class EditItem extends Component {
           min="0"
           pattern="\d+,?\d*"
           value={this.props.item.quantity}
-          onIonChange={event => this.onBlur(event)}
-          onIonBlur={event => this.props.onClose()}
+          onIonChange={event => this.onChange(event)}
+          // onIonBlur={event => }
           required="true"
         />
         {unitOfMeasure}
-        <IonButton onClick={this.props.onClose} style={{'marginLeft': '10px'}}>Add</IonButton>
+        <IonButton onClick={()=>this.concludeEditing(this.props.item)} style={{'marginLeft': '10px'}}>Add</IonButton>
       </IonItem>
 
     </IonList>

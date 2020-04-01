@@ -65,7 +65,7 @@ class ShoppingList extends Component {
       <>
         <EditItem item={newItem}
           onChange={this.onChangeNewItem.bind(this)}
-          onClose={this.onCreateComplete.bind(this)}
+          onEditingConcluded={this.onCreateComplete.bind(this)}
           mode={ITEM_TYPE_SHOPPING}
         />
         <IonList>
@@ -74,7 +74,7 @@ class ShoppingList extends Component {
             key={item.id || key}
             item={item}
             ownList={true}
-            onUpdateItem={onEditItem}
+            onEditingConcluded={onEditItem}
             onDeleteItem={onDeleteItem}
             mode={ITEM_TYPE_SHOPPING}
           />))}
