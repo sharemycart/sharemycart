@@ -46,7 +46,7 @@ class NeedsList extends Component {
           <Item
             key={item.id || key}
             item={item}
-            onEditItem={onEditItem}
+            onEditingConcluded={onEditItem}
             onDeleteItem={onDeleteItem}
             onCreateNeed={onCreateItem}
             mode={mode}
