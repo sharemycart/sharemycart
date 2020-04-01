@@ -13,8 +13,8 @@ class EditItem extends Component {
     }
   }
 
-  concludeEditing(item){
-    this.props.onEditingConcluded(item)  
+  concludeEditing(item) {
+    this.props.onEditingConcluded(item)
   }
 
   onChange(event) {
@@ -30,10 +30,10 @@ class EditItem extends Component {
   render() {
     const unitOfMeasure = this.props.mode === ITEM_TYPE_SHOPPING
       ? <IonSelect
-          value={this.props.item.unit}
-          required="true"
-          onIonChange={e => this.setUnit(e.detail.value)}
-        >
+        value={this.props.item.unit}
+        required="true"
+        onIonChange={e => this.setUnit(e.detail.value)}
+      >
         <IonSelectOption>pc</IonSelectOption>
         <IonSelectOption>g</IonSelectOption>
         <IonSelectOption>kg</IonSelectOption>
@@ -42,8 +42,8 @@ class EditItem extends Component {
       </IonSelect>
       : <IonLabel>{this.props.item.unit}</IonLabel>
 
-    return <IonList style={{ width: "100%" }}>
-      <IonItem>
+    return (
+      <IonItem style={{width: "100%"}}>
         <IonInput
           autofocus={this.props.mode === ITEM_TYPE_SHOPPING}
           placeholder="Item name"
@@ -67,10 +67,9 @@ class EditItem extends Component {
           required="true"
         />
         {unitOfMeasure}
-        <IonButton onClick={()=>this.concludeEditing(this.props.item)} style={{'marginLeft': '10px'}}>Add</IonButton>
+        <IonButton onClick={() => this.concludeEditing(this.props.item)} style={{ 'marginLeft': '10px' }}>Add</IonButton>
       </IonItem>
-
-    </IonList>
+    )
   }
 }
 
