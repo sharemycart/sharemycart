@@ -39,12 +39,13 @@ class ShoppingList extends Component {
 	onCreateComplete() {
     let {newItem} = this.state;
     
-		if (!newItem.name || !newItem.quantity || !newItem.unit) {
+		if (!newItem.name || !newItem.quantity) {
 			return;
 		}
-		this.props.onCreateItem({ listId: this.state.list.id, item: newItem })
+
+    this.props.onCreateItem(newItem)
 			.then(() => {
-				console.log('item added successfully');
+        this.setState({ newItem: {} });
 			});
 	}
 
@@ -62,11 +63,11 @@ class ShoppingList extends Component {
 
     return (
       <>
-        {/* <EditItem item={newItem}
-          onChange={this.onChangeNewItem}
-          onClose={this.onCreateComplete}
-          mode="shopping"
-        /> */}
+        <EditItem item={newItem}
+          onChange={this.onChangeNewItem.bind(this)}
+          onClose={this.onCreateComplete.bind(this)}
+          mode={ITEM_TYPE_SHOPPING}
+        />
         <IonList>
           {items.map((item, key) => (
             <Item

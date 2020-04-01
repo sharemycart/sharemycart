@@ -34,7 +34,6 @@ class Needs extends NeedsModel {
             authUser={sessionStore.authUser}
             list={currentOriginShoppingList}
             items={currentNeedsListItems}
-            onEditItem={this.onEditNeedsList}
             onCreateItem={this.onCreateItemForCurrentNeedsList}
             onEditItem={this.onEditNeededItem}
             onDeleteItem={this.onRemoveNeededItem}
@@ -49,7 +48,6 @@ class Needs extends NeedsModel {
             authUser={sessionStore.authUser}
             list={currentOriginShoppingList}
             items={potentiallyNeededItems}
-            onEditItem={this.onEditNeedsList}
             onCreateItem={this.onCreateItemForCurrentNeedsList}
             onEditItem={this.onEditNeededItem}
             onDeleteItem={this.onRemoveNeededItem}

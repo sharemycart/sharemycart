@@ -106,7 +106,7 @@ class Shopping extends Component {
 
           this.props.shoppingStore.setCurrentShoppingListItems(shoppingItems);
 
-          this.setState(Object.assign(this.state, { itemsLoading: false }));
+          this.setState({ itemsLoading: false });
         } else {
           this.props.shoppingStore.setCurrentShoppingListItems([]);
 
@@ -199,9 +199,10 @@ class Shopping extends Component {
   onCreateItemForCurrentShoppingList = (item) => {
     const { currentShoppingList } = this.props.shoppingStore;
     if (currentShoppingList) {
-      this.props.firebase.createItem(currentShoppingList.uid, item)
+      return this.props.firebase.createItem(currentShoppingList.uid, item)
     } else {
       console.error('Cannot create item for non-existing shoppingList');
+      return new Promise(()=>null)
     }
   };
 

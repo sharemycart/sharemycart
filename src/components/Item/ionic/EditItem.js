@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { IonItem, IonButton, IonInput, IonList, IonSelect, IonSelectOption, IonLabel } from "@ionic/react";
+import { ITEM_TYPE_SHOPPING, ITEM_TYPE_NEED } from "../../../constants/items";
 
 const ENTER_KEY = 13;
 
@@ -7,19 +8,14 @@ class EditItem extends Component {
   constructor(props) {
     super(props);
     if (!props.item.unit) {
-      props.onChange({ ...this.props.item, unit: 'pc'})
-    }
-  }
-
-  onKeyPress(event) {
-    if (event.which === ENTER_KEY) {
-      this.onBlur(event)
+      // don't default the unit, it might be a bit overengineered
+      // props.onChange({ ...this.props.item, unit: 'pc'})
     }
   }
 
   onBlur(event) {
-    const property = event.target.name
-    const value = event.target.value
+    const property = event.currentTarget.name
+    const value = event.currentTarget.value
     this.props.onChange({ ...this.props.item, [property]: value })
   }
 
@@ -28,7 +24,7 @@ class EditItem extends Component {
   }
 
   render() {
-    const unitOfMeasure = this.props.mode === 'shopping'
+    const unitOfMeasure = this.props.mode === ITEM_TYPE_SHOPPING
       ? <IonSelect
           value={this.props.item.unit}
           required="true"
@@ -45,25 +41,25 @@ class EditItem extends Component {
     return <IonList style={{ width: "100%" }}>
       <IonItem>
         <IonInput
-          autofocus={this.props.mode === "shopping"}
+          autofocus={this.props.mode === ITEM_TYPE_SHOPPING}
           placeholder="Item name"
           name="name"
           value={this.props.item.name}
-          onKeyPress={event => this.onKeyPress(event)}
-          onBlur={event => this.onBlur(event)}
-          disabled={this.props.mode === "need"}
+          onIonChange={event => this.onBlur(event)}
+          onIonBlur={event => this.props.onClose()}
+          disabled={this.props.mode === ITEM_TYPE_NEED}
           required="true"
         />
         <IonInput
-          autofocus={this.props.mode === "need"}
+          autofocus={this.props.mode === ITEM_TYPE_NEED}
           placeholder="Quantity"
           name="quantity"
           type="number"
           min="0"
           pattern="\d+,?\d*"
           value={this.props.item.quantity}
-          onKeyPress={event => this.onKeyPress(event)}
-          onBlur={event => this.onBlur(event)}
+          onIonChange={event => this.onBlur(event)}
+          onIonBlur={event => this.props.onClose()}
           required="true"
         />
         {unitOfMeasure}
