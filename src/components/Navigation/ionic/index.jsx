@@ -30,38 +30,44 @@ const Navigation = ({ sessionStore, dbAuthenticationCompleted }) => (
         )
 )
 
-const NavigationAuth = (/*{ authUser }*/) => (
-    <IonTabs>
-        <IonRouterOutlet>
-            <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
-            <Route path={ROUTES.SIGN_IN} component={SignInPage} />
-            <Route
-                path={ROUTES.PASSWORD_FORGET}
-                component={PasswordForgetPage}
-            />
-            <Route path={ROUTES.ACCOUNT} component={AccountPage} />
-            <Route path={ROUTES.SHOPPING} component={ShoppingPage} />
-            <Route path={ROUTES.NEEDS} component={NeedsPage} />
-            <Route path={ROUTES.SHARED_SHOPPING_LIST} component={NeedsPage} />
-            <Route path={ROUTES.ADMIN} component={AdminPage} />
-            <Redirect exact from="/" to={ROUTES.SHOPPING} />
-        </IonRouterOutlet>
-        <IonTabBar slot="bottom">
-            <IonTabButton tab="Shopping" href={ROUTES.SHOPPING}>
-                {/* <IonIcon icon={triangle} /> */}
-                <IonLabel>Shopping</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab="Needs" href={ROUTES.NEEDS}>
-                {/* <IonIcon icon={ellipse} /> */}
-                <IonLabel>Needs</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab="Account" href={ROUTES.ACCOUNT}>
-                {/* <IonIcon icon={square} /> */}
-                <IonLabel>Account</IonLabel>
-            </IonTabButton>
-        </IonTabBar>
-    </IonTabs>
-);
+const NavigationAuth = (/*{ authUser }*/) => {
+
+    return (
+            <>
+            <IonTabs>
+                <IonRouterOutlet>
+                    <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
+                    <Route path={ROUTES.SIGN_IN} component={SignInPage} />
+                    <Route
+                        path={ROUTES.PASSWORD_FORGET}
+                        component={PasswordForgetPage}
+                    />
+                    <Route path={ROUTES.ACCOUNT} component={AccountPage} />
+                    <Route path={ROUTES.SHOPPING} component={ShoppingPage} />
+                    <Route path={ROUTES.NEEDS} component={NeedsPage} />
+                    <Route path={ROUTES.SHARED_SHOPPING_LIST} component={NeedsPage} />
+                    <Route path={ROUTES.ADMIN} component={AdminPage} />
+                    <Redirect exact from="/" to={ROUTES.SHOPPING} />
+                </IonRouterOutlet>
+                <IonTabBar slot="bottom">
+                    <IonTabButton tab="Shopping" href={ROUTES.SHOPPING}>
+                        {/* <IonIcon icon={triangle} /> */}
+                        <IonLabel>Shopping</IonLabel>
+                    </IonTabButton>
+                    <IonTabButton tab="Needs" href={ROUTES.NEEDS}>
+                        {/* <IonIcon icon={ellipse} /> */}
+                        <IonLabel>Needs</IonLabel>
+                    </IonTabButton>
+                    <IonTabButton tab="Account" href={ROUTES.ACCOUNT}>
+                        {/* <IonIcon icon={square} /> */}
+                        <IonLabel>Account</IonLabel>
+                    </IonTabButton>
+                </IonTabBar>
+            </IonTabs>
+            <Redirect to='/'> </Redirect>
+            </>
+    )
+}
 
 const NavigationNonAuth = () => (
     <IonTabs>
