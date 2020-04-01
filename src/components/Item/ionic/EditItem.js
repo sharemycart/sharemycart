@@ -67,7 +67,7 @@ class EditItem extends Component {
           required="true"
         />
         {unitOfMeasure}
-        <IonButton onClick={this.props.onClose} style={{'margin-left': '10px'}}>Add</IonButton>
+        <IonButton onClick={this.props.onClose} style={{'marginLeft': '10px'}}>Add</IonButton>
       </IonItem>
 
     </IonList>

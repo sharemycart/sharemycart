@@ -43,15 +43,15 @@ class Needs extends Component {
     this.onListenForNeedsLists();
   }
 
-  componentDidUpdate(props) {
-    if (props.needsStore.limit !== this.props.needsStore.limit) {
-      this.onListenForNeedsLists();
-      this.onListenForCurrentNeedsListItems();
-    }
+  componentDidUpdate() {
   }
 
   componentWillUnmount() {
-    this.unsubscribeLists();
+    this.unregisterAllListeners();
+  }
+
+  unregisterAllListeners() {
+    this.unsubscribeLists && this.unsubscribeLists();
     this.unsubscribeItems && this.unsubscribeItems();
     this.unsubscribeOriginShoppingList && this.unsubscribeOriginShoppingList()
     this.unsubscribeOriginShoppingListItems && this.unsubscribeOriginShoppingListItems()
@@ -99,7 +99,7 @@ class Needs extends Component {
         this.unsubscribeOriginShoppingListItems && this.unsubscribeOriginShoppingListItems()
 
         // register for changes in the origin shopping list
-        if(currentOriginShoppingListUid){
+        if (currentOriginShoppingListUid) {
           this.unsubscribeOriginShoppingList = this.onListenForOriginShoppingList(currentOriginShoppingListUid)
         } else {
           this.clearOriginShoppingListInStore()
@@ -141,7 +141,7 @@ class Needs extends Component {
 
           this.unsubscribeOriginShoppingListItems && this.unsubscribeOriginShoppingListItems();
           this.onListenForOriginShoppingListItems(uid);
-          
+
         } else {
           this.clearOriginShoppingListInStore();
         }
@@ -149,23 +149,23 @@ class Needs extends Component {
   }
 
   onListenForOriginShoppingListItems = (originListUid) => {
-      this.unsubscribeOriginShoppingListItems = this.props.firebase
-        .listItems(originListUid)
-        // .orderBy('createdAt', 'desc')
-        // .limit(this.state.limit)
-        .onSnapshot(snapshot => {
-          if (snapshot.size) {
-            let originShoppingListItems = [];
-            snapshot.forEach(doc =>
-              originShoppingListItems.push({ ...doc.data(), uid: doc.id }),
-            );
+    this.unsubscribeOriginShoppingListItems = this.props.firebase
+      .listItems(originListUid)
+      // .orderBy('createdAt', 'desc')
+      // .limit(this.state.limit)
+      .onSnapshot(snapshot => {
+        if (snapshot.size) {
+          let originShoppingListItems = [];
+          snapshot.forEach(doc =>
+            originShoppingListItems.push({ ...doc.data(), uid: doc.id }),
+          );
 
-            this.props.needsStore.setCurrentOriginShoppingListItems(originShoppingListItems);
+          this.props.needsStore.setCurrentOriginShoppingListItems(originShoppingListItems);
 
-          } else {
-            this.props.needsStore.setCurrentOriginShoppingListItems([]);
-          }
-        });
+        } else {
+          this.props.needsStore.setCurrentOriginShoppingListItems([]);
+        }
+      });
   };
 
   clearOriginShoppingListInStore() {

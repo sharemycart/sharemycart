@@ -42,14 +42,14 @@ class Shopping extends Component {
     this.onListenForCurrentShoppingListItems();
   }
 
-  componentDidUpdate(props) {
-    if (props.shoppingStore.limit !== this.props.shoppingStore.limit) {
-      this.onListenForShoppingLists();
-      this.onListenForCurrentShoppingListItems();
-    }
+  componentDidUpdate() {
   }
 
   componentWillUnmount() {
+    this.unregisterAllListeners();
+  }
+
+  unregisterAllListeners() {
     this.unsubscribeLists && this.unsubscribeLists();
     this.unsubscribeItems && this.unsubscribeItems();
     this.unsubscribeDependentNeedsLists && this.unsubscribeDependentNeedsLists();
@@ -232,33 +232,33 @@ class Shopping extends Component {
   //   );
   // };
 
-  
-render() {
-  const { shoppingStore, sessionStore } = this.props;
-  const { listsLoading, itemsLoading } = this.state;
-  const {
-    // shoppingListsArray: shoppingLists,
-    currentShoppingList,
-    currentShoppingListItemsArray: currentShoppingListItems,
-    currentDependentNeedsListsArray: currentDependentNeedsLists
-  } = shoppingStore;
 
-  return (
+  render() {
+    const { shoppingStore, sessionStore } = this.props;
+    const { listsLoading, itemsLoading } = this.state;
+    const {
+      // shoppingListsArray: shoppingLists,
+      currentShoppingList,
+      currentShoppingListItemsArray: currentShoppingListItems,
+      currentDependentNeedsListsArray: currentDependentNeedsLists
+    } = shoppingStore;
 
-    // visualize the current shopping list
-    !(listsLoading || itemsLoading) && currentShoppingList &&
-    <ShoppingList
-      authUser={sessionStore.authUser}
-      list={currentShoppingList}
-      items={currentShoppingListItems}
-      dependentNeedLists={currentDependentNeedsLists}
-      onEdit={this.onEditShoppingList}
-      onCreateItem={this.onCreateItemForCurrentShoppingList}
-      onEditItem={this.onEditShoppingItem}
-      onRemoveItem={this.onRemoveShoppingItem}
-    />
-  );
-}
+    return (
+
+      // visualize the current shopping list
+      !(listsLoading || itemsLoading) && currentShoppingList &&
+      <ShoppingList
+        authUser={sessionStore.authUser}
+        list={currentShoppingList}
+        items={currentShoppingListItems}
+        dependentNeedLists={currentDependentNeedsLists}
+        onEdit={this.onEditShoppingList}
+        onCreateItem={this.onCreateItemForCurrentShoppingList}
+        onEditItem={this.onEditShoppingItem}
+        onRemoveItem={this.onRemoveShoppingItem}
+      />
+    );
+  }
 }
 
 export default compose(

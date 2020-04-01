@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
   IonApp,
 } from '@ionic/react';
@@ -26,14 +26,47 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import '../../../theme/variables.css';
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
+// const App: React.FC = () => (
+//   <IonApp>
+//     <IonReactRouter>
 
-        <Navigation />
+//         <Navigation />
 
-    </IonReactRouter>
-  </IonApp>
-);
+//     </IonReactRouter>
+//   </IonApp>
+// );
+
+class App extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      authenticated: false
+    }
+  }
+
+  componentDidMount() {
+    if (!this.handlerRegistered) {
+      this.handlerRegistered = this.props.registerAuthListener((authUser) => {
+        this.setState({
+          authenticated: !!authUser
+        })
+      })
+    }
+  }
+
+  render() {
+    return (
+      <IonApp>
+        <IonReactRouter>
+
+        {this.state.authenticated && <Navigation />}
+
+        </IonReactRouter>
+      </IonApp>
+    );
+  }
+}
+
 
 export default withAuthentication(App);
