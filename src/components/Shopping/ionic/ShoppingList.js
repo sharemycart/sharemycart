@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Item from '../../Item/ionic/Item';
 import EditItem from '../../Item/ionic/EditItem';
 import { IonList } from '@ionic/react';
+import { ITEM_TYPE_SHOPPING } from '../../../constants/items';
 
 class ShoppingList extends Component {
   constructor(props) {
@@ -53,9 +54,8 @@ class ShoppingList extends Component {
       list,
       items,
       dependentNeedLists,
-      onEdit,
       onEditItem,
-      onRemoveItem
+      onDeleteItem
     } = this.props;
     
     const { editMode, editName, newItem } = this.state;
@@ -74,8 +74,8 @@ class ShoppingList extends Component {
             item={item}
             ownList={true}
             onUpdateItem={onEditItem}
-            onDeleteItem={onRemoveItem}
-            mode={'shopping'}
+            onDeleteItem={onDeleteItem}
+            mode={ITEM_TYPE_SHOPPING}
           />))}
         </IonList>
       </>

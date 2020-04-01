@@ -21,10 +21,8 @@ class Shopping extends Component {
     super(props);
 
     this.state = {
-      editingListName: '',
       listsLoading: false,
       itemsLoading: false,
-      // limit: 50,
     };
   }
 

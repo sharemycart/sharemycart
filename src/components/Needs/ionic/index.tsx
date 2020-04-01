@@ -1,9 +1,9 @@
 import React from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import SimpleUI from '../simple-ui';
+import Needs from './Needs';
 import './page.css';
 
-const Needs: React.FC = () => {
+const NeedsPage: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
@@ -17,10 +17,10 @@ const Needs: React.FC = () => {
             <IonTitle size="large">Needs</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <SimpleUI />
+        <Needs />
       </IonContent>
     </IonPage>
   );
 };
 
-export default Needs;
+export default NeedsPage;

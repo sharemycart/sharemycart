@@ -35,10 +35,10 @@ class Shopping extends ShoppingModel {
         list={currentShoppingList}
         items={currentShoppingListItems}
         dependentNeedLists={currentDependentNeedsLists}
-        onEdit={this.onEditShoppingList}
+        onEditItem={this.onEditShoppingList}
         onCreateItem={this.onCreateItemForCurrentShoppingList}
         onEditItem={this.onEditShoppingItem}
-        onRemoveItem={this.onRemoveShoppingItem}
+        onDeleteItem={this.onRemoveShoppingItem}
       />
     );
   }
