@@ -6,14 +6,27 @@ import ShoppingList from './ShoppingList';
 import Shopping from './Shopping';
 import { withEmailVerification, withAuthorization } from '../../Session';
 import { compose } from 'recompose';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/react';
 
-const ShoppingPage = () => (
-    <Switch>
-      <Route exact path={ROUTES.SHOPPING_LIST} component={ShoppingList} />
-      <Route exact path={ROUTES.SHOPPING} component={Shopping} />
-      <Route exact path={ROUTES.LANDING} component={Shopping} />
-    </Switch>
-);
+const ShoppingPage = () => {
+  return (
+    <IonPage>
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle>Shopping</IonTitle>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent>
+        <IonHeader collapse="condense">
+          <IonToolbar>
+            <IonTitle size="large">Shopping</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <Shopping />
+      </IonContent>
+    </IonPage>
+  );
+};
 
 const condition = authUser => !!authUser;
 

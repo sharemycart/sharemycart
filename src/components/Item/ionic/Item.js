@@ -69,4 +69,4 @@ class Item extends Component {
   }
 }
 
-export default withRouter(inject('store')(observer(Item)))
+export default Item

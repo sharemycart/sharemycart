@@ -1,9 +1,15 @@
 import React from 'react';
+import { Switch, Route } from 'react-router-dom';
+
+import Shopping from './Shopping';
+import { withEmailVerification, withAuthorization } from '../../Session';
+import { compose } from 'recompose';
+
+
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import SimpleUI from '../simple-ui';
 import './page.css';
 
-const Shopping: React.FC = () => {
+const ShoppingPage: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
@@ -17,10 +23,16 @@ const Shopping: React.FC = () => {
             <IonTitle size="large">Shopping</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <SimpleUI />
+        <Shopping />
       </IonContent>
     </IonPage>
   );
 };
 
-export default Shopping;
+
+const condition = (authUser: any) => !!authUser;
+
+export default compose(
+  withEmailVerification,
+  withAuthorization(condition),
+)(ShoppingPage);
