@@ -1,38 +1,46 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
 
+import ShoppingModel from '../../../models/Shopping'
 import Shopping from './Shopping';
-import { withEmailVerification, withAuthorization } from '../../Session';
 import { compose } from 'recompose';
-
 
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import './page.css';
+import { withFirebase } from '../../Firebase';
+import { inject, observer } from 'mobx-react';
 
-const ShoppingPage: React.FC = () => {
-  return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Shopping</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent>
-        <IonHeader collapse="condense">
+class ShoppingPage extends ShoppingModel {
+
+  render() {
+    return (
+      <IonPage>
+        <IonHeader>
           <IonToolbar>
-            <IonTitle size="large">Shopping</IonTitle>
+            <IonTitle>Shopping</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <Shopping />
-      </IonContent>
-    </IonPage>
-  );
+        <IonContent>
+          <IonHeader collapse="condense">
+            <IonToolbar>
+              <IonTitle size="large">Shopping</IonTitle>
+            </IonToolbar>
+          </IonHeader>
+
+          <Shopping
+            model={this}
+          />
+
+        </IonContent>
+      </IonPage>
+    );
+  }
 };
 
 
 const condition = (authUser: any) => !!authUser;
 
 export default compose(
-  withEmailVerification,
-  withAuthorization(condition),
+  withFirebase,
+  inject('shoppingStore', 'sessionStore'),
+  observer,
 )(ShoppingPage);

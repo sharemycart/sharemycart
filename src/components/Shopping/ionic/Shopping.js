@@ -1,24 +1,20 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { compose } from 'recompose';
 
-import { withFirebase } from '../../Firebase';
 import ShoppingList from './ShoppingList';
-import ShoppingModel from '../../../models/Shopping';
 
-class Shopping extends ShoppingModel {
+class Shopping extends Component {
   constructor(props) {
     super(props);
 
-    this.state = Object.assign(this.state,
-      {
-        editingListName: '',
-      });
+    this.state = {
+      editingListName: '',
+    };
   }
 
   render() {
     const { shoppingStore, sessionStore } = this.props;
-    const { listsLoading, itemsLoading } = this.state;
     const {
       // shoppingListsArray: shoppingLists,
       currentShoppingList,
@@ -29,22 +25,21 @@ class Shopping extends ShoppingModel {
     return (
 
       // visualize the current shopping list
-      !(listsLoading || itemsLoading) && currentShoppingList &&
+      currentShoppingList &&
       <ShoppingList
         authUser={sessionStore.authUser}
         list={currentShoppingList}
         items={currentShoppingListItems}
         dependentNeedLists={currentDependentNeedsLists}
-        onCreateItem={this.onCreateItemForCurrentShoppingList}
-        onEditItem={this.onEditShoppingItem}
-        onDeleteItem={this.onRemoveShoppingItem}
+        onCreateItem={this.props.model.onCreateItemForCurrentShoppingList}
+        onEditItem={this.props.model.onEditShoppingItem}
+        onDeleteItem={this.props.model.onRemoveShoppingItem}
       />
     );
   }
 }
 
 export default compose(
-  withFirebase,
   inject('shoppingStore', 'sessionStore'),
   observer,
 )(Shopping);

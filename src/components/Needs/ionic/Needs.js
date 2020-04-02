@@ -1,24 +1,19 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { compose } from 'recompose';
-
-import { withFirebase } from '../../Firebase';
-
-import NeedsModel from '../../../models/Needs';
 import NeedsList from './NeedsList';
 import { ITEM_TYPE_NEED, ITEM_TYPE_POTENTIAL_NEED } from '../../../constants/items';
-class Needs extends NeedsModel {
+class Needs extends Component {
   constructor(props) {
     super(props);
 
-    this.state = Object.assign(this.state, {
+    this.state = {
       editingListName: '',
-    });
+    }
   }
 
   render() {
     const { needsStore, sessionStore } = this.props;
-    const { editingListName, listsLoading, itemsLoading } = this.state;
     const {
       currentNeedsList,
       potentiallyNeededItemsArray: potentiallyNeededItems,
@@ -28,29 +23,29 @@ class Needs extends NeedsModel {
 
     return (
       <>
-      {/* Needs */}
-        {!(listsLoading || itemsLoading) && currentNeedsList &&
+        {/* Needs */}
+        {currentNeedsList &&
           <NeedsList
             authUser={sessionStore.authUser}
             list={currentOriginShoppingList}
             items={currentNeedsListItems}
-            onCreateItem={this.onCreateItemForCurrentNeedsList}
-            onEditItem={this.onEditNeededItem}
-            onDeleteItem={this.onRemoveNeededItem}
+            onCreateItem={this.props.model.onCreateItemForCurrentNeedsList}
+            onEditItem={this.props.model.onEditNeededItem}
+            onDeleteItem={this.props.model.onRemoveNeededItem}
             ownList={true}
             mode={ITEM_TYPE_NEED}
           />
         }
 
         {/* Potentially needed */}
-        {!(listsLoading || itemsLoading) && currentOriginShoppingList &&
+        {currentOriginShoppingList &&
           <NeedsList
             authUser={sessionStore.authUser}
             list={currentOriginShoppingList}
             items={potentiallyNeededItems}
-            onCreateItem={this.onCreateItemForCurrentNeedsList}
-            onEditItem={this.onEditNeededItem}
-            onDeleteItem={this.onRemoveNeededItem}
+            onCreateItem={this.props.model.onCreateItemForCurrentNeedsList}
+            onEditItem={this.props.model.onEditNeededItem}
+            onDeleteItem={this.props.model.onRemoveNeededItem}
             ownList={false}
             mode={ITEM_TYPE_POTENTIAL_NEED}
           />
@@ -61,7 +56,6 @@ class Needs extends NeedsModel {
 }
 
 export default compose(
-  withFirebase,
   inject('needsStore', 'sessionStore'),
   observer,
 )(Needs);

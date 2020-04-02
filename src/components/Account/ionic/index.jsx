@@ -24,6 +24,8 @@ const AccountPage = ({ sessionStore }) => {
         <Profile />
         <IonFooter translucent style={
           {
+            // this would pin the footer to the bottom.
+            // Unfortunately, this seems not work be accepted in Safari
             // position: 'fixed',
             // left: '0',
             // bottom: '10px',

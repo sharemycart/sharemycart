@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 
 /**
  * This component represent the complete state of the needs section of the app.
