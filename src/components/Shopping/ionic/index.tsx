@@ -10,6 +10,12 @@ import { withFirebase } from '../../Firebase';
 import { inject, observer } from 'mobx-react';
 
 class ShoppingPage extends ShoppingModel {
+  
+  componentDidMount() {
+    super.componentDidMount();
+
+    this.ensureExistingCurrentShoppingList();
+  }
 
   render() {
     return (

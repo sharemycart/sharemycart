@@ -223,6 +223,13 @@ class Shopping extends Component {
       console.error('Cannot remove item from non-existing shoppingList');
     }
   };
+
+  ensureExistingCurrentShoppingList = async () =>{
+    const currentShoppingListSnapshot = await this.props.firebase.myCurrentShoppingList().get()
+    if(!currentShoppingListSnapshot.size){
+      return this.props.firebase.createShoppingList({name: ''})
+    }
+  }
 }
 
 export default Shopping;
