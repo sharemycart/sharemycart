@@ -71,7 +71,7 @@ class Needs extends NeedsModel {
           <NeededItems
             authUser={sessionStore.authUser}
             neededItems={potentiallyNeededItems}
-            originShoppingList={currentOriginShoppingList}
+            OriginShoppingList={currentOriginShoppingList}
             onEditNeededItem={this.onEditNeededItem}
             onRemoveNeededItem={this.onRemoveNeededItem}
             onCreateNeededItem={this.onCreateItemForCurrentNeedsList}

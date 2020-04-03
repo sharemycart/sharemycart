@@ -8,7 +8,7 @@ class NeedsInSharedShoppingList extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            shoppingListUid: null,
+            shoppingListId: null,
             sharedShoppingList: null,
             sharingUser: null,
             isValid: false,
@@ -19,16 +19,16 @@ class NeedsInSharedShoppingList extends Component {
     async componentDidMount() {
         const { location } = this.props;
         const { pathname } = location;
-        const shoppingListUid = pathname.replace('/share/', '')
+        const shoppingListId = pathname.replace('/share/', '')
 
-        const snapshot = await this.props.firebase.list(shoppingListUid).get()
+        const snapshot = await this.props.firebase.list(shoppingListId).get()
         const sharedShoppingList = snapshot.data();
         const sharingUser = sharedShoppingList
             ? (await this.props.firebase.user(sharedShoppingList.userId).get()).data()
             : null
 
         this.setState({
-            shoppingListUid,
+            shoppingListId,
             sharedShoppingList,
             sharingUser,
             isValid: snapshot.exists,
@@ -36,28 +36,28 @@ class NeedsInSharedShoppingList extends Component {
         })
     }
 
-    onCreateNeedsListForShoppingList(shoppingListUid, name) {
-        this.props.firebase.createNeedsListForShoppingList(shoppingListUid, name)
+    onCreateNeedsListForShoppingList(shoppingListId, name) {
+        this.props.firebase.createNeedsListForShoppingList(shoppingListId, name)
             .then(() => {
                 this.props.history.push(NEEDS)
             })
     }
 
     render() {
-        const { loading, shoppingListUid, sharingUser, isValid } = this.state;
+        const { loading, shoppingListId, sharingUser, isValid } = this.state;
 
         return (
             <div id='needs-in-shared-shopping-list'>
                 {loading && <div>Loading shared shopping list...</div>}
 
-                {!loading && !isValid && <div>The list with id {shoppingListUid} does not exist</div>}
+                {!loading && !isValid && <div>The list with id {shoppingListId} does not exist</div>}
 
-                {!loading && isValid && <div><div>you received shopping list {shoppingListUid} from {sharingUser.username}</div>
+                {!loading && isValid && <div><div>you received shopping list {shoppingListId} from {sharingUser.username}</div>
 
                     <span>
                         <button
                             type="button"
-                            onClick={() => this.onCreateNeedsListForShoppingList(shoppingListUid, sharingUser.username)}
+                            onClick={() => this.onCreateNeedsListForShoppingList(shoppingListId, sharingUser.username)}
                         >
                             Add to my needs
                         </button>

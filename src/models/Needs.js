@@ -65,17 +65,17 @@ class Needs extends Component {
       .orderBy('createdAt', 'desc')
       // .limit(this.state.limit)
       .onSnapshot(snapshot => {
-        let currentNeedsListUid = null;
-        let currentOriginShoppingListUid = null;
+        let currentNeedsListId = null;
+        let currentOriginShoppingListId = null;
 
         if (snapshot.size) {
           let needsLists = [];
           snapshot.forEach(doc => {
             const needsList = doc.data();
             needsLists.push({ ...needsList, uid: doc.id });
-            if (needsList.isCurrent && needsList.shoppingListUid) {
-              currentNeedsListUid = doc.id;
-              currentOriginShoppingListUid = needsList.shoppingListUid;
+            if (needsList.isCurrent && needsList.shoppingListId) {
+              currentNeedsListId = doc.id;
+              currentOriginShoppingListId = needsList.shoppingListId;
             }
           }
           );
@@ -91,7 +91,7 @@ class Needs extends Component {
 
         // react on item updates - this should actually be done implicitly, but it seems it isn't
         this.unsubscribeItems && this.unsubscribeItems();
-        currentNeedsListUid && this.onListenForCurrentNeedsListItems(currentNeedsListUid)
+        currentNeedsListId && this.onListenForCurrentNeedsListItems(currentNeedsListId)
 
         //* react on changes of the origin shopping list
         //  remove obsolete listeners first (if exist)
@@ -99,8 +99,8 @@ class Needs extends Component {
         this.unsubscribeOriginShoppingListItems && this.unsubscribeOriginShoppingListItems()
 
         // register for changes in the origin shopping list
-        if (currentOriginShoppingListUid) {
-          this.unsubscribeOriginShoppingList = this.onListenForOriginShoppingList(currentOriginShoppingListUid)
+        if (currentOriginShoppingListId) {
+          this.unsubscribeOriginShoppingList = this.onListenForOriginShoppingList(currentOriginShoppingListId)
         } else {
           this.clearOriginShoppingListInStore()
         }
@@ -148,19 +148,19 @@ class Needs extends Component {
       });
   }
 
-  onListenForOriginShoppingListItems = (originListUid) => {
+  onListenForOriginShoppingListItems = (originListId) => {
     this.unsubscribeOriginShoppingListItems = this.props.firebase
-      .listItems(originListUid)
+      .listItems(originListId)
       // .orderBy('createdAt', 'desc')
       // .limit(this.state.limit)
       .onSnapshot(snapshot => {
         if (snapshot.size) {
-          let originShoppingListItems = [];
+          let OriginShoppingListItems = [];
           snapshot.forEach(doc =>
-            originShoppingListItems.push({ ...doc.data(), uid: doc.id }),
+            OriginShoppingListItems.push({ ...doc.data(), uid: doc.id }),
           );
 
-          this.props.needsStore.setCurrentOriginShoppingListItems(originShoppingListItems);
+          this.props.needsStore.setCurrentOriginShoppingListItems(OriginShoppingListItems);
 
         } else {
           this.props.needsStore.setCurrentOriginShoppingListItems([]);

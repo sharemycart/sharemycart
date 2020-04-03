@@ -30,8 +30,8 @@ class ShoppingStore {
     this.currentDependentNeedsLists = toObject(lists);
   }
 
-  @action setDependentNeedsListItems = (listUid, items) => {
-    this.currentDependentNeedsLists[listUid].items = items;
+  @action setDependentNeedsListItems = (listId, items) => {
+    this.currentDependentNeedsLists[listId].items = items;
   }
 
   @computed get shoppingListsArray() {

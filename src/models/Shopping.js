@@ -69,14 +69,14 @@ class Shopping extends Component {
       .orderBy('createdAt', 'desc')
       // .limit(this.state.limit)
       .onSnapshot(snapshot => {
-        let currentShoppingListUid = null;
+        let currentshoppingListId = null;
         if (snapshot.size) {
           let shoppingLists = [];
           snapshot.forEach(doc => {
             const shoppingList = doc.data();
             shoppingLists.push({ ...shoppingList, uid: doc.id })
             if (shoppingList.isCurrent) {
-              currentShoppingListUid = doc.id;
+              currentshoppingListId = doc.id;
             }
           });
 
@@ -91,19 +91,19 @@ class Shopping extends Component {
 
         // register for item updates - this should actually be done implicitly, but it seems it isn't
         this.unsubscribeItems && this.unsubscribeItems();
-        this.onListenForCurrentShoppingListItems(currentShoppingListUid)
+        this.onListenForCurrentShoppingListItems(currentshoppingListId)
 
         // register for dependent needs list items
         this.unsubscribeDependentNeedsLists && this.unsubscribeDependentNeedsLists()
         this.unsubscribeAllDependentNeedsListItems()
-        this.onListenForDependentNeedsLists(currentShoppingListUid)
+        this.onListenForDependentNeedsLists(currentshoppingListId)
 
       });
   }
 
-  onListenForCurrentShoppingListItems = (currentShoppingListUid) => {
+  onListenForCurrentShoppingListItems = (currentshoppingListId) => {
     this.unsubscribeItems = this.props.firebase
-      .listItems(currentShoppingListUid)
+      .listItems(currentshoppingListId)
       // .orderBy('createdAt', 'desc')
       // .limit(this.state.limit)
       .onSnapshot(snapshot => {
@@ -124,9 +124,9 @@ class Shopping extends Component {
       });
   };
 
-  onListenForDependentNeedsLists = (originShoppingListUid) => {
+  onListenForDependentNeedsLists = (originshoppingListId) => {
     this.unsubscribeDependentNeedsLists = this.props.firebase
-      .dependentNeedsListOfShoppingList(originShoppingListUid)
+      .dependentNeedsListOfShoppingList(originshoppingListId)
       .onSnapshot(snapshot => {
         // remove observers for the lists items, they are going to be re-built for each needs list
         this.unsubscribeAllDependentNeedsListItems();
@@ -156,10 +156,10 @@ class Shopping extends Component {
       && this.unsubscribeDependentNeedsListsItems.forEach(handler => handler());
   }
 
-  onListenForDependentNeedsListsItems = (needsListUid) => {
+  onListenForDependentNeedsListsItems = (needsListId) => {
     this.unsubscribeDependentNeedsListsItems.push(
       this.props.firebase
-        .listItems(needsListUid)
+        .listItems(needsListId)
         // .orderBy('createdAt', 'desc')
         // .limit(this.state.limit)
         .onSnapshot(snapshot => {
@@ -167,7 +167,7 @@ class Shopping extends Component {
           snapshot.forEach(doc =>
             dependentNeedsListsItems.push({ ...doc.data(), uid: doc.id }),
           );
-          this.props.shoppingStore.setDependentNeedsListItems(needsListUid, dependentNeedsListsItems);
+          this.props.shoppingStore.setDependentNeedsListItems(needsListId, dependentNeedsListsItems);
         })
     );
   }

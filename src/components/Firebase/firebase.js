@@ -120,15 +120,15 @@ class Firebase {
       ? this.auth.currentUser.uid
       : INVALID_DUMMY_UID)
     .limit(1);
-  
-  createList = ({name}, type) => this.lists().add({
-      name,
-      type,
-      userId: this.auth.currentUser.uid,
-      isCurrent: true,
-      lifecycleStatus: LIFECYCLE_STATUS_OPEN,
-      createdAt: this.fieldValue.serverTimestamp(),
-    })
+
+  createList = ({ name }, type) => this.lists().add({
+    name,
+    type,
+    userId: this.auth.currentUser.uid,
+    isCurrent: true,
+    lifecycleStatus: LIFECYCLE_STATUS_OPEN,
+    createdAt: this.fieldValue.serverTimestamp(),
+  })
   editList = (uid, list) => this.list(uid)
     .set(Object.assign(list,
       {
@@ -158,27 +158,27 @@ class Firebase {
     }
   }
 
-  listItems = listUid => this.db.doc(`lists/${listUid}`)
+  listItems = listId => this.db.doc(`lists/${listId}`)
     .collection('items'); // don't use a nested path expression for the sub-collection!
 
-  listItem = (listUid, uid) => this.db.doc(`lists/${listUid}`)
+  listItem = (listId, uid) => this.db.doc(`lists/${listId}`)
     .collection('/items/')
     .doc(uid);
 
   // CRUD
-  createItem = (listUid, item) => this.listItems(listUid)
+  createItem = (listId, item) => this.listItems(listId)
     .add(Object.assign(item,
       {
         createdAt: this.fieldValue.serverTimestamp()
       }));
 
-  editItem = (listUid, item) => this.listItem(listUid, item.uid)
+  editItem = (listId, item) => this.listItem(listId, item.uid)
     .set(Object.assign(item,
       {
         editedAt: this.fieldValue.serverTimestamp()
       }));
 
-  deleteItem = (listUid, uid) => this.listItem(listUid, uid)
+  deleteItem = (listId, uid) => this.listItem(listId, uid)
     .delete()
 
   // *** Shopping API ***
@@ -202,7 +202,7 @@ class Firebase {
     const snapshot = await this.myCurrentShoppingList().get()
     snapshot.docs.forEach((s) => s.ref.update('isCurrent', false))
 
-    return this.createList({name}, LIST_TYPE_SHOPPING);
+    return this.createList({ name }, LIST_TYPE_SHOPPING);
   };
 
   // *** Needs API ***
@@ -220,7 +220,7 @@ class Firebase {
     const snapshot = await this.myCurrentNeedsList().get()
     snapshot.docs.forEach((s) => s.ref.update('isCurrent', false))
 
-    return this.createList({name}, LIST_TYPE_NEED)
+    return this.createList({ name }, LIST_TYPE_NEED)
   }
 
   myNeedsLists = () => this.lists()
@@ -229,34 +229,41 @@ class Firebase {
       : INVALID_DUMMY_UID)
     .where('type', '==', LIST_TYPE_NEED)
 
-  dependentNeedsListOfShoppingList = (shoppingListUid) => this.lists()
-    .where('shoppingListUid', '==', shoppingListUid)
+  dependentNeedsListOfShoppingList = (shoppingListId) => this.lists()
+    .where('shoppingListId', '==', shoppingListId)
 
-  createNeedsListForShoppingList = (shoppingListUid, name) => {
+  createNeedsListForShoppingList = (shoppingListId, name) => {
     this.myCurrentNeedsList().get()
       .then((snapshot) => {
         snapshot.docs.forEach((s) => s.ref.update('isCurrent', false))
       })
 
-    return this.myNeedsListsForShoppingList(shoppingListUid)
-      .then((existingNeedsList) => existingNeedsList
-        ? existingNeedsList.update('isCurrent', true)
-        : this.lists()
-          .add({
-            type: LIST_TYPE_NEED,
-            shoppingListUid,
-            isCurrent: true,
-            name,
-            userId: this.auth.currentUser.uid,
-            createdAt: this.fieldValue.serverTimestamp()
-          })
-      )
+    return this.list(shoppingListId)
+      .get()
+      .then(snapshot => snapshot.data())
+      .then((shoppingList) => {
+        this
+          .myNeedsListsForShoppingList(shoppingListId)
+          .then((existingNeedsList) => existingNeedsList
+            ? existingNeedsList.update('isCurrent', true)
+            : this.lists()
+              .add({
+                type: LIST_TYPE_NEED,
+                shoppingListId,
+                shoppingListOwnerId: shoppingList.userId,
+                isCurrent: true,
+                name,
+                userId: this.auth.currentUser.uid,
+                createdAt: this.fieldValue.serverTimestamp()
+              })
+          )
+      })
   }
 
-  myNeedsListsForShoppingList = async shoppingListUid => {
+  myNeedsListsForShoppingList = async shoppingListId => {
     let needsListsRef = null
     const q = this.myNeedsLists()
-      .where('shoppingListUid', '==', shoppingListUid)
+      .where('shoppingListId', '==', shoppingListId)
       .limit(1)
 
     const needsListsSnapshots = await q.get()
@@ -265,15 +272,15 @@ class Firebase {
     return needsListsRef;
   }
 
-  addNeededItemFromShoppingListItem = (needsListUid, shoppingListItem) => {
+  addNeededItemFromShoppingListItem = (needsListId, shoppingListItem) => {
     const neededItem = shoppingListItem;
 
-    neededItem.originShoppingItemUid = shoppingListItem.uid;
+    neededItem.OriginShoppingItemUid = shoppingListItem.uid;
     neededItem.quantity = 0;
     delete neededItem.createdAt;
     delete neededItem.editedAt;
     //TODO: prevent creation of duplicate needs
-    return this.createItem(needsListUid, neededItem)
+    return this.createItem(needsListId, neededItem)
   }
 }
 

@@ -5,7 +5,7 @@ import NeededItem from './NeededItem';
 const NeededItems = ({
   authUser,
   neededItems,
-  originShoppingList,
+  OriginShoppingList,
   onEditNeededItem,
   onRemoveNeededItem,
   onCreateNeededItem,
@@ -18,14 +18,14 @@ const NeededItems = ({
             authUser={authUser}
             key={item.uid}
             neededItem={item}
-            originShoppingList={originShoppingList}
+            OriginShoppingList={OriginShoppingList}
             onEditNeededItem={onEditNeededItem}
             onRemoveNeededItem={onRemoveNeededItem}
             onAddFromShoppingListItem={onAddFromShoppingListItem}
           />
         ))}
       </ul>
-      {originShoppingList && <form
+      {OriginShoppingList && <form
         onSubmit={event => {
           event.preventDefault();
           const item = {

@@ -30,7 +30,7 @@ class NeededItem extends Component {
   };
 
   render() {
-    const { authUser, neededItem, onRemoveNeededItem, originShoppingList, onAddFromShoppingListItem } = this.props;
+    const { authUser, neededItem, onRemoveNeededItem, OriginShoppingList, onAddFromShoppingListItem } = this.props;
     const { editMode, editText } = this.state;
 
     return (
@@ -52,7 +52,7 @@ class NeededItem extends Component {
           <span>
             {
               (() => {
-                if (originShoppingList)
+                if (OriginShoppingList)
                   return (<button onClick={()=>{onAddFromShoppingListItem(neededItem)}}>Add</button>)
                 if (editMode)
                   return (<span>
