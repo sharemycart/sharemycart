@@ -7,15 +7,27 @@ import Needs from './Needs';
 import NeedsInSharedShoppingList from './NeedsInSharedShoppingList';
 import { withEmailVerification, withAuthorization } from '../../Session';
 import { compose } from 'recompose';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/react';
 
-const NeedsPage = () => (
-    <Switch>
-      <Route exact path={ROUTES.SHARED_SHOPPING_LIST} component={NeedsInSharedShoppingList} />
-      <Route exact path={ROUTES.NEEDS_LIST} component={NeedsList} />
-      <Route exact path={ROUTES.NEEDS} component={Needs} />
-    </Switch>
-);
-
+const NeedsPage = () => {
+  return (
+    <IonPage>
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle>Needs</IonTitle>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent>
+        <IonHeader collapse="condense">
+          <IonToolbar>
+            <IonTitle size="large">Shopping</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <Needs />
+      </IonContent>
+    </IonPage>
+  );
+};
 const condition = authUser => !!authUser;
 
 export default compose(

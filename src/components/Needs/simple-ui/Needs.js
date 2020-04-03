@@ -26,7 +26,7 @@ class Needs extends NeedsModel {
       currentOriginShoppingList,
     } = needsStore;
 
-    return (
+    return this.props.sessionStore.dbAuthenticated && (
       <div>
         <div id='needs-lists'>
           {listsLoading && <div>Loading needs lists...</div>}

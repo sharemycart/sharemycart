@@ -27,7 +27,7 @@ class Shopping extends ShoppingModel {
       currentDependentNeedsListsArray: currentDependentNeedsLists
     } = shoppingStore;
 
-    return (
+    return this.props.sessionStore.dbAuthenticated && (
       <div>
         <div id='shopping-lists'>
           {listsLoading && <div>Loading shopping lists...</div>}
