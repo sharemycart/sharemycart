@@ -25,7 +25,14 @@ class Needs extends Component {
     };
   }
 
+  _tryInitialization(){
+    if (this.props.sessionStore.dbAuthenticated && !this.unsubscribeLists) {
+      this.onListenForNeedsLists();
+    }
+  }
+  
   // React lifecycle methods
+
   componentDidMount() {
     if (!this.props.needsStore.needsListsArray.length) {
       this.setState({
@@ -33,11 +40,10 @@ class Needs extends Component {
         itemsLoading: true
       });
     }
-
-    this.onListenForNeedsLists();
   }
 
   componentDidUpdate() {
+    this._tryInitialization()
   }
 
   componentWillUnmount() {

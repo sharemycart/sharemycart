@@ -10,12 +10,6 @@ import { withFirebase } from '../../Firebase';
 import { inject, observer } from 'mobx-react';
 
 class ShoppingPage extends ShoppingModel {
-  
-  componentDidMount() {
-    super.componentDidMount();
-
-    this.ensureExistingCurrentShoppingList();
-  }
 
   render() {
     return (
@@ -32,9 +26,9 @@ class ShoppingPage extends ShoppingModel {
             </IonToolbar>
           </IonHeader>
 
-          <Shopping
-            model={this}
-          />
+          {this.props.sessionStore.dbAuthenticated &&
+            <Shopping model={this} />
+          }
 
         </IonContent>
       </IonPage>

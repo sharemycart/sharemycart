@@ -26,7 +26,16 @@ class Shopping extends Component {
     };
   }
 
+  _tryInitialization(){
+    if (this.props.sessionStore.dbAuthenticated && !this.unsubscribeLists) {
+      this.ensureExistingCurrentShoppingList()
+      this.onListenForShoppingLists();
+      this.onListenForCurrentShoppingListItems();
+    }
+  }
+
   // React lifecycle methods
+
   componentDidMount() {
     if (!this.props.shoppingStore.shoppingListsArray.length) {
       this.setState({
@@ -35,11 +44,11 @@ class Shopping extends Component {
       });
     }
 
-    this.onListenForShoppingLists();
-    this.onListenForCurrentShoppingListItems();
+    this._tryInitialization()
   }
 
   componentDidUpdate() {
+    this._tryInitialization()
   }
 
   componentWillUnmount() {
@@ -202,7 +211,7 @@ class Shopping extends Component {
       return this.props.firebase.createItem(currentShoppingList.uid, item)
     } else {
       console.error('Cannot create item for non-existing shoppingList');
-      return new Promise(()=>null)
+      return new Promise(() => null)
     }
   };
 
@@ -224,10 +233,10 @@ class Shopping extends Component {
     }
   };
 
-  ensureExistingCurrentShoppingList = async () =>{
+  ensureExistingCurrentShoppingList = async () => {
     const currentShoppingListSnapshot = await this.props.firebase.myCurrentShoppingList().get()
-    if(!currentShoppingListSnapshot.size){
-      return this.props.firebase.createShoppingList({name: ''})
+    if (!currentShoppingListSnapshot.size) {
+      return this.props.firebase.createShoppingList({ name: '' })
     }
   }
 }

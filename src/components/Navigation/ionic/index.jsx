@@ -21,31 +21,20 @@ import {
     IonTabButton,
     IonTabs
 } from '@ionic/react';
+import PrivateRoute from '../PrivateRoute';
+import NeedsInSharedShoppingList from '../../Needs/simple-ui/NeedsInSharedShoppingList';
 
-const Navigation = ({ sessionStore, dbAuthenticationCompleted }) => (
-    dbAuthenticationCompleted && sessionStore.authUser ? (
-        <NavigationAuth /*authUser={sessionStore.authUser}*/ />
-    ) : (
-            <NavigationNonAuth />
-        )
-)
-
-const NavigationAuth = (/*{ authUser }*/) => {
-
-    return (
-            <>
+const Navigation = () => (
+        <>
             <IonTabs>
                 <IonRouterOutlet>
                     <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
                     <Route path={ROUTES.SIGN_IN} component={SignInPage} />
-                    <Route
-                        path={ROUTES.PASSWORD_FORGET}
-                        component={PasswordForgetPage}
-                    />
+                    <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
                     <Route path={ROUTES.ACCOUNT} component={AccountPage} />
                     <Route path={ROUTES.SHOPPING} component={ShoppingPage} />
                     <Route path={ROUTES.NEEDS} component={NeedsPage} />
-                    <Route path={ROUTES.SHARED_SHOPPING_LIST} component={NeedsPage} />
+                    <Route path={ROUTES.SHARED_SHOPPING_LIST} component={NeedsInSharedShoppingList} />
                     <Route path={ROUTES.ADMIN} component={AdminPage} />
                     <Redirect exact from="/" to={ROUTES.SHOPPING} />
                 </IonRouterOutlet>
@@ -64,32 +53,22 @@ const NavigationAuth = (/*{ authUser }*/) => {
                     </IonTabButton>
                 </IonTabBar>
             </IonTabs>
-            <Redirect to='/'> </Redirect>
-            </>
+        </>
     )
-}
-
-const NavigationNonAuth = () => (
-    <IonTabs>
-        <IonRouterOutlet>
-            <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
-            <Route path={ROUTES.SIGN_IN} component={SignInPage} />
-            <Route
-                path={ROUTES.PASSWORD_FORGET}
-                component={PasswordForgetPage}
-            />
-            <Redirect exact from="/" to={ROUTES.SIGN_IN} />
-        </IonRouterOutlet>
-        <IonTabBar slot="bottom">
-            <IonTabButton tab="Sign in" href={ROUTES.SIGN_IN}>
-                {/* <IonIcon icon={triangle} /> */}
-                <IonLabel>Sign in</IonLabel>
-            </IonTabButton>
-        </IonTabBar>
-    </IonTabs>
-);
-
-export default compose(
-    inject('sessionStore'),
-    observer,
-)(Navigation);
+    export const NavigationNonAuth = () => (
+        <IonTabs>
+            <IonRouterOutlet>
+                <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
+                <Route path={ROUTES.SIGN_IN} component={SignInPage} />
+                <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
+                <Redirect from="/" to={ROUTES.SIGN_IN} />
+            </IonRouterOutlet>
+            <IonTabBar slot="bottom">
+                <IonTabButton tab="Sign in" href={ROUTES.SIGN_IN}>
+                    {/* <IonIcon icon={triangle} /> */}
+                    <IonLabel>Sign in</IonLabel>
+                </IonTabButton>
+            </IonTabBar>
+        </IonTabs>
+    );
+export default Navigation

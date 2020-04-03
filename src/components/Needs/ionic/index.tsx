@@ -23,10 +23,9 @@ class NeedsPage extends NeedsModel {
             </IonToolbar>
           </IonHeader>
 
-          <Needs
-            model={this}
-          />
-
+          {this.props.sessionStore.dbAuthenticated &&
+            <Needs model={this} />
+          }
         </IonContent>
       </IonPage>
     );

@@ -25,6 +25,8 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import '../../../theme/variables.css';
+import { compose } from 'recompose';
+import { inject } from 'mobx-react';
 
 // const App: React.FC = () => (
 //   <IonApp>
@@ -37,20 +39,11 @@ import '../../../theme/variables.css';
 // );
 
 class App extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      authenticated: false
-    }
-  }
 
   componentDidMount() {
     if (!this.handlerRegistered) {
       this.handlerRegistered = this.props.registerAuthListener((authUser) => {
-        this.setState({
-          authenticated: !!authUser
-        })
+        this.props.sessionStore.setDbAuthenticated(!!authUser)
       })
     }
   }
@@ -60,9 +53,7 @@ class App extends Component {
       <IonApp>
         <IonReactRouter>
 
-          <Navigation
-            dbAuthenticationCompleted={this.state.authenticated}
-          />
+          <Navigation />
 
         </IonReactRouter>
       </IonApp>
@@ -71,4 +62,7 @@ class App extends Component {
 }
 
 
-export default withAuthentication(App);
+export default compose(
+  withAuthentication,
+  inject('sessionStore')
+) (App);
