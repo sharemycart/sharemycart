@@ -23,8 +23,8 @@ A fist website (in German) is online at [sharemycart.com](http://www.sharemycart
 ## How to contribute
 
 So you really would like to join? Awesome!
-Have a look at the [issues](https://github.com/mrsimpson/sharemycart/issues), best start with the [epics](https://github.com/mrsimpson/sharemycart/issues?q=is%3Aopen+is%3Aissue+label%3Aepic).
-There is also an [issue board](https://github.com/mrsimpson/sharemycart/projects/1) outlining the next todos
+Have a look at the [issues](https://github.com/sharemycart/sharemycart/issues), best start with the [epics](https://github.com/mrsimpson/sharemycart/issues?q=is%3Aopen+is%3Aissue+label%3Aepic).
+There is also an [issue board](https://github.com/sharemycart/sharemycart/projects/1) outlining the next todos
 Then, you can get in tough with the very new team on [a channel on the open Rocket.Chat server](https://open.rocket.chat/channel/share-my-cart)
 
 ## Getting started as a developer
