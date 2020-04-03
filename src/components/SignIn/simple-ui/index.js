@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Redirect } from 'react-router-dom';
 import { compose } from 'recompose';
 
 import { SignUpLink } from '../../SignUp/simple-ui';
 import { PasswordForgetLink } from '../../PasswordForget/simple-ui';
 import { withFirebase } from '../../Firebase';
-import * as ROUTES from '../../../constants/routes';
+import { SHOPPING } from '../../../constants/routes';
 
 const SignInPage = () => (
   <div>
@@ -35,10 +35,24 @@ const ERROR_MSG_ACCOUNT_EXISTS = `
   your personal account page.
 `;
 
+// this function defers the navigation to the referrer or to another site
+// after signing in.
+// this is necessary since if not deferred, the session's authUser may not be 
+// available in the cache.
+// It's a hack since there's no option / hook into the event which it can be hooked into
+// probably, a MobX reaction in the session store could provide a hook.
+const navigateIfRequested = function() {
+  const { from } = this.props.location.state || { from: { pathname: '/' } };
+  const { redirectToReferrer } = this.state;
+  const { history } = this.props;
+  if (redirectToReferrer === true) {
+    setTimeout(() => history.push((from && from.pathname) || SHOPPING), 500);
+  }
+}
+
 class SignInFormBase extends Component {
   constructor(props) {
     super(props);
-
     this.state = { ...INITIAL_STATE };
   }
 
@@ -48,8 +62,10 @@ class SignInFormBase extends Component {
     this.props.firebase
       .doSignInWithEmailAndPassword(email, password)
       .then(() => {
-        this.setState({ ...INITIAL_STATE });
-        this.props.history.push('/');
+        this.setState({
+          redirectToReferrer: true
+          , ...INITIAL_STATE
+        });
       })
       .catch(error => {
         this.setState({ error });
@@ -66,6 +82,8 @@ class SignInFormBase extends Component {
     const { email, password, error } = this.state;
 
     const isInvalid = password === '' || email === '';
+
+    navigateIfRequested.call(this);
 
     return (
       <form onSubmit={this.onSubmit}>
@@ -114,8 +132,10 @@ class SignInGoogleBase extends Component {
         );
       })
       .then(() => {
-        this.setState({ error: null });
-        this.props.history.push('/');
+        this.setState({
+          redirectToReferrer: true
+          , error: null
+        });
       })
       .catch(error => {
         if (error.code === ERROR_CODE_ACCOUNT_EXISTS) {
@@ -130,6 +150,8 @@ class SignInGoogleBase extends Component {
 
   render() {
     const { error } = this.state;
+
+    navigateIfRequested.call(this);
 
     return (
       <form onSubmit={this.onSubmit}>
@@ -162,8 +184,10 @@ class SignInFacebookBase extends Component {
         );
       })
       .then(() => {
-        this.setState({ error: null });
-        this.props.history.push('/');
+        this.setState({
+          redirectToReferrer: true,
+          error: null
+        });
       })
       .catch(error => {
         if (error.code === ERROR_CODE_ACCOUNT_EXISTS) {
@@ -178,6 +202,8 @@ class SignInFacebookBase extends Component {
 
   render() {
     const { error } = this.state;
+
+    navigateIfRequested.call(this);
 
     return (
       <form onSubmit={this.onSubmit}>
@@ -210,8 +236,10 @@ class SignInTwitterBase extends Component {
         );
       })
       .then(() => {
-        this.setState({ error: null });
-        this.props.history.push('/');
+        this.setState({
+          redirectToReferrer: true,
+          error: null
+        });
       })
       .catch(error => {
         if (error.code === ERROR_CODE_ACCOUNT_EXISTS) {
@@ -226,6 +254,8 @@ class SignInTwitterBase extends Component {
 
   render() {
     const { error } = this.state;
+
+    navigateIfRequested.call(this);
 
     return (
       <form onSubmit={this.onSubmit}>
