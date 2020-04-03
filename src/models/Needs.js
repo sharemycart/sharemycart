@@ -40,6 +40,7 @@ class Needs extends Component {
         itemsLoading: true
       });
     }
+    this._tryInitialization()
   }
 
   componentDidUpdate() {
