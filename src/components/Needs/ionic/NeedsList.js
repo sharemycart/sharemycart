@@ -38,7 +38,6 @@ class NeedsList extends Component {
       onEditItem,
       onDeleteItem
     } = this.props;
-    const { editMode, editText } = this.state;
 
     return (
       <IonList>

@@ -1,5 +1,4 @@
 import { observable, action } from 'mobx';
-import { withFirebase } from '../components/Firebase';
 
 class SessionStore {
   @observable authUser = null;

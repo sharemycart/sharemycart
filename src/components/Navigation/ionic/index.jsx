@@ -1,9 +1,9 @@
 import React from 'react';
-import { Link, Route, Redirect } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { compose } from 'recompose';
 
-import { ellipse, square, triangle } from 'ionicons/icons';
+// import { ellipse, square, triangle } from 'ionicons/icons';
 import SignUpPage from '../../SignUp/simple-ui';
 import SignInPage from '../../SignIn/simple-ui';
 import PasswordForgetPage from '../../PasswordForget/simple-ui';
@@ -16,14 +16,13 @@ import { useLocation } from 'react-router-dom'
 
 import * as ROUTES from '../../../constants/routes';
 import {
-    IonIcon,
+    // IonIcon,
     IonLabel,
     IonRouterOutlet,
     IonTabBar,
     IonTabButton,
     IonTabs
 } from '@ionic/react';
-import PrivateRoute from '../PrivateRoute';
 import NeedsInSharedShoppingList from '../../Needs/simple-ui/NeedsInSharedShoppingList';
 
 export const NavigationAuth = ({ authUser }) => (

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { IonItem, IonButton, IonInput, IonList, IonSelect, IonSelectOption, IonLabel } from "@ionic/react";
+import { IonItem, IonButton, IonInput, IonSelect, IonSelectOption, IonLabel } from "@ionic/react";
 import { ITEM_TYPE_SHOPPING, ITEM_TYPE_NEED } from "../../../constants/items";
 
 const ENTER_KEY = 13;
