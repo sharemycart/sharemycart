@@ -41,35 +41,35 @@ jobs:
       - uses: TickX/var-to-dotenv@v1.1.1
         with:
           key: "REACT_APP_BACKEND_API_KEY"
-          value: ${{"}}${{secrets.STAGING_BACKEND_API_KEY}}${{"}}
+          value: ${{\"}}${{secrets.STAGING_BACKEND_API_KEY}}${{\"}}
       - uses: TickX/var-to-dotenv@v1.1.1
         with:
           key: "REACT_APP_BACKEND_AUTH_DOMAIN"
-          value: ${{"}}${{secrets.STAGING_BACKEND_PROJECT_ID}}${{'.firebaseapp.com'}}${{"}}
+          value: ${{\"}}${{secrets.STAGING_BACKEND_PROJECT_ID}}${{'.firebaseapp.com'}}${{\"}}
       - uses: TickX/var-to-dotenv@v1.1.1
         with:
           key: "REACT_APP_BACKEND_DATABASE_URL"
-          value: ${{"}}${{'https://'}}${{secrets.STAGING_BACKEND_PROJECT_ID}}${{'.firebaseio.com'}}${{"}}
+          value: ${{\"}}${{'https://'}}${{secrets.STAGING_BACKEND_PROJECT_ID}}${{'.firebaseio.com'}}${{\"}}
       - uses: TickX/var-to-dotenv@v1.1.1
         with:
           key: "REACT_APP_BACKEND_PROJECT_ID"
-          value: ${{"}}${{secrets.STAGING_BACKEND_PROJECT_ID}}${{"}}
+          value: ${{\"}}${{secrets.STAGING_BACKEND_PROJECT_ID}}${{\"}}
       - uses: TickX/var-to-dotenv@v1.1.1
         with:
           key: "REACT_APP_BACKEND_STORAGE_BUCKET"
-          value: ${{"}}${{secrets.STAGING_BACKEND_PROJECT_ID}}${{'.appspot.com'}}${{"}}
+          value: ${{\"}}${{secrets.STAGING_BACKEND_PROJECT_ID}}${{'.appspot.com'}}${{\"}}
       - uses: TickX/var-to-dotenv@v1.1.1
         with:
           key: "REACT_APP_BACKEND_MESSAGE_SENDER_ID"
-          value: ${{"}}${{secrets.STAGING_BACKEND_MESSAGE_SENDER_ID}}${{"}}
+          value: ${{\"}}${{secrets.STAGING_BACKEND_MESSAGE_SENDER_ID}}${{\"}}
       - uses: TickX/var-to-dotenv@v1.1.1
         with:
           key: "REACT_APP_BACKEND_SENDER_APP_ID"
-          value: ${{"}}${{secrets.STAGING_BACKEND_SENDER_APP_ID}}${{"}}
+          value: ${{\"}}${{secrets.STAGING_BACKEND_SENDER_APP_ID}}${{\"}}
       - uses: TickX/var-to-dotenv@v1.1.1
         with:
           key: "REACT_APP_BACKEND_MEASUREMENT_ID"
-          value: ${{"}}${{secrets.STAGING_BACKEND_MEASUREMENT_ID}}${{"}}
+          value: ${{\"}}${{secrets.STAGING_BACKEND_MEASUREMENT_ID}}${{\"}}
       - name: Upload env
         uses: actions/upload-artifact@v1.0.0
         with:
@@ -100,35 +100,35 @@ jobs:
       - uses: TickX/var-to-dotenv@v1.1.1
         with:
           key: "REACT_APP_BACKEND_API_KEY"
-          value: ${{"}}${{secrets.STAGING_BACKEND_API_KEY}}${{"}}
+          value: ${{\"}}${{secrets.STAGING_BACKEND_API_KEY}}${{\"}}
       - uses: TickX/var-to-dotenv@v1.1.1
         with:
           key: "REACT_APP_BACKEND_AUTH_DOMAIN"
-          value: ${{"}}${{secrets.STAGING_BACKEND_PROJECT_ID}}${{'.firebaseapp.com'}}${{"}}
+          value: ${{\"}}${{secrets.STAGING_BACKEND_PROJECT_ID}}${{'.firebaseapp.com'}}${{\"}}
       - uses: TickX/var-to-dotenv@v1.1.1
         with:
           key: "REACT_APP_BACKEND_DATABASE_URL"
-          value: ${{"}}${{'https://'}}${{secrets.STAGING_BACKEND_PROJECT_ID}}${{'.firebaseio.com'}}${{"}}
+          value: ${{\"}}${{'https://'}}${{secrets.STAGING_BACKEND_PROJECT_ID}}${{'.firebaseio.com'}}${{\"}}
       - uses: TickX/var-to-dotenv@v1.1.1
         with:
           key: "REACT_APP_BACKEND_PROJECT_ID"
-          value: ${{"}}${{secrets.STAGING_BACKEND_PROJECT_ID}}${{"}}
+          value: ${{\"}}${{secrets.STAGING_BACKEND_PROJECT_ID}}${{\"}}
       - uses: TickX/var-to-dotenv@v1.1.1
         with:
           key: "REACT_APP_BACKEND_STORAGE_BUCKET"
-          value: ${{"}}${{secrets.STAGING_BACKEND_PROJECT_ID}}${{'.appspot.com'}}${{"}}
+          value: ${{\"}}${{secrets.STAGING_BACKEND_PROJECT_ID}}${{'.appspot.com'}}${{\"}}
       - uses: TickX/var-to-dotenv@v1.1.1
         with:
           key: "REACT_APP_BACKEND_MESSAGE_SENDER_ID"
-          value: ${{"}}${{secrets.STAGING_BACKEND_MESSAGE_SENDER_ID}}${{"}}
+          value: ${{\"}}${{secrets.STAGING_BACKEND_MESSAGE_SENDER_ID}}${{\"}}
       - uses: TickX/var-to-dotenv@v1.1.1
         with:
           key: "REACT_APP_BACKEND_SENDER_APP_ID"
-          value: ${{"}}${{secrets.STAGING_BACKEND_SENDER_APP_ID}}${{"}}
+          value: ${{\"}}${{secrets.STAGING_BACKEND_SENDER_APP_ID}}${{\"}}
       - uses: TickX/var-to-dotenv@v1.1.1
         with:
           key: "REACT_APP_BACKEND_MEASUREMENT_ID"
-          value: ${{"}}${{secrets.STAGING_BACKEND_MEASUREMENT_ID}}${{"}}
+          value: ${{\"}}${{secrets.STAGING_BACKEND_MEASUREMENT_ID}}${{\"}}
 
       - name: Deploy to GitHub Pages
         uses: crazy-max/ghaction-github-pages@v1.3.0
