@@ -1,6 +1,7 @@
 {
-  "name": "react-mobx-firebase-authentication",
-  "version": "0.2.0",
+  "name": "share-my-cart",
+  "homepage": "https://app.sharemycart.com",
+  "version": "0.0.2",
   "private": true,
   "dependencies": {
     "@babel/core": "7.1.0",
