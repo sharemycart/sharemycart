@@ -72,7 +72,7 @@ jobs:
       - uses: TickX/var-to-dotenv@v1.1.1
         with:
           key: "REACT_APP_BACKEND_MESSAGE_SENDER_ID"
-          value: ${{secrets.SOME_API_URI}}
+          value: ${{secrets.STAGING_BACKEND_MESSAGE_SENDER_ID}}
       - uses: TickX/var-to-dotenv@v1.1.1
         with:
           key: "REACT_APP_BACKEND_SENDER_APP_ID"
