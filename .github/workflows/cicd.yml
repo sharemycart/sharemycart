@@ -74,9 +74,13 @@ jobs:
         uses: actions/upload-artifact@v1.0.0
         with:
           # Artifact name
-          name: Env-file
+          name: env
           # Directory containing files to upload
           path: .env
+      - uses: actions/download-artifact@v1
+        with:
+          name: env
+      - run: cat env
 
   deploy-staging:
     needs: [build]
