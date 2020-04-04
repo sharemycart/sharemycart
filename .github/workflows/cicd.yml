@@ -37,7 +37,7 @@ jobs:
   deploy-staging:
     needs: [build]
     env:
-      GITHUB_PAT: ${{ secrets. DEPLOYMENT_PAT }}
+      GITHUB_PAT: ${{ secrets.DEPLOYMENT_PAT }}
 
     runs-on: ubuntu-latest
     steps:
