@@ -11,7 +11,6 @@ class ShoppingList extends Component {
     this.state = {
       editMode: false,
       editName: this.props.list.name,
-      newItem: {},
     };
   }
 
@@ -36,17 +35,12 @@ class ShoppingList extends Component {
     this.setState({ newItem });
   }
 
-  onCreateComplete() {
-    let { newItem } = this.state;
-
+  onCreateComplete(newItem) {
     if (!newItem.name || !newItem.quantity) {
       return;
     }
 
     this.props.onCreateItem(newItem)
-      .then(() => {
-        this.setState({ newItem: {} });
-      });
   }
 
   render() {
@@ -56,14 +50,11 @@ class ShoppingList extends Component {
       onDeleteItem
     } = this.props;
 
-    const { newItem } = this.state;
-
     return (
       <>
         <IonList>
           <IonItem>
-            <EditItem item={newItem}
-              onChange={this.onChangeNewItem.bind(this)}
+            <EditItem
               onEditingConcluded={this.onCreateComplete.bind(this)}
               mode={ITEM_TYPE_SHOPPING}
             />
