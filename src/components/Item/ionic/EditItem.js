@@ -7,29 +7,39 @@ const ENTER_KEY = 13;
 class EditItem extends Component {
   constructor(props) {
     super(props);
-    if (!props.item.unit) {
-      // don't default the unit, it might be a bit overengineered
-      // props.onChange({ ...this.props.item, unit: 'pc'})
+    this.state = {
+      item: Object.assign({
+        name: '',
+        quantity: 0,
+        unit: '',
+      }, props.item)
     }
   }
 
-  concludeEditing(item) {
-    this.props.onEditingConcluded(item)
+  concludeEditing() {
+    this.props.onEditingConcluded(this.state.item)
+    this.setState({
+      item: Object.assign({
+        name: '',
+        quantity: 0,
+        unit: '',
+      }, this.props.item)
+    })
   }
 
   onChange(event) {
     const property = event.currentTarget.name
     const value = event.currentTarget.value
-    this.props.onChange({ ...this.props.item, [property]: value })
+    this.setState({item: { ...this.state.item, [property]: value }})
   }
 
   onKeyPress = (event) => {
-    event.which === ENTER_KEY && this.concludeEditing(this.props.item)
+    event.which === ENTER_KEY && this.concludeEditing()
   }
 
-  onBlur(event){
-    if(event.target.parentElement !== event.srcElement.parentElement){
-      this.concludeEditing(this.props.item)
+  onBlur(event) {
+    if (event.target.parentElement !== event.srcElement.parentElement) {
+      this.concludeEditing()
     }
   }
 
@@ -38,9 +48,11 @@ class EditItem extends Component {
   }
 
   render() {
+    const {item} = this.state;
+
     const unitOfMeasure = this.props.mode === ITEM_TYPE_SHOPPING
       ? <IonSelect
-        value={this.props.item.unit}
+        value={item.unit}
         required="true"
         onIonChange={e => this.setUnit(e.detail.value)}
       >
@@ -50,15 +62,15 @@ class EditItem extends Component {
         <IonSelectOption>l</IonSelectOption>
         <IonSelectOption>ml</IonSelectOption>
       </IonSelect>
-      : <IonLabel>{this.props.item.unit}</IonLabel>
+      : <IonLabel>{item.unit}</IonLabel>
 
     return (
-      <IonItem style={{width: "100%"}}>
+      <IonItem style={{ width: "100%" }}>
         <IonInput
-          autofocus={this.props.mode === ITEM_TYPE_SHOPPING}
+          autofocus={this.props.mode === ITEM_TYPE_SHOPPING && !item.name}
           placeholder="Item name"
           name="name"
-          value={this.props.item.name}
+          value={item.name}
           onIonInput={event => this.onKeyPress(event)}
           onIonChange={event => this.onChange(event)}
           onIonBlur={event => this.onBlur(event)}
@@ -66,20 +78,20 @@ class EditItem extends Component {
           required="true"
         />
         <IonInput
-          autofocus={this.props.mode === ITEM_TYPE_NEED}
+          autofocus={(this.props.mode === ITEM_TYPE_NEED) || (this.props.mode === ITEM_TYPE_SHOPPING && item.name)}
           placeholder="Quantity"
           name="quantity"
           type="number"
           min="0"
           pattern="\d+,?\d*"
-          value={this.props.item.quantity}
+          value={item.quantity}
           onKeyUp={this.onKeyPress}
           onIonChange={event => this.onChange(event)}
           onIonBlur={event => this.onBlur(event)}
           required="true"
         />
         {unitOfMeasure}
-        <IonButton onClick={() => this.concludeEditing(this.props.item)} style={{ 'marginLeft': '10px' }}>Add</IonButton>
+        <IonButton onClick={() => this.concludeEditing()} style={{ 'marginLeft': '10px' }}>Add</IonButton>
       </IonItem>
     )
   }

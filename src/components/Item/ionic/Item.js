@@ -51,10 +51,9 @@ class Item extends Component {
 
     const itemDisplay = this.state.inEdit ?
       <EditItem item={this.state.editingItem}
-        onChange={this.onChangeEditingItem.bind(this)}
-        onEditingConcluded={() => {
+        onEditingConcluded={(item) => {
           this.setEditMode(false)
-          this.props.onEditingConcluded(this.state.editingItem)
+          this.props.onEditingConcluded(item)
           }
         }
         mode={this.props.mode}
