@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { compose } from 'recompose';
 
-import { withFirebase } from '../../Firebase';
+import { withFirebase } from '../components/Firebase';
 
-class UserItem extends Component {
+class User extends Component {
   constructor(props) {
     super(props);
 
@@ -29,11 +29,14 @@ class UserItem extends Component {
         this.props.userStore.setUser(
           this.props.match.params.id,
           snapshot.data(),
+
         );
 
         this.setState({ loading: false });
       });
   }
+
+  render = () => (<span />)
 
   componentWillUnmount() {
     this.unsubscribe && this.unsubscribe();
@@ -44,46 +47,10 @@ class UserItem extends Component {
       this.props.userStore.users[this.props.match.params.id].email,
     );
   };
-
-  render() {
-    const user = (this.props.userStore.users || {})[
-      this.props.match.params.id
-    ];
-    const { loading } = this.state;
-
-    return (
-      <div>
-        <h2>User ({this.props.match.params.id})</h2>
-        {loading && <div>Loading ...</div>}
-
-        {user && (
-          <div>
-            <span>
-              <strong>ID:</strong> {user.uid}
-            </span>
-            <span>
-              <strong>E-Mail:</strong> {user.email}
-            </span>
-            <span>
-              <strong>Username:</strong> {user.username}
-            </span>
-            <span>
-              <button
-                type="button"
-                onClick={this.onSendPasswordResetEmail}
-              >
-                Send Password Reset
-              </button>
-            </span>
-          </div>
-        )}
-      </div>
-    );
-  }
 }
 
 export default compose(
   withFirebase,
   inject('userStore'),
   observer,
-)(UserItem);
+)(User);
