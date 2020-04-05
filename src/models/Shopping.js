@@ -26,7 +26,7 @@ class Shopping extends Component {
     };
   }
 
-  _tryInitialization(){
+  _tryInitialization() {
     if (this.props.sessionStore.dbAuthenticated && !this.unsubscribeLists) {
       this.ensureExistingCurrentShoppingList()
       this.onListenForShoppingLists();
@@ -69,14 +69,14 @@ class Shopping extends Component {
       .orderBy('createdAt', 'desc')
       // .limit(this.state.limit)
       .onSnapshot(snapshot => {
-        let currentshoppingListId = null;
+        let currentShoppingListId = null;
         if (snapshot.size) {
           let shoppingLists = [];
           snapshot.forEach(doc => {
             const shoppingList = doc.data();
             shoppingLists.push({ ...shoppingList, uid: doc.id })
             if (shoppingList.isCurrent) {
-              currentshoppingListId = doc.id;
+              currentShoppingListId = doc.id;
             }
           });
 
@@ -91,19 +91,19 @@ class Shopping extends Component {
 
         // register for item updates - this should actually be done implicitly, but it seems it isn't
         this.unsubscribeItems && this.unsubscribeItems();
-        this.onListenForCurrentShoppingListItems(currentshoppingListId)
+        this.onListenForCurrentShoppingListItems(currentShoppingListId)
 
         // register for dependent needs list items
         this.unsubscribeDependentNeedsLists && this.unsubscribeDependentNeedsLists()
         this.unsubscribeAllDependentNeedsListItems()
-        this.onListenForDependentNeedsLists(currentshoppingListId)
+        this.onListenForDependentNeedsLists(currentShoppingListId)
 
       });
   }
 
-  onListenForCurrentShoppingListItems = (currentshoppingListId) => {
+  onListenForCurrentShoppingListItems = (currentShoppingListId) => {
     this.unsubscribeItems = this.props.firebase
-      .listItems(currentshoppingListId)
+      .listItems(currentShoppingListId)
       // .orderBy('createdAt', 'desc')
       // .limit(this.state.limit)
       .onSnapshot(snapshot => {
@@ -202,6 +202,10 @@ class Shopping extends Component {
 
   onSetCurrentShoppingList = uid => {
     this.props.firebase.setCurrentShoppingList(uid);
+  }
+
+  onReorderItems = (listId, items, order) => {
+    items.forEach(item => this.props.firebase.setItemOrder(listId, item.uid, order[item.uid] || 0))
   }
 
   // event handlers for items

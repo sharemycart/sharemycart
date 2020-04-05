@@ -31,9 +31,11 @@ class Shopping extends Component {
         list={currentShoppingList}
         items={currentShoppingListItems}
         dependentNeedLists={currentDependentNeedsLists}
+        onEditList={this.props.model.onEditShoppingList}
         onCreateItem={this.props.model.onCreateItemForCurrentShoppingList}
         onEditItem={this.props.model.onEditShoppingItem}
         onDeleteItem={this.props.model.onRemoveShoppingItem}
+        onReorderItems={this.props.model.onReorderItems}
       />
     );
   }

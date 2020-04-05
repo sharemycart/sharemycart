@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Item from '../../Item/ionic/Item';
 import EditItem from '../../Item/ionic/EditItem';
-import { IonList, IonItem } from '@ionic/react';
+import { IonList, IonItem, IonReorderGroup, IonButton, IonToolbar, IonButtons, IonIcon, IonTitle } from '@ionic/react';
 import { ITEM_TYPE_SHOPPING } from '../../../constants/items';
 
 class ShoppingList extends Component {
@@ -26,7 +26,7 @@ class ShoppingList extends Component {
   };
 
   onSaveEditName = () => {
-    this.props.onEditShoppingList(this.props.list, this.state.editName);
+    this.props.onEditList(this.props.list, this.state.editName);
 
     this.setState({ editMode: false });
   };
@@ -43,6 +43,37 @@ class ShoppingList extends Component {
     this.props.onCreateItem(newItem)
   }
 
+  doReorder(event) {
+    // The `from` and `to` properties contain the index of the item
+    // when the drag started and ended, respectively
+    console.log('Dragged from index', event.detail.from, 'to', event.detail.to);
+
+    // Finish the reorder and position the item in the DOM based on
+    // where the gesture ended. This method can also be called directly
+    // by the reorder group
+    const {children} = event.srcElement
+    let order = {}
+    event.detail.complete();
+    let position = 0
+    for (let k in children) {
+      position++;
+      if (children.hasOwnProperty(k)) {
+        if (children[k].id) {
+          order[children[k].id] = position
+        }
+      }
+    }
+
+    this.setState({ order })
+  }
+
+  saveEdit() {
+    this.onSaveEditName()
+    if (this.state.order) {
+      this.props.onReorderItems(this.props.list.uid, this.props.items, this.state.order)
+    }
+  }
+
   render() {
     const {
       items,
@@ -50,8 +81,36 @@ class ShoppingList extends Component {
       onDeleteItem
     } = this.props;
 
+    const EditButton = () => (
+      !this.state.editMode && <IonButton color="danger" fill="clear"
+      onClick={() => this.setState({ editMode: true })}>
+      {'Edit'}
+      <IonIcon slot="end" name="create" />
+    </IonButton>
+    )
+
+    const SaveButton = () => (
+      this.state.editMode && <IonButton color="danger" fill="clear"
+      onClick={()=>this.saveEdit()}>
+      {'Save'}
+      <IonIcon slot="end" name="create" />
+    </IonButton>
+    )
+
     return (
       <>
+        <IonToolbar>
+          <IonButtons slot="secondary">
+            <IonButton fill="clear">
+              Go Shopping
+      </IonButton>
+          </IonButtons>
+          <IonTitle>{this.props.list.name}</IonTitle>
+          <IonButtons slot="primary">
+            <EditButton />
+            <SaveButton />
+          </IonButtons>
+        </IonToolbar>
         <IonList>
           <IonItem>
             <EditItem
@@ -61,15 +120,17 @@ class ShoppingList extends Component {
           </IonItem>
         </IonList>
         <IonList>
-          {items.map((item, key) => (
-            <Item
-              key={item.id || key}
-              item={item}
-              ownList={true}
-              onEditingConcluded={onEditItem}
-              onDeleteItem={onDeleteItem}
-              mode={ITEM_TYPE_SHOPPING}
-            />))}
+          <IonReorderGroup disabled={!this.state.editMode} onIonItemReorder={this.doReorder.bind(this)}>
+            {items.map((item, key) => (
+              <Item
+                key={item.id || key}
+                item={item}
+                ownList={true}
+                onEditingConcluded={onEditItem}
+                onDeleteItem={onDeleteItem}
+                mode={ITEM_TYPE_SHOPPING}
+              />))}
+          </IonReorderGroup>
         </IonList>
       </>
     );

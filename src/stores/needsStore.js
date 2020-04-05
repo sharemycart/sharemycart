@@ -44,7 +44,11 @@ class NeedsStore {
     return Object.keys(this.currentNeedsListItems || {}).map(key => ({
       ...this.currentNeedsListItems[key],
       uid: this.currentNeedsListItems[key].uid,
-    }));
+    }))
+    .sort((a, b)=>{
+      if(a.order && b.order) return a.order - b.order;
+      return a.createdAt - b.createdAt;
+    });
   }
 
   @computed get potentiallyNeededItemsArray() {
@@ -61,7 +65,11 @@ class NeedsStore {
         ...this.currentOriginShoppingListItems[key],
         uid: this.currentOriginShoppingListItems[key].uid,
       }))
-      .filter(item => !needsByName[item.name]);
+      .filter(item => !needsByName[item.name])
+      .sort((a, b)=>{
+        if(a.order && b.order) return a.order - b.order;
+        return a.createdAt - b.createdAt;
+      });
   }
 }
 

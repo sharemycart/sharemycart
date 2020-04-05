@@ -160,7 +160,7 @@ class Firebase {
   }
 
   listItems = listId => this.db.doc(`lists/${listId}`)
-    .collection('items'); // don't use a nested path expression for the sub-collection!
+    .collection('items');
 
   listItem = (listId, uid) => this.db.doc(`lists/${listId}`)
     .collection('/items/')
@@ -181,6 +181,9 @@ class Firebase {
 
   deleteItem = (listId, uid) => this.listItem(listId, uid)
     .delete()
+
+  setItemOrder = (listId, uid, order) => this.listItem(listId, uid)
+      .update('order', order)
 
   // *** Shopping API ***
   myCurrentShoppingList = () => this.myCurrentList(LIST_TYPE_SHOPPING);

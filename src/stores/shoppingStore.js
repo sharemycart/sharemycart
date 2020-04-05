@@ -45,7 +45,11 @@ class ShoppingStore {
     return Object.keys(this.currentShoppingListItems || {}).map(key => ({
       ...this.currentShoppingListItems[key],
       uid: this.currentShoppingListItems[key].uid,
-    }));
+    }))
+    .sort((a, b)=>{
+      if(a.order && b.order) return a.order - b.order;
+      return a.createdAt.seconds - b.createdAt.seconds;
+    })
   }
 
   @computed get currentDependentNeedsListsArray() {
