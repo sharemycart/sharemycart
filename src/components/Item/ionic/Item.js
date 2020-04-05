@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import { IonItem, IonLabel, IonButton, IonIcon, IonBadge } from "@ionic/react";
 import EditItem from './EditItem';
 import { trash, add } from 'ionicons/icons';
-import { ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_SHOPPING, ITEM_TYPE_NEED } from "../../../constants/items";
+import { ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_SHOPPING, ITEM_TYPE_NEED, ITEM_TYPE_POTENTIAL_NEED } from "../../../constants/items";
 
 class Item extends Component {
   constructor(props) {
     super(props);
-    this.state = { 
-      inEdit: !props.item.quantity ,
+    this.state = {
+      inEdit: !props.item.quantity,
     };
     this.mode = { mode: props.mode }
   }
@@ -18,17 +18,21 @@ class Item extends Component {
   }
 
   onItemClick() {
-    if (this.props.mode !== ITEM_TYPE_IN_SHOPPING) {
-      // this.props.onEditingConcluded(this.state.editingItem)
-      this.setEditMode(true)
-    } else {
-      this.props.onItemClicked()
+    switch (this.props.mode) {
+      case ITEM_TYPE_IN_SHOPPING:
+        this.props.onItemClicked()
+        break;
+      case ITEM_TYPE_POTENTIAL_NEED:
+        break;
+      default:
+        this.setEditMode(true)
+        break;
     }
   }
 
   render() {
     const needIcon = !this.props.ownList &&
-      <IonButton onClick={()=>this.props.onCreateNeed(this.props.item)} fill="add" size="large" slot="end" color="primary">
+      <IonButton onClick={() => this.props.onCreateNeed(this.props.item)} fill="add" size="large" slot="end" color="primary">
         <IonIcon icon={add} />
       </IonButton>
 
@@ -40,7 +44,7 @@ class Item extends Component {
     </IonBadge>
 
     const showDeleteButton = this.props.ownList && this.props.mode !== ITEM_TYPE_IN_SHOPPING
-    const deleteIcon = showDeleteButton && <IonButton className="button-end" fill="clear" size="large" slot="end" color="danger" onClick={()=>this.props.onDeleteItem(this.props.item.uid)}>
+    const deleteIcon = showDeleteButton && <IonButton className="button-end" fill="clear" size="large" slot="end" color="danger" onClick={() => this.props.onDeleteItem(this.props.item.uid)}>
       <IonIcon icon={trash} />
     </IonButton>
 
@@ -50,18 +54,18 @@ class Item extends Component {
         onEditingConcluded={(item) => {
           this.setEditMode(false)
           this.props.onEditingConcluded(item)
-          }
+        }
         }
         mode={this.props.mode}
       />
       :
       <>
         <IonLabel onClick={() => this.onItemClick()}
-                  style={{
-                    cursor: 'pointer',
-                    textDecoration: (this.props.item.checked ? 'line-through' : 'none'),
-                    color: (this.props.item.checked ? 'grey' : 'black')
-                  }}>
+          style={{
+            cursor: 'pointer',
+            textDecoration: (this.props.item.checked ? 'line-through' : 'none'),
+            color: (this.props.item.checked ? 'grey' : 'black')
+          }}>
           {this.props.item.name}
         </IonLabel>
         {quantityLabel}
