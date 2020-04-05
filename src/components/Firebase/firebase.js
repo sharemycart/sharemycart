@@ -17,8 +17,6 @@ const config = {
 
 class Firebase {
   constructor() {
-    console.log('Here come the firebase config')
-    console.log(JSON.stringify(config))
 
     app.initializeApp(config);
 
