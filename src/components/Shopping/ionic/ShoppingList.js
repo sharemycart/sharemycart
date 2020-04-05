@@ -51,15 +51,12 @@ class ShoppingList extends Component {
 
   render() {
     const {
-      authUser,
-      list,
       items,
-      dependentNeedLists,
       onEditItem,
       onDeleteItem
     } = this.props;
 
-    const { editMode, editName, newItem } = this.state;
+    const { newItem } = this.state;
 
     return (
       <>
