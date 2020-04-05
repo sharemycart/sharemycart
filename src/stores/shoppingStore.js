@@ -46,12 +46,13 @@ class ShoppingStore {
       ...this.currentShoppingListItems[key],
       uid: this.currentShoppingListItems[key].uid,
     }))
-    .sort((a, b)=>{
-      if(a.order && b.order) return a.order - b.order;
-      if(a.createdAt && b.createdAt) return b.createdAt.seconds - a.createdAt.seconds;
-      if(!a.createdAt) return -1
-      if(!b.createdAt) return 1
-    })
+      .sort((a, b) => {
+        if (a.order && b.order) return a.order - b.order;
+        if (a.createdAt && b.createdAt) return b.createdAt.seconds - a.createdAt.seconds;
+        if (!a.createdAt) return -1
+        if (!b.createdAt) return 1
+        return 0
+      })
   }
 
   @computed get currentDependentNeedsListsArray() {
