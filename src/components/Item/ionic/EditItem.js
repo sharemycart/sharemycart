@@ -10,10 +10,13 @@ class EditItem extends Component {
     this.state = {
       item: Object.assign({
         name: '',
-        quantity: 0,
+        quantity: '',
         unit: '',
       }, props.item)
     }
+
+    this.nameInput = React.createRef()
+    this.quantityInput = React.createRef()
   }
 
   concludeEditing() {
@@ -21,16 +24,23 @@ class EditItem extends Component {
     this.setState({
       item: Object.assign({
         name: '',
-        quantity: 0,
+        quantity: '',
         unit: '',
       }, this.props.item)
     })
+
+
+    if (this.props.mode === ITEM_TYPE_SHOPPING) {
+      setTimeout(this.nameInput.current.focus(), 1000)
+    } else {
+      setTimeout(this.quantityInput.current.focus(), 1000)
+    }
   }
 
   onChange(event) {
     const property = event.currentTarget.name
     const value = event.currentTarget.value
-    this.setState({item: { ...this.state.item, [property]: value }})
+    this.setState({ item: { ...this.state.item, [property]: value } })
   }
 
   onKeyPress = (event) => {
@@ -48,7 +58,7 @@ class EditItem extends Component {
   }
 
   render() {
-    const {item} = this.state;
+    const { item } = this.state;
 
     const unitOfMeasure = this.props.mode === ITEM_TYPE_SHOPPING
       ? <IonSelect
@@ -67,7 +77,7 @@ class EditItem extends Component {
     return (
       <IonItem style={{ width: "100%" }}>
         <IonInput
-          autofocus={this.props.mode === ITEM_TYPE_SHOPPING && !item.name}
+          // autofocus={this.props.mode === ITEM_TYPE_SHOPPING && !item.name}
           placeholder="Item name"
           name="name"
           value={item.name}
@@ -76,9 +86,10 @@ class EditItem extends Component {
           onIonBlur={event => this.onBlur(event)}
           disabled={this.props.mode === ITEM_TYPE_NEED}
           required="true"
+          ref={this.nameInput}
         />
         <IonInput
-          autofocus={(this.props.mode === ITEM_TYPE_NEED) || (this.props.mode === ITEM_TYPE_SHOPPING && item.name)}
+          // autofocus={(this.props.mode === ITEM_TYPE_NEED) || (this.props.mode === ITEM_TYPE_SHOPPING && item.name)}
           placeholder="Quantity"
           name="quantity"
           type="number"
@@ -89,6 +100,7 @@ class EditItem extends Component {
           onIonChange={event => this.onChange(event)}
           onIonBlur={event => this.onBlur(event)}
           required="true"
+          ref={this.quantityInput}
         />
         {unitOfMeasure}
         <IonButton onClick={() => this.concludeEditing()} style={{ 'marginLeft': '10px' }}>Add</IonButton>

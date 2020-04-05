@@ -48,7 +48,9 @@ class ShoppingStore {
     }))
     .sort((a, b)=>{
       if(a.order && b.order) return a.order - b.order;
-      return a.createdAt.seconds - b.createdAt.seconds;
+      if(a.createdAt && b.createdAt) return b.createdAt.seconds - a.createdAt.seconds;
+      if(!a.createdAt) return -1
+      if(!b.createdAt) return 1
     })
   }
 
