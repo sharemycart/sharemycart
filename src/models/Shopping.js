@@ -205,7 +205,7 @@ class Shopping extends Component {
   }
 
   onReorderItems = (listId, items, order) => {
-    items.forEach(item => this.props.firebase.setItemOrder(listId, item.uid, order[item.uid] || 0))
+    this.props.firebase.setItemsOrder(listId, items, order)
   }
 
   // event handlers for items

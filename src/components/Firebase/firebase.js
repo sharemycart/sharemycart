@@ -182,8 +182,11 @@ class Firebase {
   deleteItem = (listId, uid) => this.listItem(listId, uid)
     .delete()
 
-  setItemOrder = (listId, uid, order) => this.listItem(listId, uid)
-      .update('order', order)
+  setItemsOrder = (listId, items, order) => {
+    const batch = this.db.batch()
+    items.forEach(i => batch.update(this.listItem(listId, i.uid), 'order', order[i.uid] || 0))
+    batch.commit()
+  }
 
   // *** Shopping API ***
   myCurrentShoppingList = () => this.myCurrentList(LIST_TYPE_SHOPPING);

@@ -44,14 +44,11 @@ class ShoppingList extends Component {
   }
 
   doReorder(event) {
-    // The `from` and `to` properties contain the index of the item
-    // when the drag started and ended, respectively
     console.log('Dragged from index', event.detail.from, 'to', event.detail.to);
 
-    // Finish the reorder and position the item in the DOM based on
-    // where the gesture ended. This method can also be called directly
-    // by the reorder group
-    const {children} = event.srcElement
+    event.detail.complete()
+
+    const { children } = event.srcElement
     let order = {}
     event.detail.complete();
     let position = 0
@@ -83,18 +80,18 @@ class ShoppingList extends Component {
 
     const EditButton = () => (
       !this.state.editMode && <IonButton color="danger" fill="clear"
-      onClick={() => this.setState({ editMode: true })}>
-      {'Edit'}
-      <IonIcon slot="end" name="create" />
-    </IonButton>
+        onClick={() => this.setState({ editMode: true })}>
+        {'Edit'}
+        <IonIcon slot="end" name="create" />
+      </IonButton>
     )
 
     const SaveButton = () => (
       this.state.editMode && <IonButton color="danger" fill="clear"
-      onClick={()=>this.saveEdit()}>
-      {'Save'}
-      <IonIcon slot="end" name="create" />
-    </IonButton>
+        onClick={() => this.saveEdit()}>
+        {'Save'}
+        <IonIcon slot="end" name="create" />
+      </IonButton>
     )
 
     return (
@@ -120,8 +117,25 @@ class ShoppingList extends Component {
           </IonItem>
         </IonList>
         <IonList>
-          <IonReorderGroup disabled={!this.state.editMode} onIonItemReorder={this.doReorder.bind(this)}>
-            {items.map((item, key) => (
+        {/* // The following component is actually a hack. I expected the IonReorderGroup to 
+        // toggle "disabled" based on the edit mode.
+        // However, whit does not work as expected, as when leaving back to non-Edit-mode, 
+        // the oder is destroyed until loaded from the database for the next time */}
+          {
+            this.state.editMode && <IonReorderGroup disabled={false} onIonItemReorder={this.doReorder.bind(this)}>
+              {items.map((item, key) => (
+                <Item
+                  key={item.id || key}
+                  item={item}
+                  ownList={true}
+                  onEditingConcluded={onEditItem}
+                  onDeleteItem={onDeleteItem}
+                  mode={ITEM_TYPE_SHOPPING}
+                />))}
+            </IonReorderGroup>
+          }
+          {
+            !this.state.editMode && items.map((item, key) => (
               <Item
                 key={item.id || key}
                 item={item}
@@ -129,8 +143,8 @@ class ShoppingList extends Component {
                 onEditingConcluded={onEditItem}
                 onDeleteItem={onDeleteItem}
                 mode={ITEM_TYPE_SHOPPING}
-              />))}
-          </IonReorderGroup>
+              />))
+          }
         </IonList>
       </>
     );
