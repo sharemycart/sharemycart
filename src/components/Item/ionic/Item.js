@@ -9,7 +9,6 @@ class Item extends Component {
     super(props);
     this.state = { 
       inEdit: !props.item.quantity ,
-      editingItem: props.item,
     };
     this.mode = { mode: props.mode }
   }
@@ -17,10 +16,6 @@ class Item extends Component {
   setEditMode(inEdit) {
     this.setState({ inEdit })
   }
-
-  onChangeEditingItem(editingItem) {
-		this.setState({ editingItem });
-	}
 
   onItemClick() {
     if (this.props.mode !== ITEM_TYPE_IN_SHOPPING) {
@@ -50,7 +45,8 @@ class Item extends Component {
     </IonButton>
 
     const itemDisplay = this.state.inEdit ?
-      <EditItem item={this.state.editingItem}
+      <EditItem
+        item={this.props.item}
         onEditingConcluded={(item) => {
           this.setEditMode(false)
           this.props.onEditingConcluded(item)
