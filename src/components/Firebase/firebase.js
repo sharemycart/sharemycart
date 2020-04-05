@@ -15,10 +15,11 @@ const config = {
   appId: process.env.REACT_APP_BACKEND_SENDER_APP_ID
 };
 
-console.log(JSON.stringify(config))
-
 class Firebase {
   constructor() {
+    console.log('Here come the firebase config')
+    console.log(JSON.stringify(config))
+
     app.initializeApp(config);
 
     /* Helper */
