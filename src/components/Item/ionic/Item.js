@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { IonItem, IonLabel, IonButton, IonIcon, IonBadge } from "@ionic/react";
+import { IonItem, IonLabel, IonButton, IonIcon, IonBadge, IonReorder } from "@ionic/react";
 import EditItem from './EditItem';
 import { trash, add } from 'ionicons/icons';
 import { ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_SHOPPING, ITEM_TYPE_NEED, ITEM_TYPE_POTENTIAL_NEED } from "../../../constants/items";
@@ -73,7 +73,8 @@ class Item extends Component {
         {deleteIcon}
       </>
 
-    return <IonItem>
+    return <IonItem id={this.props.item.uid}>
+            <IonReorder slot="start" />
       {itemDisplay}
     </IonItem>
   }
