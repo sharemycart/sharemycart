@@ -24,8 +24,50 @@ jobs:
           npm i
       # - run: |
       #     npm run test
+      ### setup env-file from secrets
+      - name: Setup env
+        uses: TickX/var-to-dotenv@v1.1.1
+        with:
+          key: "REACT_APP_BACKEND_API_KEY"
+          value: ${{secrets.STAGING_BACKEND_API_KEY}}
+          envPath: '.env.staging'
+      - uses: TickX/var-to-dotenv@v1.1.1
+        with:
+          key: "REACT_APP_BACKEND_AUTH_DOMAIN"
+          value: ${{secrets.STAGING_BACKEND_PROJECT_ID}}${{'.firebaseapp.com'}}
+          envPath: '.env.staging'
+      - uses: TickX/var-to-dotenv@v1.1.1
+        with:
+          key: "REACT_APP_BACKEND_DATABASE_URL"
+          value: ${{'https://'}}${{secrets.STAGING_BACKEND_PROJECT_ID}}${{'.firebaseio.com'}}
+          envPath: '.env.staging'
+      - uses: TickX/var-to-dotenv@v1.1.1
+        with:
+          key: "REACT_APP_BACKEND_PROJECT_ID"
+          value: ${{secrets.STAGING_BACKEND_PROJECT_ID}}
+          envPath: '.env.staging'
+      - uses: TickX/var-to-dotenv@v1.1.1
+        with:
+          key: "REACT_APP_BACKEND_STORAGE_BUCKET"
+          value: ${{secrets.STAGING_BACKEND_PROJECT_ID}}${{'.appspot.com'}}
+          envPath: '.env.staging'
+      - uses: TickX/var-to-dotenv@v1.1.1
+        with:
+          key: "REACT_APP_BACKEND_MESSAGE_SENDER_ID"
+          value: ${{secrets.STAGING_BACKEND_MESSAGE_SENDER_ID}}
+          envPath: '.env.staging'
+      - uses: TickX/var-to-dotenv@v1.1.1
+        with:
+          key: "REACT_APP_BACKEND_SENDER_APP_ID"
+          value: ${{secrets.STAGING_BACKEND_SENDER_APP_ID}}
+          envPath: '.env.staging'
+      - uses: TickX/var-to-dotenv@v1.1.1
+        with:
+          key: "REACT_APP_BACKEND_MEASUREMENT_ID"
+          value: ${{secrets.STAGING_BACKEND_MEASUREMENT_ID}}
+          envPath: '.env.staging'
       - run: |
-          npm run build
+          npm run build:staging
       - name: Upload build
         uses: actions/upload-artifact@v1.0.0
         with:
@@ -33,54 +75,6 @@ jobs:
           name: Build
           # Directory containing files to upload
           path: build
-
-  debug-dotenv:
-    runs-on: ubuntu-latest
-    steps:
-      ### setup env-file from secrets
-      - uses: TickX/var-to-dotenv@v1.1.1
-        with:
-          key: "REACT_APP_BACKEND_API_KEY"
-          value: ${{''}}${{secrets.STAGING_BACKEND_API_KEY}}${{''}}
-      - uses: TickX/var-to-dotenv@v1.1.1
-        with:
-          key: "REACT_APP_BACKEND_AUTH_DOMAIN"
-          value: ${{''}}${{secrets.STAGING_BACKEND_PROJECT_ID}}${{'.firebaseapp.com'}}${{''}}
-      - uses: TickX/var-to-dotenv@v1.1.1
-        with:
-          key: "REACT_APP_BACKEND_DATABASE_URL"
-          value: ${{''}}${{'https://'}}${{secrets.STAGING_BACKEND_PROJECT_ID}}${{'.firebaseio.com'}}${{''}}
-      - uses: TickX/var-to-dotenv@v1.1.1
-        with:
-          key: "REACT_APP_BACKEND_PROJECT_ID"
-          value: ${{''}}${{secrets.STAGING_BACKEND_PROJECT_ID}}${{''}}
-      - uses: TickX/var-to-dotenv@v1.1.1
-        with:
-          key: "REACT_APP_BACKEND_STORAGE_BUCKET"
-          value: ${{''}}${{secrets.STAGING_BACKEND_PROJECT_ID}}${{'.appspot.com'}}${{''}}
-      - uses: TickX/var-to-dotenv@v1.1.1
-        with:
-          key: "REACT_APP_BACKEND_MESSAGE_SENDER_ID"
-          value: ${{''}}${{secrets.STAGING_BACKEND_MESSAGE_SENDER_ID}}${{''}}
-      - uses: TickX/var-to-dotenv@v1.1.1
-        with:
-          key: "REACT_APP_BACKEND_SENDER_APP_ID"
-          value: ${{''}}${{secrets.STAGING_BACKEND_SENDER_APP_ID}}${{''}}
-      - uses: TickX/var-to-dotenv@v1.1.1
-        with:
-          key: "REACT_APP_BACKEND_MEASUREMENT_ID"
-          value: ${{''}}${{secrets.STAGING_BACKEND_MEASUREMENT_ID}}${{''}}
-      - name: Upload env
-        uses: actions/upload-artifact@v1.0.0
-        with:
-          # Artifact name
-          name: env
-          # Directory containing files to upload
-          path: .env
-      - uses: actions/download-artifact@v1
-        with:
-          name: env
-      - run: cat env
 
   deploy-staging:
     needs: [build]
@@ -96,40 +90,6 @@ jobs:
           name: Build
           # Destination path
           path: build
-      ### setup env-file from secrets
-      - uses: TickX/var-to-dotenv@v1.1.1
-        with:
-          key: "REACT_APP_BACKEND_API_KEY"
-          value: ${{''}}${{secrets.STAGING_BACKEND_API_KEY}}${{''}}
-      - uses: TickX/var-to-dotenv@v1.1.1
-        with:
-          key: "REACT_APP_BACKEND_AUTH_DOMAIN"
-          value: ${{''}}${{secrets.STAGING_BACKEND_PROJECT_ID}}${{'.firebaseapp.com'}}${{''}}
-      - uses: TickX/var-to-dotenv@v1.1.1
-        with:
-          key: "REACT_APP_BACKEND_DATABASE_URL"
-          value: ${{''}}${{'https://'}}${{secrets.STAGING_BACKEND_PROJECT_ID}}${{'.firebaseio.com'}}${{''}}
-      - uses: TickX/var-to-dotenv@v1.1.1
-        with:
-          key: "REACT_APP_BACKEND_PROJECT_ID"
-          value: ${{''}}${{secrets.STAGING_BACKEND_PROJECT_ID}}${{''}}
-      - uses: TickX/var-to-dotenv@v1.1.1
-        with:
-          key: "REACT_APP_BACKEND_STORAGE_BUCKET"
-          value: ${{''}}${{secrets.STAGING_BACKEND_PROJECT_ID}}${{'.appspot.com'}}${{''}}
-      - uses: TickX/var-to-dotenv@v1.1.1
-        with:
-          key: "REACT_APP_BACKEND_MESSAGE_SENDER_ID"
-          value: ${{''}}${{secrets.STAGING_BACKEND_MESSAGE_SENDER_ID}}${{''}}
-      - uses: TickX/var-to-dotenv@v1.1.1
-        with:
-          key: "REACT_APP_BACKEND_SENDER_APP_ID"
-          value: ${{''}}${{secrets.STAGING_BACKEND_SENDER_APP_ID}}${{''}}
-      - uses: TickX/var-to-dotenv@v1.1.1
-        with:
-          key: "REACT_APP_BACKEND_MEASUREMENT_ID"
-          value: ${{''}}${{secrets.STAGING_BACKEND_MEASUREMENT_ID}}${{''}}
-
       - name: Deploy to GitHub Pages
         uses: crazy-max/ghaction-github-pages@v1.3.0
         with:
