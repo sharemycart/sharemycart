@@ -84,6 +84,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
+    "build:staging": "env-cmd -f .env.staging npm run build",
     "test": "node scripts/test.js --env=jsdom --passWithNoTests"
   },
   "browserslist": [
