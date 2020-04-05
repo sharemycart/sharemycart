@@ -10,7 +10,7 @@ class EditItem extends Component {
     this.state = {
       item: Object.assign({
         name: '',
-        quantity: 0,
+        quantity: '',
         unit: '',
       }, props.item)
     }
@@ -21,7 +21,7 @@ class EditItem extends Component {
     this.setState({
       item: Object.assign({
         name: '',
-        quantity: 0,
+        quantity: '',
         unit: '',
       }, this.props.item)
     })
