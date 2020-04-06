@@ -1,0 +1,18 @@
+.separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #666666;
+    padding: 10px;
+}
+.separator::before, .separator::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #666666;
+}
+.separator::before {
+    margin-right: .5em;
+}
+.separator::after {
+    margin-left: .5em;
+}

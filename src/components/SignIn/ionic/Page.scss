@@ -1,0 +1,57 @@
+.login-page {
+	.native-input.sc-ion-input-md:-webkit-autofill {
+		padding: 0;
+		background-color: transparent;
+	}
+
+	.padding {
+		padding-left: 20px !important;
+		padding-right: 20px !important;
+	}
+
+	.image-login {
+		width: fit-content;
+		margin: 50px auto 0px;
+		max-width: 200px;
+	}
+
+	.logo-text {
+		font-size: 32px;
+		width: fit-content;
+		margin: auto;
+	}
+
+	.input {
+		background-color: rgb(240, 240, 240);
+		border: 1px solid rgb(210, 210, 210);
+		border-radius: 9px;
+		font-size: .9em !important;
+	}
+
+	.white {
+		color: white;
+	}
+
+	.small {
+		font-size: 13px;
+	}
+
+	a {
+		text-decoration: none !important;
+	}
+
+	.label-or {
+		font-weight: 600;
+		color: #777;
+		margin: 10px auto;
+		text-align: center;
+		position: relative;
+		width: 100%;
+	}
+
+	.social-button-text {
+		text-transform: none;
+		margin-left: 10px;
+	}
+
+}

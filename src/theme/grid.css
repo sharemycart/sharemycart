@@ -1,0 +1,10 @@
+.new-row {
+    flex-basis: 100%;
+    height: 0;
+  }
+
+  .center-inside {
+    display: "flex";
+    align-items: "center";
+    justify-content: "center";
+  }

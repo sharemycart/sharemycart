@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Item from '../../Item/ionic/Item';
-import EditItem from '../../Item/ionic/EditItem';
+import Item from '../../Reusables/ionic/Item';
+import EditItem from '../../Reusables/ionic/EditItem';
 import { IonList, IonItem, IonReorderGroup} from '@ionic/react';
 import { ITEM_TYPE_SHOPPING } from '../../../constants/items';
 

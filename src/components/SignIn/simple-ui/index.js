@@ -6,7 +6,6 @@ import { SignUpLink } from '../../SignUp/simple-ui';
 import { PasswordForgetLink } from '../../PasswordForget/simple-ui';
 import { withFirebase } from '../../Firebase';
 import { SHOPPING } from '../../../constants/routes';
-
 const SignInPage = () => (
   <div>
     <h1>SignIn</h1>

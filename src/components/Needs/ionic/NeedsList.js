@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { IonList } from '@ionic/react';
-import Item from '../../Item/ionic/Item';
+import Item from '../../Reusables/ionic/Item';
 
 class NeedsList extends Component {
   constructor(props) {
