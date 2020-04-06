@@ -104,14 +104,19 @@ jobs:
         shell: bash
         run: |
             SUBDOMAIN="staging"
-            if [ "$BRANCH" == "master" ]; then SUBDOMAIN="app"; fi;
+            REPO="sharemycart/app-staging"
+            if [ "$BRANCH" == "master" ]; then 
+            SUBDOMAIN="app"; 
+            REPO="sharemycart/sharemycart"; 
+            fi;
             echo ::set-output name=SUBDOMAIN::${SUBDOMAIN}
+            echo ::set-output name=REPO::${REPO}
         env:
           BRANCH: "${{ github.ref }}"
       - name: Deploy to GitHub Pages
         uses: crazy-max/ghaction-github-pages@v1.3.0
         with:
-          repo: sharemycart/sharemycart
+          repo: ${{ steps.vars.outputs.REPO }}
           target_branch: gh-pages
           build_dir: build
           fqdn: ${{ steps.vars.outputs.SUBDOMAIN }}.sharemycart.com
