@@ -33,7 +33,6 @@ export const NavigationAuth = ({ authUser }) => (
     <>
         <IonTabs>
             <IonRouterOutlet>
-                <IonReactRouter>
                     <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
                     <Route path={ROUTES.PASSWORD_CHANGE} component={PasswordChangePage} />
                     <Route path={ROUTES.ACCOUNT} component={AccountPage} />
@@ -42,7 +41,6 @@ export const NavigationAuth = ({ authUser }) => (
                     <Route path={ROUTES.SHARED_SHOPPING_LIST} component={NeedsInSharedShoppingList} />
                     <Route path={ROUTES.ADMIN} component={AdminPage} />
                     <Redirect exact from="/" to={ROUTES.SHOPPING} />
-                </IonReactRouter>
             </IonRouterOutlet>
             <IonTabBar slot="bottom">
                 <IonTabButton tab="Shopping" href={ROUTES.SHOPPING}>
@@ -68,7 +66,6 @@ export const NavigationNonAuth = (props) => {
     return (
         <IonTabs>
             <IonRouterOutlet>
-                <IonReactRouter>
                     <Switch>
                         <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
                         <Route path={ROUTES.SIGN_IN} component={SignInPage} />
@@ -78,7 +75,6 @@ export const NavigationNonAuth = (props) => {
                             state: { from: currentLocation }
                         }} />
                     </Switch>
-                </IonReactRouter>
             </IonRouterOutlet>
             <IonTabBar slot="bottom">
                 <IonTabButton tab="Sign in" href={ROUTES.SIGN_IN}>
