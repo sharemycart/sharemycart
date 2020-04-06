@@ -14,7 +14,10 @@ service cloud.firestore {
       
       // since we always create own lists in which we record items, we can 
       // restrict writing to our own data
-      allow write: if resource.data.userId == request.auth.uid;
+      allow update, delete: if resource.data.userId == request.auth.uid;
+
+      // since there's no userId on the newly created list, we need to allow this if signed in
+      allow create: if isSignedIn();
       
       // https://stackoverflow.com/a/48447400
       function listData() {
