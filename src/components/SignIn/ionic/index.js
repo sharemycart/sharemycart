@@ -18,8 +18,10 @@ const SignInPage = () => (
         <SignInForm />
         <SignInGoogle />
         <SignInFacebook />
-        <SignInTwitter />
+        {/* <SignInTwitter /> */}
 
+        <PasswordForgetLink />
+        <SignUpLink />
       </IonGrid>
     </IonContent>
   </>
@@ -176,7 +178,7 @@ class SignInGoogleBase extends Component {
       <form onSubmit={this.onSubmit}>
         <IonRow>
           <IonCol>
-            <IonButton onClick={this.onSubmit} type="submit" expand="block" color="light"><IonIcon
+            <IonButton onClick={this.onSubmit} type="submit" expand="block"><IonIcon
               icon={logoGoogle} /><span className="social-button-text">Sign In with Google</span></IonButton>
           </IonCol>
         </IonRow>
