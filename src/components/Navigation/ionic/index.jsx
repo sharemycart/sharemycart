@@ -33,7 +33,7 @@ export const NavigationAuth = ({ authUser }) => (
     <>
         <IonTabs>
             <IonRouterOutlet>
-                <IonReactRouter basename={process.env.REACT_APP_BASENAME}>
+                <IonReactRouter>
                     <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
                     <Route path={ROUTES.PASSWORD_CHANGE} component={PasswordChangePage} />
                     <Route path={ROUTES.ACCOUNT} component={AccountPage} />
@@ -68,7 +68,7 @@ export const NavigationNonAuth = (props) => {
     return (
         <IonTabs>
             <IonRouterOutlet>
-                <IonReactRouter basename={process.env.REACT_APP_BASENAME}>
+                <IonReactRouter>
                     <Switch>
                         <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
                         <Route path={ROUTES.SIGN_IN} component={SignInPage} />
