@@ -103,6 +103,9 @@ dist
 # TernJS port file
 .tern-port
 
+# Jetbrains IDE
+.idea/
+
 
 # Build artifacts
 build
