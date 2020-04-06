@@ -54,7 +54,7 @@ class EditItem extends Component {
   }
 
   setUnit(unit) {
-    this.props.onChange({ ...this.props.item, unit })
+    this.setState({item: { ...this.state.item, unit }})
   }
 
   render() {
