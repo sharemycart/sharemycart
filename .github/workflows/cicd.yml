@@ -5,7 +5,7 @@ on:
     branches:
       - master
       - cicd
-      - router-gh-pager
+      - router-gh-pages
   pull_request:
 env:
   CI: true
