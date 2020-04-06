@@ -4,8 +4,8 @@ import { inject, observer } from 'mobx-react';
 import { compose } from 'recompose';
 
 // import { ellipse, square, triangle } from 'ionicons/icons';
-import SignUpPage from '../../SignUp/simple-ui';
-import SignInPage from '../../SignIn/simple-ui';
+import SignUpPage from '../../SignUp/ionic';
+import SignInPage from '../../SignIn/ionic';
 import PasswordForgetPage from '../../PasswordForget/simple-ui';
 import AccountPage from '../../Account/ionic';
 import AdminPage from '../../Admin/simple-ui';

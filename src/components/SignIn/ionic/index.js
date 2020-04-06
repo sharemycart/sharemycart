@@ -6,16 +6,32 @@ import { SignUpLink } from '../../SignUp/simple-ui';
 import { PasswordForgetLink } from '../../PasswordForget/simple-ui';
 import { withFirebase } from '../../Firebase';
 import { SHOPPING } from '../../../constants/routes';
+import { IonImg, IonGrid, IonRow, IonCol, IonLabel, IonContent, IonInput, IonIcon, IonButton } from '@ionic/react';
+
+import './Page.scss'
+import { logoGoogle, logoFacebook, logoTwitter } from 'ionicons/icons';
+
 const SignInPage = () => (
-  <div>
-    <h1>SignIn</h1>
-    <SignInForm />
-    <SignInGoogle />
-    <SignInFacebook />
-    <SignInTwitter />
-    <PasswordForgetLink />
-    <SignUpLink />
-  </div>
+  <>
+    <IonContent className="login-page">
+      <IonImg className="image-login" src="logo-cart_1000.png" />
+      <IonGrid>
+        <IonRow className="logo-text">
+          <IonCol className="ion-align-self-center">
+            <IonLabel style={{ color: '#707070' }}>Share</IonLabel>
+            <IonLabel style={{ color: '#FA3D04' }}>MyCart!</IonLabel>
+          </IonCol>
+        </IonRow>
+      </IonGrid>
+      <IonGrid>
+        <SignInForm />
+        <SignInGoogle />
+        <SignInFacebook />
+        <SignInTwitter />
+
+      </IonGrid>
+    </IonContent>
+  </>
 );
 
 const INITIAL_STATE = {
@@ -40,7 +56,7 @@ const ERROR_MSG_ACCOUNT_EXISTS = `
 // available in the cache.
 // It's a hack since there's no option / hook into the event which it can be hooked into
 // probably, a MobX reaction in the session store could provide a hook.
-const navigateIfRequested = function() {
+const navigateIfRequested = function () {
   const { from } = this.props.location.state || { from: { pathname: '/' } };
   const { redirectToReferrer } = this.state;
   const { history } = this.props;
@@ -86,20 +102,33 @@ class SignInFormBase extends Component {
 
     return (
       <form onSubmit={this.onSubmit}>
-        <input
-          name="email"
-          value={email}
-          onChange={this.onChange}
-          type="text"
-          placeholder="Email Address"
-        />
-        <input
-          name="password"
-          value={password}
-          onChange={this.onChange}
-          type="password"
-          placeholder="Password"
-        />
+        <IonRow>
+          <IonCol>
+            <IonInput
+              name="email"
+              value={email}
+              onIonChange={this.onChange}
+              clearInput
+              type="email"
+              placeholder="Email"
+              class="input"
+              padding-horizontal
+              clear-input="true"></IonInput>
+          </IonCol>
+        </IonRow>
+        <IonRow>
+          <IonCol>
+            <IonInput
+              clearInput
+              name="password"
+              value={password}
+              onIonChange={this.onChange}
+              type="password"
+              placeholder="Password"
+              class="input"
+              padding-horizontal></IonInput>
+          </IonCol>
+        </IonRow>
         <button disabled={isInvalid} type="submit">
           Sign In
         </button>
@@ -154,8 +183,12 @@ class SignInGoogleBase extends Component {
 
     return (
       <form onSubmit={this.onSubmit}>
-        <button type="submit">Sign In with Google</button>
-
+        <IonRow>
+          <IonCol>
+            <IonButton onClick={this.onSubmit} type="submit" expand="block" color="light"><IonIcon
+              icon={logoGoogle} /><span className="social-button-text">Sign In with Google</span></IonButton>
+          </IonCol>
+        </IonRow>
         {error && <p>{error.message}</p>}
       </form>
     );
@@ -206,7 +239,14 @@ class SignInFacebookBase extends Component {
 
     return (
       <form onSubmit={this.onSubmit}>
-        <button type="submit">Sign In with Facebook</button>
+        <IonRow>
+
+          <IonCol>
+            <IonButton onClick={this.onSubmit} type="submit" expand="block"><IonIcon
+              icon={logoFacebook} /><span
+                className="social-button-text">Sign In with Facebook</span></IonButton>
+          </IonCol>
+        </IonRow>
 
         {error && <p>{error.message}</p>}
       </form>
@@ -258,7 +298,14 @@ class SignInTwitterBase extends Component {
 
     return (
       <form onSubmit={this.onSubmit}>
-        <button type="submit">Sign In with Twitter</button>
+        <IonRow>
+
+          <IonCol>
+            <IonButton onClick={this.onSubmit} type="submit" expand="block"><IonIcon
+              icon={logoTwitter} /><span
+                className="social-button-text">Sign In with Twitter</span></IonButton>
+          </IonCol>
+        </IonRow>
 
         {error && <p>{error.message}</p>}
       </form>
