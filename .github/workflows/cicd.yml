@@ -15,11 +15,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Set up node using nvm
-        uses: dcodeIO/setup-node-nvm@v3.0.0
+      - uses: actions/setup-node@v1
         with:
-          # The node.js version to use according to nvm. Uses the version specified in .nvmrc if omitted.
-          node-version: 10
+          node-version: '10.x'
       - run: |
           npm i
       # - run: |

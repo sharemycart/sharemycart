@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Item from '../../Item/ionic/Item';
 import EditItem from '../../Item/ionic/EditItem';
-import { IonList, IonItem, IonReorderGroup, IonButton, IonToolbar, IonButtons, IonIcon, IonTitle } from '@ionic/react';
+import { IonList, IonItem, IonReorderGroup} from '@ionic/react';
 import { ITEM_TYPE_SHOPPING } from '../../../constants/items';
 
 class ShoppingList extends Component {
