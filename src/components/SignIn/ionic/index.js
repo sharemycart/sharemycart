@@ -2,27 +2,18 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
 
-import { SignUpLink } from '../../SignUp/simple-ui';
-import { PasswordForgetLink } from '../../PasswordForget/simple-ui';
 import { withFirebase } from '../../Firebase';
 import { SHOPPING } from '../../../constants/routes';
-import { IonImg, IonGrid, IonRow, IonCol, IonLabel, IonContent, IonInput, IonIcon, IonButton } from '@ionic/react';
+import { IonGrid, IonRow, IonCol, IonContent, IonInput, IonIcon, IonButton } from '@ionic/react';
 
 import './Page.scss'
 import { logoGoogle, logoFacebook, logoTwitter } from 'ionicons/icons';
+import SplashLogo from '../../Reusables/ionic/SplashLogo';
 
 const SignInPage = () => (
   <>
     <IonContent className="login-page">
-      <IonImg className="image-login" src="logo-cart_1000.png" />
-      <IonGrid>
-        <IonRow className="logo-text">
-          <IonCol className="ion-align-self-center">
-            <IonLabel style={{ color: '#707070' }}>Share</IonLabel>
-            <IonLabel style={{ color: '#FA3D04' }}>MyCart!</IonLabel>
-          </IonCol>
-        </IonRow>
-      </IonGrid>
+      <SplashLogo />
       <IonGrid>
         <SignInForm />
         <SignInGoogle />

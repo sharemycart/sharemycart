@@ -6,7 +6,7 @@ import { compose } from 'recompose';
 // import { ellipse, square, triangle } from 'ionicons/icons';
 import SignUpPage from '../../SignUp/ionic';
 import SignInPage from '../../SignIn/ionic';
-import PasswordForgetPage from '../../PasswordForget/simple-ui';
+import PasswordForgetPage from '../../PasswordForget/ionic';
 import AccountPage from '../../Account/ionic';
 import AdminPage from '../../Admin/simple-ui';
 import ShoppingPage from '../../Shopping/ionic';
