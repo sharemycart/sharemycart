@@ -5,7 +5,6 @@ import { IonHeader, IonButtons, IonToolbar, IonBackButton, IonContent, IonGrid, 
 import { ACCOUNT, PASSWORD_CHANGE } from '../../../constants/routes';
 import SplashLogo from '../../Reusables/ionic/SplashLogo';
 import { pencilOutline } from 'ionicons/icons';
-import { Link, withRouter } from 'react-router-dom';
 
 const INITIAL_STATE = {
   passwordOne: '',
