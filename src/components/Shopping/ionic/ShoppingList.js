@@ -9,17 +9,11 @@ class ShoppingList extends Component {
     super(props);
 
     this.state = {
-      editMode: false,
       editName: this.props.list.name,
     };
-  }
 
-  onToggleEditMode = () => {
-    this.setState(state => ({
-      editMode: !state.editMode,
-      editName: this.props.list.name,
-    }));
-  };
+    this.props.addSaveEditHandler(this.saveEdit.bind(this))
+  }
 
   onChangeEditName = event => {
     this.setState({ editName: event.target.value });
@@ -27,8 +21,6 @@ class ShoppingList extends Component {
 
   onSaveEditName = () => {
     this.props.onEditList(this.props.list, this.state.editName);
-
-    this.setState({ editMode: false });
   };
 
   onChangeNewItem(newItem) {
@@ -78,36 +70,9 @@ class ShoppingList extends Component {
       onDeleteItem
     } = this.props;
 
-    const EditButton = () => (
-      !this.state.editMode && <IonButton color="danger" fill="clear"
-        onClick={() => this.setState({ editMode: true })}>
-        {'Edit'}
-        <IonIcon slot="end" name="create" />
-      </IonButton>
-    )
-
-    const SaveButton = () => (
-      this.state.editMode && <IonButton color="danger" fill="clear"
-        onClick={() => this.saveEdit()}>
-        {'Save'}
-        <IonIcon slot="end" name="create" />
-      </IonButton>
-    )
 
     return (
       <>
-        <IonToolbar>
-          <IonButtons slot="secondary">
-            <IonButton fill="clear">
-              Go Shopping
-      </IonButton>
-          </IonButtons>
-          <IonTitle>{this.props.list.name}</IonTitle>
-          <IonButtons slot="primary">
-            <EditButton />
-            <SaveButton />
-          </IonButtons>
-        </IonToolbar>
         <IonList>
           <IonItem>
             <EditItem
@@ -122,7 +87,7 @@ class ShoppingList extends Component {
         // However, whit does not work as expected, as when leaving back to non-Edit-mode, 
         // the oder is destroyed until loaded from the database for the next time */}
           {
-            this.state.editMode && <IonReorderGroup disabled={false} onIonItemReorder={this.doReorder.bind(this)}>
+            this.props.editMode && <IonReorderGroup disabled={false} onIonItemReorder={this.doReorder.bind(this)}>
               {items.map((item, key) => (
                 <Item
                   key={item.id || key}
@@ -135,7 +100,7 @@ class ShoppingList extends Component {
             </IonReorderGroup>
           }
           {
-            !this.state.editMode && items.map((item, key) => (
+            !this.props.editMode && items.map((item, key) => (
               <Item
                 key={item.id || key}
                 item={item}

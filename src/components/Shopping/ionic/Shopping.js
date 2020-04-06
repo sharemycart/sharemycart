@@ -36,6 +36,8 @@ class Shopping extends Component {
         onEditItem={this.props.model.onEditShoppingItem}
         onDeleteItem={this.props.model.onRemoveShoppingItem}
         onReorderItems={this.props.model.onReorderItems}
+        editMode={this.props.editMode}
+        addSaveEditHandler={this.props.addSaveEditHandler}
       />
     );
   }
