@@ -32,7 +32,7 @@ export const NavigationAuth = ({ authUser }) => (
     <>
         <IonTabs>
             <IonRouterOutlet>
-                <IonReactRouter basename={process.env.PUBLIC_URL}>
+                <IonReactRouter basename={process.env.REACT_APP_BASENAME}>
                     <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
                     <Route path={ROUTES.ACCOUNT} component={AccountPage} />
                     <Route path={ROUTES.SHOPPING} component={ShoppingPage} />
@@ -66,13 +66,15 @@ export const NavigationNonAuth = (props) => {
     return (
         <IonTabs>
             <IonRouterOutlet>
-                <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
-                <Route path={ROUTES.SIGN_IN} component={SignInPage} />
-                <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
-                <Redirect from="/" to={{
-                    pathname: ROUTES.SIGN_IN,
-                    state: { from: currentLocation }
-                }} />
+                <IonReactRouter basename={process.env.REACT_APP_BASENAME}>
+                    <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
+                    <Route path={ROUTES.SIGN_IN} component={SignInPage} />
+                    <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
+                    <Redirect from="/" to={{
+                        pathname: ROUTES.SIGN_IN,
+                        state: { from: currentLocation }
+                    }} />
+                </IonReactRouter>
             </IonRouterOutlet>
             <IonTabBar slot="bottom">
                 <IonTabButton tab="Sign in" href={ROUTES.SIGN_IN}>
@@ -85,7 +87,7 @@ export const NavigationNonAuth = (props) => {
 }
 
 const Navigation = ({ sessionStore }) => {
-    console.log('publicUrl', process.env.PUBLIC_URL)
+    console.log('Basename', process.env.REACT_APP_BASENAME)
     return sessionStore.authUser ? (
         <NavigationAuth authUser={sessionStore.authUser} />
     ) : (
