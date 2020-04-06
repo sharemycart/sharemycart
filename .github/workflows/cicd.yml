@@ -64,6 +64,11 @@ jobs:
           key: "REACT_APP_BACKEND_MEASUREMENT_ID"
           value: ${{secrets.STAGING_BACKEND_MEASUREMENT_ID}}
           envPath: '.env.staging'
+      - uses: TickX/var-to-dotenv@v1.1.1
+        with:
+          key: "REACT_APP_CONFIRMATION_EMAIL_REDIRECT"
+          value: ${{secrets.STAGING_CONFIRMATION_EMAIL_REDIRECT}}
+          envPath: '.env.staging'
       - run: |
           npm run build:staging
       - name: Upload build
