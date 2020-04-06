@@ -26,6 +26,7 @@ jobs:
             fi;
             echo ::set-output name=SUBDOMAIN::${SUBDOMAIN}
             echo ::set-output name=DOMAIN::${SUBDOMAIN}.sharemycart.com
+            echo ::set-output name=PUBLIC_URL::https://${DOMAIN}
       - uses: actions/setup-node@v1
         with:
           node-version: '10.x'
@@ -38,7 +39,7 @@ jobs:
         uses: TickX/var-to-dotenv@v1.1.1
         with:
           key: "REACT_APP_BASENAME"
-          value: ${{ steps.vars.outputs.DOMAIN }}
+          value: ${{ steps.vars.outputs.PUBLIC_URL }}
           envPath: '.env.staging'
       - uses: TickX/var-to-dotenv@v1.1.1
         with:
