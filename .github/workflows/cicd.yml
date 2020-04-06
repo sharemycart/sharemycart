@@ -23,6 +23,7 @@ jobs:
             SUBDOMAIN="staging"
             if [ "$BRANCH" == "master" ]; then 
             SUBDOMAIN="app"; 
+            fi;
             echo ::set-output name=SUBDOMAIN::${SUBDOMAIN}
             echo ::set-output name=DOMAIN::${SUBDOMAIN}.sharemycart.com
       - uses: actions/setup-node@v1
