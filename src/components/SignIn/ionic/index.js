@@ -9,6 +9,8 @@ import { IonGrid, IonRow, IonCol, IonContent, IonInput, IonIcon, IonButton } fro
 import './Page.scss'
 import { logoGoogle, logoFacebook, logoTwitter } from 'ionicons/icons';
 import SplashLogo from '../../Reusables/ionic/SplashLogo';
+import { PasswordForgetLink } from '../../PasswordForget/ionic';
+import { SignUpLink } from '../../SignUp/ionic';
 
 const SignInPage = () => (
   <>
