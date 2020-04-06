@@ -16,10 +16,10 @@ const Profile = (props) => {
 
     return (
         <div style={{
-            "height": "80%",
-            "display": "flex",
-            "align-items": "center",
-            "justify-content": "center",
+            height: "80%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}>
             <IonCard style={{
             padding: '50px',
