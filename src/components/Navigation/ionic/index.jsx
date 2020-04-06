@@ -21,9 +21,11 @@ import {
     IonRouterOutlet,
     IonTabBar,
     IonTabButton,
-    IonTabs
+    IonTabs,
+    IonIcon
 } from '@ionic/react';
 import NeedsInSharedShoppingList from '../../Needs/simple-ui/NeedsInSharedShoppingList';
+import { cartOutline, linkOutline, personOutline } from 'ionicons/icons';
 
 export const NavigationAuth = ({ authUser }) => (
     <>
@@ -40,15 +42,15 @@ export const NavigationAuth = ({ authUser }) => (
             </IonRouterOutlet>
             <IonTabBar slot="bottom">
                 <IonTabButton tab="Shopping" href={ROUTES.SHOPPING}>
-                    {/* <IonIcon icon={triangle} /> */}
+                    <IonIcon icon={cartOutline} />
                     <IonLabel>Shopping</IonLabel>
                 </IonTabButton>
                 <IonTabButton tab="Needs" href={ROUTES.NEEDS}>
-                    {/* <IonIcon icon={ellipse} /> */}
+                    <IonIcon icon={linkOutline} />
                     <IonLabel>Needs</IonLabel>
                 </IonTabButton>
                 <IonTabButton tab="Account" href={ROUTES.ACCOUNT}>
-                    {/* <IonIcon icon={square} /> */}
+                    <IonIcon icon={personOutline} />
                     <IonLabel>Account</IonLabel>
                 </IonTabButton>
             </IonTabBar>
