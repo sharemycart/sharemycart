@@ -98,7 +98,7 @@ jobs:
         id: vars
         shell: bash
         run: |
-            $SUBDOMAIN="staging"
+            SUBDOMAIN="staging"
             if [ "$BRANCH" == "master" ]; then SUBDOMAIN="app"
             echo ::set-output name=SUBDOMAIN::${SUBDOMAIN}
         env:
