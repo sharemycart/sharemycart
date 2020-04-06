@@ -27,7 +27,6 @@ import {
 } from '@ionic/react';
 import NeedsInSharedShoppingList from '../../Needs/simple-ui/NeedsInSharedShoppingList';
 import { cartOutline, linkOutline, personOutline, lockClosed } from 'ionicons/icons';
-import { IonReactRouter } from '@ionic/react-router';
 
 export const NavigationAuth = ({ authUser }) => (
     <>
