@@ -3,17 +3,24 @@ import { Link } from 'react-router-dom';
 
 import { withFirebase } from '../../Firebase';
 import * as ROUTES from '../../../constants/routes';
-import { IonContent, IonGrid, IonButton, IonRow, IonCol, IonInput } from '@ionic/react';
+import { IonContent, IonGrid, IonButton, IonRow, IonCol, IonInput, IonHeader, IonToolbar, IonButtons, IonBackButton } from '@ionic/react';
 import SplashLogo from '../../Reusables/ionic/SplashLogo';
 
 const PasswordForgetPage = () => (
     <>
+        <IonHeader>
+            <IonToolbar>
+                <IonButtons slot="start">
+                    <IonBackButton defaultHref={ROUTES.SIGN_IN} />
+                </IonButtons>
+            </IonToolbar>
+        </IonHeader>
         <IonContent className="login-page">
-            <SplashLogo 
+            <SplashLogo
                 maxWidth="100px"
-                textStart="Forgot "
-                textEnd="My Password!"
-                />
+                textStart="Forgot"
+                textEnd="MyPassword!"
+            />
             <IonGrid>
                 <PasswordForgetForm />
             </IonGrid>
