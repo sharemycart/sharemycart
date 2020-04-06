@@ -8,6 +8,7 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonIc
 import './page.css';
 import { withFirebase } from '../../Firebase';
 import { inject, observer } from 'mobx-react';
+import { createOutline, saveOutline, cartOutline } from 'ionicons/icons';
 
 class ShoppingPage extends ShoppingModel {
 
@@ -34,7 +35,7 @@ class ShoppingPage extends ShoppingModel {
       !this.state.editMode && <IonButton color="danger" fill="clear"
         onClick={() => this.setState({ editMode: true })}>
         {'Edit'}
-        <IonIcon slot="end" name="create" />
+        <IonIcon slot="end" icon={createOutline} />
       </IonButton>
     )
 
@@ -42,7 +43,7 @@ class ShoppingPage extends ShoppingModel {
       this.state.editMode && <IonButton color="danger" fill="clear"
         onClick={() => this.saveEdit()}>
         {'Save'}
-        <IonIcon slot="end" name="create" />
+        <IonIcon slot="end" icon={saveOutline} />
       </IonButton>
     )
     
@@ -53,6 +54,7 @@ class ShoppingPage extends ShoppingModel {
           <IonButtons slot="secondary">
             <IonButton fill="clear">
               Go Shopping
+              <IonIcon slot="start" icon={cartOutline} />
       </IonButton>
           </IonButtons>
           <IonTitle>{
