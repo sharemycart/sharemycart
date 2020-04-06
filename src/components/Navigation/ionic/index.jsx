@@ -26,20 +26,22 @@ import {
 } from '@ionic/react';
 import NeedsInSharedShoppingList from '../../Needs/simple-ui/NeedsInSharedShoppingList';
 import { cartOutline, linkOutline, personOutline } from 'ionicons/icons';
+import { IonReactRouter } from '@ionic/react-router';
 
 export const NavigationAuth = ({ authUser }) => (
     <>
         <IonTabs>
-            <IonRouterOutlet>
-                <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
-                <Route path={ROUTES.ACCOUNT} component={AccountPage} />
-                <Route path={ROUTES.SHOPPING} component={ShoppingPage} />
-                <Route path={ROUTES.NEEDS} component={NeedsPage} />
-                <Route path={ROUTES.SHARED_SHOPPING_LIST} component={NeedsInSharedShoppingList} />
-                <Route path={ROUTES.ADMIN} component={AdminPage} />
-                <Redirect exact from="/" to={ROUTES.SHOPPING} />
-
-            </IonRouterOutlet>
+            <IonReactRouter basename={process.env.PUBLIC_URL}>
+                <IonRouterOutlet>
+                    <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
+                    <Route path={ROUTES.ACCOUNT} component={AccountPage} />
+                    <Route path={ROUTES.SHOPPING} component={ShoppingPage} />
+                    <Route path={ROUTES.NEEDS} component={NeedsPage} />
+                    <Route path={ROUTES.SHARED_SHOPPING_LIST} component={NeedsInSharedShoppingList} />
+                    <Route path={ROUTES.ADMIN} component={AdminPage} />
+                    <Redirect exact from="/" to={ROUTES.SHOPPING} />
+                </IonRouterOutlet>
+            </IonReactRouter>
             <IonTabBar slot="bottom">
                 <IonTabButton tab="Shopping" href={ROUTES.SHOPPING}>
                     <IonIcon icon={cartOutline} />
@@ -83,11 +85,11 @@ export const NavigationNonAuth = (props) => {
 }
 
 const Navigation = ({ sessionStore }) => {
-    console.log('Navigation requested', sessionStore.authUser)
+    console.log('publicUrl', process.env.PUBLIC_URL)
     return sessionStore.authUser ? (
         <NavigationAuth authUser={sessionStore.authUser} />
     ) : (
-            <NavigationNonAuth authUser={sessionStore.authUser}/>
+            <NavigationNonAuth authUser={sessionStore.authUser} />
         );
 }
 
