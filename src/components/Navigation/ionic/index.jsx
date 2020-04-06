@@ -31,8 +31,8 @@ import { IonReactRouter } from '@ionic/react-router';
 export const NavigationAuth = ({ authUser }) => (
     <>
         <IonTabs>
-            <IonReactRouter basename={process.env.PUBLIC_URL}>
-                <IonRouterOutlet>
+            <IonRouterOutlet>
+                <IonReactRouter basename={process.env.PUBLIC_URL}>
                     <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
                     <Route path={ROUTES.ACCOUNT} component={AccountPage} />
                     <Route path={ROUTES.SHOPPING} component={ShoppingPage} />
@@ -40,8 +40,8 @@ export const NavigationAuth = ({ authUser }) => (
                     <Route path={ROUTES.SHARED_SHOPPING_LIST} component={NeedsInSharedShoppingList} />
                     <Route path={ROUTES.ADMIN} component={AdminPage} />
                     <Redirect exact from="/" to={ROUTES.SHOPPING} />
-                </IonRouterOutlet>
-            </IonReactRouter>
+                </IonReactRouter>
+            </IonRouterOutlet>
             <IonTabBar slot="bottom">
                 <IonTabButton tab="Shopping" href={ROUTES.SHOPPING}>
                     <IonIcon icon={cartOutline} />
