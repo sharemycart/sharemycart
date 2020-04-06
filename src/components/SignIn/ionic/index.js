@@ -111,7 +111,10 @@ class SignInFormBase extends Component {
               placeholder="Email"
               class="input"
               padding-horizontal
-              clear-input="true"></IonInput>
+              clear-input="true"
+              autocomplete
+              >
+              </IonInput>
           </IonCol>
         </IonRow>
         <IonRow>
@@ -124,7 +127,8 @@ class SignInFormBase extends Component {
               type="password"
               placeholder="Password"
               class="input"
-              padding-horizontal></IonInput>
+              padding-horizontal>
+              </IonInput>
           </IonCol>
         </IonRow>
         <IonButton disabled={isInvalid} type="submit" expand="block">

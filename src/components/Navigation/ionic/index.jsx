@@ -7,6 +7,7 @@ import { compose } from 'recompose';
 import SignUpPage from '../../SignUp/ionic';
 import SignInPage from '../../SignIn/ionic';
 import PasswordForgetPage from '../../PasswordForget/ionic';
+import PasswordChangePage from '../../PasswordChange/ionic';
 import AccountPage from '../../Account/ionic';
 import AdminPage from '../../Admin/simple-ui';
 import ShoppingPage from '../../Shopping/ionic';
@@ -32,12 +33,13 @@ export const NavigationAuth = ({ authUser }) => (
         <IonTabs>
             <IonRouterOutlet>
                 <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
+                <Route path={ROUTES.PASSWORD_CHANGE} component={PasswordChangePage} />
                 <Route path={ROUTES.ACCOUNT} component={AccountPage} />
                 <Route path={ROUTES.SHOPPING} component={ShoppingPage} />
                 <Route path={ROUTES.NEEDS} component={NeedsPage} />
                 <Route path={ROUTES.SHARED_SHOPPING_LIST} component={NeedsInSharedShoppingList} />
                 <Route path={ROUTES.ADMIN} component={AdminPage} />
-                <Redirect from="/" to={ROUTES.SHOPPING} />
+                <Redirect exact from="/" to={ROUTES.SHOPPING} />
             </IonRouterOutlet>
             <IonTabBar slot="bottom">
                 <IonTabButton tab="Shopping" href={ROUTES.SHOPPING}>

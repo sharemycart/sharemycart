@@ -82,8 +82,7 @@ class PasswordForgetFormBase extends Component {
                 </IonRow>
                 <IonButton disabled={isInvalid} type="submit" expand="block">
                     Reset My Password
-        </IonButton>
-
+                </IonButton>
                 {error && <p>{error.message}</p>}
             </form>
         );

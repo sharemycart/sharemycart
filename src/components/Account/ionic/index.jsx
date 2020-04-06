@@ -1,11 +1,14 @@
 import React from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonFooter } from '@ionic/react';
-import './page.css';
 import { inject, observer } from 'mobx-react';
 import { withEmailVerification, withAuthorization } from '../../Session';
 import { compose } from 'recompose';
 import Profile from './Profile';
 import SignOutButton from '../../SignOut/ionic'
+
+import { PasswordChangeButton } from '../../PasswordChange/ionic'
+
+import './page.css';
 
 const AccountPage = ({ sessionStore }) => {
   return (
@@ -33,6 +36,7 @@ const AccountPage = ({ sessionStore }) => {
           }
         }>
           <IonToolbar>
+            <PasswordChangeButton />
             <SignOutButton />
           </IonToolbar>
         </IonFooter>
