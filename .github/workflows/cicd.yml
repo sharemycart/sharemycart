@@ -70,6 +70,11 @@ jobs:
           key: "REACT_APP_CONFIRMATION_EMAIL_REDIRECT"
           value: ${{secrets.STAGING_CONFIRMATION_EMAIL_REDIRECT}}
           envPath: '.env.staging'
+      - uses: TickX/var-to-dotenv@v1.1.1
+        with:
+          key: "REACT_APP_BASENAME"
+          value: ${{env.PUBLIC_URL}}
+          envPath: '.env.staging'
       - run: |
           npm run build:staging
       - name: Upload build
@@ -99,7 +104,7 @@ jobs:
         shell: bash
         run: |
             SUBDOMAIN="staging"
-            if [ "$BRANCH" == "master" ]; then SUBDOMAIN="app"
+            if [ "$BRANCH" == "master" ]; then SUBDOMAIN="app"; fi;
             echo ::set-output name=SUBDOMAIN::${SUBDOMAIN}
         env:
           BRANCH: "${{ github.ref }}"
