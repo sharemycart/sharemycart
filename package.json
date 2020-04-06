@@ -95,7 +95,8 @@
   ],
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.2.0",
-    "@capacitor/cli": "1.5.2"
+    "@capacitor/cli": "1.5.2",
+    "node-sass": "^4.13.1"
   },
   "jest": {
     "collectCoverageFrom": [
