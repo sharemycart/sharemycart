@@ -7,8 +7,8 @@ export default (props) => (
         <IonGrid>
             <IonRow className="logo-text">
                 <IonCol className="ion-align-self-center">
-                    <IonLabel style={{ color: '#707070' }}>Share</IonLabel>
-                    <IonLabel style={{ color: '#FA3D04' }}>MyCart!</IonLabel>
+                    <IonLabel style={{ color: '#707070' }}>{props.textStart || 'Share'}</IonLabel>
+                    <IonLabel style={{ color: '#FA3D04' }}>{props.textEnd || 'MyCart!'}</IonLabel>
                 </IonCol>
             </IonRow>
         </IonGrid>

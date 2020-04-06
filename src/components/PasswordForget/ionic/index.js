@@ -9,7 +9,11 @@ import SplashLogo from '../../Reusables/ionic/SplashLogo';
 const PasswordForgetPage = () => (
     <>
         <IonContent className="login-page">
-            <SplashLogo maxWidth="100px"/>
+            <SplashLogo 
+                maxWidth="100px"
+                textStart="Forgot "
+                textEnd="My Password!"
+                />
             <IonGrid>
                 <PasswordForgetForm />
             </IonGrid>
