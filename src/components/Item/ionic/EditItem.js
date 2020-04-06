@@ -30,11 +30,11 @@ class EditItem extends Component {
     })
 
 
-    if (this.props.mode === ITEM_TYPE_SHOPPING) {
-      setTimeout(this.nameInput.current.focus(), 1000)
-    } else {
-      setTimeout(this.quantityInput.current.focus(), 1000)
-    }
+    // if (this.props.mode === ITEM_TYPE_SHOPPING) {
+    //   setTimeout(this.nameInput.current.focus(), 1000)
+    // } else {
+    //   setTimeout(this.quantityInput.current.focus(), 1000)
+    // }
   }
 
   onChange(event) {
