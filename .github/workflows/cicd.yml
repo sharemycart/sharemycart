@@ -80,12 +80,11 @@ jobs:
           # Directory containing files to upload
           path: build
 
-  deploy-staging:
+  deploy:
     needs: [build]
     # if: github.ref == 'master' #TODO: Switch to real staging once we're out of Beta
     env:
       GITHUB_PAT: ${{ secrets.DEPLOYMENT_PAT }}
-
     runs-on: ubuntu-latest
     steps:
       - name: Download build
@@ -95,10 +94,19 @@ jobs:
           name: Build
           # Destination path
           path: build
+      - name: Initialize workflow variables
+        id: vars
+        shell: bash
+        run: |
+            $SUBDOMAIN="staging"
+            if [ "$BRANCH" == "master" ]; then SUBDOMAIN="app"
+            echo ::set-output name=SUBDOMAIN::${SUBDOMAIN}
+        env:
+          BRANCH: "${{ github.ref }}"
       - name: Deploy to GitHub Pages
         uses: crazy-max/ghaction-github-pages@v1.3.0
         with:
           repo: sharemycart/sharemycart
           target_branch: gh-pages
           build_dir: build
-          fqdn: app.sharemycart.com
+          fqdn: ${{ steps.vars.outputs.SUBDOMAIN }}.sharemycart.com
