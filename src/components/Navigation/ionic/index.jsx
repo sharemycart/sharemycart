@@ -48,7 +48,7 @@ export const NavigationAuth = ({ authUser }) => (
                 </IonTabButton>
                 <IonTabButton tab="Needs" href={ROUTES.NEEDS}>
                     <IonIcon icon={linkOutline} />
-                    <IonLabel>Needs</IonLabel>
+                    <IonLabel>Shared</IonLabel>
                 </IonTabButton>
                 <IonTabButton tab="Account" href={ROUTES.ACCOUNT}>
                     <IonIcon icon={personOutline} />

@@ -1,7 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import toObject from '../lib/convertArrayToObject';
 class UserStore {
-  @observable users = null;
+  @observable users = {};
 
   constructor(rootStore) {
     this.rootStore = rootStore;
@@ -11,7 +11,7 @@ class UserStore {
     this.users = toObject(users);
   };
 
-  @action setUser = (user, uid) => {
+  @action setUser = (uid, user) => {
     if (!this.users) {
       this.users = {};
     }

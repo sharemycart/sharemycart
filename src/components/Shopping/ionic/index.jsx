@@ -55,7 +55,7 @@ class ShoppingPage extends ShoppingModel {
             <IonButton fill="clear">
               Go Shopping
               <IonIcon slot="start" icon={cartOutline} />
-      </IonButton>
+            </IonButton>
           </IonButtons>
           <IonTitle>{
             (this.props.shoppingStore.currentShoppingList && this.props.shoppingStore.currentShoppingList.name)
