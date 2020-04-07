@@ -21,7 +21,7 @@ jobs:
         shell: bash
         run: |
             SUBDOMAIN="staging"
-            if [ "$BRANCH" == "master" ]; then 
+            if [ "$BRANCH" == "refs/heads/master" ]; then 
             SUBDOMAIN="app"; 
             fi;
             echo ::set-output name=SUBDOMAIN::${SUBDOMAIN}
@@ -56,6 +56,7 @@ jobs:
           envkey_REACT_APP_BACKEND_SENDER_APP_ID: ${{secrets.STAGING_BACKEND_SENDER_APP_ID}}
           envkey_REACT_APP_BACKEND_MEASUREMENT_ID: ${{secrets.STAGING_BACKEND_MEASUREMENT_ID}}
           envkey_REACT_APP_CONFIRMATION_EMAIL_REDIRECT: ${{ steps.vars.outputs.PUBLIC_URL }}
+          file_name: .env.staging
       - run: |
           npm run build:staging
       - name: Upload build
@@ -68,7 +69,7 @@ jobs:
 
   deploy:
     needs: [build]
-    # if: github.ref == 'master' #TODO: Switch to real staging once we're out of Beta
+    # if: github.ref == 'refs/heads/master' #TODO: Switch to real staging once we're out of Beta
     env:
       GITHUB_PAT: ${{ secrets.DEPLOYMENT_PAT }}
     runs-on: ubuntu-latest
@@ -86,7 +87,7 @@ jobs:
         run: |
             SUBDOMAIN="staging"
             REPO="sharemycart/app-staging"
-            if [ "$BRANCH" == "master" ]; then 
+            if [ "$BRANCH" == "refs/heads/master" ]; then 
             SUBDOMAIN="app"; 
             REPO="sharemycart/sharemycart"; 
             fi;
