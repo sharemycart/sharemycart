@@ -23,6 +23,7 @@ const resources = {
             "Reset My Password": "Reset My Password",
             "Save": "Save",
             "Share": "Share",
+            "Sharing_link_copied": "A link to your shopping list has been copied to the clipboard.\nSend it to people you like so that they ask you to bring something along for you!",
             "Sign In": "Sign In",
             "Sign Out": "Sign Out",
             "Sign Up": "Sign Up",
