@@ -25,12 +25,12 @@ class Needs extends Component {
     };
   }
 
-  _tryInitialization(){
+  _tryInitialization() {
     if (this.props.sessionStore.dbAuthenticated && !this.unsubscribeLists) {
       this.onListenForNeedsLists();
     }
   }
-  
+
   // React lifecycle methods
 
   componentDidMount() {
@@ -76,6 +76,18 @@ class Needs extends Component {
             if (needsList.isCurrent && needsList.shoppingListId) {
               currentNeedsListId = doc.id;
               currentOriginShoppingListId = needsList.shoppingListId;
+            }
+
+            // The owner of the needs list is a relevant user. 
+            // Make sure we've got his information buffered
+            // we don't need reactivity for that in the first step to keep it simple
+            const { shoppingListOwnerId } = needsList;
+            if (shoppingListOwnerId && !this.props.userStore.users[shoppingListOwnerId]) {
+              this.props.firebase.user(shoppingListOwnerId).get()
+                .then(snapshot => {
+                  const owner = snapshot.data()
+                  this.props.userStore.setUser(owner.uid, owner)
+                })
             }
           }
           );
@@ -238,7 +250,7 @@ class Needs extends Component {
   onAddFromShoppingListItem = (item) => {
     const { currentNeedsList } = this.props.needsStore;
     if (currentNeedsList) {
-      this.props.firebase.addNeededItemFromShoppingListItem(currentNeedsList.uid, Object.assign(item, {quantity: 0}))
+      this.props.firebase.addNeededItemFromShoppingListItem(currentNeedsList.uid, Object.assign(item, { quantity: 0 }))
     } else {
       console.error('Cannot add item to non-existing needsList');
     }
