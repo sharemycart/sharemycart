@@ -4,6 +4,8 @@ import { compose } from 'recompose';
 
 import ShoppingList from './ShoppingList';
 
+import ShareListFab from './Share';
+
 class Shopping extends Component {
   constructor(props) {
     super(props);
@@ -23,22 +25,23 @@ class Shopping extends Component {
     } = shoppingStore;
 
     return (
-
-      // visualize the current shopping list
-      currentShoppingList &&
-      <ShoppingList
-        authUser={sessionStore.authUser}
-        list={currentShoppingList}
-        items={currentShoppingListItems}
-        dependentNeedLists={currentDependentNeedsLists}
-        onEditList={this.props.model.onEditShoppingList}
-        onCreateItem={this.props.model.onCreateItemForCurrentShoppingList}
-        onEditItem={this.props.model.onEditShoppingItem}
-        onDeleteItem={this.props.model.onRemoveShoppingItem}
-        onReorderItems={this.props.model.onReorderItems}
-        editMode={this.props.editMode}
-        addSaveEditHandler={this.props.addSaveEditHandler}
-      />
+      currentShoppingList && 
+      <>
+        <ShoppingList
+          authUser={sessionStore.authUser}
+          list={currentShoppingList}
+          items={currentShoppingListItems}
+          dependentNeedLists={currentDependentNeedsLists}
+          onEditList={this.props.model.onEditShoppingList}
+          onCreateItem={this.props.model.onCreateItemForCurrentShoppingList}
+          onEditItem={this.props.model.onEditShoppingItem}
+          onDeleteItem={this.props.model.onRemoveShoppingItem}
+          onReorderItems={this.props.model.onReorderItems}
+          editMode={this.props.editMode}
+          addSaveEditHandler={this.props.addSaveEditHandler}
+        />
+        currentShoppingList && <ShareListFab shoppingList={currentShoppingList} />
+      </>
     );
   }
 }
