@@ -21,12 +21,21 @@ jobs:
         shell: bash
         run: |
             SUBDOMAIN="staging"
-            if [ "$BRANCH" == "master" ]; then 
+            if [ "$BRANCH" == "refs/heads/master" ]; then 
             SUBDOMAIN="app"; 
             fi;
             echo ::set-output name=SUBDOMAIN::${SUBDOMAIN}
             echo ::set-output name=DOMAIN::${SUBDOMAIN}.sharemycart.com
             echo ::set-output name=PUBLIC_URL::https://${SUBDOMAIN}.sharemycart.com
+        env:
+          BRANCH: ${{ github.ref }}
+      - name: print vars
+        run: |
+          echo "Branch: $BRANCH"
+          echo "Public URL: $PUBLIC_URL"
+        env:
+          BRANCH: ${{ github.ref }}
+          PUBLIC_URL: ${{ steps.vars.outputs.PUBLIC_URL }}
       - uses: actions/setup-node@v1
         with:
           node-version: '10.x'
@@ -34,58 +43,20 @@ jobs:
           npm i
       # - run: |
       #     npm run test
-      ### setup env-file from secrets
       - name: Setup env
-        uses: TickX/var-to-dotenv@v1.1.1
+        uses: SpicyPizza/create-envfile@v1
         with:
-          key: "REACT_APP_BASENAME"
-          value: ${{ steps.vars.outputs.PUBLIC_URL }}
-          envPath: '.env.staging'
-      - uses: TickX/var-to-dotenv@v1.1.1
-        with:
-          key: "REACT_APP_BACKEND_API_KEY"
-          value: ${{secrets.STAGING_BACKEND_API_KEY}}
-          envPath: '.env.staging'
-      - uses: TickX/var-to-dotenv@v1.1.1
-        with:
-          key: "REACT_APP_BACKEND_AUTH_DOMAIN"
-          value: ${{secrets.STAGING_BACKEND_PROJECT_ID}}${{'.firebaseapp.com'}}
-          envPath: '.env.staging'
-      - uses: TickX/var-to-dotenv@v1.1.1
-        with:
-          key: "REACT_APP_BACKEND_DATABASE_URL"
-          value: ${{'https://'}}${{secrets.STAGING_BACKEND_PROJECT_ID}}${{'.firebaseio.com'}}
-          envPath: '.env.staging'
-      - uses: TickX/var-to-dotenv@v1.1.1
-        with:
-          key: "REACT_APP_BACKEND_PROJECT_ID"
-          value: ${{secrets.STAGING_BACKEND_PROJECT_ID}}
-          envPath: '.env.staging'
-      - uses: TickX/var-to-dotenv@v1.1.1
-        with:
-          key: "REACT_APP_BACKEND_STORAGE_BUCKET"
-          value: ${{secrets.STAGING_BACKEND_PROJECT_ID}}${{'.appspot.com'}}
-          envPath: '.env.staging'
-      - uses: TickX/var-to-dotenv@v1.1.1
-        with:
-          key: "REACT_APP_BACKEND_MESSAGE_SENDER_ID"
-          value: ${{secrets.STAGING_BACKEND_MESSAGE_SENDER_ID}}
-          envPath: '.env.staging'
-      - uses: TickX/var-to-dotenv@v1.1.1
-        with:
-          key: "REACT_APP_BACKEND_SENDER_APP_ID"
-          value: ${{secrets.STAGING_BACKEND_SENDER_APP_ID}}
-          envPath: '.env.staging'
-      - uses: TickX/var-to-dotenv@v1.1.1
-        with:
-          key: "REACT_APP_BACKEND_MEASUREMENT_ID"
-          value: ${{secrets.STAGING_BACKEND_MEASUREMENT_ID}}
-          envPath: '.env.staging'
-      - uses: TickX/var-to-dotenv@v1.1.1
-        with:
-          key: "REACT_APP_CONFIRMATION_EMAIL_REDIRECT"
-          value: ${{secrets.STAGING_CONFIRMATION_EMAIL_REDIRECT}}
-          envPath: '.env.staging'
+          envkey_REACT_APP_BASENAME: ${{ steps.vars.outputs.PUBLIC_URL }}
+          envkey_REACT_APP_BACKEND_API_KEY: ${{secrets.STAGING_BACKEND_API_KEY}}
+          envkey_REACT_APP_BACKEND_AUTH_DOMAIN: ${{secrets.STAGING_BACKEND_PROJECT_ID}}.firebaseapp.com
+          envkey_REACT_APP_BACKEND_DATABASE_URL: https://${{secrets.STAGING_BACKEND_PROJECT_ID}}.firebaseio.com
+          envkey_REACT_APP_BACKEND_PROJECT_ID: ${{secrets.STAGING_BACKEND_PROJECT_ID}}
+          envkey_REACT_APP_BACKEND_STORAGE_BUCKET: ${{secrets.STAGING_BACKEND_PROJECT_ID}}.appspot.com
+          envkey_REACT_APP_BACKEND_MESSAGE_SENDER_ID: ${{secrets.STAGING_BACKEND_MESSAGE_SENDER_ID}}
+          envkey_REACT_APP_BACKEND_SENDER_APP_ID: ${{secrets.STAGING_BACKEND_SENDER_APP_ID}}
+          envkey_REACT_APP_BACKEND_MEASUREMENT_ID: ${{secrets.STAGING_BACKEND_MEASUREMENT_ID}}
+          envkey_REACT_APP_CONFIRMATION_EMAIL_REDIRECT: ${{ steps.vars.outputs.PUBLIC_URL }}
+          file_name: .env.staging
       - run: |
           npm run build:staging
       - name: Upload build
@@ -98,7 +69,7 @@ jobs:
 
   deploy:
     needs: [build]
-    # if: github.ref == 'master' #TODO: Switch to real staging once we're out of Beta
+    # if: github.ref == 'refs/heads/master' #TODO: Switch to real staging once we're out of Beta
     env:
       GITHUB_PAT: ${{ secrets.DEPLOYMENT_PAT }}
     runs-on: ubuntu-latest
@@ -116,7 +87,7 @@ jobs:
         run: |
             SUBDOMAIN="staging"
             REPO="sharemycart/app-staging"
-            if [ "$BRANCH" == "master" ]; then 
+            if [ "$BRANCH" == "refs/heads/master" ]; then 
             SUBDOMAIN="app"; 
             REPO="sharemycart/sharemycart"; 
             fi;
@@ -124,7 +95,7 @@ jobs:
             echo ::set-output name=DOMAIN::${SUBDOMAIN}.sharemycart.com
             echo ::set-output name=REPO::${REPO}
         env:
-          BRANCH: "${{ github.ref }}"
+          BRANCH: ${{ github.ref }}
       - name: Deploy to GitHub Pages
         uses: crazy-max/ghaction-github-pages@v1.3.0
         with:

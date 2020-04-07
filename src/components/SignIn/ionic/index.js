@@ -17,16 +17,21 @@ import '../../Reusables/components.scss'
 const SignInPage = () => (
   <>
     <IonContent className="login-page">
-      <SplashLogo />
+      <SplashLogo maxWidth="150px" />
       <IonGrid>
         <SignInForm />
-        <div class="separator">Your social network account</div>
+        <div class="separator">or with</div>
         <SignInGoogle />
         <SignInFacebook />
         {/* <SignInTwitter /> */}
-
-        <PasswordForgetLink />
-        <SignUpLink />
+        <IonRow>
+          <IonCol>
+            <PasswordForgetLink />
+          </IonCol>
+          <IonCol>
+            <SignUpLink />
+          </IonCol>
+        </IonRow>
       </IonGrid>
     </IonContent>
   </>
@@ -113,8 +118,8 @@ class SignInFormBase extends Component {
               padding-horizontal
               clear-input="true"
               autocomplete
-              >
-              </IonInput>
+            >
+            </IonInput>
           </IonCol>
         </IonRow>
         <IonRow>
@@ -128,7 +133,7 @@ class SignInFormBase extends Component {
               placeholder="Password"
               class="input"
               padding-horizontal>
-              </IonInput>
+            </IonInput>
           </IonCol>
         </IonRow>
         <IonButton disabled={isInvalid} type="submit" expand="block">
@@ -188,7 +193,7 @@ class SignInGoogleBase extends Component {
         <IonRow>
           <IonCol>
             <IonButton onClick={this.onSubmit} type="submit" expand="block" color="secondary"><IonIcon
-              icon={logoGoogle} /><span className="social-button-text">Sign In with Google</span></IonButton>
+              icon={logoGoogle} /><span className="social-button-text">Google</span></IonButton>
           </IonCol>
         </IonRow>
         {error && <p>{error.message}</p>}
@@ -246,7 +251,7 @@ class SignInFacebookBase extends Component {
           <IonCol>
             <IonButton onClick={this.onSubmit} type="submit" expand="block" color="secondary"><IonIcon
               icon={logoFacebook} /><span
-                className="social-button-text">Sign In with Facebook</span></IonButton>
+                className="social-button-text">Facebook</span></IonButton>
           </IonCol>
         </IonRow>
 
@@ -305,7 +310,7 @@ class SignInTwitterBase extends Component {
           <IonCol>
             <IonButton onClick={this.onSubmit} type="submit" expand="block" color="secondary"><IonIcon
               icon={logoTwitter} /><span
-                className="social-button-text">Sign In with Twitter</span></IonButton>
+                className="social-button-text">Twitter</span></IonButton>
           </IonCol>
         </IonRow>
 

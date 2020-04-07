@@ -9,13 +9,13 @@ import { IonPage, IonHeader, IonToolbar, IonButtons, IonButton, IonContent, IonI
 const SignUpPage = () => (
   <IonPage>
     <IonHeader>
-    <IonToolbar>
-      <IonButtons slot="secondary">
-        <IonButton fill="clear">
-          Help
+      <IonToolbar>
+        <IonButtons slot="secondary">
+          <IonButton fill="clear">
+            Help
         </IonButton>
-      </IonButtons>
-    </IonToolbar>
+        </IonButtons>
+      </IonToolbar>
     </IonHeader>
     <IonContent>
 
@@ -115,69 +115,67 @@ class SignUpFormBase extends Component {
       username === '';
 
     return (
-        <>
-          <IonImg className="image-login" src="../../../theme/logo-cart_1000.png" />
-          <IonGrid>
-            <IonRow className="logo-text">
-              <IonCol className="ion-align-self-center">
-                <IonLabel style={{ color: '#707070' }}>Share</IonLabel>
-                <IonLabel style={{ color: '#FA3D04' }}>MyCart</IonLabel>
-              </IonCol>
-            </IonRow>
-          </IonGrid>
-      <form onSubmit={this.onSubmit}>
-        <input
-          name="username"
-          value={username}
-          onChange={this.onChange}
-          type="text"
-          placeholder="Full Name"
-        />
-        <input
-          name="email"
-          value={email}
-          onChange={this.onChange}
-          type="text"
-          placeholder="Email Address"
-        />
-        <input
-          name="passwordOne"
-          value={passwordOne}
-          onChange={this.onChange}
-          type="password"
-          placeholder="Password"
-        />
-        <input
-          name="passwordTwo"
-          value={passwordTwo}
-          onChange={this.onChange}
-          type="password"
-          placeholder="Confirm Password"
-        />
-        <label>
-          Admin:
+      <>
+        <IonImg className="image-login" src="../../../theme/logo-cart_1000.png" />
+        <IonGrid>
+          <IonRow className="logo-text">
+            <IonCol className="ion-align-self-center">
+              <IonLabel style={{ color: '#707070' }}>Share</IonLabel>
+              <IonLabel style={{ color: '#FA3D04' }}>MyCart</IonLabel>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
+        <form onSubmit={this.onSubmit}>
           <input
-            name="isAdmin"
-            type="checkbox"
-            checked={isAdmin}
-            onChange={this.onChangeCheckbox}
+            name="username"
+            value={username}
+            onChange={this.onChange}
+            type="text"
+            placeholder="Full Name"
           />
-        </label>
-        <button disabled={isInvalid} type="submit">
-          Sign Up
+          <input
+            name="email"
+            value={email}
+            onChange={this.onChange}
+            type="text"
+            placeholder="Email Address"
+          />
+          <input
+            name="passwordOne"
+            value={passwordOne}
+            onChange={this.onChange}
+            type="password"
+            placeholder="Password"
+          />
+          <input
+            name="passwordTwo"
+            value={passwordTwo}
+            onChange={this.onChange}
+            type="password"
+            placeholder="Confirm Password"
+          />
+          <label>
+            Admin:
+          <input
+              name="isAdmin"
+              type="checkbox"
+              checked={isAdmin}
+              onChange={this.onChangeCheckbox}
+            />
+          </label>
+          <button disabled={isInvalid} type="submit">
+            Sign Up
         </button>
 
-        {error && <p>{error.message}</p>}
-      </form>
+          {error && <p>{error.message}</p>}
+        </form>
       </>
     );
   }
 }
 
 const SignUpLink = () => (
-  <p>
-    Don't have an account? <Link to={ROUTES.SIGN_UP}>Sign Up</Link>
-  </p>
+  <span>No account yet? <Link to={ROUTES.SIGN_UP}>Sign Up</Link></span>
 );
 
 const SignUpForm = withRouter(withFirebase(SignUpFormBase));
