@@ -86,7 +86,7 @@ class Needs extends Component {
               this.props.firebase.user(shoppingListOwnerId).get()
                 .then(snapshot => {
                   const owner = snapshot.data()
-                  this.props.userStore.setUser(owner.uid, owner)
+                  this.props.userStore.setUser(snapshot.id, owner)
                 })
             }
           }
