@@ -1,123 +1,67 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import {Trans} from 'react-i18next'
+import {withTranslation} from 'react-i18next';
 
 import {
-	IonFab,
-	IonItem,
-	IonLabel,
-	IonPopover,
-	IonButton,
-	IonToast,
-	IonFabButton,
-	IonIcon,
-	IonListHeader,
-	IonItemSliding
-} from '@ionic/react';
-import { share, exit, copy } from 'ionicons/icons';
+    IonFab,
+    IonToast,
+    IonFabButton,
+    IonIcon} from '@ionic/react';
+import { share } from 'ionicons/icons';
+import { compose } from 'recompose';
 
 class ShareListFab extends Component {
-	constructor (props) {
-		super(props);
-		this._hasUnmounted = false;
-		this.state = {
-			showPopover: false,
-			shareableLink: '',
-			message: '',
-			showToast: false
-		};
+    constructor(props) {
+        super(props);
+        this._hasUnmounted = false;
+        this.state = {
+            message: '',
+            showToast: false
+        };
+    }
 
-		this.setShowPopover = this.setShowPopover.bind(this);
-	}
+    generateShareLink = () => {
+        let shoppingListId = this.props.shoppingList.uid
+        return `${window.location.origin}/share/${shoppingListId}`;
+    };
 
-	setShowPopover = async (showPopover) => {
-		if (showPopover) {
-			await this.generateShareLink();
-		}
-		this.setState({ showPopover: showPopover });
-	};
+    async componentDidMount() {
+        if (this._hasUnmounted) {
+            return;
+        }
+    }
 
-	generateShareLink = async () => {
-		let shoppingListId = this.props.shoppingList.uid
-		let newLink = `${window.location.origin}/share/${shoppingListId}`;
+    componentWillUnmount() {
+        this._hasUnmounted = true;
+    }
 
-		this.setState({
-			shareableLink: newLink
-		});
-	};
-
-	async componentDidMount () {
-		if (this._hasUnmounted) {
-			return;
-		}
-		try {
-			// this.setState({
-			// 	currentList: await this.props.store.getCurrentList()
-			// });
-		} catch (error) {
-			console.error('error found', error);
-		}
-	}
-
-	componentWillUnmount () {
-		this._hasUnmounted = true;
-	}
-
-	render () {
-		return (
-			<>
-				<IonFab vertical="bottom" horizontal="end" onClick={() => this.setShowPopover(true)}>
-					<IonFabButton><IonIcon icon={share}/></IonFabButton>
-				</IonFab>
-				<IonPopover
-					isOpen={this.state.showPopover}
-					onDidDismiss={e => this.setShowPopover(false)}
-				>
-					<IonListHeader style={{
-						fontWeight: 'bold'
-					}}>
-						Link to share
-					</IonListHeader>
-
-					<IonItemSliding>
-						<IonItem>
-							<IonLabel style={{
-								wordBreak: 'break-all',
-								whiteSpace: 'normal'
-							}}>{this.state.shareableLink}
-							</IonLabel>
-						</IonItem>
-					</IonItemSliding>
-					<CopyToClipboard text={this.state.shareableLink}>
-						<IonButton expand="full" onClick={()=>{
-							this.setState({
-								showToast: true,
-								message: 'Link copied to Clipboard'
-							})
-						}}>
-							COPY LINK
-							<IonIcon slot="end" icon={copy}/>
-						</IonButton>
-					</CopyToClipboard>
-					<IonToast
-						isOpen={this.state.showToast}
-						onDidDismiss={() => this.setState(() => ({ showToast: false }))}
-						message={this.state.message}
-						duration={2000}
-					/>
-					<IonButton
-						color="danger"
-						expand="full"
-						onClick={e => this.setShowPopover(false)}
-					>
-						<IonIcon slot="end" icon={exit}/>
-						CLOSE
-					</IonButton>
-				</IonPopover>
-			</>
-		);
-	}
+    render() {
+        const {t} = this.props;
+        return (
+            <>
+                <CopyToClipboard text={this.generateShareLink()}>
+                    <IonFab vertical="bottom" horizontal="end" onClick={() => {
+                        this.setState({
+                            showToast: true,
+                            message: t('Sharing_link_copied')
+                        })
+                    }}>
+					<IonFabButton><IonIcon icon={share} /></IonFabButton>
+                    </IonFab>
+                </CopyToClipboard>
+                <IonToast
+                    isOpen={this.state.showToast}
+                    onDidDismiss={() => this.setState(() => ({ showToast: false }))}
+                    message={this.state.message}
+                    duration={5000}
+                />
+            </>
+        );
+    }
 }
 
-export default withRouter(ShareListFab);
+export default compose(
+    withTranslation(),
+    withRouter
+)(ShareListFab)

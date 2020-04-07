@@ -40,7 +40,7 @@ class Shopping extends Component {
           editMode={this.props.editMode}
           addSaveEditHandler={this.props.addSaveEditHandler}
         />
-        currentShoppingList && <ShareListFab shoppingList={currentShoppingList} />
+        <ShareListFab shoppingList={currentShoppingList} />
       </>
     );
   }
