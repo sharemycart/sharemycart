@@ -25,28 +25,12 @@ const AccountPage = ({ sessionStore }) => {
           </IonToolbar>
         </IonHeader>
         <Profile />
-        <IonFooter translucent style={
-          {
-            // this would pin the footer to the bottom.
-            // Unfortunately, this seems not work be accepted in Safari
-            // position: 'fixed',
-            // left: '0',
-            // bottom: '10px',
-            // right: '0',
-          }
-        }>
+        <IonFooter>
           <IonToolbar>
             <PasswordChangeButton />
             <SignOutButton />
           </IonToolbar>
         </IonFooter>
-        {/* The following components allow the user to manage their logins */}
-        {/* 
-        <PasswordForgetForm />
-        <PasswordChangeForm />
-        <LoginManagement authUser={sessionStore.authUser} /> 
-        */}
-
       </IonContent>
     </IonPage>
   );
