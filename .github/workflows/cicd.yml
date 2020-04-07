@@ -69,7 +69,7 @@ jobs:
 
   deploy:
     needs: [build]
-    # if: github.ref == 'refs/heads/master' #TODO: Switch to real staging once we're out of Beta
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop' #TODO: Switch to real staging once we're out of Beta
     env:
       GITHUB_PAT: ${{ secrets.DEPLOYMENT_PAT }}
     runs-on: ubuntu-latest
