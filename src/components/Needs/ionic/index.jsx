@@ -6,7 +6,7 @@ import './page.css';
 import { withFirebase } from '../../Firebase';
 import { compose } from 'recompose';
 import { inject, observer } from 'mobx-react';
-import Avatar from '../../Reusables/ionic/Avatar';
+// import Avatar from '../../Reusables/ionic/Avatar';
 
 class NeedsPage extends NeedsModel {
   render() {
