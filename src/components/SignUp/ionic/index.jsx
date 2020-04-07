@@ -6,13 +6,15 @@ import * as ROUTES from '../../../constants/routes';
 import * as ROLES from '../../../constants/roles';
 import { IonPage, IonHeader, IonToolbar, IonButtons, IonButton, IonContent, IonImg, IonGrid, IonRow, IonCol, IonLabel } from '@ionic/react';
 
+import {Trans} from 'react-i18next'
+
 const SignUpPage = () => (
   <IonPage>
     <IonHeader>
       <IonToolbar>
         <IonButtons slot="secondary">
           <IonButton fill="clear">
-            Help
+            <Trans>Help</Trans>
         </IonButton>
         </IonButtons>
       </IonToolbar>
@@ -164,7 +166,7 @@ class SignUpFormBase extends Component {
             />
           </label>
           <button disabled={isInvalid} type="submit">
-            Sign Up
+            <Trans>Sign Up</Trans>
         </button>
 
           {error && <p>{error.message}</p>}
@@ -175,7 +177,12 @@ class SignUpFormBase extends Component {
 }
 
 const SignUpLink = () => (
-  <span>No account yet? <Link to={ROUTES.SIGN_UP}>Sign Up</Link></span>
+  <span>
+    <Trans>No account yet?</Trans>
+    &nbsp;
+    <Link to={ROUTES.SIGN_UP}>
+    <Trans>Sign Up</Trans>
+</Link></span>
 );
 
 const SignUpForm = withRouter(withFirebase(SignUpFormBase));

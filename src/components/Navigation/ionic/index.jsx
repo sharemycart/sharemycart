@@ -15,6 +15,8 @@ import NeedsPage from '../../Needs/ionic';
 
 import { useLocation } from 'react-router-dom'
 
+import {Trans} from 'react-i18next';
+
 import * as ROUTES from '../../../constants/routes';
 import {
     // IonIcon,
@@ -44,15 +46,15 @@ export const NavigationAuth = ({ authUser }) => (
             <IonTabBar slot="bottom">
                 <IonTabButton tab="Shopping" href={ROUTES.SHOPPING}>
                     <IonIcon icon={cartOutline} />
-                    <IonLabel>Shopping</IonLabel>
+                    <IonLabel><Trans>Shopping</Trans></IonLabel>
                 </IonTabButton>
                 <IonTabButton tab="Needs" href={ROUTES.NEEDS}>
                     <IonIcon icon={linkOutline} />
-                    <IonLabel>Shared</IonLabel>
+                    <IonLabel><Trans>Shared</Trans></IonLabel>
                 </IonTabButton>
                 <IonTabButton tab="Account" href={ROUTES.ACCOUNT}>
                     <IonIcon icon={personOutline} />
-                    <IonLabel>Account</IonLabel>
+                    <IonLabel><Trans>Account</Trans></IonLabel>
                 </IonTabButton>
             </IonTabBar>
         </IonTabs>
@@ -76,9 +78,9 @@ export const NavigationNonAuth = (props) => {
                     </Switch>
             </IonRouterOutlet>
             <IonTabBar slot="bottom">
-                <IonTabButton tab="Sign in" href={ROUTES.SIGN_IN}>
+                <IonTabButton tab="Sign In" href={ROUTES.SIGN_IN}>
                     <IonIcon icon={lockClosed} />
-                    <IonLabel>Sign in</IonLabel>
+                    <IonLabel>Sign In</IonLabel>
                 </IonTabButton>
             </IonTabBar>
         </IonTabs>

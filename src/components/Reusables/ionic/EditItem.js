@@ -1,6 +1,9 @@
 import React, { Component } from "react";
-import { IonItem, IonButton, IonInput, IonSelect, IonSelectOption, IonLabel } from "@ionic/react";
+import { IonItem, IonButton, IonInput, IonSelect, IonSelectOption, IonLabel, IonIcon } from "@ionic/react";
 import { ITEM_TYPE_SHOPPING, ITEM_TYPE_NEED } from "../../../constants/items";
+
+import {withTranslation} from 'react-i18next';
+import { cartOutline } from "ionicons/icons";
 
 const ENTER_KEY = 13;
 
@@ -60,6 +63,8 @@ class EditItem extends Component {
   render() {
     const { item } = this.state;
 
+    const {t} = this.props;
+
     const unitOfMeasure = this.props.mode === ITEM_TYPE_SHOPPING
       ? <IonSelect
         value={item.unit}
@@ -78,7 +83,7 @@ class EditItem extends Component {
       <IonItem style={{ width: "100%" }}>
         <IonInput
           // autofocus={this.props.mode === ITEM_TYPE_SHOPPING && !item.name}
-          placeholder="Item name"
+          placeholder={t('Item name')}
           name="name"
           value={item.name}
           onIonInput={event => this.onKeyPress(event)}
@@ -90,7 +95,7 @@ class EditItem extends Component {
         />
         <IonInput
           // autofocus={(this.props.mode === ITEM_TYPE_NEED) || (this.props.mode === ITEM_TYPE_SHOPPING && item.name)}
-          placeholder="Quantity"
+          placeholder={t("Quantity")}
           name="quantity"
           type="number"
           min="0"
@@ -103,10 +108,12 @@ class EditItem extends Component {
           ref={this.quantityInput}
         />
         {unitOfMeasure}
-        <IonButton onClick={() => this.concludeEditing()} style={{ 'marginLeft': '10px' }}>Add</IonButton>
+        <IonButton onClick={() => this.concludeEditing()} style={{ 'marginLeft': '10px' }}>
+          <IonIcon icon={cartOutline} />
+        </IonButton>
       </IonItem>
     )
   }
 }
 
-export default EditItem
+export default withTranslation()(EditItem)

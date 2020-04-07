@@ -10,9 +10,10 @@ import { withFirebase } from '../../Firebase';
 import { inject, observer } from 'mobx-react';
 import { createOutline, saveOutline, cartOutline } from 'ionicons/icons';
 
+import { Trans } from 'react-i18next';
 class ShoppingPage extends ShoppingModel {
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = Object.assign(this.state, {
       editMode: false
@@ -21,12 +22,12 @@ class ShoppingPage extends ShoppingModel {
     this.saveHandler = []
   }
 
-  saveEdit(){
-    this.saveHandler.forEach(handler=>handler())
-    this.setState({editMode: false})
+  saveEdit() {
+    this.saveHandler.forEach(handler => handler())
+    this.setState({ editMode: false })
   }
 
-  addSaveEditHandler(handlerFn){
+  addSaveEditHandler(handlerFn) {
     this.saveHandler.push(handlerFn)
   }
 
@@ -34,7 +35,7 @@ class ShoppingPage extends ShoppingModel {
     const EditButton = () => (
       !this.state.editMode && <IonButton color="danger" fill="clear"
         onClick={() => this.setState({ editMode: true })}>
-        {'Edit'}
+        <Trans>Edit</Trans>
         <IonIcon slot="end" icon={createOutline} />
       </IonButton>
     )
@@ -42,30 +43,30 @@ class ShoppingPage extends ShoppingModel {
     const SaveButton = () => (
       this.state.editMode && <IonButton color="danger" fill="clear"
         onClick={() => this.saveEdit()}>
-        {'Save'}
+        <Trans>Save</Trans>
         <IonIcon slot="end" icon={saveOutline} />
       </IonButton>
     )
-    
+
     return (
       <IonPage>
         <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="secondary">
-            <IonButton fill="clear">
-              Go Shopping
+          <IonToolbar>
+            <IonButtons slot="secondary">
+              <IonButton fill="clear">
+                <Trans>Go Shopping</Trans>
               <IonIcon slot="start" icon={cartOutline} />
-            </IonButton>
-          </IonButtons>
-          <IonTitle>{
-            (this.props.shoppingStore.currentShoppingList && this.props.shoppingStore.currentShoppingList.name)
-            || 'Shopping'
+              </IonButton>
+            </IonButtons>
+            <IonTitle>{
+              (this.props.shoppingStore.currentShoppingList && this.props.shoppingStore.currentShoppingList.name)
+              || 'Shopping'
             }</IonTitle>
-          <IonButtons slot="primary">
-            <EditButton />
-            <SaveButton />
-          </IonButtons>
-        </IonToolbar>
+            <IonButtons slot="primary">
+              <EditButton />
+              <SaveButton />
+            </IonButtons>
+          </IonToolbar>
         </IonHeader>
         <IonContent>
           <IonHeader collapse="condense">
@@ -76,9 +77,9 @@ class ShoppingPage extends ShoppingModel {
 
           {this.props.sessionStore.dbAuthenticated &&
             <Shopping model={this}
-                      editMode={this.state.editMode} 
-                      addSaveEditHandler={this.addSaveEditHandler.bind(this)}
-                      />
+              editMode={this.state.editMode}
+              addSaveEditHandler={this.addSaveEditHandler.bind(this)}
+            />
           }
 
         </IonContent>

@@ -8,6 +8,8 @@ import store from './stores';
 import App from './components/App/ionic';
 import Firebase, { FirebaseContext } from './components/Firebase';
 
+import './i18n';
+
 ReactDOM.render(
   <Provider {...store}>
     <FirebaseContext.Provider value={new Firebase()}>

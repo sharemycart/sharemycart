@@ -8,6 +8,8 @@ import { compose } from 'recompose';
 import { inject, observer } from 'mobx-react';
 // import Avatar from '../../Reusables/ionic/Avatar';
 
+import {Trans} from 'react-i18next';
+
 class NeedsPage extends NeedsModel {
   render() {
     const ListHeader = ({
@@ -26,7 +28,7 @@ class NeedsPage extends NeedsModel {
               user={owner}
             /> */}
             <span>
-              by {owner.username}
+              <Trans>by</Trans> {owner.username}
             </span>
           </IonTitle>
         )
