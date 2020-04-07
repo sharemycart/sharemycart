@@ -1,7 +1,7 @@
 import React from 'react';
 import { compose } from 'recompose';
 import { inject, observer } from 'mobx-react';
-import { IonAvatar, IonCardHeader, IonCard, IonCardSubtitle, IonCardTitle } from '@ionic/react';
+import { IonCardHeader, IonCard, IonCardSubtitle, IonCardTitle } from '@ionic/react';
 import Avatar from '../../Reusables/ionic/Avatar';
 
 const Profile = (props) => {
