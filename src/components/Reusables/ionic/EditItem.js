@@ -44,7 +44,7 @@ class EditItem extends Component {
   onChange(event) {
     const property = event.currentTarget.name
     const value = event.currentTarget.value
-    this.setState({ item: { ...this.state.item, [property]: value } })
+    this.setState({ item: { ...this.props.item, [property]: value } })
   }
 
   onKeyPress = (event) => {
