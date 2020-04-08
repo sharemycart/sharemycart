@@ -12,6 +12,7 @@ import AccountPage from '../../Account/ionic';
 import AdminPage from '../../Admin/simple-ui';
 import ShoppingPage from '../../Shopping/ionic';
 import NeedsPage from '../../Needs/ionic';
+import SharedShoppingList from '../../Needs/ionic/SharedShoppingList';
 
 import { useLocation } from 'react-router-dom'
 
@@ -27,7 +28,7 @@ import {
     IonTabs,
     IonIcon
 } from '@ionic/react';
-import NeedsInSharedShoppingList from '../../Needs/simple-ui/NeedsInSharedShoppingList';
+
 import { cartOutline, linkOutline, personOutline, lockClosed } from 'ionicons/icons';
 
 export const NavigationAuth = ({ authUser }) => (
@@ -39,7 +40,7 @@ export const NavigationAuth = ({ authUser }) => (
                     <Route path={ROUTES.ACCOUNT} component={AccountPage} />
                     <Route path={ROUTES.SHOPPING} component={ShoppingPage} />
                     <Route path={ROUTES.NEEDS} component={NeedsPage} />
-                    <Route path={ROUTES.SHARED_SHOPPING_LIST} component={NeedsInSharedShoppingList} />
+                    <Route path={ROUTES.SHARED_SHOPPING_LIST} component={SharedShoppingList} />
                     <Route path={ROUTES.ADMIN} component={AdminPage} />
                     <Redirect exact from="/" to={ROUTES.SHOPPING} />
             </IonRouterOutlet>
@@ -115,7 +116,7 @@ export default compose(
 //                 <PrivateRoute path={ROUTES.ACCOUNT} component={AccountPage} />
 //                 <PrivateRoute path={ROUTES.SHOPPING} component={ShoppingPage} />
 //                 <PrivateRoute path={ROUTES.NEEDS} component={NeedsPage} />
-//                 <PrivateRoute path={ROUTES.SHARED_SHOPPING_LIST} component={NeedsInSharedShoppingList} />
+//                 <PrivateRoute path={ROUTES.SHARED_SHOPPING_LIST} component={SharedShoppingList} />
 //                 <PrivateRoute path={ROUTES.ADMIN} component={AdminPage} />
 //                 <Redirect exact from="/" to={ROUTES.SHOPPING} />
 //             </IonRouterOutlet>
