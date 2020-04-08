@@ -70,6 +70,9 @@ class Shopping extends Component {
       // .limit(this.state.limit)
       .onSnapshot(snapshot => {
         let currentShoppingListId = null;
+
+        this.props.shoppingStore.setInitializationDone(true);
+
         if (snapshot.size) {
           let shoppingLists = [];
           snapshot.forEach(doc => {

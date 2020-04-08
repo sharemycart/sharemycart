@@ -10,9 +10,14 @@ class ShoppingStore {
   @observable currentShoppingListItems = null;
   @observable currentDependentNeedsLists = null;
   @observable currentDependentNeedsListsItems = null;
+  @observable initializationDone = false;
 
   constructor(rootStore) {
     this.rootStore = rootStore;
+  }
+
+  @action setInitializationDone(done){
+    this.initializationDone = done;
   }
 
   @action setShoppingLists = shoppingLists => {

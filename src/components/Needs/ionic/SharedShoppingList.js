@@ -4,12 +4,13 @@ import { withFirebase } from '../../Firebase';
 import { inject, observer } from 'mobx-react';
 import { NEEDS } from '../../../constants/routes';
 
-import { IonLoading, IonButton, IonContent, IonFooter, IonToolbar, IonPage, IonHeader, IonTitle, IonCard, IonCardHeader, IonCardTitle } from '@ionic/react';
+import { IonButton, IonContent, IonFooter, IonToolbar, IonPage, IonHeader, IonTitle, IonCard, IonCardHeader, IonCardTitle } from '@ionic/react';
 import Avatar from '../../Reusables/ionic/Avatar';
 
 import { Trans } from 'react-i18next';
 
 import './page.css'
+import LoadingAnimation from '../../Reusables/ionic/LoadingAnimation';
 
 class NeedsInSharedShoppingList extends Component {
     constructor(props) {
@@ -54,11 +55,7 @@ class NeedsInSharedShoppingList extends Component {
         const { loading, shoppingListId, sharingUser, isValid } = this.state;
 
         const Content = (props) => {
-            if (loading) return (
-                <IonLoading
-                    isOpen={loading}
-                    message={'Please wait...'}
-                />)
+            if (loading) return <LoadingAnimation loading={loading}/>
             if (!loading && !isValid) return <div>The list with id {shoppingListId} does not exist</div>
             if (!loading && isValid) return (
                 <>

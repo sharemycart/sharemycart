@@ -5,6 +5,7 @@ import { compose } from 'recompose';
 import ShoppingList from './ShoppingList';
 
 import ShareListFab from './Share';
+import LoadingAnimation from '../../Reusables/ionic/LoadingAnimation';
 
 class Shopping extends Component {
   constructor(props) {
@@ -21,8 +22,11 @@ class Shopping extends Component {
       // shoppingListsArray: shoppingLists,
       currentShoppingList,
       currentShoppingListItemsArray: currentShoppingListItems,
-      currentDependentNeedsListsArray: currentDependentNeedsLists
+      currentDependentNeedsListsArray: currentDependentNeedsLists,
+      initializationDone,
     } = shoppingStore;
+
+    if( !initializationDone ) return <LoadingAnimation loading={initializationDone} />
 
     return (
       currentShoppingList && 
