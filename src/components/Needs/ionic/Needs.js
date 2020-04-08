@@ -3,6 +3,8 @@ import { inject, observer } from 'mobx-react';
 import { compose } from 'recompose';
 import NeedsList from './NeedsList';
 import { ITEM_TYPE_NEED, ITEM_TYPE_POTENTIAL_NEED } from '../../../constants/items';
+import SplashLogo from '../../Reusables/ionic/SplashLogo';
+import { IonGrid, IonCol, IonRow, IonItem } from '@ionic/react';
 class Needs extends Component {
   constructor(props) {
     super(props);
@@ -19,7 +21,25 @@ class Needs extends Component {
       potentiallyNeededItemsArray: potentiallyNeededItems,
       currentNeedsListItemsArray: currentNeedsListItems,
       currentOriginShoppingList,
+      initializationDone,
     } = needsStore;
+
+    const NothingSharedYet = () => (
+      <IonGrid>
+        <IonRow>
+          <IonCol>
+          <IonItem>
+            <SplashLogo
+              maxWidth="150px"
+              textStart="Nothing"
+              textEnd="SharedYet"
+            />
+            </IonItem>
+          </IonCol>
+        </IonRow>
+
+      </IonGrid>
+    )
 
     return (
       <>
@@ -35,6 +55,10 @@ class Needs extends Component {
             ownList={true}
             mode={ITEM_TYPE_NEED}
           />
+        }
+
+        {!currentNeedsList && initializationDone &&
+          <NothingSharedYet />
         }
 
         {/* Potentially needed */}

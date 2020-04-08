@@ -68,6 +68,8 @@ class Needs extends Component {
         let currentNeedsListId = null;
         let currentOriginShoppingListId = null;
 
+        this.props.needsStore.setInitializationDone(true);
+
         if (snapshot.size) {
           let needsLists = [];
           snapshot.forEach(doc => {
