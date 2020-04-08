@@ -40,13 +40,11 @@ class EditItem extends Component {
       })
     }
 
-    // This was a try to get the inputs focused after submit
-    // does not work, as it seems keeping it for reference
-    // if (this.props.mode === ITEM_TYPE_SHOPPING) {
-    //   setTimeout(this.nameInput.current.focus(), 1000)
-    // } else {
-    //   setTimeout(this.quantityInput.current.focus(), 1000)
-    // }
+    if (this.props.mode === ITEM_TYPE_NEW_SHOPPING) {
+      this.nameInput.current.setFocus()
+    } else {
+      this.quantityInput.current.setFocus()
+    }
   }
 
   onChange(event) {
@@ -99,8 +97,11 @@ class EditItem extends Component {
             onIonInput={event => this.onKeyPress(event)}
             onIonChange={event => this.onChange(event)}
             onIonBlur={event => this.onBlur(event)}
-            disabled={this.props.mode === ITEM_TYPE_NEED}
+            readonly={this.props.mode === ITEM_TYPE_NEED}
             required="true"
+            autocapitalize
+            autocorrect="on"
+            debounce="100"
             ref={this.nameInput}
           />
           <IonInput
