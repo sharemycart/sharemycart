@@ -33,8 +33,6 @@ const withEmailVerification = Component => {
 
     render() {
 
-      const { t } = this.props;
-
       return needsEmailVerification(
         this.props.sessionStore.authUser,
       ) ? (

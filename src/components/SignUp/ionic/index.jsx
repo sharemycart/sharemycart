@@ -4,7 +4,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { withFirebase } from '../../Firebase';
 import * as ROUTES from '../../../constants/routes';
 import * as ROLES from '../../../constants/roles';
-import { IonPage, IonHeader, IonToolbar, IonButtons, IonButton, IonContent, IonImg, IonGrid, IonRow, IonCol, IonLabel, IonInput } from '@ionic/react';
+import { IonPage, IonHeader, IonToolbar, IonButtons, IonButton, IonContent, IonRow, IonCol, IonInput } from '@ionic/react';
 
 import { withTranslation, Trans } from 'react-i18next'
 import { compose } from 'recompose';
