@@ -11,6 +11,7 @@ import { inject, observer } from 'mobx-react';
 import { createOutline, saveOutline, cartOutline } from 'ionicons/icons';
 
 import { Trans } from 'react-i18next';
+import { withEmailVerification } from '../../Session';
 class ShoppingPage extends ShoppingModel {
 
   constructor(props) {
@@ -93,6 +94,7 @@ class ShoppingPage extends ShoppingModel {
 
 export default compose(
   withFirebase,
+  withEmailVerification,
   inject('shoppingStore', 'sessionStore'),
   observer,
 )(ShoppingPage);

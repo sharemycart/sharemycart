@@ -21,6 +21,12 @@ const resources = {
             "Change Password": "Change Password",
             "Edit": "Edit",
             "Email": "Email",
+            "Email_confirmation_sent": `E-Mail confirmation sent: \n
+                Check you E-Mails (Spam folder included) for a confirmation E-Mail.\n
+                Refresh this page once you confirmed your E-Mail.`,
+            "Email_verification_needed": `Verify your E-Mail: \n
+                Check you E-Mails (Spam folder included) for a confirmation E-Mail \n
+                or send another confirmation E-Mail.`,
             "Forgot Password": "Forgot Password?",
             "Full Name": "Full Name",
             "Go Shopping": "Go shopping",
@@ -34,6 +40,7 @@ const resources = {
             "Reset My Password": "Reset My Password",
             "Repeat Password": "Repeat Password",
             "Save": "Save",
+            "Send confirmation E-Mail": "Send confirmation E-Mail",
             "Share": "Share",
             "Sharing_link_copied": "A link to your shopping list has been copied to the clipboard.\nSend it to people you like so that they ask you to bring something along for you!",
             "Sign In": "Sign In",
@@ -50,16 +57,22 @@ const resources = {
             "A shopping list has been shared with you": "Eine Einkaufsliste wurde mit Dir geteilt!",
             "Account": "Konto",
             "Account_already_exists": `
-                Ein Konto mit dieser E-Mail-Adresse existiert bereits.
-                Versuchen Sie stattdessen, sich mit diesem Konto anzumelden. 
-                Wenn Sie glauben, dass das Konto bereits von einem der sozialen Logins aus verwendet wird, 
-                versuchen Sie, sich mit iesem anzumelden. 
+                Ein Konto mit dieser E-Mail-Adresse existiert bereits.\n
+                Versuchen Sie stattdessen, sich mit diesem Konto anzumelden.\n
+                Wenn Sie glauben, dass das Konto bereits von einem der sozialen Logins aus verwendet wird, \n
+                versuchen Sie, sich mit iesem anzumelden.\n
                 Danach verbinden Sie Ihre Konten auf Ihrer persönlichen Konto-Seite.
                 `,
             "by": "von",
             "Change Password": "Passwort ändern",
             "Edit": "Bearbeiten",
             "Email": "Email",
+            "Email_confirmation_sent": `Bestätigungs-E-Mail wurde gesendet: \n
+                Prüfen Sie Ihre E-Mails (inklusive des Spam-Ordners) für eine Bestätigungs-E-Mail.\n
+                Aktualisieren Sie diese Seite, sobald Sie Ihre E-Mail bestätigt haben.`,
+            "Email_verification_needed": `Verifizieren Sie Ihre E-Mail-Adresse: \n
+                Prüfen Sie Ihre E-Mails (inklusive des Spam-Ordners) für eine Bestätigungs-E-Mail.\n
+                oder senden Sie eine weitere E-Mail-Bestätigungs-Anfrage.`,
             "Forgot Password": "Passwort vergessen?",
             "Full Name": "Vollständiger Name",
             "Go Shopping": "Einkaufen",
@@ -76,6 +89,7 @@ const resources = {
             "Repeat Password": "Passwort wiederholen",
             "Reset My Password": "Mein Passwort zurücksetzen",
             "Save": "Speichern",
+            "Send confirmation E-Mail": "Bestätigungs-E-Mail senden",
             "Share": "Teilen",
             "Sign In": "Anmelden",
             "Sign Out": "Abmelden",

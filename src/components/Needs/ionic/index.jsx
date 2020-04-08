@@ -9,6 +9,7 @@ import { inject, observer } from 'mobx-react';
 // import Avatar from '../../Reusables/ionic/Avatar';
 
 import {Trans} from 'react-i18next';
+import { withEmailVerification } from '../../Session';
 
 class NeedsPage extends NeedsModel {
   render() {
@@ -70,4 +71,5 @@ export default compose(
   withFirebase,
   inject('needsStore', 'userStore', 'sessionStore'),
   observer,
+  withEmailVerification,
 )(NeedsPage);
