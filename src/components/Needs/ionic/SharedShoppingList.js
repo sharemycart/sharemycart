@@ -4,7 +4,7 @@ import { withFirebase } from '../../Firebase';
 import { inject, observer } from 'mobx-react';
 import { NEEDS } from '../../../constants/routes';
 
-import { IonLoading, IonButton, IonContent, IonFooter, IonToolbar, IonPage, IonHeader, IonTitle, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
+import { IonLoading, IonButton, IonContent, IonFooter, IonToolbar, IonPage, IonHeader, IonTitle, IonCard, IonCardHeader, IonCardTitle } from '@ionic/react';
 import Avatar from '../../Reusables/ionic/Avatar';
 
 import { Trans } from 'react-i18next';
