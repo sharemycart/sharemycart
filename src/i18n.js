@@ -8,6 +8,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 const resources = {
     en: {
         translation: {
+            "A shopping list has been shared with you": "A shopping list has been shared with you!",
             "Account": "Account",
             "by": "by",
             "Change Password": "Change Password",
@@ -15,8 +16,10 @@ const resources = {
             "Email": "Email",
             "Forgot Password": "Forgot Password?",
             "Go Shopping": "Go shopping",
+            "has shared a shopping list with you": "has shared a shopping list with you",
             "Item name": "Item name",
             "No account yet?": "No account yet?",
+            "Open shared shopping list": "Open shared shopping list",
             "or with": "or with",
             "Password": "Password",
             "Quantity": "Quantity",
@@ -35,6 +38,7 @@ const resources = {
     },
     de: {
         translation: {
+            "A shopping list has been shared with you": "Eine Einkaufsliste wurde mit Dir geteilt!",
             "Account": "Konto",
             "by": "von",
             "Change Password": "Passwort ändern",
@@ -42,11 +46,13 @@ const resources = {
             "Email": "Email",
             "Forgot Password": "Passwort vergessen?",
             "Go Shopping": "Einkaufen",
+            "has shared a shopping list with you": "hat eine Einkaufsliste mit Dir geteilt!",
             "Help": "Hilfe",
             "Item name": "Sache",
             "Login": "Anmelden",
             "Logout": "Abmelden",
             "No account yet?": "Noch kein Konto?",
+            "Open shared shopping list": "Geteilte Einkaufsliste öffnen",
             "or with": "oder mit",
             "Password": "Passwort",
             "Quantity": "Menge",
