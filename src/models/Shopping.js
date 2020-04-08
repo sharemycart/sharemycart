@@ -240,6 +240,15 @@ class Shopping extends Component {
     }
   };
 
+  onShopShoppingItem = (uid, shopped = true) => {
+    const { currentShoppingList } = this.props.shoppingStore;
+    if (currentShoppingList) {
+      this.props.firebase.shopItem(currentShoppingList.uid, uid, shopped)
+    } else {
+      console.error('Cannot shop item from non-existing shoppingList');
+    }
+  };
+
   ensureExistingCurrentShoppingList = async () => {
     const currentShoppingListSnapshot = await this.props.firebase.myCurrentShoppingList().get()
     if (!currentShoppingListSnapshot.size) {

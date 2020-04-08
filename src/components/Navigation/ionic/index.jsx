@@ -16,7 +16,7 @@ import SharedShoppingList from '../../Needs/ionic/SharedShoppingList';
 
 import { useLocation } from 'react-router-dom'
 
-import {Trans} from 'react-i18next';
+import { Trans } from 'react-i18next';
 
 import * as ROUTES from '../../../constants/routes';
 import {
@@ -35,14 +35,17 @@ export const NavigationAuth = ({ authUser }) => (
     <>
         <IonTabs>
             <IonRouterOutlet>
+                <Switch>
                     <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
                     <Route path={ROUTES.PASSWORD_CHANGE} component={PasswordChangePage} />
                     <Route path={ROUTES.ACCOUNT} component={AccountPage} />
                     <Route path={ROUTES.SHOPPING} component={ShoppingPage} />
+                    <Route path={ROUTES.GO_SHOPPING} component={ShoppingPage} />
                     <Route path={ROUTES.NEEDS} component={NeedsPage} />
                     <Route path={ROUTES.SHARED_SHOPPING_LIST} component={SharedShoppingList} />
                     <Route path={ROUTES.ADMIN} component={AdminPage} />
                     <Redirect exact from="/" to={ROUTES.SHOPPING} />
+                </Switch>
             </IonRouterOutlet>
             <IonTabBar slot="bottom">
                 <IonTabButton tab="Shopping" href={ROUTES.SHOPPING}>
@@ -68,15 +71,15 @@ export const NavigationNonAuth = (props) => {
     return (
         <IonTabs>
             <IonRouterOutlet>
-                    <Switch>
-                        <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
-                        <Route path={ROUTES.SIGN_IN} component={SignInPage} />
-                        <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
-                        <Redirect from="/" to={{
-                            pathname: ROUTES.SIGN_IN,
-                            state: { from: currentLocation }
-                        }} />
-                    </Switch>
+                <Switch>
+                    <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
+                    <Route path={ROUTES.SIGN_IN} component={SignInPage} />
+                    <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
+                    <Redirect from="/" to={{
+                        pathname: ROUTES.SIGN_IN,
+                        state: { from: currentLocation }
+                    }} />
+                </Switch>
             </IonRouterOutlet>
             <IonTabBar slot="bottom">
                 <IonTabButton tab="Sign In" href={ROUTES.SIGN_IN}>

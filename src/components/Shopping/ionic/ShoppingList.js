@@ -67,7 +67,8 @@ class ShoppingList extends Component {
     const {
       items,
       onEditItem,
-      onDeleteItem
+      onDeleteItem,
+      onShopItem,
     } = this.props;
 
 
@@ -86,6 +87,19 @@ class ShoppingList extends Component {
         // toggle "disabled" based on the edit mode.
         // However, whit does not work as expected, as when leaving back to non-Edit-mode, 
         // the oder is destroyed until loaded from the database for the next time */}
+
+          {
+            !this.props.editMode && items.map((item, key) => (
+              <Item
+                key={item.id || key}
+                item={item}
+                ownList={true}
+                onEditingConcluded={onEditItem}
+                onDeleteItem={onDeleteItem}
+                onShopItem={onShopItem}
+                mode={this.props.mode}
+              />))
+          }
           {
             this.props.editMode && <IonReorderGroup disabled={false} onIonItemReorder={this.doReorder.bind(this)}>
               {items.map((item, key) => (
@@ -95,20 +109,8 @@ class ShoppingList extends Component {
                   ownList={true}
                   onEditingConcluded={onEditItem}
                   onDeleteItem={onDeleteItem}
-                  mode={ITEM_TYPE_SHOPPING}
                 />))}
             </IonReorderGroup>
-          }
-          {
-            !this.props.editMode && items.map((item, key) => (
-              <Item
-                key={item.id || key}
-                item={item}
-                ownList={true}
-                onEditingConcluded={onEditItem}
-                onDeleteItem={onDeleteItem}
-                mode={ITEM_TYPE_SHOPPING}
-              />))
           }
         </IonList>
       </>

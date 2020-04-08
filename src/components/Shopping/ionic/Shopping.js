@@ -6,6 +6,9 @@ import ShoppingList from './ShoppingList';
 
 import ShareListFab from './Share';
 import LoadingAnimation from '../../Reusables/ionic/LoadingAnimation';
+import { Switch, Route, withRouter } from 'react-router';
+import { GO_SHOPPING } from '../../../constants/routes';
+import { ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_SHOPPING } from '../../../constants/items';
 
 class Shopping extends Component {
   constructor(props) {
@@ -26,6 +29,10 @@ class Shopping extends Component {
       initializationDone,
     } = shoppingStore;
 
+    const mode = this.props.location.pathname === GO_SHOPPING
+                  ? ITEM_TYPE_IN_SHOPPING
+                  : ITEM_TYPE_SHOPPING
+
     if( !initializationDone ) return <LoadingAnimation loading={initializationDone} />
 
     return (
@@ -35,10 +42,12 @@ class Shopping extends Component {
           authUser={sessionStore.authUser}
           list={currentShoppingList}
           items={currentShoppingListItems}
+          mode={mode}
           dependentNeedLists={currentDependentNeedsLists}
           onEditList={this.props.model.onEditShoppingList}
           onCreateItem={this.props.model.onCreateItemForCurrentShoppingList}
           onEditItem={this.props.model.onEditShoppingItem}
+          onShopItem={this.props.model.onShopShoppingItem}
           onDeleteItem={this.props.model.onRemoveShoppingItem}
           onReorderItems={this.props.model.onReorderItems}
           editMode={this.props.editMode}
@@ -51,6 +60,7 @@ class Shopping extends Component {
 }
 
 export default compose(
+  withRouter,
   inject('shoppingStore', 'sessionStore'),
   observer,
 )(Shopping);

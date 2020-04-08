@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { IonItem, IonLabel, IonButton, IonIcon, IonBadge, IonReorder } from "@ionic/react";
+import { IonItem, IonLabel, IonButton, IonIcon, IonBadge, IonReorder, IonCheckbox } from "@ionic/react";
 import EditItem from './EditItem';
 import { trash, add } from 'ionicons/icons';
 import { ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_SHOPPING, ITEM_TYPE_NEW_SHOPPING, ITEM_TYPE_NEED, ITEM_TYPE_POTENTIAL_NEED } from "../../../constants/items";
@@ -20,7 +20,7 @@ class Item extends Component {
   onItemClick() {
     switch (this.props.mode) {
       case ITEM_TYPE_IN_SHOPPING:
-        this.props.onItemClicked()
+        this.props.onShopItem(this.props.item.uid, !this.props.item.shopped)
         break;
       case ITEM_TYPE_POTENTIAL_NEED:
         break;
@@ -60,11 +60,17 @@ class Item extends Component {
       />
       :
       <>
+        {this.props.mode === ITEM_TYPE_IN_SHOPPING && <IonCheckbox slot="start"
+          value={this.props.item.name}
+          checked={this.props.item.shopped}
+          onClick={() => this.onItemClick()}
+          color="primary"
+        />}
         <IonLabel onClick={() => this.onItemClick()}
           style={{
             cursor: 'pointer',
-            textDecoration: (this.props.item.checked ? 'line-through' : 'none'),
-            color: (this.props.item.checked ? 'grey' : 'black')
+            textDecoration: (this.props.item.shopped ? 'line-through' : 'none'),
+            color: (this.props.item.shopped ? 'grey' : 'black')
           }}>
           {this.props.item.name}
         </IonLabel>
@@ -74,7 +80,7 @@ class Item extends Component {
       </>
 
     return <IonItem id={this.props.item.uid}>
-            <IonReorder slot="start" />
+      <IonReorder slot="start" />
       {itemDisplay}
     </IonItem>
   }
