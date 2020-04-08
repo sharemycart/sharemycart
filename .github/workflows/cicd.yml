@@ -20,7 +20,7 @@ jobs:
         id: vars
         shell: bash
         run: |
-            SUBDOMAIN="staging"
+            SUBDOMAIN="beta"
             if [ "$BRANCH" == "refs/heads/master" ]; then 
             SUBDOMAIN="app"; 
             fi;
@@ -85,7 +85,7 @@ jobs:
         id: vars
         shell: bash
         run: |
-            SUBDOMAIN="staging"
+            SUBDOMAIN="beta"
             REPO="sharemycart/app-staging"
             if [ "$BRANCH" == "refs/heads/master" ]; then 
             SUBDOMAIN="app"; 
