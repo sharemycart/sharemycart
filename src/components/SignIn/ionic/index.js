@@ -13,7 +13,7 @@ import { SignUpLink } from '../../SignUp/ionic';
 
 import { withTranslation, Trans } from 'react-i18next';
 
-import './page.scss'
+import '../../Reusables/sign-in-up-page.scss'
 import '../../Reusables/components.scss'
 
 const SignInPage = () => (

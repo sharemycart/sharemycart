@@ -10,11 +10,19 @@ const resources = {
         translation: {
             "A shopping list has been shared with you": "A shopping list has been shared with you!",
             "Account": "Account",
+            "Account_already_exists": `
+                An account with this E-Mail address already exists.
+                Try to login with this account instead. If you think the
+                account is already used from one of the social logins, try
+                to sign in with one of them. Afterward, associate your accounts
+                on your personal account page.
+                `,
             "by": "by",
             "Change Password": "Change Password",
             "Edit": "Edit",
             "Email": "Email",
             "Forgot Password": "Forgot Password?",
+            "Full Name": "Full Name",
             "Go Shopping": "Go shopping",
             "has shared a shopping list with you": "has shared a shopping list with you",
             "Item name": "Item name",
@@ -24,6 +32,7 @@ const resources = {
             "Password": "Password",
             "Quantity": "Quantity",
             "Reset My Password": "Reset My Password",
+            "Repeat Password": "Repeat Password",
             "Save": "Save",
             "Share": "Share",
             "Sharing_link_copied": "A link to your shopping list has been copied to the clipboard.\nSend it to people you like so that they ask you to bring something along for you!",
@@ -40,11 +49,19 @@ const resources = {
         translation: {
             "A shopping list has been shared with you": "Eine Einkaufsliste wurde mit Dir geteilt!",
             "Account": "Konto",
+            "Account_already_exists": `
+                Ein Konto mit dieser E-Mail-Adresse existiert bereits.
+                Versuchen Sie stattdessen, sich mit diesem Konto anzumelden. 
+                Wenn Sie glauben, dass das Konto bereits von einem der sozialen Logins aus verwendet wird, 
+                versuchen Sie, sich mit iesem anzumelden. 
+                Danach verbinden Sie Ihre Konten auf Ihrer persönlichen Konto-Seite.
+                `,
             "by": "von",
             "Change Password": "Passwort ändern",
             "Edit": "Bearbeiten",
             "Email": "Email",
             "Forgot Password": "Passwort vergessen?",
+            "Full Name": "Vollständiger Name",
             "Go Shopping": "Einkaufen",
             "has shared a shopping list with you": "hat eine Einkaufsliste mit Dir geteilt!",
             "Help": "Hilfe",
@@ -56,6 +73,7 @@ const resources = {
             "or with": "oder mit",
             "Password": "Passwort",
             "Quantity": "Menge",
+            "Repeat Password": "Passwort wiederholen",
             "Reset My Password": "Mein Passwort zurücksetzen",
             "Save": "Speichern",
             "Share": "Teilen",
