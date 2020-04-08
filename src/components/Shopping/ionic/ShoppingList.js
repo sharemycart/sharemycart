@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Item from '../../Reusables/ionic/Item';
 import EditItem from '../../Reusables/ionic/EditItem';
 import { IonList, IonItem, IonReorderGroup} from '@ionic/react';
-import { ITEM_TYPE_SHOPPING } from '../../../constants/items';
+import { ITEM_TYPE_SHOPPING, ITEM_TYPE_NEW_SHOPPING } from '../../../constants/items';
 
 class ShoppingList extends Component {
   constructor(props) {
@@ -77,7 +77,7 @@ class ShoppingList extends Component {
           <IonItem>
             <EditItem
               onEditingConcluded={this.onCreateComplete.bind(this)}
-              mode={ITEM_TYPE_SHOPPING}
+              mode={ITEM_TYPE_NEW_SHOPPING}
             />
           </IonItem>
         </IonList>

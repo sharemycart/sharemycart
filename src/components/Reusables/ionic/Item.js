@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { IonItem, IonLabel, IonButton, IonIcon, IonBadge, IonReorder } from "@ionic/react";
 import EditItem from './EditItem';
 import { trash, add } from 'ionicons/icons';
-import { ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_SHOPPING, ITEM_TYPE_NEED, ITEM_TYPE_POTENTIAL_NEED } from "../../../constants/items";
+import { ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_SHOPPING, ITEM_TYPE_NEW_SHOPPING, ITEM_TYPE_NEED, ITEM_TYPE_POTENTIAL_NEED } from "../../../constants/items";
 
 class Item extends Component {
   constructor(props) {
@@ -36,7 +36,7 @@ class Item extends Component {
         <IonIcon icon={add} />
       </IonButton>
 
-    const showQuantityLabel = [ITEM_TYPE_SHOPPING, ITEM_TYPE_NEED, ITEM_TYPE_IN_SHOPPING].includes(this.props.mode)
+    const showQuantityLabel = [ITEM_TYPE_SHOPPING, ITEM_TYPE_NEW_SHOPPING, ITEM_TYPE_NEED, ITEM_TYPE_IN_SHOPPING].includes(this.props.mode)
     const quantityLabel = showQuantityLabel && <IonBadge>
       <IonLabel onClick={() => this.setEditMode(true)}>
         {this.props.item.quantity} {this.props.item.unit}
