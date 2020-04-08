@@ -32,7 +32,8 @@ class EditItem extends Component {
       }, this.props.item)
     })
 
-
+    // This was a try to get the inputs focused after submit
+    // does not work, as it seems keeping it for reference
     // if (this.props.mode === ITEM_TYPE_SHOPPING) {
     //   setTimeout(this.nameInput.current.focus(), 1000)
     // } else {

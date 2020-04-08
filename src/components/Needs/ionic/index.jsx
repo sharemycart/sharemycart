@@ -69,7 +69,7 @@ class NeedsPage extends NeedsModel {
 
 export default compose(
   withFirebase,
+  withEmailVerification,
   inject('needsStore', 'userStore', 'sessionStore'),
   observer,
-  withEmailVerification,
 )(NeedsPage);

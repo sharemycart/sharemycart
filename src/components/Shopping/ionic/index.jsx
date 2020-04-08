@@ -95,6 +95,6 @@ class ShoppingPage extends ShoppingModel {
 export default compose(
   withFirebase,
   withEmailVerification,
-  inject('shoppingStore', 'sessionStore'),
+  inject('shoppingStore', 'userStore', 'sessionStore'),
   observer,
 )(ShoppingPage);
