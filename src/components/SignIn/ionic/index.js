@@ -15,6 +15,7 @@ import { withTranslation, Trans } from 'react-i18next';
 
 import '../../Reusables/sign-in-up-page.scss'
 import '../../Reusables/components.scss'
+import { withEmailVerification } from '../../Session';
 
 const SignInPage = () => (
   <>
@@ -26,7 +27,7 @@ const SignInPage = () => (
           <Trans>or with</Trans>
         </div>
         <SignInGoogle />
-        <SignInFacebook />
+        {/* <SignInFacebook /> */}
         {/* <SignInTwitter /> */}
         <IonRow>
           <IonCol>
@@ -347,6 +348,6 @@ const SignInTwitter = compose(
   withFirebase,
 )(SignInTwitterBase);
 
-export default SignInPage;
+export default withEmailVerification(SignInPage);
 
 export { SignInForm, SignInGoogle, SignInFacebook, SignInTwitter };
