@@ -26,6 +26,7 @@ class Shopping extends Component {
       currentShoppingList,
       currentShoppingListItemsArray: currentShoppingListItems,
       currentDependentNeedsListsArray: currentDependentNeedsLists,
+      currentDependentNeedsListsItemsArray: currentDependentNeedsListsItems,
       initializationDone,
     } = shoppingStore;
 
@@ -44,6 +45,7 @@ class Shopping extends Component {
           items={currentShoppingListItems}
           mode={mode}
           dependentNeedLists={currentDependentNeedsLists}
+          bringAlongItems={currentDependentNeedsListsItems}
           onEditList={this.props.model.onEditShoppingList}
           onCreateItem={this.props.model.onCreateItemForCurrentShoppingList}
           onEditItem={this.props.model.onEditShoppingItem}

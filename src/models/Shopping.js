@@ -127,9 +127,9 @@ class Shopping extends Component {
       });
   };
 
-  onListenForDependentNeedsLists = (originshoppingListId) => {
+  onListenForDependentNeedsLists = (originShoppingListId) => {
     this.unsubscribeDependentNeedsLists = this.props.firebase
-      .dependentNeedsListOfShoppingList(originshoppingListId)
+      .dependentNeedsListOfShoppingList(originShoppingListId)
       .onSnapshot(snapshot => {
         // remove observers for the lists items, they are going to be re-built for each needs list
         this.unsubscribeAllDependentNeedsListItems();
@@ -139,15 +139,28 @@ class Shopping extends Component {
           this.unsubscribeDependentNeedsListsItems = [];
 
           snapshot.forEach(doc => {
-            dependentNeedsLists.push({ ...doc.data(), uid: doc.id })
+            const needsList = doc.data();
+
+            dependentNeedsLists.push({ ...needsList, uid: doc.id })
 
             // for each of those needs lists, we also need to setup a listener for the items
             this.onListenForDependentNeedsListsItems(doc.id);
+
+            // The owner of the needs list is a relevant user. 
+            // Make sure we've got his information buffered
+            // we don't need reactivity for that in the first step to keep it simple
+            const { userId } = needsList;
+            if (!this.props.userStore.users[userId]) {
+              this.props.firebase.user(userId).get()
+                .then(snapshot => {
+                  const owner = snapshot.data()
+                  this.props.userStore.setUser(snapshot.id, owner)
+                })
+            }
           }
           );
 
           this.props.shoppingStore.setCurrentDependentNeedsLists(dependentNeedsLists);
-
         } else {
           this.props.shoppingStore.setCurrentDependentNeedsLists([]);
         }
