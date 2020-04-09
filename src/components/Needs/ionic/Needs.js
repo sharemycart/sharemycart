@@ -5,6 +5,7 @@ import NeedsList from './NeedsList';
 import { ITEM_TYPE_NEED, ITEM_TYPE_POTENTIAL_NEED } from '../../../constants/items';
 import SplashLogo from '../../Reusables/ionic/SplashLogo';
 import { IonGrid, IonCol, IonRow, IonItem } from '@ionic/react';
+import LoadingAnimation from '../../Reusables/ionic/LoadingAnimation';
 class Needs extends Component {
   constructor(props) {
     super(props);
@@ -40,7 +41,9 @@ class Needs extends Component {
 
       </IonGrid>
     )
-
+    
+    if( !initializationDone ) return <LoadingAnimation loading={initializationDone} />
+    
     return (
       <>
         {/* Needs */}
@@ -57,7 +60,7 @@ class Needs extends Component {
           />
         }
 
-        {!currentNeedsList && initializationDone &&
+        {!currentNeedsList &&
           <NothingSharedYet />
         }
 

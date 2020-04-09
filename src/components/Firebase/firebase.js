@@ -187,6 +187,14 @@ class Firebase {
     batch.commit()
   }
 
+  shopItem = (listId, uid, shopped = true) => this.listItem(listId, uid)
+    .update(
+      {
+        shopped,
+        editedAt: this.fieldValue.serverTimestamp()
+      }
+    )
+
   // *** Shopping API ***
   myCurrentShoppingList = () => this.myCurrentList(LIST_TYPE_SHOPPING);
 

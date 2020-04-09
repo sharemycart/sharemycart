@@ -80,7 +80,8 @@ class Needs extends Component {
               currentOriginShoppingListId = needsList.shoppingListId;
             }
 
-            // The owner of the needs list is a relevant user. 
+            // The owner of the shopping list for which the needs list 
+            // has been created is a relevant user. 
             // Make sure we've got his information buffered
             // we don't need reactivity for that in the first step to keep it simple
             const { shoppingListOwnerId } = needsList;
@@ -131,7 +132,7 @@ class Needs extends Component {
         if (snapshot.size) {
           let neededItems = [];
           snapshot.forEach(doc =>
-            neededItems.push({ ...doc.data(), uid: doc.id }),
+            neededItems.push({ ...doc.data(), uid: doc.id, parentId: doc.ref.parent.parent.id  }),
           );
 
           this.props.needsStore.setCurrentNeedsListItems(neededItems);

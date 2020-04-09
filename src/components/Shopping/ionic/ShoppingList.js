@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Item from '../../Reusables/ionic/Item';
 import EditItem from '../../Reusables/ionic/EditItem';
 import { IonList, IonItem, IonReorderGroup } from '@ionic/react';
-import { ITEM_TYPE_NEW_SHOPPING, ITEM_TYPE_SHOPPING } from '../../../constants/items';
+import { ITEM_TYPE_NEW_SHOPPING } from '../../../constants/items';
 
 class ShoppingList extends Component {
   constructor(props) {
@@ -67,7 +67,8 @@ class ShoppingList extends Component {
     const {
       items,
       onEditItem,
-      onDeleteItem
+      onDeleteItem,
+      onShopItem,
     } = this.props;
 
 
@@ -82,10 +83,33 @@ class ShoppingList extends Component {
           </IonItem>
         </IonList>
         <IonList>
-        {/* // The following component is actually a hack. I expected the IonReorderGroup to 
+          {/* // The following component is actually a hack. I expected the IonReorderGroup to 
         // toggle "disabled" based on the edit mode.
         // However, whit does not work as expected, as when leaving back to non-Edit-mode, 
         // the oder is destroyed until loaded from the database for the next time */}
+
+          {
+            !this.props.editMode && items.map((item, key) => {
+              const relatedBringAlongItems = (this.props.bringAlongItems || [])
+                .filter(
+                  neededItem => (
+                    (item.uid === neededItem.originShoppingItemId)
+                    || (item.name === neededItem.name)
+                  ) && neededItem.quantity
+                )
+              return (
+                <Item
+                  key={item.id || key}
+                  item={item}
+                  bringAlongItems={relatedBringAlongItems}
+                  ownList={true}
+                  onEditingConcluded={onEditItem}
+                  onDeleteItem={onDeleteItem}
+                  onShopItem={onShopItem}
+                  mode={this.props.mode}
+                />)
+            })
+          }
           {
             this.props.editMode && <IonReorderGroup disabled={false} onIonItemReorder={this.doReorder.bind(this)}>
               {items.map((item, key) => (
@@ -95,20 +119,9 @@ class ShoppingList extends Component {
                   ownList={true}
                   onEditingConcluded={onEditItem}
                   onDeleteItem={onDeleteItem}
-                  mode={ITEM_TYPE_SHOPPING}
+                  mode={this.props.mode}
                 />))}
             </IonReorderGroup>
-          }
-          {
-            !this.props.editMode && items.map((item, key) => (
-              <Item
-                key={item.id || key}
-                item={item}
-                ownList={true}
-                onEditingConcluded={onEditItem}
-                onDeleteItem={onDeleteItem}
-                mode={ITEM_TYPE_SHOPPING}
-              />))
           }
         </IonList>
       </>

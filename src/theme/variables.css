@@ -1,3 +1,21 @@
 /* Ionic Variables and Theming. For more info, please see:
   http://ionicframework.com/docs/theming/
 */
+
+:root {
+  --ion-color-success: #69bb7b;
+  --ion-color-success-rgb: 105,187,123;
+  --ion-color-success-contrast: #000000;
+  --ion-color-success-contrast-rgb: 0,0,0;
+  --ion-color-success-shade: #5ca56c;
+  --ion-color-success-tint: #78c288;
+}
+
+.ion-color-success {
+  --ion-color-base: var(--ion-color-success);
+  --ion-color-base-rgb: var(--ion-color-success-rgb);
+  --ion-color-contrast: var(--ion-color-success-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-success-contrast-rgb);
+  --ion-color-shade: var(--ion-color-success-shade);
+  --ion-color-tint: var(--ion-color-success-tint);
+}
