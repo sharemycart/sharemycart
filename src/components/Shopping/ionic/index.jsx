@@ -3,16 +3,18 @@ import React from 'react';
 import ShoppingModel from '../../../models/Shopping'
 import Shopping from './Shopping';
 import { compose } from 'recompose';
-
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonIcon, IonButton } from '@ionic/react';
-import './page.css';
 import { withFirebase } from '../../Firebase';
+import { withEmailVerification } from '../../Session';
 import { inject, observer } from 'mobx-react';
+
+import ShareListFab from './Share';
+
+import { GO_SHOPPING, SHOPPING } from '../../../constants/routes';
+import { IonButton, IonIcon, IonPage, IonHeader, IonToolbar, IonButtons, IonTitle, IonContent, IonFooter } from '@ionic/react';
 import { createOutline, saveOutline, cartOutline, documentTextOutline } from 'ionicons/icons';
 
 import { Trans } from 'react-i18next';
-import { withEmailVerification } from '../../Session';
-import { GO_SHOPPING, SHOPPING } from '../../../constants/routes';
+
 class ShoppingPage extends ShoppingModel {
 
   constructor(props) {
@@ -34,6 +36,9 @@ class ShoppingPage extends ShoppingModel {
   }
 
   render() {
+
+    const {currentShoppingList} = this.props.shoppingStore;
+
     const EditButton = () => (
       !this.state.editMode && <IonButton color="danger" fill="clear"
         onClick={() => this.setState({ editMode: true })}>
@@ -102,6 +107,9 @@ class ShoppingPage extends ShoppingModel {
           }
 
         </IonContent>
+        <IonFooter>
+          {currentShoppingList && <ShareListFab shoppingList={currentShoppingList} />}
+        </IonFooter>
       </IonPage>
     );
   }

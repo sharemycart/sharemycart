@@ -4,9 +4,8 @@ import { compose } from 'recompose';
 
 import ShoppingList from './ShoppingList';
 
-import ShareListFab from './Share';
 import LoadingAnimation from '../../Reusables/ionic/LoadingAnimation';
-import { Switch, Route, withRouter } from 'react-router';
+import { withRouter } from 'react-router';
 import { GO_SHOPPING } from '../../../constants/routes';
 import { ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_SHOPPING } from '../../../constants/items';
 
@@ -55,7 +54,6 @@ class Shopping extends Component {
           editMode={this.props.editMode}
           addSaveEditHandler={this.props.addSaveEditHandler}
         />
-        <ShareListFab shoppingList={currentShoppingList} />
       </>
     );
   }

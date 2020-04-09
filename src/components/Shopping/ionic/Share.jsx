@@ -8,7 +8,7 @@ import {
     IonToast,
     IonFabButton,
     IonIcon} from '@ionic/react';
-import { share } from 'ionicons/icons';
+import { shareSocialOutline } from 'ionicons/icons';
 import { compose } from 'recompose';
 
 class ShareListFab extends Component {
@@ -47,7 +47,7 @@ class ShareListFab extends Component {
                             message: t('Sharing_link_copied')
                         })
                     }}>
-					<IonFabButton><IonIcon icon={share} /></IonFabButton>
+					<IonFabButton><IonIcon icon={shareSocialOutline} /></IonFabButton>
                     </IonFab>
                 </CopyToClipboard>
                 <IonToast
