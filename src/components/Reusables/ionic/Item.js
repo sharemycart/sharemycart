@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { IonItem, IonLabel, IonButton, IonIcon, IonBadge, IonReorder, IonCheckbox, IonList, IonChip } from "@ionic/react";
+import { IonItem, IonLabel, IonButton, IonIcon, IonReorder, IonCheckbox, IonList, IonChip } from "@ionic/react";
 import EditItem from './EditItem';
 import { trash, add, shareSocialOutline } from 'ionicons/icons';
 import { ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_SHOPPING, ITEM_TYPE_NEW_SHOPPING, ITEM_TYPE_NEED, ITEM_TYPE_POTENTIAL_NEED, ITEM_TYPE_BRING_ALONG } from "../../../constants/items";
