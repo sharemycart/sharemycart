@@ -97,6 +97,7 @@ const resources = {
             "Sign Out": "Abmelden",
             "Sign Up": "Anmelden",
             "Shared": "Geteilt",
+            "Sharing_link_copied": "Ein Link zu Ihrer Einkaufsliste wurde in die Zwischenablage kopiert. \nSchicken Sie ihn an Leute, denen Sie etwas, das ohnehin schon auf Ihrem Zettel steht, mitbringen möchten",
             "Shopping": "Einkaufen",
             "Shopping list": "Einkaufsliste",
             "Username": "Benutzername",

@@ -29,7 +29,7 @@ import {
     IonIcon
 } from '@ionic/react';
 
-import { cartOutline, linkOutline, personOutline, lockClosed } from 'ionicons/icons';
+import { cartOutline, personOutline, lockClosed, shareSocialOutline } from 'ionicons/icons';
 
 export const NavigationAuth = ({ authUser }) => (
     <>
@@ -50,7 +50,7 @@ export const NavigationAuth = ({ authUser }) => (
                     <IonLabel><Trans>Shopping</Trans></IonLabel>
                 </IonTabButton>
                 <IonTabButton tab="Needs" href={ROUTES.NEEDS}>
-                    <IonIcon icon={linkOutline} />
+                    <IonIcon icon={shareSocialOutline} />
                     <IonLabel><Trans>Shared</Trans></IonLabel>
                 </IonTabButton>
                 <IonTabButton tab="Account" href={ROUTES.ACCOUNT}>

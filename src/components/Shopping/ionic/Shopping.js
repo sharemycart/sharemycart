@@ -4,8 +4,6 @@ import { compose } from 'recompose';
 
 import ShoppingList from './ShoppingList';
 
-import ShareListFab from './Share';
-
 class Shopping extends Component {
   constructor(props) {
     super(props);
@@ -40,7 +38,6 @@ class Shopping extends Component {
           editMode={this.props.editMode}
           addSaveEditHandler={this.props.addSaveEditHandler}
         />
-        <ShareListFab shoppingList={currentShoppingList} />
       </>
     );
   }
