@@ -20,9 +20,11 @@ class Item extends Component {
   }
 
   onItemClick() {
+    const { uid, parentId, shopped } = this.props.item;
     switch (this.props.mode) {
       case ITEM_TYPE_IN_SHOPPING:
-        this.props.onShopItem(this.props.item.uid, !this.props.item.shopped)
+      case ITEM_TYPE_BRING_ALONG:
+        this.props.onShopItem(parentId, uid, !shopped)
         break;
       case ITEM_TYPE_POTENTIAL_NEED:
         break;
@@ -33,41 +35,50 @@ class Item extends Component {
   }
 
   render() {
-    const { item } = this.props;
-    const { bringAlongItems } = this.props;
+    const {
+      item,
+      bringAlongItems,
+      mode,
+      ownList,
+      owner,
+      onCreateNeed,
+      onDeleteItem,
+      onEditingConcluded,
+      onShopItem
+    } = this.props;
 
-    const needIcon = !this.props.ownList && this.props.mode === ITEM_TYPE_NEED &&
-      <IonButton onClick={() => this.props.onCreateNeed(item)} fill="add" size="large" slot="end" color="primary">
+    const needIcon = !ownList && mode === ITEM_TYPE_NEED &&
+      <IonButton onClick={() => onCreateNeed(item)} fill="add" size="large" slot="end" color="primary">
         <IonIcon icon={add} />
       </IonButton>
 
-    const showQuantityLabel = [ITEM_TYPE_SHOPPING, ITEM_TYPE_NEW_SHOPPING, ITEM_TYPE_NEED, ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_BRING_ALONG].includes(this.props.mode)
+    const showQuantityLabel = [ITEM_TYPE_SHOPPING, ITEM_TYPE_NEW_SHOPPING, ITEM_TYPE_NEED, ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_BRING_ALONG].includes(mode)
     const quantityLabel = showQuantityLabel && <IonBadge>
       <IonLabel onClick={() => this.setEditMode(true)}>
-        {this.props.mode === ITEM_TYPE_BRING_ALONG && "+"}{item.quantity} {item.unit}
+        {mode === ITEM_TYPE_BRING_ALONG && "+"}{item.quantity} {item.unit}
       </IonLabel>
     </IonBadge>
 
-    const showDeleteButton = this.props.ownList && this.props.mode !== ITEM_TYPE_IN_SHOPPING
-    const deleteIcon = showDeleteButton && <IonButton className="button-end" fill="clear" size="large" slot="end" color="danger" onClick={() => this.props.onDeleteItem(item.uid)}>
+    const showDeleteButton = ownList && mode !== ITEM_TYPE_IN_SHOPPING
+    const deleteIcon = showDeleteButton && <IonButton className="button-end" fill="clear" size="large" slot="end" color="danger" onClick={() => onDeleteItem(item.uid)}>
       <IonIcon icon={trash} />
     </IonButton>
 
-    const ownerIcon = this.props.owner && <IonButton className="button-end" fill="clear" size="large" slot="end"><Avatar size="30px" user={this.props.owner} /></IonButton>
+    const ownerIcon = owner && <IonButton className="button-end" fill="clear" size="large" slot="end"><Avatar size="30px" user={owner} /></IonButton>
 
     const itemDisplay = this.state.inEdit ?
       <EditItem
         item={item}
         onEditingConcluded={(item) => {
           this.setEditMode(false)
-          this.props.onEditingConcluded(item)
+          onEditingConcluded(item)
         }
         }
-        mode={this.props.mode}
+        mode={mode}
       />
       :
       <>
-        {this.props.mode === ITEM_TYPE_IN_SHOPPING && <IonCheckbox slot="start"
+        {[ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_BRING_ALONG].includes(mode) && <IonCheckbox slot="start"
           value={item.name}
           checked={item.shopped}
           onClick={() => this.onItemClick()}
@@ -79,7 +90,7 @@ class Item extends Component {
             textDecoration: (item.shopped ? 'line-through' : 'none'),
             color: (item.shopped ? 'grey' : 'black')
           }}>
-          {!(this.props.mode === ITEM_TYPE_BRING_ALONG) && item.name}
+          {!(mode === ITEM_TYPE_BRING_ALONG) && item.name}
         </IonLabel>
         {ownerIcon}
         {quantityLabel}
@@ -94,11 +105,12 @@ class Item extends Component {
             const owner = this.props.userStore.users[neededItem.ownerId]
             return (
               <Item
-                key={neededItem.id}
+                key={neededItem.uid}
                 item={neededItem}
                 owner={owner}
                 ownList={false}
-                onShopItem={() => this.props.onShopItem(neededItem.id, !neededItem.shopped)}
+                onShopItem={() =>
+                  onShopItem(neededItem.parentId, neededItem.uid, !neededItem.shopped)}
                 mode={ITEM_TYPE_BRING_ALONG} />
             )
           })

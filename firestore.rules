@@ -26,6 +26,7 @@ service cloud.firestore {
       
       match /items/{item} {
         allow read: if isSignedIn();
+        allow update: if listData().shoppingListOwnerId == request.auth.uid;
         allow write: if listData().userId == request.auth.uid;
       }
     }

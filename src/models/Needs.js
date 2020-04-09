@@ -132,7 +132,7 @@ class Needs extends Component {
         if (snapshot.size) {
           let neededItems = [];
           snapshot.forEach(doc =>
-            neededItems.push({ ...doc.data(), uid: doc.id }),
+            neededItems.push({ ...doc.data(), uid: doc.id, parentId: doc.ref.parent.parent.id  }),
           );
 
           this.props.needsStore.setCurrentNeedsListItems(neededItems);

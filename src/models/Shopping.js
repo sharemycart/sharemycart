@@ -113,7 +113,7 @@ class Shopping extends Component {
         if (snapshot.size) {
           let shoppingItems = [];
           snapshot.forEach(doc =>
-            shoppingItems.push({ ...doc.data(), uid: doc.id }),
+            shoppingItems.push({ ...doc.data(), uid: doc.id, parentId: doc.ref.parent.parent.id  }),
           );
 
           this.props.shoppingStore.setCurrentShoppingListItems(shoppingItems);
@@ -181,7 +181,7 @@ class Shopping extends Component {
         .onSnapshot(snapshot => {
           let dependentNeedsListsItems = [];
           snapshot.forEach(doc =>
-            dependentNeedsListsItems.push({ ...doc.data(), uid: doc.id }),
+            dependentNeedsListsItems.push({ ...doc.data(), uid: doc.id, parentId: doc.ref.parent.parent.id }),
           );
           this.props.shoppingStore.setDependentNeedsListItems(needsListId, dependentNeedsListsItems);
         })
@@ -253,13 +253,8 @@ class Shopping extends Component {
     }
   };
 
-  onShopShoppingItem = (uid, shopped = true) => {
-    const { currentShoppingList } = this.props.shoppingStore;
-    if (currentShoppingList) {
-      this.props.firebase.shopItem(currentShoppingList.uid, uid, shopped)
-    } else {
-      console.error('Cannot shop item from non-existing shoppingList');
-    }
+  onShopShoppingItem = (listId, uid, shopped = true) => {
+      this.props.firebase.shopItem(listId, uid, shopped)
   };
 
   ensureExistingCurrentShoppingList = async () => {

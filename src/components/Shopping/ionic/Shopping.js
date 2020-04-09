@@ -30,13 +30,13 @@ class Shopping extends Component {
     } = shoppingStore;
 
     const mode = this.props.location.pathname === GO_SHOPPING
-                  ? ITEM_TYPE_IN_SHOPPING
-                  : ITEM_TYPE_SHOPPING
+      ? ITEM_TYPE_IN_SHOPPING
+      : ITEM_TYPE_SHOPPING
 
-    if( !initializationDone ) return <LoadingAnimation loading={initializationDone} />
+    if (!initializationDone) return <LoadingAnimation loading={initializationDone} />
 
     return (
-      currentShoppingList && 
+      currentShoppingList &&
       <>
         <ShoppingList
           authUser={sessionStore.authUser}
