@@ -35,17 +35,15 @@ export const NavigationAuth = ({ authUser }) => (
     <>
         <IonTabs>
             <IonRouterOutlet>
-                <Switch>
-                    <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
-                    <Route path={ROUTES.PASSWORD_CHANGE} component={PasswordChangePage} />
-                    <Route path={ROUTES.ACCOUNT} component={AccountPage} />
-                    <Route path={ROUTES.SHOPPING} component={ShoppingPage} />
-                    <Route path={ROUTES.GO_SHOPPING} component={ShoppingPage} />
-                    <Route path={ROUTES.NEEDS} component={NeedsPage} />
-                    <Route path={ROUTES.SHARED_SHOPPING_LIST} component={SharedShoppingList} />
-                    <Route path={ROUTES.ADMIN} component={AdminPage} />
-                    <Redirect exact from="/" to={ROUTES.SHOPPING} />
-                </Switch>
+                <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
+                <Route path={ROUTES.PASSWORD_CHANGE} component={PasswordChangePage} />
+                <Route path={ROUTES.ACCOUNT} component={AccountPage} />
+                <Route path={ROUTES.SHOPPING} component={ShoppingPage} />
+                <Route path={ROUTES.GO_SHOPPING} component={ShoppingPage} />
+                <Route path={ROUTES.NEEDS} component={NeedsPage} />
+                <Route path={ROUTES.SHARED_SHOPPING_LIST} component={SharedShoppingList} />
+                <Route path={ROUTES.ADMIN} component={AdminPage} />
+                <Redirect exact from="/" to={ROUTES.SHOPPING} />
             </IonRouterOutlet>
             <IonTabBar slot="bottom">
                 <IonTabButton tab="Shopping" href={ROUTES.SHOPPING}>
