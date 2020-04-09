@@ -119,8 +119,7 @@ class Firebase {
     .where('isCurrent', '==', true)
     .where('userId', '==', this.auth.currentUser
       ? this.auth.currentUser.uid
-      : INVALID_DUMMY_UID)
-    .limit(1);
+      : INVALID_DUMMY_UID);
 
   createList = ({ name }, type) => this.lists().add({
     name,
@@ -247,7 +246,7 @@ class Firebase {
             // we need to update all needs lists which are not referenced to the shopping list
             const needsList = s.data();
             if (needsList.shoppingListId !== shoppingListId) {
-              s.update('isCurrent', false)
+              s.ref.update('isCurrent', false)
             }
           })
         }
