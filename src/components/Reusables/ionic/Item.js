@@ -53,7 +53,7 @@ class Item extends Component {
       </IonButton>
 
     const showQuantityLabel = [ITEM_TYPE_SHOPPING, ITEM_TYPE_NEW_SHOPPING, ITEM_TYPE_NEED, ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_BRING_ALONG].includes(mode)
-    const quantityLabel = showQuantityLabel && (item.quantity > 1 || item.unit)
+    const quantityLabel = showQuantityLabel && (item.quantity > 1 || item.unit) &&
       <IonChip
         onClick={() => this.setEditMode(true)}
         color={!item.shopped ? "primary" : "success"}>
