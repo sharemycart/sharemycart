@@ -11,8 +11,8 @@ import { Component } from 'react';
  *   Since all subordinate components are stateless with respect to applications state,
  *   subordinate components are being passed functions to manipulate it.
  *   This might get messy as the application grows and might be refactored, but it's not that simple to do.
- * 
- * This component shall not have a representation. However, it can serve as base-class 
+ *
+ * This component shall not have a representation. However, it can serve as base-class
  * for visualizing components.
  */
 class Needs extends Component {
@@ -37,14 +37,14 @@ class Needs extends Component {
     if (!this.props.needsStore.needsListsArray.length) {
       this.setState({
         listsLoading: true,
-        itemsLoading: true
+        itemsLoading: true,
       });
     }
-    this._tryInitialization()
+    this._tryInitialization();
   }
 
   componentDidUpdate() {
-    this._tryInitialization()
+    this._tryInitialization();
   }
 
   componentWillUnmount() {
@@ -54,8 +54,8 @@ class Needs extends Component {
   unregisterAllListeners() {
     this.unsubscribeLists && this.unsubscribeLists();
     this.unsubscribeItems && this.unsubscribeItems();
-    this.unsubscribeOriginShoppingList && this.unsubscribeOriginShoppingList()
-    this.unsubscribeOriginShoppingListItems && this.unsubscribeOriginShoppingListItems()
+    this.unsubscribeOriginShoppingList && this.unsubscribeOriginShoppingList();
+    this.unsubscribeOriginShoppingListItems && this.unsubscribeOriginShoppingListItems();
   }
 
   // listeners to the database
@@ -64,15 +64,15 @@ class Needs extends Component {
       .myNeedsLists()
       .orderBy('createdAt', 'desc')
       // .limit(this.state.limit)
-      .onSnapshot(snapshot => {
+      .onSnapshot((snapshot) => {
         let currentNeedsListId = null;
         let currentOriginShoppingListId = null;
 
         this.props.needsStore.setInitializationDone(true);
 
         if (snapshot.size) {
-          let needsLists = [];
-          snapshot.forEach(doc => {
+          const needsLists = [];
+          snapshot.forEach((doc) => {
             const needsList = doc.data();
             needsLists.push({ ...needsList, uid: doc.id });
             if (needsList.isCurrent && needsList.shoppingListId) {
@@ -80,20 +80,19 @@ class Needs extends Component {
               currentOriginShoppingListId = needsList.shoppingListId;
             }
 
-            // The owner of the shopping list for which the needs list 
-            // has been created is a relevant user. 
+            // The owner of the shopping list for which the needs list
+            // has been created is a relevant user.
             // Make sure we've got his information buffered
             // we don't need reactivity for that in the first step to keep it simple
             const { shoppingListOwnerId } = needsList;
             if (shoppingListOwnerId && !this.props.userStore.users[shoppingListOwnerId]) {
               this.props.firebase.user(shoppingListOwnerId).get()
-                .then(snapshot => {
-                  const owner = snapshot.data()
-                  this.props.userStore.setUser(snapshot.id, owner)
-                })
+                .then((snapshot) => {
+                  const owner = snapshot.data();
+                  this.props.userStore.setUser(snapshot.id, owner);
+                });
             }
-          }
-          );
+          });
 
           this.props.needsStore.setNeedsLists(needsLists);
 
@@ -106,34 +105,31 @@ class Needs extends Component {
 
         // react on item updates - this should actually be done implicitly, but it seems it isn't
         this.unsubscribeItems && this.unsubscribeItems();
-        currentNeedsListId && this.onListenForCurrentNeedsListItems(currentNeedsListId)
+        currentNeedsListId && this.onListenForCurrentNeedsListItems(currentNeedsListId);
 
         //* react on changes of the origin shopping list
         //  remove obsolete listeners first (if exist)
-        this.unsubscribeOriginShoppingList && this.unsubscribeOriginShoppingList()
-        this.unsubscribeOriginShoppingListItems && this.unsubscribeOriginShoppingListItems()
+        this.unsubscribeOriginShoppingList && this.unsubscribeOriginShoppingList();
+        this.unsubscribeOriginShoppingListItems && this.unsubscribeOriginShoppingListItems();
 
         // register for changes in the origin shopping list
         if (currentOriginShoppingListId) {
-          this.unsubscribeOriginShoppingList = this.onListenForOriginShoppingList(currentOriginShoppingListId)
+          this.unsubscribeOriginShoppingList = this.onListenForOriginShoppingList(currentOriginShoppingListId);
         } else {
-          this.clearOriginShoppingListInStore()
+          this.clearOriginShoppingListInStore();
         }
-
       });
   }
 
-  onListenForCurrentNeedsListItems = uid => {
+  onListenForCurrentNeedsListItems = (uid) => {
     this.unsubscribeItems = this.props.firebase
       .listItems(uid)
       // .orderBy('createdAt', 'desc')
       // .limit(this.state.limit)
-      .onSnapshot(snapshot => {
+      .onSnapshot((snapshot) => {
         if (snapshot.size) {
-          let neededItems = [];
-          snapshot.forEach(doc =>
-            neededItems.push({ ...doc.data(), uid: doc.id, parentId: doc.ref.parent.parent.id  }),
-          );
+          const neededItems = [];
+          snapshot.forEach((doc) => neededItems.push({ ...doc.data(), uid: doc.id, parentId: doc.ref.parent.parent.id }));
 
           this.props.needsStore.setCurrentNeedsListItems(neededItems);
 
@@ -149,14 +145,13 @@ class Needs extends Component {
   onListenForOriginShoppingList = (uid) => {
     this.unsubscribeOriginShoppingList = this.props.firebase
       .list(uid)
-      .onSnapshot(snapshot => {
+      .onSnapshot((snapshot) => {
         if (snapshot.exists) {
           const shoppingList = snapshot.data();
           this.props.needsStore.setCurrentOriginShoppingList(shoppingList);
 
           this.unsubscribeOriginShoppingListItems && this.unsubscribeOriginShoppingListItems();
           this.onListenForOriginShoppingListItems(uid);
-
         } else {
           this.clearOriginShoppingListInStore();
         }
@@ -168,15 +163,12 @@ class Needs extends Component {
       .listItems(originListId)
       // .orderBy('createdAt', 'desc')
       // .limit(this.state.limit)
-      .onSnapshot(snapshot => {
+      .onSnapshot((snapshot) => {
         if (snapshot.size) {
-          let OriginShoppingListItems = [];
-          snapshot.forEach(doc =>
-            OriginShoppingListItems.push({ ...doc.data(), uid: doc.id }),
-          );
+          const OriginShoppingListItems = [];
+          snapshot.forEach((doc) => OriginShoppingListItems.push({ ...doc.data(), uid: doc.id }));
 
           this.props.needsStore.setCurrentOriginShoppingListItems(OriginShoppingListItems);
-
         } else {
           this.props.needsStore.setCurrentOriginShoppingListItems([]);
         }
@@ -189,7 +181,7 @@ class Needs extends Component {
   }
 
   // event handlers for lists
-  onChangeText = event => {
+  onChangeText = (event) => {
     this.setState({ editingListName: event.target.value });
   };
 
@@ -212,11 +204,11 @@ class Needs extends Component {
     });
   };
 
-  onRemoveNeedsList = uid => {
+  onRemoveNeedsList = (uid) => {
     this.props.firebase.deleteList(uid);
   };
 
-  onSetCurrentNeedsList = uid => {
+  onSetCurrentNeedsList = (uid) => {
     this.props.firebase.setCurrentNeedsList(uid);
   }
 
@@ -233,7 +225,7 @@ class Needs extends Component {
   onEditNeededItem = (item) => {
     const { currentNeedsList } = this.props.needsStore;
     if (currentNeedsList) {
-      this.props.firebase.editItem(currentNeedsList.uid, item)
+      this.props.firebase.editItem(currentNeedsList.uid, item);
     } else {
       console.error('Cannot edit item in non-existing needsList');
     }
@@ -244,7 +236,7 @@ class Needs extends Component {
     if (currentNeedsList) {
       this.props.firebase
         .listItem(currentNeedsList.uid, uid)
-        .delete()
+        .delete();
     } else {
       console.error('Cannot remove item from non-existing needsList');
     }
@@ -253,7 +245,7 @@ class Needs extends Component {
   onAddFromShoppingListItem = (item) => {
     const { currentNeedsList } = this.props.needsStore;
     if (currentNeedsList) {
-      this.props.firebase.addNeededItemFromShoppingListItem(currentNeedsList.uid, Object.assign(item, { quantity: 0 }))
+      this.props.firebase.addNeededItemFromShoppingListItem(currentNeedsList.uid, Object.assign(item, { quantity: 0 }));
     } else {
       console.error('Cannot add item to non-existing needsList');
     }

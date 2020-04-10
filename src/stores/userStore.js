@@ -1,5 +1,6 @@
 import { observable, action, computed } from 'mobx';
 import toObject from '../lib/convertArrayToObject';
+
 class UserStore {
   @observable users = {};
 
@@ -7,7 +8,7 @@ class UserStore {
     this.rootStore = rootStore;
   }
 
-  @action setUsers = users => {
+  @action setUsers = (users) => {
     this.users = toObject(users);
   };
 
@@ -20,7 +21,7 @@ class UserStore {
   };
 
   @computed get userList() {
-    return Object.keys(this.users || {}).map(key => ({
+    return Object.keys(this.users || {}).map((key) => ({
       ...this.users[key],
       uid: key,
     }));

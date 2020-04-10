@@ -11,10 +11,10 @@ import { Component } from 'react';
  *   Since all subordinate components are stateless with respect to applications state,
  *   subordinate components are being passed functions to manipulate it.
  *   This might get messy as the application grows and might be refactored, but it's not that simple to do.
- * 
- * This component shall not have a representation. However, it can serve as base-class 
+ *
+ * This component shall not have a representation. However, it can serve as base-class
  * for visualizing components.
- * 
+ *
  */
 class Shopping extends Component {
   constructor(props) {
@@ -28,7 +28,7 @@ class Shopping extends Component {
 
   _tryInitialization() {
     if (this.props.sessionStore.dbAuthenticated && !this.unsubscribeLists) {
-      this.ensureExistingCurrentShoppingList()
+      this.ensureExistingCurrentShoppingList();
       this.onListenForShoppingLists();
       this.onListenForCurrentShoppingListItems();
     }
@@ -40,15 +40,15 @@ class Shopping extends Component {
     if (!this.props.shoppingStore.shoppingListsArray.length) {
       this.setState({
         listsLoading: true,
-        itemsLoading: true
+        itemsLoading: true,
       });
     }
 
-    this._tryInitialization()
+    this._tryInitialization();
   }
 
   componentDidUpdate() {
-    this._tryInitialization()
+    this._tryInitialization();
   }
 
   componentWillUnmount() {
@@ -68,16 +68,16 @@ class Shopping extends Component {
       .myShoppingLists()
       .orderBy('createdAt', 'desc')
       // .limit(this.state.limit)
-      .onSnapshot(snapshot => {
+      .onSnapshot((snapshot) => {
         let currentShoppingListId = null;
 
         this.props.shoppingStore.setInitializationDone(true);
 
         if (snapshot.size) {
-          let shoppingLists = [];
-          snapshot.forEach(doc => {
+          const shoppingLists = [];
+          snapshot.forEach((doc) => {
             const shoppingList = doc.data();
-            shoppingLists.push({ ...shoppingList, uid: doc.id })
+            shoppingLists.push({ ...shoppingList, uid: doc.id });
             if (shoppingList.isCurrent) {
               currentShoppingListId = doc.id;
             }
@@ -94,13 +94,12 @@ class Shopping extends Component {
 
         // register for item updates - this should actually be done implicitly, but it seems it isn't
         this.unsubscribeItems && this.unsubscribeItems();
-        this.onListenForCurrentShoppingListItems(currentShoppingListId)
+        this.onListenForCurrentShoppingListItems(currentShoppingListId);
 
         // register for dependent needs list items
-        this.unsubscribeDependentNeedsLists && this.unsubscribeDependentNeedsLists()
-        this.unsubscribeAllDependentNeedsListItems()
-        this.onListenForDependentNeedsLists(currentShoppingListId)
-
+        this.unsubscribeDependentNeedsLists && this.unsubscribeDependentNeedsLists();
+        this.unsubscribeAllDependentNeedsListItems();
+        this.onListenForDependentNeedsLists(currentShoppingListId);
       });
   }
 
@@ -109,12 +108,10 @@ class Shopping extends Component {
       .listItems(currentShoppingListId)
       // .orderBy('createdAt', 'desc')
       // .limit(this.state.limit)
-      .onSnapshot(snapshot => {
+      .onSnapshot((snapshot) => {
         if (snapshot.size) {
-          let shoppingItems = [];
-          snapshot.forEach(doc =>
-            shoppingItems.push({ ...doc.data(), uid: doc.id, parentId: doc.ref.parent.parent.id  }),
-          );
+          const shoppingItems = [];
+          snapshot.forEach((doc) => shoppingItems.push({ ...doc.data(), uid: doc.id, parentId: doc.ref.parent.parent.id }));
 
           this.props.shoppingStore.setCurrentShoppingListItems(shoppingItems);
 
@@ -130,35 +127,34 @@ class Shopping extends Component {
   onListenForDependentNeedsLists = (originShoppingListId) => {
     this.unsubscribeDependentNeedsLists = this.props.firebase
       .dependentNeedsListOfShoppingList(originShoppingListId)
-      .onSnapshot(snapshot => {
+      .onSnapshot((snapshot) => {
         // remove observers for the lists items, they are going to be re-built for each needs list
         this.unsubscribeAllDependentNeedsListItems();
 
         if (snapshot.size) {
-          let dependentNeedsLists = [];
+          const dependentNeedsLists = [];
           this.unsubscribeDependentNeedsListsItems = [];
 
-          snapshot.forEach(doc => {
+          snapshot.forEach((doc) => {
             const needsList = doc.data();
 
-            dependentNeedsLists.push({ ...needsList, uid: doc.id })
+            dependentNeedsLists.push({ ...needsList, uid: doc.id });
 
             // for each of those needs lists, we also need to setup a listener for the items
             this.onListenForDependentNeedsListsItems(doc.id);
 
-            // The owner of the needs list is a relevant user. 
+            // The owner of the needs list is a relevant user.
             // Make sure we've got his information buffered
             // we don't need reactivity for that in the first step to keep it simple
             const { userId } = needsList;
             if (!this.props.userStore.users[userId]) {
               this.props.firebase.user(userId).get()
-                .then(snapshot => {
-                  const owner = snapshot.data()
-                  this.props.userStore.setUser(snapshot.id, owner)
-                })
+                .then((snapshot) => {
+                  const owner = snapshot.data();
+                  this.props.userStore.setUser(snapshot.id, owner);
+                });
             }
-          }
-          );
+          });
 
           this.props.shoppingStore.setCurrentDependentNeedsLists(dependentNeedsLists);
         } else {
@@ -169,7 +165,7 @@ class Shopping extends Component {
 
   unsubscribeAllDependentNeedsListItems() {
     this.unsubscribeDependentNeedsListsItems && this.unsubscribeDependentNeedsListsItems.length
-      && this.unsubscribeDependentNeedsListsItems.forEach(handler => handler());
+      && this.unsubscribeDependentNeedsListsItems.forEach((handler) => handler());
   }
 
   onListenForDependentNeedsListsItems = (needsListId) => {
@@ -178,18 +174,16 @@ class Shopping extends Component {
         .listItems(needsListId)
         // .orderBy('createdAt', 'desc')
         // .limit(this.state.limit)
-        .onSnapshot(snapshot => {
-          let dependentNeedsListsItems = [];
-          snapshot.forEach(doc =>
-            dependentNeedsListsItems.push({ ...doc.data(), uid: doc.id, parentId: doc.ref.parent.parent.id }),
-          );
+        .onSnapshot((snapshot) => {
+          const dependentNeedsListsItems = [];
+          snapshot.forEach((doc) => dependentNeedsListsItems.push({ ...doc.data(), uid: doc.id, parentId: doc.ref.parent.parent.id }));
           this.props.shoppingStore.setDependentNeedsListItems(needsListId, dependentNeedsListsItems);
-        })
+        }),
     );
   }
 
   // event handlers for lists
-  onChangeText = event => {
+  onChangeText = (event) => {
     this.setState({ editingListName: event.target.value });
   };
 
@@ -197,7 +191,7 @@ class Shopping extends Component {
     event.preventDefault();
 
     this.props.firebase.createShoppingList({
-      name: this.state.editingListName
+      name: this.state.editingListName,
     });
 
     this.setState({ editingListName: '' });
@@ -212,33 +206,32 @@ class Shopping extends Component {
     });
   };
 
-  onRemoveShoppingList = uid => {
+  onRemoveShoppingList = (uid) => {
     this.props.firebase.deleteList(uid);
   };
 
-  onSetCurrentShoppingList = uid => {
+  onSetCurrentShoppingList = (uid) => {
     this.props.firebase.setCurrentShoppingList(uid);
   }
 
   onReorderItems = (listId, items, order) => {
-    this.props.firebase.setItemsOrder(listId, items, order)
+    this.props.firebase.setItemsOrder(listId, items, order);
   }
 
   // event handlers for items
   onCreateItemForCurrentShoppingList = (item) => {
     const { currentShoppingList } = this.props.shoppingStore;
     if (currentShoppingList) {
-      return this.props.firebase.createItem(currentShoppingList.uid, item)
-    } else {
-      console.error('Cannot create item for non-existing shoppingList');
-      return new Promise(() => null)
+      return this.props.firebase.createItem(currentShoppingList.uid, item);
     }
+    console.error('Cannot create item for non-existing shoppingList');
+    return new Promise(() => null);
   };
 
   onEditShoppingItem = (item) => {
     const { currentShoppingList } = this.props.shoppingStore;
     if (currentShoppingList) {
-      this.props.firebase.editItem(currentShoppingList.uid, item)
+      this.props.firebase.editItem(currentShoppingList.uid, item);
     } else {
       console.error('Cannot edit item in non-existing shoppingList');
     }
@@ -247,20 +240,20 @@ class Shopping extends Component {
   onRemoveShoppingItem = (uid) => {
     const { currentShoppingList } = this.props.shoppingStore;
     if (currentShoppingList) {
-      this.props.firebase.deleteItem(currentShoppingList.uid, uid)
+      this.props.firebase.deleteItem(currentShoppingList.uid, uid);
     } else {
       console.error('Cannot remove item from non-existing shoppingList');
     }
   };
 
   onShopShoppingItem = (listId, uid, shopped = true) => {
-      this.props.firebase.shopItem(listId, uid, shopped)
+    this.props.firebase.shopItem(listId, uid, shopped);
   };
 
   ensureExistingCurrentShoppingList = async () => {
-    const currentShoppingListSnapshot = await this.props.firebase.myCurrentShoppingList().get()
+    const currentShoppingListSnapshot = await this.props.firebase.myCurrentShoppingList().get();
     if (!currentShoppingListSnapshot.size) {
-      return this.props.firebase.createShoppingList({ name: '' })
+      return this.props.firebase.createShoppingList({ name: '' });
     }
   }
 }

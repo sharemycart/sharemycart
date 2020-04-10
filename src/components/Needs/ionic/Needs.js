@@ -1,18 +1,21 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { compose } from 'recompose';
+import {
+  IonGrid, IonCol, IonRow, IonItem,
+} from '@ionic/react';
 import NeedsList from './NeedsList';
 import { ITEM_TYPE_NEED, ITEM_TYPE_POTENTIAL_NEED } from '../../../constants/items';
 import SplashLogo from '../../Reusables/ionic/SplashLogo';
-import { IonGrid, IonCol, IonRow, IonItem } from '@ionic/react';
 import LoadingAnimation from '../../Reusables/ionic/LoadingAnimation';
+
 class Needs extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       editingListName: '',
-    }
+    };
   }
 
   render() {
@@ -29,25 +32,26 @@ class Needs extends Component {
       <IonGrid>
         <IonRow>
           <IonCol>
-          <IonItem>
-            <SplashLogo
-              maxWidth="150px"
-              textStart="Nothing"
-              textEnd="SharedYet"
-            />
+            <IonItem>
+              <SplashLogo
+                maxWidth="150px"
+                textStart="Nothing"
+                textEnd="SharedYet"
+              />
             </IonItem>
           </IonCol>
         </IonRow>
 
       </IonGrid>
-    )
-    
-    if( !initializationDone ) return <LoadingAnimation loading={initializationDone} />
-    
+    );
+
+    if (!initializationDone) return <LoadingAnimation loading={initializationDone} />;
+
     return (
       <>
         {/* Needs */}
-        {currentNeedsList &&
+        {currentNeedsList
+          && (
           <NeedsList
             authUser={sessionStore.authUser}
             list={currentOriginShoppingList}
@@ -55,17 +59,17 @@ class Needs extends Component {
             onCreateItem={this.props.model.onCreateItemForCurrentNeedsList}
             onEditItem={this.props.model.onEditNeededItem}
             onDeleteItem={this.props.model.onRemoveNeededItem}
-            ownList={true}
+            ownList
             mode={ITEM_TYPE_NEED}
           />
-        }
+          )}
 
-        {!currentNeedsList &&
-          <NothingSharedYet />
-        }
+        {!currentNeedsList
+          && <NothingSharedYet />}
 
         {/* Potentially needed */}
-        {currentOriginShoppingList &&
+        {currentOriginShoppingList
+          && (
           <NeedsList
             authUser={sessionStore.authUser}
             list={currentOriginShoppingList}
@@ -76,7 +80,7 @@ class Needs extends Component {
             ownList={false}
             mode={ITEM_TYPE_POTENTIAL_NEED}
           />
-        }
+          )}
       </>
     );
   }

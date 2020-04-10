@@ -13,13 +13,13 @@ class NeedsList extends Component {
   }
 
   onToggleEditMode = () => {
-    this.setState(state => ({
+    this.setState((state) => ({
       editMode: !state.editMode,
       editText: this.props.list.name,
     }));
   };
 
-  onChangeEditText = event => {
+  onChangeEditText = (event) => {
     this.setState({ editText: event.target.value });
   };
 
@@ -36,7 +36,7 @@ class NeedsList extends Component {
       mode,
       onCreateItem,
       onEditItem,
-      onDeleteItem
+      onDeleteItem,
     } = this.props;
 
     return (
@@ -50,8 +50,8 @@ class NeedsList extends Component {
             onCreateNeed={onCreateItem}
             mode={mode}
             ownList={ownList}
-          />))
-        }
+          />
+        ))}
       </IonList>
     );
   }

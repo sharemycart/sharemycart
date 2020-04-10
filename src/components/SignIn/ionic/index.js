@@ -2,19 +2,21 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
 
+import {
+  IonGrid, IonRow, IonCol, IonContent, IonInput, IonIcon, IonButton,
+} from '@ionic/react';
+import { logoGoogle, logoFacebook, logoTwitter } from 'ionicons/icons';
+import { withTranslation, Trans } from 'react-i18next';
 import { withFirebase } from '../../Firebase';
 import { SHOPPING } from '../../../constants/routes';
-import { IonGrid, IonRow, IonCol, IonContent, IonInput, IonIcon, IonButton } from '@ionic/react';
 
-import { logoGoogle, logoFacebook, logoTwitter } from 'ionicons/icons';
 import SplashLogo from '../../Reusables/ionic/SplashLogo';
 import { PasswordForgetLink } from '../../PasswordForget/ionic';
 import { SignUpLink } from '../../SignUp/ionic';
 
-import { withTranslation, Trans } from 'react-i18next';
 
-import '../../Reusables/sign-in-up-page.scss'
-import '../../Reusables/components.scss'
+import '../../Reusables/sign-in-up-page.scss';
+import '../../Reusables/components.scss';
 import { withEmailVerification } from '../../Session';
 
 const SignInPage = () => (
@@ -48,8 +50,7 @@ const INITIAL_STATE = {
   error: null,
 };
 
-const ERROR_CODE_ACCOUNT_EXISTS =
-  'auth/account-exists-with-different-credential';
+const ERROR_CODE_ACCOUNT_EXISTS = 'auth/account-exists-with-different-credential';
 
 const ERROR_MSG_ACCOUNT_EXISTS = `
   An account with an E-Mail address to
@@ -60,7 +61,7 @@ const ERROR_MSG_ACCOUNT_EXISTS = `
 
 // this function defers the navigation to the referrer or to another site
 // after signing in.
-// this is necessary since if not deferred, the session's authUser may not be 
+// this is necessary since if not deferred, the session's authUser may not be
 // available in the cache.
 // It's a hack since there's no option / hook into the event which it can be hooked into
 // probably, a MobX reaction in the session store could provide a hook.
@@ -71,7 +72,7 @@ const navigateIfRequested = function () {
   if (redirectToReferrer === true) {
     setTimeout(() => history.push((from && from.pathname) || SHOPPING), 500);
   }
-}
+};
 
 class SignInFormBase extends Component {
   constructor(props) {
@@ -79,25 +80,25 @@ class SignInFormBase extends Component {
     this.state = { ...INITIAL_STATE };
   }
 
-  onSubmit = event => {
+  onSubmit = (event) => {
     const { email, password } = this.state;
 
     this.props.firebase
       .doSignInWithEmailAndPassword(email, password)
       .then(() => {
         this.setState({
-          redirectToReferrer: true
-          , ...INITIAL_STATE
+          redirectToReferrer: true,
+          ...INITIAL_STATE,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({ error });
       });
 
     event.preventDefault();
   };
 
-  onChange = event => {
+  onChange = (event) => {
     this.setState({ [event.target.name]: event.target.value });
   };
 
@@ -125,8 +126,7 @@ class SignInFormBase extends Component {
               padding-horizontal
               clear-input="true"
               autocomplete
-            >
-            </IonInput>
+            />
           </IonCol>
         </IonRow>
         <IonRow>
@@ -139,8 +139,8 @@ class SignInFormBase extends Component {
               type="password"
               placeholder={t('Password')}
               className="input"
-              padding-horizontal>
-            </IonInput>
+              padding-horizontal
+            />
           </IonCol>
         </IonRow>
         <IonButton disabled={isInvalid} type="submit" expand="block">
@@ -160,26 +160,24 @@ class SignInGoogleBase extends Component {
     this.state = { error: null };
   }
 
-  onSubmit = event => {
+  onSubmit = (event) => {
     this.props.firebase
       .doSignInWithGoogle()
-      .then(socialAuthUser => {
+      .then((socialAuthUser) =>
         // Create a user in your Firebase Realtime Database too
-        return this.props.firebase.user(socialAuthUser.user.uid).set({
+        this.props.firebase.user(socialAuthUser.user.uid).set({
           username: socialAuthUser.user.displayName,
           email: socialAuthUser.user.email,
           roles: {},
         },
-          { merge: true },
-        );
-      })
+        { merge: true }))
       .then(() => {
         this.setState({
-          redirectToReferrer: true
-          , error: null
+          redirectToReferrer: true,
+          error: null,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         if (error.code === ERROR_CODE_ACCOUNT_EXISTS) {
           error.message = ERROR_MSG_ACCOUNT_EXISTS;
         }
@@ -199,8 +197,12 @@ class SignInGoogleBase extends Component {
       <form onSubmit={this.onSubmit}>
         <IonRow>
           <IonCol>
-            <IonButton onClick={this.onSubmit} type="submit" expand="block" color="secondary"><IonIcon
-              icon={logoGoogle} /><span className="social-button-text">Google</span></IonButton>
+            <IonButton onClick={this.onSubmit} type="submit" expand="block" color="secondary">
+              <IonIcon
+                icon={logoGoogle}
+              />
+              <span className="social-button-text">Google</span>
+            </IonButton>
           </IonCol>
         </IonRow>
         {error && <p>{error.message}</p>}
@@ -216,26 +218,24 @@ class SignInFacebookBase extends Component {
     this.state = { error: null };
   }
 
-  onSubmit = event => {
+  onSubmit = (event) => {
     this.props.firebase
       .doSignInWithFacebook()
-      .then(socialAuthUser => {
+      .then((socialAuthUser) =>
         // Create a user in your Firebase Realtime Database too
-        return this.props.firebase.user(socialAuthUser.user.uid).set({
+        this.props.firebase.user(socialAuthUser.user.uid).set({
           username: socialAuthUser.additionalUserInfo.profile.name,
           email: socialAuthUser.additionalUserInfo.profile.email,
           roles: {},
         },
-          { merge: true },
-        );
-      })
+        { merge: true }))
       .then(() => {
         this.setState({
           redirectToReferrer: true,
-          error: null
+          error: null,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         if (error.code === ERROR_CODE_ACCOUNT_EXISTS) {
           error.message = ERROR_MSG_ACCOUNT_EXISTS;
         }
@@ -256,9 +256,16 @@ class SignInFacebookBase extends Component {
         <IonRow>
 
           <IonCol>
-            <IonButton onClick={this.onSubmit} type="submit" expand="block" color="secondary"><IonIcon
-              icon={logoFacebook} /><span
-                className="social-button-text">Facebook</span></IonButton>
+            <IonButton onClick={this.onSubmit} type="submit" expand="block" color="secondary">
+              <IonIcon
+                icon={logoFacebook}
+              />
+              <span
+                className="social-button-text"
+              >
+                Facebook
+              </span>
+            </IonButton>
           </IonCol>
         </IonRow>
 
@@ -275,26 +282,24 @@ class SignInTwitterBase extends Component {
     this.state = { error: null };
   }
 
-  onSubmit = event => {
+  onSubmit = (event) => {
     this.props.firebase
       .doSignInWithTwitter()
-      .then(socialAuthUser => {
+      .then((socialAuthUser) =>
         // Create a user in your Firebase Realtime Database too
-        return this.props.firebase.user(socialAuthUser.user.uid).set({
+        this.props.firebase.user(socialAuthUser.user.uid).set({
           username: socialAuthUser.additionalUserInfo.profile.name,
           email: socialAuthUser.additionalUserInfo.profile.email,
           roles: {},
         },
-          { merge: true },
-        );
-      })
+        { merge: true }))
       .then(() => {
         this.setState({
           redirectToReferrer: true,
-          error: null
+          error: null,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         if (error.code === ERROR_CODE_ACCOUNT_EXISTS) {
           error.message = ERROR_MSG_ACCOUNT_EXISTS;
         }
@@ -315,9 +320,16 @@ class SignInTwitterBase extends Component {
         <IonRow>
 
           <IonCol>
-            <IonButton onClick={this.onSubmit} type="submit" expand="block" color="secondary"><IonIcon
-              icon={logoTwitter} /><span
-                className="social-button-text">Twitter</span></IonButton>
+            <IonButton onClick={this.onSubmit} type="submit" expand="block" color="secondary">
+              <IonIcon
+                icon={logoTwitter}
+              />
+              <span
+                className="social-button-text"
+              >
+                Twitter
+              </span>
+            </IonButton>
           </IonCol>
         </IonRow>
 
@@ -350,4 +362,6 @@ const SignInTwitter = compose(
 
 export default withEmailVerification(SignInPage);
 
-export { SignInForm, SignInGoogle, SignInFacebook, SignInTwitter };
+export {
+  SignInForm, SignInGoogle, SignInFacebook, SignInTwitter,
+};

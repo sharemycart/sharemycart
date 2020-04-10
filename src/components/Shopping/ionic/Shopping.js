@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { compose } from 'recompose';
 
+import { withRouter } from 'react-router';
 import ShoppingList from './ShoppingList';
 
 import LoadingAnimation from '../../Reusables/ionic/LoadingAnimation';
-import { withRouter } from 'react-router';
 import { GO_SHOPPING } from '../../../constants/routes';
 import { ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_SHOPPING } from '../../../constants/items';
 
@@ -31,12 +31,13 @@ class Shopping extends Component {
 
     const mode = this.props.location.pathname === GO_SHOPPING
       ? ITEM_TYPE_IN_SHOPPING
-      : ITEM_TYPE_SHOPPING
+      : ITEM_TYPE_SHOPPING;
 
-    if (!initializationDone) return <LoadingAnimation loading={initializationDone} />
+    if (!initializationDone) return <LoadingAnimation loading={initializationDone} />;
 
     return (
-      currentShoppingList &&
+      currentShoppingList
+      && (
       <>
         <ShoppingList
           authUser={sessionStore.authUser}
@@ -55,6 +56,7 @@ class Shopping extends Component {
           addSaveEditHandler={this.props.addSaveEditHandler}
         />
       </>
+      )
     );
   }
 }

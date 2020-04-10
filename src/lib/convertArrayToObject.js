@@ -1,9 +1,7 @@
 export default (array, key = 'uid') => {
-    const initialValue = {};
-    return array.reduce((obj, item) => {
-      return {
-        ...obj,
-        [item[key]]: item,
-      };
-    }, initialValue);
-  };
+  const initialValue = {};
+  return array.reduce((obj, item) => ({
+    ...obj,
+    [item[key]]: item,
+  }), initialValue);
+};

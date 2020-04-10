@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { withFirebase } from '../../Firebase';
 import { IonButton, IonIcon } from '@ionic/react';
 import { logOut } from 'ionicons/icons';
 
 import { Trans } from 'react-i18next';
+import { withFirebase } from '../../Firebase';
 
 const SignOutButton = ({ firebase }) => (
   <IonButton

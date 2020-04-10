@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
+import { IonList, IonItem, IonReorderGroup } from '@ionic/react';
 import Item from '../../Reusables/ionic/Item';
 import EditItem from '../../Reusables/ionic/EditItem';
-import { IonList, IonItem, IonReorderGroup } from '@ionic/react';
 import { ITEM_TYPE_NEW_SHOPPING } from '../../../constants/items';
 
 class ShoppingList extends Component {
@@ -12,10 +12,10 @@ class ShoppingList extends Component {
       editName: this.props.list.name,
     };
 
-    this.props.addSaveEditHandler(this.saveEdit.bind(this))
+    this.props.addSaveEditHandler(this.saveEdit.bind(this));
   }
 
-  onChangeEditName = event => {
+  onChangeEditName = (event) => {
     this.setState({ editName: event.target.value });
   };
 
@@ -32,34 +32,34 @@ class ShoppingList extends Component {
       return;
     }
 
-    this.props.onCreateItem(newItem)
+    this.props.onCreateItem(newItem);
   }
 
   doReorder(event) {
     console.log('Dragged from index', event.detail.from, 'to', event.detail.to);
 
-    event.detail.complete()
-
-    const { children } = event.srcElement
-    let order = {}
     event.detail.complete();
-    let position = 0
-    for (let k in children) {
+
+    const { children } = event.srcElement;
+    const order = {};
+    event.detail.complete();
+    let position = 0;
+    for (const k in children) {
       position++;
       if (children.hasOwnProperty(k)) {
         if (children[k].id) {
-          order[children[k].id] = position
+          order[children[k].id] = position;
         }
       }
     }
 
-    this.setState({ order })
+    this.setState({ order });
   }
 
   saveEdit() {
-    this.onSaveEditName()
+    this.onSaveEditName();
     if (this.state.order) {
-      this.props.onReorderItems(this.props.list.uid, this.props.items, this.state.order)
+      this.props.onReorderItems(this.props.list.uid, this.props.items, this.state.order);
     }
   }
 
@@ -83,45 +83,49 @@ class ShoppingList extends Component {
           </IonItem>
         </IonList>
         <IonList>
-          {/* // The following component is actually a hack. I expected the IonReorderGroup to 
+          {/* // The following component is actually a hack. I expected the IonReorderGroup to
         // toggle "disabled" based on the edit mode.
-        // However, whit does not work as expected, as when leaving back to non-Edit-mode, 
+        // However, whit does not work as expected, as when leaving back to non-Edit-mode,
         // the oder is destroyed until loaded from the database for the next time */}
 
           {
             !this.props.editMode && items.map((item, key) => {
               const relatedBringAlongItems = (this.props.bringAlongItems || [])
                 .filter(
-                  neededItem => (
+                  (neededItem) => (
                     (item.uid === neededItem.originShoppingItemId)
                     || (item.name === neededItem.name)
-                  ) && neededItem.quantity
-                )
+                  ) && neededItem.quantity,
+                );
               return (
                 <Item
                   key={item.id || key}
                   item={item}
                   bringAlongItems={relatedBringAlongItems}
-                  ownList={true}
+                  ownList
                   onEditingConcluded={onEditItem}
                   onDeleteItem={onDeleteItem}
                   onShopItem={onShopItem}
                   mode={this.props.mode}
-                />)
+                />
+              );
             })
           }
           {
-            this.props.editMode && <IonReorderGroup disabled={false} onIonItemReorder={this.doReorder.bind(this)}>
+            this.props.editMode && (
+            <IonReorderGroup disabled={false} onIonItemReorder={this.doReorder.bind(this)}>
               {items.map((item, key) => (
                 <Item
                   key={item.id || key}
                   item={item}
-                  ownList={true}
+                  ownList
                   onEditingConcluded={onEditItem}
                   onDeleteItem={onDeleteItem}
                   mode={this.props.mode}
-                />))}
+                />
+              ))}
             </IonReorderGroup>
+            )
           }
         </IonList>
       </>

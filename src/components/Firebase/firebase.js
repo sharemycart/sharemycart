@@ -12,12 +12,11 @@ const config = {
   projectId: process.env.REACT_APP_BACKEND_PROJECT_ID,
   storageBucket: process.env.REACT_APP_BACKEND_STORAGE_BUCKET,
   messagingSenderId: process.env.REACT_APP_BACKEND_MESSAGE_SENDER_ID,
-  appId: process.env.REACT_APP_BACKEND_SENDER_APP_ID
+  appId: process.env.REACT_APP_BACKEND_SENDER_APP_ID,
 };
 
 class Firebase {
   constructor() {
-
     app.initializeApp(config);
 
     /* Helper */
@@ -28,7 +27,7 @@ class Firebase {
     /* Firebase APIs */
 
     this.auth = app.auth();
-    this.db = app.firestore()
+    this.db = app.firestore();
 
     /* Social Sign In Method Provider */
 
@@ -39,79 +38,73 @@ class Firebase {
 
   // *** Auth API ***
 
-  doCreateUserWithEmailAndPassword = (email, password) =>
-    this.auth.createUserWithEmailAndPassword(email, password);
+  doCreateUserWithEmailAndPassword = (email, password) => this.auth.createUserWithEmailAndPassword(email, password);
 
-  doSignInWithEmailAndPassword = (email, password) =>
-    this.auth.signInWithEmailAndPassword(email, password);
+  doSignInWithEmailAndPassword = (email, password) => this.auth.signInWithEmailAndPassword(email, password);
 
-  doSignInWithGoogle = () =>
-    this.auth.signInWithPopup(this.googleProvider);
+  doSignInWithGoogle = () => this.auth.signInWithPopup(this.googleProvider);
 
-  doSignInWithFacebook = () =>
-    this.auth.signInWithPopup(this.facebookProvider);
+  doSignInWithFacebook = () => this.auth.signInWithPopup(this.facebookProvider);
 
-  doSignInWithTwitter = () =>
-    this.auth.signInWithPopup(this.twitterProvider);
+  doSignInWithTwitter = () => this.auth.signInWithPopup(this.twitterProvider);
 
   doSignOut = () => this.auth.signOut();
 
-  doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
+  doPasswordReset = (email) => this.auth.sendPasswordResetEmail(email);
 
-  doSendEmailVerification = () =>
-    this.auth.currentUser.sendEmailVerification({
-      url: process.env.REACT_APP_CONFIRMATION_EMAIL_REDIRECT,
-    });
+  doSendEmailVerification = () => this.auth.currentUser.sendEmailVerification({
+    url: process.env.REACT_APP_CONFIRMATION_EMAIL_REDIRECT,
+  });
 
-  doPasswordUpdate = password =>
-    this.auth.currentUser.updatePassword(password);
+  doPasswordUpdate = (password) => this.auth.currentUser.updatePassword(password);
 
   // *** Merge Auth and DB User API *** //
 
-  onAuthUserListener = (next, fallback) =>
-    this.auth.onAuthStateChanged(authUser => {
-      if (authUser) {
-        this.user(authUser.uid)
-          .get()
-          .then(snapshot => {
+  onAuthUserListener = (next, fallback) => this.auth.onAuthStateChanged((authUser) => {
+    if (authUser) {
+      this.user(authUser.uid)
+        .get()
+        .then((snapshot) => {
+          const dbUser = snapshot.exists
+            ? snapshot.data()
+            : {};
 
-            const dbUser = snapshot.exists
-              ? snapshot.data()
-              : {};
+          // default empty roles
+          if (!dbUser.roles) {
+            dbUser.roles = {};
+          }
 
-            // default empty roles
-            if (!dbUser.roles) {
-              dbUser.roles = {};
-            }
+          // merge auth and db user
+          authUser = {
+            uid: authUser.uid,
+            email: authUser.email,
+            emailVerified: authUser.emailVerified,
+            providerData: authUser.providerData,
+            ...dbUser,
+          };
 
-            // merge auth and db user
-            authUser = {
-              uid: authUser.uid,
-              email: authUser.email,
-              emailVerified: authUser.emailVerified,
-              providerData: authUser.providerData,
-              ...dbUser,
-            };
-
-            next(authUser);
-          });
-      } else {
-        fallback();
-      }
-    });
+          next(authUser);
+        });
+    } else {
+      fallback();
+    }
+  });
 
   // *** User API ***
 
-  user = uid => this.db.doc(`users/${uid}`);
+  user = (uid) => this.db.doc(`users/${uid}`);
+
   users = () => this.db.collection('users');
 
   // *** Message API ***
 
-  message = uid => this.db.doc(`messages/${uid}`);
+  message = (uid) => this.db.doc(`messages/${uid}`);
+
   messages = () => this.db.collection('messages');
 
   // *** Lists API ***
-  list = uid => this.db.doc(`lists/${uid}`);
+  list = (uid) => this.db.doc(`lists/${uid}`);
+
   lists = () => this.db.collection('/lists');
 
   myCurrentList = (type) => this.db.collection('/lists')
@@ -129,19 +122,20 @@ class Firebase {
     lifecycleStatus: LIFECYCLE_STATUS_OPEN,
     createdAt: this.fieldValue.serverTimestamp(),
   })
+
   editList = (uid, list) => this.list(uid)
     .set(Object.assign(list,
       {
-        editedAt: this.fieldValue.serverTimestamp()
+        editedAt: this.fieldValue.serverTimestamp(),
       }));
 
-  deleteList = async uid => {
-    const toBeDeleted = await this.list(uid).get()
+  deleteList = async (uid) => {
+    const toBeDeleted = await this.list(uid).get();
 
     if (toBeDeleted.exists) {
       const deleted = toBeDeleted.data();
 
-      await this.list(uid).delete()
+      await this.list(uid).delete();
 
       if (deleted.isCurrent) {
         // make sure there's a new current list
@@ -149,16 +143,16 @@ class Firebase {
           .where('userId', '==', deleted.userId)
           .where('type', '==', deleted.type)
           .limit(1)
-          .get()
+          .get();
 
         otherListOfSameType.docs.forEach(
-          (s) => s.ref.update('isCurrent', true)
-        )
+          (s) => s.ref.update('isCurrent', true),
+        );
       }
     }
   }
 
-  listItems = listId => this.db.doc(`lists/${listId}`)
+  listItems = (listId) => this.db.doc(`lists/${listId}`)
     .collection('items');
 
   listItem = (listId, uid) => this.db.doc(`lists/${listId}`)
@@ -169,30 +163,30 @@ class Firebase {
   createItem = (listId, item) => this.listItems(listId)
     .add(Object.assign(item,
       {
-        createdAt: this.fieldValue.serverTimestamp()
+        createdAt: this.fieldValue.serverTimestamp(),
       }));
 
   editItem = (listId, item) => this.listItem(listId, item.uid)
     .set(Object.assign(item,
       {
-        editedAt: this.fieldValue.serverTimestamp()
+        editedAt: this.fieldValue.serverTimestamp(),
       }));
 
   deleteItem = (listId, uid) => this.listItem(listId, uid)
     .delete()
 
   setItemsOrder = (listId, items, order) => {
-    const batch = this.db.batch()
-    items.forEach(i => batch.update(this.listItem(listId, i.uid), 'order', order[i.uid] || 0))
-    batch.commit()
+    const batch = this.db.batch();
+    items.forEach((i) => batch.update(this.listItem(listId, i.uid), 'order', order[i.uid] || 0));
+    batch.commit();
   }
 
   shopItem = (listId, uid, shopped = true) => this.listItem(listId, uid)
     .update(
       {
         shopped,
-        editedAt: this.fieldValue.serverTimestamp()
-      }
+        editedAt: this.fieldValue.serverTimestamp(),
+      },
     )
 
   // *** Shopping API ***
@@ -204,17 +198,17 @@ class Firebase {
       : INVALID_DUMMY_UID)
     .where('type', '==', LIST_TYPE_SHOPPING)
 
-  setCurrentShoppingList = uid => {
+  setCurrentShoppingList = (uid) => {
     this.myCurrentShoppingList().get()
       .then((snapshot) => {
-        snapshot.docs.forEach((s) => s.ref.update('isCurrent', false))
+        snapshot.docs.forEach((s) => s.ref.update('isCurrent', false));
       })
-      .then(() => this.list(uid).update('isCurrent', true))
+      .then(() => this.list(uid).update('isCurrent', true));
   }
 
   createShoppingList = async ({ name }) => {
-    const snapshot = await this.myCurrentShoppingList().get()
-    snapshot.docs.forEach((s) => s.ref.update('isCurrent', false))
+    const snapshot = await this.myCurrentShoppingList().get();
+    snapshot.docs.forEach((s) => s.ref.update('isCurrent', false));
 
     return this.createList({ name }, LIST_TYPE_SHOPPING);
   };
@@ -222,19 +216,19 @@ class Firebase {
   // *** Needs API ***
   myCurrentNeedsList = () => this.myCurrentList(LIST_TYPE_NEED);
 
-  setCurrentNeedsList = uid => {
+  setCurrentNeedsList = (uid) => {
     this.myCurrentNeedsList().get()
       .then((snapshot) => {
-        snapshot.docs.forEach((s) => s.ref.update('isCurrent', false))
+        snapshot.docs.forEach((s) => s.ref.update('isCurrent', false));
       })
-      .then(() => this.list(uid).update('isCurrent', true))
+      .then(() => this.list(uid).update('isCurrent', true));
   }
 
   createNeedsList = async ({ name }) => {
-    const snapshot = await this.myCurrentNeedsList().get()
-    snapshot.docs.forEach((s) => s.ref.update('isCurrent', false))
+    const snapshot = await this.myCurrentNeedsList().get();
+    snapshot.docs.forEach((s) => s.ref.update('isCurrent', false));
 
-    return this.createList({ name }, LIST_TYPE_NEED)
+    return this.createList({ name }, LIST_TYPE_NEED);
   }
 
   myNeedsLists = () => this.lists()
@@ -254,21 +248,21 @@ class Firebase {
             // we need to update all needs lists which are not referenced to the shopping list
             const needsList = s.data();
             if (needsList.shoppingListId !== shoppingListId) {
-              s.ref.update('isCurrent', false)
+              s.ref.update('isCurrent', false);
             }
-          })
+          });
         }
-      })
+      });
 
     return this.list(shoppingListId)
       .get()
-      .then(snapshot => snapshot.data())
+      .then((snapshot) => snapshot.data())
       .then((shoppingList) => {
         this
           .myNeedsListsForShoppingList(shoppingListId)
           .then((existingNeedsList) => {
             if (existingNeedsList && existingNeedsList.id) {
-              existingNeedsList.update('isCurrent', true)
+              existingNeedsList.update('isCurrent', true);
             } else {
               this.lists()
                 .add({
@@ -278,21 +272,21 @@ class Firebase {
                   isCurrent: true,
                   name,
                   userId: this.auth.currentUser.uid,
-                  createdAt: this.fieldValue.serverTimestamp()
-                })
+                  createdAt: this.fieldValue.serverTimestamp(),
+                });
             }
-          })
-      })
+          });
+      });
   }
 
-  myNeedsListsForShoppingList = async shoppingListId => {
-    let needsListsRef = null
+  myNeedsListsForShoppingList = async (shoppingListId) => {
+    let needsListsRef = null;
     const q = this.myNeedsLists()
       .where('shoppingListId', '==', shoppingListId)
-      .limit(1)
+      .limit(1);
 
-    const needsListsSnapshots = await q.get()
-    needsListsSnapshots.docs.forEach(sl => { needsListsRef = sl.ref; return false })
+    const needsListsSnapshots = await q.get();
+    needsListsSnapshots.docs.forEach((sl) => { needsListsRef = sl.ref; return false; });
 
     return needsListsRef;
   }
@@ -304,8 +298,8 @@ class Firebase {
     neededItem.quantity = '';
     delete neededItem.createdAt;
     delete neededItem.editedAt;
-    //TODO: prevent creation of duplicate needs
-    return this.createItem(needsListId, neededItem)
+    // TODO: prevent creation of duplicate needs
+    return this.createItem(needsListId, neededItem);
   }
 }
 
