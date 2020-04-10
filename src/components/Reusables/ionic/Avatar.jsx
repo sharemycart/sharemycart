@@ -1,12 +1,13 @@
 import React from 'react'
 import { IonAvatar } from '@ionic/react'
+import md5 from 'md5'
 
 const Avatar = ({
     user,
     size = 200,
 }) => {
     let userImage = user ? user.photoURL : null;
-    const emailMd5 = '';
+    const emailMd5 = md5(user.email);
     const namePathComponent = encodeURIComponent(encodeURIComponent(user.username));
     // const colorPathComponent = encodeURIComponent(`color=${ff0000}`);
     let src = userImage

@@ -119,8 +119,7 @@ class Firebase {
     .where('isCurrent', '==', true)
     .where('userId', '==', this.auth.currentUser
       ? this.auth.currentUser.uid
-      : INVALID_DUMMY_UID)
-    .limit(1);
+      : INVALID_DUMMY_UID);
 
   createList = ({ name }, type) => this.lists().add({
     name,
@@ -188,6 +187,14 @@ class Firebase {
     batch.commit()
   }
 
+  shopItem = (listId, uid, shopped = true) => this.listItem(listId, uid)
+    .update(
+      {
+        shopped,
+        editedAt: this.fieldValue.serverTimestamp()
+      }
+    )
+
   // *** Shopping API ***
   myCurrentShoppingList = () => this.myCurrentList(LIST_TYPE_SHOPPING);
 
@@ -242,7 +249,15 @@ class Firebase {
   createNeedsListForShoppingList = (shoppingListId, name) => {
     this.myCurrentNeedsList().get()
       .then((snapshot) => {
-        snapshot.docs.forEach((s) => s.ref.update('isCurrent', false))
+        if (snapshot.size) {
+          snapshot.docs.forEach((s) => {
+            // we need to update all needs lists which are not referenced to the shopping list
+            const needsList = s.data();
+            if (needsList.shoppingListId !== shoppingListId) {
+              s.ref.update('isCurrent', false)
+            }
+          })
+        }
       })
 
     return this.list(shoppingListId)
@@ -251,19 +266,22 @@ class Firebase {
       .then((shoppingList) => {
         this
           .myNeedsListsForShoppingList(shoppingListId)
-          .then((existingNeedsList) => existingNeedsList
-            ? existingNeedsList.update('isCurrent', true)
-            : this.lists()
-              .add({
-                type: LIST_TYPE_NEED,
-                shoppingListId,
-                shoppingListOwnerId: shoppingList.userId,
-                isCurrent: true,
-                name,
-                userId: this.auth.currentUser.uid,
-                createdAt: this.fieldValue.serverTimestamp()
-              })
-          )
+          .then((existingNeedsList) => {
+            if (existingNeedsList && existingNeedsList.id) {
+              existingNeedsList.update('isCurrent', true)
+            } else {
+              this.lists()
+                .add({
+                  type: LIST_TYPE_NEED,
+                  shoppingListId,
+                  shoppingListOwnerId: shoppingList.userId,
+                  isCurrent: true,
+                  name,
+                  userId: this.auth.currentUser.uid,
+                  createdAt: this.fieldValue.serverTimestamp()
+                })
+            }
+          })
       })
   }
 
@@ -283,7 +301,7 @@ class Firebase {
     const neededItem = shoppingListItem;
 
     neededItem.OriginShoppingItemUid = shoppingListItem.uid;
-    neededItem.quantity = 0;
+    neededItem.quantity = '';
     delete neededItem.createdAt;
     delete neededItem.editedAt;
     //TODO: prevent creation of duplicate needs

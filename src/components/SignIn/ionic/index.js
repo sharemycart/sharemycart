@@ -11,8 +11,11 @@ import SplashLogo from '../../Reusables/ionic/SplashLogo';
 import { PasswordForgetLink } from '../../PasswordForget/ionic';
 import { SignUpLink } from '../../SignUp/ionic';
 
-import './page.scss'
+import { withTranslation, Trans } from 'react-i18next';
+
+import '../../Reusables/sign-in-up-page.scss'
 import '../../Reusables/components.scss'
+import { withEmailVerification } from '../../Session';
 
 const SignInPage = () => (
   <>
@@ -20,9 +23,11 @@ const SignInPage = () => (
       <SplashLogo maxWidth="150px" />
       <IonGrid>
         <SignInForm />
-        <div class="separator">or with</div>
+        <div className="separator">
+          <Trans>or with</Trans>
+        </div>
         <SignInGoogle />
-        <SignInFacebook />
+        {/* <SignInFacebook /> */}
         {/* <SignInTwitter /> */}
         <IonRow>
           <IonCol>
@@ -101,6 +106,8 @@ class SignInFormBase extends Component {
 
     const isInvalid = password === '' || email === '';
 
+    const { t } = this.props;
+
     navigateIfRequested.call(this);
 
     return (
@@ -113,8 +120,8 @@ class SignInFormBase extends Component {
               onIonChange={this.onChange}
               clearInput
               type="email"
-              placeholder="Email"
-              class="input"
+              placeholder={t('Email')}
+              className="input"
               padding-horizontal
               clear-input="true"
               autocomplete
@@ -130,14 +137,14 @@ class SignInFormBase extends Component {
               value={password}
               onIonChange={this.onChange}
               type="password"
-              placeholder="Password"
-              class="input"
+              placeholder={t('Password')}
+              className="input"
               padding-horizontal>
             </IonInput>
           </IonCol>
         </IonRow>
         <IonButton disabled={isInvalid} type="submit" expand="block">
-          Sign In
+          <Trans>Sign In</Trans>
         </IonButton>
 
         {error && <p>{error.message}</p>}
@@ -323,6 +330,7 @@ class SignInTwitterBase extends Component {
 const SignInForm = compose(
   withRouter,
   withFirebase,
+  withTranslation(),
 )(SignInFormBase);
 
 const SignInGoogle = compose(
@@ -340,6 +348,6 @@ const SignInTwitter = compose(
   withFirebase,
 )(SignInTwitterBase);
 
-export default SignInPage;
+export default withEmailVerification(SignInPage);
 
 export { SignInForm, SignInGoogle, SignInFacebook, SignInTwitter };

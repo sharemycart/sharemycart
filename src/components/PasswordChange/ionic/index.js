@@ -6,6 +6,8 @@ import { ACCOUNT, PASSWORD_CHANGE } from '../../../constants/routes';
 import SplashLogo from '../../Reusables/ionic/SplashLogo';
 import { pencilOutline } from 'ionicons/icons';
 
+import {Trans} from 'react-i18next';
+
 const INITIAL_STATE = {
   passwordOne: '',
   passwordTwo: '',
@@ -105,7 +107,7 @@ class PasswordChangeFormBase extends Component {
 
 const PasswordChangeButton = () => (
   <IonButton expand="block" color="secondary" href={PASSWORD_CHANGE}>
-    Change Password
+    <Trans>Change Password</Trans>
     <IonIcon slot="end" icon={pencilOutline} />
   </IonButton>
 );

@@ -6,6 +6,8 @@ import * as ROUTES from '../../../constants/routes';
 import { IonContent, IonGrid, IonButton, IonRow, IonCol, IonInput, IonHeader, IonToolbar, IonButtons, IonBackButton } from '@ionic/react';
 import SplashLogo from '../../Reusables/ionic/SplashLogo';
 
+import {Trans} from 'react-i18next';
+
 const PasswordForgetPage = () => (
     <>
         <IonHeader>
@@ -81,7 +83,7 @@ class PasswordForgetFormBase extends Component {
                     </IonCol>
                 </IonRow>
                 <IonButton disabled={isInvalid} type="submit" expand="block">
-                    Reset My Password
+                    <Trans>Reset My Password</Trans>
                 </IonButton>
                 {error && <p>{error.message}</p>}
             </form>
@@ -90,7 +92,7 @@ class PasswordForgetFormBase extends Component {
 }
 
 const PasswordForgetLink = () => (
-   <span><Link to={ROUTES.PASSWORD_FORGET}>Forgot Password?</Link></span>
+   <span><Link to={ROUTES.PASSWORD_FORGET}><Trans>Forgot Password</Trans></Link></span>
 );
 
 export default PasswordForgetPage;

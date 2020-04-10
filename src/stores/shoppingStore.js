@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, toJS } from 'mobx';
 import toObject from '../lib/convertArrayToObject';
 
 // This store holds all information needed to create and manage shopping lists 
@@ -10,9 +10,14 @@ class ShoppingStore {
   @observable currentShoppingListItems = null;
   @observable currentDependentNeedsLists = null;
   @observable currentDependentNeedsListsItems = null;
+  @observable initializationDone = false;
 
   constructor(rootStore) {
     this.rootStore = rootStore;
+  }
+
+  @action setInitializationDone(done){
+    this.initializationDone = done;
   }
 
   @action setShoppingLists = shoppingLists => {
@@ -60,6 +65,17 @@ class ShoppingStore {
       ...this.currentDependentNeedsLists[key],
       uid: this.currentDependentNeedsLists[key].uid,
     }));
+  }
+
+  @computed get currentDependentNeedsListsItemsArray() {
+    return Object.keys(this.currentDependentNeedsLists || {}).reduce((allItems, key) => {
+      const needsListId = this.currentDependentNeedsLists[key].uid;
+      const ownerId = this.currentDependentNeedsLists[key].userId;
+      const neededItems = toJS(this.currentDependentNeedsLists)[key].items;
+      return allItems.concat(neededItems || []).map(
+        neededItem => Object.assign(neededItem, {needsListId, ownerId}
+      ))
+    }, []);
   }
 }
 

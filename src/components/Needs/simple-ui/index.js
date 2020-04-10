@@ -4,7 +4,7 @@ import { Switch, Route } from 'react-router-dom';
 import * as ROUTES from '../../../constants/routes';
 import NeedsList from './NeedsList';
 import Needs from './Needs';
-import NeedsInSharedShoppingList from './NeedsInSharedShoppingList';
+import NeedsInSharedShoppingList from './SharedShoppingList';
 import { withEmailVerification, withAuthorization } from '../../Session';
 import { compose } from 'recompose';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/react';

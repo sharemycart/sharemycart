@@ -4,6 +4,12 @@ import { compose } from 'recompose';
 
 import { withFirebase } from '../Firebase';
 
+import { Trans } from 'react-i18next';
+import { IonContent, IonGrid, IonRow, IonCol, IonButton } from '@ionic/react';
+import SplashLogo from '../Reusables/ionic/SplashLogo';
+
+import '../Reusables/sign-in-up-page.scss';
+
 const needsEmailVerification = authUser =>
   authUser &&
   !authUser.emailVerified &&
@@ -26,35 +32,43 @@ const withEmailVerification = Component => {
     };
 
     render() {
+
       return needsEmailVerification(
         this.props.sessionStore.authUser,
       ) ? (
-        <div>
-          {this.state.isSent ? (
-            <p>
-              E-Mail confirmation sent: Check you E-Mails (Spam folder
-              included) for a confirmation E-Mail. Refresh this page
-              once you confirmed your E-Mail.
-            </p>
-          ) : (
-            <p>
-              Verify your E-Mail: Check you E-Mails (Spam folder
-              included) for a confirmation E-Mail or send another
-              confirmation E-Mail.
-            </p>
-          )}
-
-          <button
-            type="button"
-            onClick={this.onSendEmailVerification}
-            disabled={this.state.isSent}
-          >
-            Send confirmation E-Mail
-          </button>
-        </div>
-      ) : (
-        <Component {...this.props} />
-      );
+          <IonContent className="login-page">
+            <SplashLogo
+              maxWidth="150px"
+              textStart='Check'
+              textEnd='YourEmail'
+            />
+            <IonGrid>
+              <IonRow>
+                <IonCol>
+                  {this.state.isSent ? (
+                    <Trans>Email_confirmation_sent</Trans>
+                  ) : (
+                      <Trans>Email_verification_needed</Trans>
+                    )}
+                </IonCol>
+              </IonRow>
+              <IonRow>
+                <IonCol>
+                  <IonButton
+                    type="button"
+                    onClick={this.onSendEmailVerification}
+                    disabled={this.state.isSent}
+                    expand="block"
+                  >
+                    <Trans>Send confirmation E-Mail</Trans>
+                  </IonButton>
+                </IonCol>
+              </IonRow>
+            </IonGrid>
+          </IonContent>
+        ) : (
+          <Component {...this.props} />
+        );
     }
   }
 

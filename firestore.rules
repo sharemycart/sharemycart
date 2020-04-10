@@ -26,13 +26,14 @@ service cloud.firestore {
       
       match /items/{item} {
         allow read: if isSignedIn();
+        allow update: if listData().shoppingListOwnerId == request.auth.uid;
         allow write: if listData().userId == request.auth.uid;
       }
     }
     
     match /users/{userId} {
-      allow read, update, delete: if request.auth.uid == userId;
-      allow create: if isSignedIn();
+      allow read, create: if isSignedIn();
+      allow update, delete: if request.auth.uid == userId;
     }
   }
 }

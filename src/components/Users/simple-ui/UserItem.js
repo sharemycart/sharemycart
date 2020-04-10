@@ -27,8 +27,8 @@ class UserItem extends Component {
       .user(this.props.match.params.id)
       .onSnapshot(snapshot => {
         this.props.userStore.setUser(
-          snapshot.data(),
           this.props.match.params.id,
+          snapshot.data(),
         );
 
         this.setState({ loading: false });

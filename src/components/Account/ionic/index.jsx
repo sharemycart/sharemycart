@@ -8,6 +8,8 @@ import SignOutButton from '../../SignOut/ionic'
 
 import { PasswordChangeButton } from '../../PasswordChange/ionic'
 
+import {Trans} from 'react-i18next';
+
 import './page.css';
 
 const AccountPage = ({ sessionStore }) => {
@@ -15,13 +17,13 @@ const AccountPage = ({ sessionStore }) => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Account</IonTitle>
+          <IonTitle><Trans>Account</Trans></IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Account</IonTitle>
+            <IonTitle size="large"><Trans>Account</Trans></IonTitle>
           </IonToolbar>
         </IonHeader>
         <Profile />

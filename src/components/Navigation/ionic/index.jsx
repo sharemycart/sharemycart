@@ -12,8 +12,11 @@ import AccountPage from '../../Account/ionic';
 import AdminPage from '../../Admin/simple-ui';
 import ShoppingPage from '../../Shopping/ionic';
 import NeedsPage from '../../Needs/ionic';
+import SharedShoppingList from '../../Needs/ionic/SharedShoppingList';
 
 import { useLocation } from 'react-router-dom'
+
+import { Trans } from 'react-i18next';
 
 import * as ROUTES from '../../../constants/routes';
 import {
@@ -25,34 +28,35 @@ import {
     IonTabs,
     IonIcon
 } from '@ionic/react';
-import NeedsInSharedShoppingList from '../../Needs/simple-ui/NeedsInSharedShoppingList';
-import { cartOutline, linkOutline, personOutline, lockClosed } from 'ionicons/icons';
+
+import { cartOutline, personOutline, lockClosed, shareSocialOutline } from 'ionicons/icons';
 
 export const NavigationAuth = ({ authUser }) => (
     <>
         <IonTabs>
             <IonRouterOutlet>
-                    <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
-                    <Route path={ROUTES.PASSWORD_CHANGE} component={PasswordChangePage} />
-                    <Route path={ROUTES.ACCOUNT} component={AccountPage} />
-                    <Route path={ROUTES.SHOPPING} component={ShoppingPage} />
-                    <Route path={ROUTES.NEEDS} component={NeedsPage} />
-                    <Route path={ROUTES.SHARED_SHOPPING_LIST} component={NeedsInSharedShoppingList} />
-                    <Route path={ROUTES.ADMIN} component={AdminPage} />
-                    <Redirect exact from="/" to={ROUTES.SHOPPING} />
+                <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
+                <Route path={ROUTES.PASSWORD_CHANGE} component={PasswordChangePage} />
+                <Route path={ROUTES.ACCOUNT} component={AccountPage} />
+                <Route path={ROUTES.SHOPPING} component={ShoppingPage} />
+                <Route path={ROUTES.GO_SHOPPING} component={ShoppingPage} />
+                <Route path={ROUTES.NEEDS} component={NeedsPage} />
+                <Route path={ROUTES.SHARED_SHOPPING_LIST} component={SharedShoppingList} />
+                <Route path={ROUTES.ADMIN} component={AdminPage} />
+                <Redirect exact from="/" to={ROUTES.SHOPPING} />
             </IonRouterOutlet>
             <IonTabBar slot="bottom">
                 <IonTabButton tab="Shopping" href={ROUTES.SHOPPING}>
                     <IonIcon icon={cartOutline} />
-                    <IonLabel>Shopping</IonLabel>
+                    <IonLabel><Trans>Shopping</Trans></IonLabel>
                 </IonTabButton>
                 <IonTabButton tab="Needs" href={ROUTES.NEEDS}>
-                    <IonIcon icon={linkOutline} />
-                    <IonLabel>Needs</IonLabel>
+                    <IonIcon icon={shareSocialOutline} />
+                    <IonLabel><Trans>Shared</Trans></IonLabel>
                 </IonTabButton>
                 <IonTabButton tab="Account" href={ROUTES.ACCOUNT}>
                     <IonIcon icon={personOutline} />
-                    <IonLabel>Account</IonLabel>
+                    <IonLabel><Trans>Account</Trans></IonLabel>
                 </IonTabButton>
             </IonTabBar>
         </IonTabs>
@@ -65,20 +69,20 @@ export const NavigationNonAuth = (props) => {
     return (
         <IonTabs>
             <IonRouterOutlet>
-                    <Switch>
-                        <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
-                        <Route path={ROUTES.SIGN_IN} component={SignInPage} />
-                        <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
-                        <Redirect from="/" to={{
-                            pathname: ROUTES.SIGN_IN,
-                            state: { from: currentLocation }
-                        }} />
-                    </Switch>
+                <Switch>
+                    <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
+                    <Route path={ROUTES.SIGN_IN} component={SignInPage} />
+                    <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
+                    <Redirect from="/" to={{
+                        pathname: ROUTES.SIGN_IN,
+                        state: { from: currentLocation }
+                    }} />
+                </Switch>
             </IonRouterOutlet>
             <IonTabBar slot="bottom">
-                <IonTabButton tab="Sign in" href={ROUTES.SIGN_IN}>
+                <IonTabButton tab="Sign In" href={ROUTES.SIGN_IN}>
                     <IonIcon icon={lockClosed} />
-                    <IonLabel>Sign in</IonLabel>
+                    <IonLabel>Sign In</IonLabel>
                 </IonTabButton>
             </IonTabBar>
         </IonTabs>
@@ -113,7 +117,7 @@ export default compose(
 //                 <PrivateRoute path={ROUTES.ACCOUNT} component={AccountPage} />
 //                 <PrivateRoute path={ROUTES.SHOPPING} component={ShoppingPage} />
 //                 <PrivateRoute path={ROUTES.NEEDS} component={NeedsPage} />
-//                 <PrivateRoute path={ROUTES.SHARED_SHOPPING_LIST} component={NeedsInSharedShoppingList} />
+//                 <PrivateRoute path={ROUTES.SHARED_SHOPPING_LIST} component={SharedShoppingList} />
 //                 <PrivateRoute path={ROUTES.ADMIN} component={AdminPage} />
 //                 <Redirect exact from="/" to={ROUTES.SHOPPING} />
 //             </IonRouterOutlet>

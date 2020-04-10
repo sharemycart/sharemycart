@@ -4,7 +4,13 @@ import { Link, withRouter } from 'react-router-dom';
 import { withFirebase } from '../../Firebase';
 import * as ROUTES from '../../../constants/routes';
 import * as ROLES from '../../../constants/roles';
-import { IonPage, IonHeader, IonToolbar, IonButtons, IonButton, IonContent, IonImg, IonGrid, IonRow, IonCol, IonLabel } from '@ionic/react';
+import { IonPage, IonHeader, IonToolbar, IonButtons, IonButton, IonContent, IonRow, IonCol, IonInput } from '@ionic/react';
+
+import { withTranslation, Trans } from 'react-i18next'
+import { compose } from 'recompose';
+
+import '../../Reusables/sign-in-up-page.scss'
+import SplashLogo from '../../Reusables/ionic/SplashLogo';
 
 const SignUpPage = () => (
   <IonPage>
@@ -12,12 +18,13 @@ const SignUpPage = () => (
       <IonToolbar>
         <IonButtons slot="secondary">
           <IonButton fill="clear">
-            Help
-        </IonButton>
+            <Trans>Help</Trans>
+          </IonButton>
         </IonButtons>
       </IonToolbar>
     </IonHeader>
-    <IonContent>
+    <IonContent className="login-page">
+      <SplashLogo maxWidth="150px" />
 
       <SignUpForm />
 
@@ -36,14 +43,6 @@ const INITIAL_STATE = {
 
 const ERROR_CODE_ACCOUNT_EXISTS = 'auth/email-already-in-use';
 
-const ERROR_MSG_ACCOUNT_EXISTS = `
-  An account with this E-Mail address already exists.
-  Try to login with this account instead. If you think the
-  account is already used from one of the social logins, try
-  to sign in with one of them. Afterward, associate your accounts
-  on your personal account page.
-`;
-
 class SignUpFormBase extends Component {
   constructor(props) {
     super(props);
@@ -54,6 +53,10 @@ class SignUpFormBase extends Component {
   onSubmit = event => {
     const { username, email, passwordOne, isAdmin } = this.state;
     const roles = {};
+
+    const { t } = this.props;
+
+    const ERROR_MSG_ACCOUNT_EXISTS = t('Account_already_exists');
 
     if (isAdmin) {
       roles[ROLES.ADMIN] = ROLES.ADMIN;
@@ -77,7 +80,7 @@ class SignUpFormBase extends Component {
       })
       .then(() => {
         this.setState({ ...INITIAL_STATE });
-        this.props.history.push(ROUTES.HOME);
+        this.props.history.push(ROUTES.LANDING);
       })
       .catch(error => {
         if (error.code === ERROR_CODE_ACCOUNT_EXISTS) {
@@ -99,12 +102,14 @@ class SignUpFormBase extends Component {
   };
 
   render() {
+
+    const { t } = this.props;
+
     const {
       username,
       email,
       passwordOne,
       passwordTwo,
-      isAdmin,
       error,
     } = this.state;
 
@@ -116,57 +121,70 @@ class SignUpFormBase extends Component {
 
     return (
       <>
-        <IonImg className="image-login" src="../../../theme/logo-cart_1000.png" />
-        <IonGrid>
-          <IonRow className="logo-text">
-            <IonCol className="ion-align-self-center">
-              <IonLabel style={{ color: '#707070' }}>Share</IonLabel>
-              <IonLabel style={{ color: '#FA3D04' }}>MyCart</IonLabel>
+        <form onSubmit={this.onSubmit}>
+          <IonRow>
+            <IonCol>
+              <IonInput
+                name="username"
+                value={username}
+                type="text"
+                placeholder={t("Full Name")}
+                onIonChange={this.onChange}
+                clearInput
+                className="input"
+                padding-horizontal
+                clear-input="true"
+                autocomplete
+              />
             </IonCol>
           </IonRow>
-        </IonGrid>
-        <form onSubmit={this.onSubmit}>
-          <input
-            name="username"
-            value={username}
-            onChange={this.onChange}
-            type="text"
-            placeholder="Full Name"
-          />
-          <input
-            name="email"
-            value={email}
-            onChange={this.onChange}
-            type="text"
-            placeholder="Email Address"
-          />
-          <input
-            name="passwordOne"
-            value={passwordOne}
-            onChange={this.onChange}
-            type="password"
-            placeholder="Password"
-          />
-          <input
-            name="passwordTwo"
-            value={passwordTwo}
-            onChange={this.onChange}
-            type="password"
-            placeholder="Confirm Password"
-          />
-          <label>
-            Admin:
-          <input
-              name="isAdmin"
-              type="checkbox"
-              checked={isAdmin}
-              onChange={this.onChangeCheckbox}
-            />
-          </label>
-          <button disabled={isInvalid} type="submit">
-            Sign Up
-        </button>
-
+          <IonRow>
+            <IonCol>
+              <IonInput
+                name="email"
+                value={email}
+                onIonChange={this.onChange}
+                clearInput
+                type="email"
+                placeholder={t('Email')}
+                className="input"
+                padding-horizontal
+                clear-input="true"
+                autocomplete
+              />
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol>
+              <IonInput
+                clearInput
+                name="passwordOne"
+                value={passwordOne}
+                onIonChange={this.onChange}
+                type="password"
+                placeholder={t('Password')}
+                className="input"
+                padding-horizontal>
+              </IonInput>
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol>
+              <IonInput
+                clearInput
+                name="passwordTwo"
+                value={passwordTwo}
+                onIonChange={this.onChange}
+                type="password"
+                placeholder={t('Repeat Password')}
+                className="input"
+                padding-horizontal>
+              </IonInput>
+            </IonCol>
+          </IonRow>
+          <IonButton disabled={isInvalid} type="submit" expand="block">
+            <Trans>Sign Up</Trans>
+          </IonButton>
           {error && <p>{error.message}</p>}
         </form>
       </>
@@ -175,10 +193,19 @@ class SignUpFormBase extends Component {
 }
 
 const SignUpLink = () => (
-  <span>No account yet? <Link to={ROUTES.SIGN_UP}>Sign Up</Link></span>
+  <span>
+    <Trans>No account yet?</Trans>
+    &nbsp;
+    <Link to={ROUTES.SIGN_UP}>
+      <Trans>Sign Up</Trans>
+    </Link></span>
 );
 
-const SignUpForm = withRouter(withFirebase(SignUpFormBase));
+const SignUpForm = compose(
+  withRouter,
+  withFirebase,
+  withTranslation()
+)(SignUpFormBase);
 
 export default SignUpPage;
 

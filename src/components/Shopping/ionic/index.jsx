@@ -3,16 +3,21 @@ import React from 'react';
 import ShoppingModel from '../../../models/Shopping'
 import Shopping from './Shopping';
 import { compose } from 'recompose';
-
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonIcon, IonButton } from '@ionic/react';
-import './page.css';
 import { withFirebase } from '../../Firebase';
+import { withEmailVerification } from '../../Session';
 import { inject, observer } from 'mobx-react';
-import { createOutline, saveOutline, cartOutline } from 'ionicons/icons';
+
+import ShareListFab from './Share';
+
+import { GO_SHOPPING, SHOPPING } from '../../../constants/routes';
+import { IonButton, IonIcon, IonPage, IonHeader, IonToolbar, IonButtons, IonTitle, IonContent, IonFooter } from '@ionic/react';
+import { createOutline, saveOutline, cartOutline, documentTextOutline } from 'ionicons/icons';
+
+import { Trans } from 'react-i18next';
 
 class ShoppingPage extends ShoppingModel {
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = Object.assign(this.state, {
       editMode: false
@@ -21,20 +26,23 @@ class ShoppingPage extends ShoppingModel {
     this.saveHandler = []
   }
 
-  saveEdit(){
-    this.saveHandler.forEach(handler=>handler())
-    this.setState({editMode: false})
+  saveEdit() {
+    this.saveHandler.forEach(handler => handler())
+    this.setState({ editMode: false })
   }
 
-  addSaveEditHandler(handlerFn){
+  addSaveEditHandler(handlerFn) {
     this.saveHandler.push(handlerFn)
   }
 
   render() {
+
+    const {currentShoppingList} = this.props.shoppingStore;
+
     const EditButton = () => (
       !this.state.editMode && <IonButton color="danger" fill="clear"
         onClick={() => this.setState({ editMode: true })}>
-        {'Edit'}
+        <Trans>Edit</Trans>
         <IonIcon slot="end" icon={createOutline} />
       </IonButton>
     )
@@ -42,30 +50,47 @@ class ShoppingPage extends ShoppingModel {
     const SaveButton = () => (
       this.state.editMode && <IonButton color="danger" fill="clear"
         onClick={() => this.saveEdit()}>
-        {'Save'}
+        <Trans>Save</Trans>
         <IonIcon slot="end" icon={saveOutline} />
       </IonButton>
     )
-    
+
+    const ModeButton = () => {
+      if (this.props.location.pathname === SHOPPING) {
+        return (
+          <IonButton fill="clear" href={GO_SHOPPING}>
+            <Trans>Go Shopping</Trans>
+            <IonIcon slot="start" icon={cartOutline} />
+          </IonButton>
+        )
+      }
+      if (this.props.location.pathname === GO_SHOPPING) {
+        return (
+          <IonButton fill="clear" href={SHOPPING}>
+            <Trans>Plan Shopping</Trans>
+            <IonIcon slot="start" icon={documentTextOutline} />
+          </IonButton>
+        )
+      }
+      return null
+    }
+
     return (
       <IonPage>
         <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="secondary">
-            <IonButton fill="clear">
-              Go Shopping
-              <IonIcon slot="start" icon={cartOutline} />
-      </IonButton>
-          </IonButtons>
-          <IonTitle>{
-            (this.props.shoppingStore.currentShoppingList && this.props.shoppingStore.currentShoppingList.name)
-            || 'Shopping'
+          <IonToolbar>
+            <IonButtons slot="secondary">
+              <ModeButton />
+            </IonButtons>
+            <IonTitle>{
+              (this.props.shoppingStore.currentShoppingList && this.props.shoppingStore.currentShoppingList.name)
+              || 'Shopping'
             }</IonTitle>
-          <IonButtons slot="primary">
-            <EditButton />
-            <SaveButton />
-          </IonButtons>
-        </IonToolbar>
+            <IonButtons slot="primary">
+              <EditButton />
+              <SaveButton />
+            </IonButtons>
+          </IonToolbar>
         </IonHeader>
         <IonContent>
           <IonHeader collapse="condense">
@@ -76,12 +101,15 @@ class ShoppingPage extends ShoppingModel {
 
           {this.props.sessionStore.dbAuthenticated &&
             <Shopping model={this}
-                      editMode={this.state.editMode} 
-                      addSaveEditHandler={this.addSaveEditHandler.bind(this)}
-                      />
+              editMode={this.state.editMode}
+              addSaveEditHandler={this.addSaveEditHandler.bind(this)}
+            />
           }
 
         </IonContent>
+        <IonFooter>
+          {currentShoppingList && <ShareListFab shoppingList={currentShoppingList} />}
+        </IonFooter>
       </IonPage>
     );
   }
@@ -92,6 +120,7 @@ class ShoppingPage extends ShoppingModel {
 
 export default compose(
   withFirebase,
-  inject('shoppingStore', 'sessionStore'),
+  withEmailVerification,
+  inject('shoppingStore', 'userStore', 'sessionStore'),
   observer,
 )(ShoppingPage);
