@@ -39,6 +39,10 @@ class EditItem extends Component {
     this.quantityInput.current.setFocus()
   }
 
+  componentDidMount() {
+    setTimeout(() => this.quantityInput.current.setFocus(), 200 )
+  }
+
   onChange(event) {
     this.setState({ [event.target.name]: event.target.value });
   }
