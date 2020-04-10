@@ -1,6 +1,11 @@
 import React, { Component } from "react";
 import { IonItem, IonButton, IonInput, IonSelect, IonSelectOption, IonLabel, IonIcon, IonToast } from "@ionic/react";
-import { ITEM_TYPE_SHOPPING, ITEM_TYPE_NEW_SHOPPING, ITEM_TYPE_NEED } from "../../../constants/items";
+import {
+  ITEM_TYPE_SHOPPING,
+  ITEM_TYPE_NEW_SHOPPING,
+  ITEM_TYPE_NEED,
+  ITEM_TYPE_POTENTIAL_NEED
+} from "../../../constants/items";
 
 import { withTranslation } from 'react-i18next';
 import { cartOutline } from "ionicons/icons";
@@ -13,7 +18,7 @@ const EMPTY_ITEM = {
 }
 
 class EditItem extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       item: props.item || EMPTY_ITEM,
@@ -25,7 +30,7 @@ class EditItem extends Component {
     this.quantityInput = React.createRef()
   }
 
-  concludeEditing() {
+  concludeEditing () {
     const { t } = this.props;
     const { item } = this.state
     if (item.name && item.quantity) {
@@ -47,7 +52,7 @@ class EditItem extends Component {
     }
   }
 
-  onChange(event) {
+  onChange (event) {
     const property = event.currentTarget.name
     const value = event.currentTarget.value
     this.setState({ item: { ...this.state.item, [property]: value } })
@@ -57,17 +62,17 @@ class EditItem extends Component {
     event.which === ENTER_KEY && this.concludeEditing()
   }
 
-  onBlur(event) {
+  onBlur (event) {
     if (event.target.parentElement !== event.srcElement.parentElement) {
       this.concludeEditing()
     }
   }
 
-  setUnit(unit) {
+  setUnit (unit) {
     this.setState({ item: { ...this.state.item, unit } })
   }
 
-  render() {
+  render () {
     const { item } = this.state;
 
     const { t } = this.props;
@@ -97,7 +102,7 @@ class EditItem extends Component {
             onIonInput={event => this.onKeyPress(event)}
             onIonChange={event => this.onChange(event)}
             onIonBlur={event => this.onBlur(event)}
-            readonly={this.props.mode === ITEM_TYPE_NEED}
+            readonly={this.props.mode === ITEM_TYPE_NEED || this.props.mode === ITEM_TYPE_POTENTIAL_NEED}
             required="true"
             autocapitalize
             autocorrect="on"
@@ -120,7 +125,7 @@ class EditItem extends Component {
           />
           {unitOfMeasure}
           <IonButton onClick={() => this.concludeEditing()} style={{ 'marginLeft': '10px' }}>
-            <IonIcon icon={cartOutline} />
+            <IonIcon icon={cartOutline}/>
           </IonButton>
         </IonItem>
         <IonToast
