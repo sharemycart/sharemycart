@@ -25,10 +25,10 @@ class NeedsPage extends NeedsModel {
           <IonTitle size="large">
             
               {/* // TODO: Display the Avatar of the owner */}
-              <Avatar
+              {/* <Avatar
               size="35px"
               user={owner}
-            />
+            /> */}
             <span>
               <Trans>by</Trans> {owner.username}
             </span>
