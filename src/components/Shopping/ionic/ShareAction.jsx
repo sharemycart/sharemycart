@@ -4,7 +4,6 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { withTranslation } from 'react-i18next';
 
 import {
-    IonFab,
     IonToast,
     IonFabButton,
     IonIcon

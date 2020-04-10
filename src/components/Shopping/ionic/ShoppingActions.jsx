@@ -2,7 +2,7 @@ import React from 'react';
 import { IonFabButton, IonFab, IonIcon, IonFabList } from '@ionic/react';
 import { ellipsisVerticalOutline } from 'ionicons/icons';
 
-import ShareFabButton from './Share';
+import ShareFabButton from './ShareAction';
 import ShoppingPhaseAction from './ShoppingPhaseAction';
 
 

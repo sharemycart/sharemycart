@@ -10,7 +10,6 @@ import { inject, observer } from 'mobx-react';
 
 import {Trans} from 'react-i18next';
 import { withEmailVerification } from '../../Session';
-import Avatar from '../../Reusables/ionic/Avatar';
 
 class NeedsPage extends NeedsModel {
   render() {

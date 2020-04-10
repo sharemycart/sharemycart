@@ -7,11 +7,8 @@ import { withFirebase } from '../../Firebase';
 import { withEmailVerification } from '../../Session';
 import { inject, observer } from 'mobx-react';
 
-import ShareListFab from './Share';
-
-import { GO_SHOPPING, SHOPPING } from '../../../constants/routes';
 import { IonButton, IonIcon, IonPage, IonHeader, IonToolbar, IonButtons, IonTitle, IonContent, IonFooter } from '@ionic/react';
-import { createOutline, saveOutline, cartOutline, documentTextOutline } from 'ionicons/icons';
+import { createOutline, saveOutline } from 'ionicons/icons';
 
 import { Trans } from 'react-i18next';
 import ShoppingActions from './ShoppingActions';

@@ -35,15 +35,15 @@ class ShoppingList extends Component {
   }
 
   doReorder(event) {
-    console.log('Dragged from index', event.detail.from, 'to', event.detail.to);
-
     event.detail.complete()
 
     const { children } = event.srcElement
     let order = {}
     event.detail.complete();
     let position = 0
-    for (let k in children) {
+    
+    // eslint-disable-next-line
+    for (const k in children) {
       position++;
       if (children.hasOwnProperty(k)) {
         if (children[k].id) {
