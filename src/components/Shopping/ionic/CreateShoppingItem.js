@@ -1,17 +1,22 @@
 import React, { Component } from "react";
-import { IonItem, IonButton, IonInput, IonSelect, IonSelectOption, IonLabel, IonIcon, IonToast } from "@ionic/react";
-import { ITEM_TYPE_SHOPPING, ITEM_TYPE_NEED } from "../../../constants/items";
+import { IonItem, IonButton, IonInput, IonSelect, IonSelectOption, IonIcon, IonToast } from "@ionic/react";
 
 import { withTranslation } from 'react-i18next';
 import { cartOutline } from "ionicons/icons";
-import { ENTER } from "../keys";
+import { ENTER } from "../../Reusables/keys";
 
-class EditItem extends Component {
+const EMPTY_ITEM = {
+  name: '',
+  quantity: '',
+  unit: '',
+}
+
+class CreateShoppingItem extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      ...props.item,
+      ...EMPTY_ITEM,
       showToast: false,
       message: "",
     }
@@ -22,21 +27,22 @@ class EditItem extends Component {
 
   concludeEditing() {
     const { t } = this.props;
-    const { name, quantity, unit } = this.state
+    const { name, quantity, unit = ''} = this.state
     if (name && quantity) {
       this.props.onEditingConcluded({
-        uid: this.props.item.uid,
         name,
         quantity,
         unit,
       })
+      this.setState({ ...EMPTY_ITEM })
     } else {
       this.setState({
         showToast: true,
         message: t('Name_and_quantity_mandatory')
       })
     }
-    this.quantityInput.current.setFocus()
+
+    this.nameInput.current.setFocus()
   }
 
   onChange(event) {
@@ -62,32 +68,28 @@ class EditItem extends Component {
 
     const { t } = this.props;
 
-    const unitOfMeasure = this.props.mode === ITEM_TYPE_SHOPPING
-      ? <IonSelect
+    const unitOfMeasure = 
+      <IonSelect
         value={unit}
         required="true"
-        onIonChange={e => this.setUnit(e.detail.value)}
-      >
+        onIonChange={e => this.setUnit(e.detail.value)}>
         <IonSelectOption>pc</IonSelectOption>
         <IonSelectOption>g</IonSelectOption>
         <IonSelectOption>kg</IonSelectOption>
         <IonSelectOption>l</IonSelectOption>
         <IonSelectOption>ml</IonSelectOption>
       </IonSelect>
-      : <IonLabel>{unit}</IonLabel>
 
     return (
       <>
         <IonItem style={{ width: "100%" }}>
           <IonInput
-            // autofocus={this.props.mode === ITEM_TYPE_NEW_SHOPPING && !name}
             placeholder={t('Item name')}
             name="name"
             value={name}
             onIonInput={event => this.onKeyPress(event)}
             onIonChange={event => this.onChange(event)}
             onIonBlur={event => this.onBlur(event)}
-            readonly={this.props.mode === ITEM_TYPE_NEED}
             required="true"
             autocapitalize
             autocorrect="on"
@@ -95,7 +97,6 @@ class EditItem extends Component {
             ref={this.nameInput}
           />
           <IonInput
-            // autofocus={(this.props.mode === ITEM_TYPE_NEED) || (this.props.mode === ITEM_TYPE_SHOPPING && name)}
             placeholder={t("Quantity")}
             name="quantity"
             type="number"
@@ -124,4 +125,4 @@ class EditItem extends Component {
   }
 }
 
-export default withTranslation()(EditItem)
+export default withTranslation()(CreateShoppingItem)

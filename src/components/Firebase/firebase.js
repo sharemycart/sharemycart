@@ -304,6 +304,8 @@ class Firebase {
     neededItem.quantity = '';
     delete neededItem.createdAt;
     delete neededItem.editedAt;
+    delete neededItem.uid;
+    delete neededItem.parentId;
     //TODO: prevent creation of duplicate needs
     return this.createItem(needsListId, neededItem)
   }
