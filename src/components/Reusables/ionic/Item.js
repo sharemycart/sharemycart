@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { IonItem, IonLabel, IonButton, IonIcon, IonReorder, IonCheckbox, IonList, IonChip } from "@ionic/react";
 import EditItem from './EditItem';
 import { trash, add, shareSocialOutline } from 'ionicons/icons';
-import { ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_SHOPPING, ITEM_TYPE_NEW_SHOPPING, ITEM_TYPE_NEED, ITEM_TYPE_POTENTIAL_NEED, ITEM_TYPE_BRING_ALONG } from "../../../constants/items";
+import { ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_SHOPPING, ITEM_TYPE_NEW_SHOPPING, ITEM_TYPE_NEED, ITEM_TYPE_BRING_ALONG } from "../../../constants/items";
 import { compose } from "recompose";
 import { inject, observer } from "mobx-react";
 import Avatar from "./Avatar";
@@ -25,8 +25,6 @@ class Item extends Component {
       case ITEM_TYPE_IN_SHOPPING:
       case ITEM_TYPE_BRING_ALONG:
         this.props.onShopItem(parentId, uid, !shopped)
-        break;
-      case ITEM_TYPE_POTENTIAL_NEED:
         break;
       default:
         this.setEditMode(true)
@@ -53,7 +51,7 @@ class Item extends Component {
       </IonButton>
 
     const showQuantityLabel = [ITEM_TYPE_SHOPPING, ITEM_TYPE_NEW_SHOPPING, ITEM_TYPE_NEED, ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_BRING_ALONG].includes(mode)
-    const quantityLabel = showQuantityLabel && (item.quantity > 1 || item.unit)
+    const quantityLabel = showQuantityLabel && (item.quantity > 1 || item.unit) &&
       <IonChip
         onClick={() => this.setEditMode(true)}
         color={!item.shopped ? "primary" : "success"}>
@@ -98,8 +96,8 @@ class Item extends Component {
       />
       :
       <>
-        {[ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_BRING_ALONG].includes(mode) && 
-        <IonCheckbox 
+        {[ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_BRING_ALONG].includes(mode) &&
+        <IonCheckbox
           slot="start"
           style={mode === ITEM_TYPE_BRING_ALONG ? {marginLeft: "40px"} : null}
           value={item.name}
