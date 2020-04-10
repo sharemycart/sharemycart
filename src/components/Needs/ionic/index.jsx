@@ -10,6 +10,7 @@ import { inject, observer } from 'mobx-react';
 
 import {Trans} from 'react-i18next';
 import { withEmailVerification } from '../../Session';
+import Avatar from '../../Reusables/ionic/Avatar';
 
 class NeedsPage extends NeedsModel {
   render() {
@@ -22,12 +23,12 @@ class NeedsPage extends NeedsModel {
         const owner = userStore.users[needsStore.currentNeedsList.shoppingListOwnerId]
         if (owner) return (
           <IonTitle size="large">
-            {/* 
-              // TODO: Display the Avatar of the owner
+            
+              {/* // TODO: Display the Avatar of the owner */}
               <Avatar
               size="35px"
               user={owner}
-            /> */}
+            />
             <span>
               <Trans>by</Trans> {owner.username}
             </span>
