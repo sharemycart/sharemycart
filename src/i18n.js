@@ -22,10 +22,10 @@ const resources = {
             "Edit": "Edit",
             "Email": "Email",
             "Email_confirmation_sent": `E-Mail confirmation sent: \n
-                Check you E-Mails (Spam folder included) for a confirmation E-Mail.\n
+                Check your E-Mails (Spam folder included) for a confirmation E-Mail.\n
                 Refresh this page once you confirmed your E-Mail.`,
             "Email_verification_needed": `Verify your E-Mail: \n
-                Check you E-Mails (Spam folder included) for a confirmation E-Mail \n
+                Check your E-Mails (Spam folder included) for a confirmation E-Mail \n
                 or send another confirmation E-Mail.`,
             "Forgot Password": "Forgot Password?",
             "Full Name": "Full Name",
