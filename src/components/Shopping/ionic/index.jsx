@@ -14,6 +14,7 @@ import { IonButton, IonIcon, IonPage, IonHeader, IonToolbar, IonButtons, IonTitl
 import { createOutline, saveOutline, cartOutline, documentTextOutline } from 'ionicons/icons';
 
 import { Trans } from 'react-i18next';
+import ShoppingActions from './ShoppingActions';
 
 class ShoppingPage extends ShoppingModel {
 
@@ -55,33 +56,11 @@ class ShoppingPage extends ShoppingModel {
       </IonButton>
     )
 
-    const ModeButton = () => {
-      if (this.props.location.pathname === SHOPPING) {
-        return (
-          <IonButton fill="clear" href={GO_SHOPPING}>
-            <Trans>Go Shopping</Trans>
-            <IonIcon slot="start" icon={cartOutline} />
-          </IonButton>
-        )
-      }
-      if (this.props.location.pathname === GO_SHOPPING) {
-        return (
-          <IonButton fill="clear" href={SHOPPING}>
-            <Trans>Plan Shopping</Trans>
-            <IonIcon slot="start" icon={documentTextOutline} />
-          </IonButton>
-        )
-      }
-      return null
-    }
 
     return (
       <IonPage>
         <IonHeader>
           <IonToolbar>
-            <IonButtons slot="secondary">
-              <ModeButton />
-            </IonButtons>
             <IonTitle>{
               (this.props.shoppingStore.currentShoppingList && this.props.shoppingStore.currentShoppingList.name)
               || 'Shopping'
@@ -108,7 +87,7 @@ class ShoppingPage extends ShoppingModel {
 
         </IonContent>
         <IonFooter>
-          {currentShoppingList && <ShareListFab shoppingList={currentShoppingList} />}
+          {currentShoppingList && <ShoppingActions />}
         </IonFooter>
       </IonPage>
     );

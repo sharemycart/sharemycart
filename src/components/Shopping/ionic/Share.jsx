@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import {withTranslation} from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 import {
     IonFab,
     IonToast,
     IonFabButton,
-    IonIcon} from '@ionic/react';
+    IonIcon
+} from '@ionic/react';
 import { shareSocialOutline } from 'ionicons/icons';
 import { compose } from 'recompose';
+import { inject } from 'mobx-react';
 
 class ShareListFab extends Component {
     constructor(props) {
@@ -22,7 +24,7 @@ class ShareListFab extends Component {
     }
 
     generateShareLink = () => {
-        let shoppingListId = this.props.shoppingList.uid
+        let shoppingListId = this.props.shoppingStore.currentShoppingList.uid
         return `${window.location.origin}/share/${shoppingListId}`;
     };
 
@@ -37,18 +39,18 @@ class ShareListFab extends Component {
     }
 
     render() {
-        const {t} = this.props;
+        const { t } = this.props;
         return (
             <>
                 <CopyToClipboard text={this.generateShareLink()}>
-                    <IonFab vertical="bottom" horizontal="end" onClick={() => {
+                    <IonFabButton title={t('Share')} onClick={() => {
                         this.setState({
                             showToast: true,
                             message: t('Sharing_link_copied')
                         })
                     }}>
-					<IonFabButton><IonIcon icon={shareSocialOutline} /></IonFabButton>
-                    </IonFab>
+                        <IonIcon icon={shareSocialOutline} />
+                    </IonFabButton>
                 </CopyToClipboard>
                 <IonToast
                     isOpen={this.state.showToast}
@@ -63,5 +65,6 @@ class ShareListFab extends Component {
 
 export default compose(
     withTranslation(),
+    inject('shoppingStore'),
     withRouter
 )(ShareListFab)
