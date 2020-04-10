@@ -28,17 +28,17 @@ class CreateShoppingItem extends Component {
   concludeEditing() {
     const { t } = this.props;
     const { name, quantity, unit = ''} = this.state
-    if (name && quantity) {
+    if (name) {
       this.props.onEditingConcluded({
         name,
-        quantity,
+        quantity: quantity || 1,
         unit,
       })
       this.setState({ ...EMPTY_ITEM })
     } else {
       this.setState({
         showToast: true,
-        message: t('Name_and_quantity_mandatory')
+        message: t('Name_mandatory')
       })
     }
 
@@ -87,6 +87,7 @@ class CreateShoppingItem extends Component {
             placeholder={t('Item name')}
             name="name"
             value={name}
+            onKeyUp={this.onKeyPress}
             onIonInput={event => this.onKeyPress(event)}
             onIonChange={event => this.onChange(event)}
             onIonBlur={event => this.onBlur(event)}

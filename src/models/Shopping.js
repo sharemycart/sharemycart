@@ -107,8 +107,6 @@ class Shopping extends Component {
   onListenForCurrentShoppingListItems = (currentShoppingListId) => {
     this.unsubscribeItems = this.props.firebase
       .listItems(currentShoppingListId)
-      // .orderBy('createdAt', 'desc')
-      // .limit(this.state.limit)
       .onSnapshot(snapshot => {
         if (snapshot.size) {
           let shoppingItems = [];
