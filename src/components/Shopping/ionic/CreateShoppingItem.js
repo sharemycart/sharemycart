@@ -107,7 +107,7 @@ class CreateShoppingItem extends Component {
             onKeyUp={this.onKeyPress}
             onIonChange={event => this.onChange(event)}
             onIonBlur={event => this.onBlur(event)}
-            required="true"
+            required="false"
             ref={this.quantityInput}
           />
           {unitOfMeasure}
