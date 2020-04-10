@@ -8,7 +8,7 @@ import { cartOutline } from "ionicons/icons";
 const ENTER_KEY = 13;
 const EMPTY_ITEM = {
   name: '',
-  quantity: '',
+  quantity: 1,
   unit: '',
 }
 
