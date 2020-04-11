@@ -12,6 +12,8 @@ import { createOutline, saveOutline } from 'ionicons/icons';
 
 import { Trans } from 'react-i18next';
 import ShoppingActions from './ShoppingActions';
+import { SHOPPING_LISTS } from '../../../constants/routes';
+import AllListsButton from '../../Reusables/ionic/AllListsButton';
 
 class ShoppingPage extends ShoppingModel {
 
@@ -52,8 +54,6 @@ class ShoppingPage extends ShoppingModel {
         <IonIcon slot="end" icon={saveOutline} />
       </IonButton>
     )
-
-
     return (
       <IonPage>
         <IonHeader>
@@ -65,6 +65,12 @@ class ShoppingPage extends ShoppingModel {
             <IonButtons slot="primary">
               <EditButton />
               <SaveButton />
+            </IonButtons>
+            <IonButtons slot="secondary">
+              <AllListsButton
+                label="All Shopping Lists"
+                href={SHOPPING_LISTS}
+               />
             </IonButtons>
           </IonToolbar>
         </IonHeader>

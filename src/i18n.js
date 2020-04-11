@@ -17,8 +17,11 @@ const resources = {
                 to sign in with one of them. Afterward, associate your accounts
                 on your personal account page.
                 `,
+            "All Needs Lists": "Shared with me",
+            "All Shopping Lists": "My Shopping Lists",
             "by": "by",
             "Change Password": "Change Password",
+            "Create Shopping List": "New Shopping List",
             "Edit": "Edit",
             "Email": "Email",
             "Email_confirmation_sent": `E-Mail confirmation sent: \n
@@ -58,7 +61,7 @@ const resources = {
     },
     de: {
         translation: {
-            "A shopping list has been shared with you": "Eine Einkaufsliste wurde mit Dir geteilt!",
+            "A shopping list has been shared with you": "Ein Einkaufszettel wurde mit Dir geteilt!",
             "Account": "Konto",
             "Account_already_exists": `
                 Ein Konto mit dieser E-Mail-Adresse existiert bereits.\n
@@ -67,8 +70,11 @@ const resources = {
                 versuchen Sie, sich mit iesem anzumelden.\n
                 Danach verbinden Sie Ihre Konten auf Ihrer persönlichen Konto-Seite.
                 `,
+            "All Needs Lists": "Mit mir geteilt",
+            "All Shopping Lists": "Meine Einkaufszettel",
             "by": "von",
             "Change Password": "Passwort ändern",
+            "Create Shopping List": "Neuer Einkauszettel",
             "Edit": "Bearbeiten",
             "Email": "Email",
             "Email_confirmation_sent": `Bestätigungs-E-Mail wurde gesendet: \n
@@ -80,7 +86,7 @@ const resources = {
             "Forgot Password": "Passwort vergessen?",
             "Full Name": "Vollständiger Name",
             "Go Shopping": "Einkaufen",
-            "has shared a shopping list with you": "hat eine Einkaufsliste mit Dir geteilt!",
+            "has shared a shopping list with you": "hat einen Einkaufszettel mit Dir geteilt!",
             "Help": "Hilfe",
             "Item name": "Sache",
             "Loading_message": "Ich lade...",
@@ -89,7 +95,7 @@ const resources = {
             "Name_mandatory": "Bitte geben Sie an, was Sie einkaufen möchten!",
             "Name_and_quantity_mandatory": "Was und wieviel soll es sein?",
             "No account yet?": "Noch kein Konto?",
-            "Open shared shopping list": "Geteilte Einkaufsliste öffnen",
+            "Open shared shopping list": "Geteilten Einkaufszettel öffnen",
             "or with": "oder mit",
             "Password": "Passwort",
             "Plan Shopping": "Einkauf planen",
@@ -103,9 +109,9 @@ const resources = {
             "Sign Out": "Abmelden",
             "Sign Up": "Anmelden",
             "Shared": "Geteilt",
-            "Sharing_link_copied": "Ein Link zu Ihrer Einkaufsliste wurde in die Zwischenablage kopiert. \nSchicken Sie ihn an Leute, denen Sie etwas, das ohnehin schon auf Ihrem Zettel steht, mitbringen möchten",
+            "Sharing_link_copied": "Ein Link zu Ihrem Einkaufszettel wurde in die Zwischenablage kopiert. \nSchicken Sie ihn an Leute, denen Sie etwas, das ohnehin schon auf Ihrem Zettel steht, mitbringen möchten",
             "Shopping": "Einkaufen",
-            "Shopping list": "Einkaufsliste",
+            "Shopping list": "Einkaufszettel",
             "Username": "Benutzername",
         }
     }

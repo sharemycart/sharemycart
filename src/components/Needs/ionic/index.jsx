@@ -1,5 +1,5 @@
 import React from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons } from '@ionic/react';
 import NeedsModel from '../../../models/Needs';
 import Needs from './Needs';
 import './page.css';
@@ -8,8 +8,10 @@ import { compose } from 'recompose';
 import { inject, observer } from 'mobx-react';
 // import Avatar from '../../Reusables/ionic/Avatar';
 
-import {Trans} from 'react-i18next';
+import { Trans } from 'react-i18next';
 import { withEmailVerification } from '../../Session';
+import AllListsButton from '../../Reusables/ionic/AllListsButton';
+import { NEEDS_LISTS } from '../../../constants/routes';
 
 class NeedsPage extends NeedsModel {
   render() {
@@ -22,9 +24,9 @@ class NeedsPage extends NeedsModel {
         const owner = userStore.users[needsStore.currentNeedsList.shoppingListOwnerId]
         if (owner) return (
           <IonTitle size="large">
-            
-              {/* // TODO: Display the Avatar of the owner */}
-              {/* <Avatar
+
+            {/* // TODO: Display the Avatar of the owner */}
+            {/* <Avatar
               size="35px"
               user={owner}
             /> */}
@@ -45,6 +47,12 @@ class NeedsPage extends NeedsModel {
               needsStore={this.props.needsStore}
               userStore={this.props.userStore}
             />
+            <IonButtons slot="secondary">
+              <AllListsButton
+                label="All Needs Lists"
+                href={NEEDS_LISTS}
+              />
+            </IonButtons>
           </IonToolbar>
         </IonHeader>
         <IonContent>
