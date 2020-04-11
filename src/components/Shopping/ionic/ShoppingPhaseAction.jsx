@@ -2,7 +2,7 @@ import React from 'react';
 import { SHOPPING, GO_SHOPPING } from '../../../constants/routes';
 import { IonFabButton, IonIcon } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
-import { cartOutline, documentTextOutline } from 'ionicons/icons';
+import { cartOutline } from 'ionicons/icons';
 import { withRouter } from 'react-router-dom';
 
 import '../../Reusables/fabButtonTitle.scss'
