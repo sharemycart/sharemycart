@@ -5,12 +5,13 @@ import { inject, observer } from 'mobx-react';
 
 import NeedsModel from '../../../models/Needs'
 
-import { IonHeader, IonToolbar, IonButtons, IonContent, IonBackButton, IonFooter, IonPage } from '@ionic/react';
+import { IonHeader, IonToolbar, IonButtons, IonContent, IonFooter, IonPage } from '@ionic/react';
 
 import { NEEDS } from '../../../constants/routes';
 import Lists from '../../Reusables/ionic/Lists';
 import { withEmailVerification } from '../../Session';
 import { withFirebase } from '../../Firebase';
+import LabelledBackButton from '../../Reusables/ionic/LabelledBackButton';
 
 class NeedsListsPage extends NeedsModel {
   render() {
@@ -19,7 +20,7 @@ class NeedsListsPage extends NeedsModel {
         <IonHeader>
           <IonToolbar>
             <IonButtons slot="start">
-              <IonBackButton defaultHref={NEEDS} />
+              <LabelledBackButton defaultHref={NEEDS} />
             </IonButtons>
           </IonToolbar>
         </IonHeader>

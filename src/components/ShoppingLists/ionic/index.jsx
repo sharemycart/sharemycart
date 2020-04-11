@@ -5,13 +5,14 @@ import { inject, observer } from 'mobx-react';
 
 import ShoppingModel from '../../../models/Shopping'
 
-import { IonHeader, IonToolbar, IonButtons, IonContent, IonBackButton, IonIcon, IonFooter, IonFab, IonFabButton, IonPage } from '@ionic/react';
+import { IonHeader, IonToolbar, IonButtons, IonContent, IonIcon, IonFooter, IonFab, IonFabButton, IonPage } from '@ionic/react';
 
 import { SHOPPING } from '../../../constants/routes';
 import Lists from '../../Reusables/ionic/Lists';
 import { withEmailVerification } from '../../Session';
 import { withFirebase } from '../../Firebase';
 import { addOutline } from 'ionicons/icons';
+import LabelledBackButton from '../../Reusables/ionic/LabelledBackButton';
 
 const CreateShoppingListButton = ({ onCreateShoppingList, history }) => (
   <IonFabButton onClick={() => {
@@ -29,7 +30,7 @@ class ShoppingListsPage extends ShoppingModel {
         <IonHeader>
           <IonToolbar>
             <IonButtons slot="start">
-              <IonBackButton defaultHref={SHOPPING} />
+              <LabelledBackButton defaultHref={SHOPPING} />
             </IonButtons>
           </IonToolbar>
         </IonHeader>

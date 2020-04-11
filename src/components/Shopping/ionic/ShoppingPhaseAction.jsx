@@ -16,13 +16,13 @@ const ShoppingPhaseAction = (props) => {
             </IonFabButton>
         )
     }
-    if (props.location.pathname === GO_SHOPPING) {
-        return (
-            <IonFabButton fill="clear" href={SHOPPING} title={t('Plan Shopping')}>
-                <IonIcon icon={documentTextOutline} />
-            </IonFabButton>
-        )
-    }
+    // if (props.location.pathname === GO_SHOPPING) {
+    //     return (
+    //         <IonFabButton fill="clear" href={SHOPPING} title={t('Plan Shopping')}>
+    //             <IonIcon icon={documentTextOutline} />
+    //         </IonFabButton>
+    //     )
+    // }
     return null
 }
 

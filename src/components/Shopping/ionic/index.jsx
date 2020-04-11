@@ -12,8 +12,9 @@ import { createOutline, saveOutline } from 'ionicons/icons';
 
 import { Trans } from 'react-i18next';
 import ShoppingActions from './ShoppingActions';
-import { SHOPPING_LISTS } from '../../../constants/routes';
+import { SHOPPING_LISTS, SHOPPING, GO_SHOPPING } from '../../../constants/routes';
 import AllListsButton from '../../Reusables/ionic/AllListsButton';
+import LabelledBackButton from '../../Reusables/ionic/LabelledBackButton';
 
 class ShoppingPage extends ShoppingModel {
 
@@ -36,8 +37,7 @@ class ShoppingPage extends ShoppingModel {
   }
 
   render() {
-
-    const {currentShoppingList} = this.props.shoppingStore;
+    const { currentShoppingList } = this.props.shoppingStore;
 
     const EditButton = () => (
       !this.state.editMode && <IonButton color="danger" fill="clear"
@@ -67,10 +67,13 @@ class ShoppingPage extends ShoppingModel {
               <SaveButton />
             </IonButtons>
             <IonButtons slot="secondary">
-              <AllListsButton
-                label="All Shopping Lists"
-                href={SHOPPING_LISTS}
-               />
+              {this.props.location.pathname === GO_SHOPPING &&
+                <LabelledBackButton defaultHref={SHOPPING} />}
+              {this.props.location.pathname !== GO_SHOPPING &&
+                <AllListsButton
+                  label="All Shopping Lists"
+                  href={SHOPPING_LISTS}
+                />}
             </IonButtons>
           </IonToolbar>
         </IonHeader>
