@@ -13,6 +13,7 @@ import AdminPage from '../../Admin/simple-ui';
 import ShoppingPage from '../../Shopping/ionic';
 import ShoppingListsPage from '../../ShoppingLists/ionic';
 import NeedsPage from '../../Needs/ionic';
+import NeedsListsPage from '../../NeedsLists/ionic';
 import SharedShoppingList from '../../Needs/ionic/SharedShoppingList';
 
 import { useLocation } from 'react-router-dom'
@@ -42,6 +43,7 @@ export const NavigationAuth = ({ authUser }) => (
                 <Route path={ROUTES.SHOPPING_LISTS} component={ShoppingListsPage} />
                 <Route path={ROUTES.SHOPPING} component={ShoppingPage} />
                 <Route path={ROUTES.GO_SHOPPING} component={ShoppingPage} />
+                <Route path={ROUTES.NEEDS_LISTS} component={NeedsListsPage} />
                 <Route path={ROUTES.NEEDS} component={NeedsPage} />
                 <Route path={ROUTES.SHARED_SHOPPING_LIST} component={SharedShoppingList} />
                 <Route path={ROUTES.ADMIN} component={AdminPage} />

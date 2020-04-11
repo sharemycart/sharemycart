@@ -2,7 +2,6 @@ import React from "react";
 import { IonItem, IonLabel, IonIcon, IonList } from "@ionic/react";
 import { arrowForwardOutline, trashBinOutline } from 'ionicons/icons';
 import { withRouter } from "react-router";
-import { SHOPPING } from "../../../constants/routes";
 
 const Lists = (props) => (
     <IonList>
@@ -12,7 +11,7 @@ const Lists = (props) => (
                     key={list.uid}
                     onClick={() => {
                     props.onSetCurrentList(list.uid)
-                    props.history.push(SHOPPING)
+                    props.history.push(props.hrefOnClick)
                 }}>
                     <IonLabel>
                         {list.name}

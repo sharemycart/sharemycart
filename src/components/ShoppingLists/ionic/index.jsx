@@ -40,6 +40,7 @@ class ShoppingListsPage extends ShoppingModel {
               lists={this.props.shoppingStore.shoppingListsArray}
               onSetCurrentList={(listId) => this.onSetCurrentShoppingList(listId)}
               onRemoveList={(listId) => this.onRemoveShoppingList(listId)}
+              hrefOnClick={SHOPPING}
             />}
 
         </IonContent>

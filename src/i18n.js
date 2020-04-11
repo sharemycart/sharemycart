@@ -17,6 +17,7 @@ const resources = {
                 to sign in with one of them. Afterward, associate your accounts
                 on your personal account page.
                 `,
+            "All Needs Lists": "Shared with me",
             "All Shopping Lists": "My Shopping Lists",
             "by": "by",
             "Change Password": "Change Password",
@@ -69,6 +70,7 @@ const resources = {
                 versuchen Sie, sich mit iesem anzumelden.\n
                 Danach verbinden Sie Ihre Konten auf Ihrer persönlichen Konto-Seite.
                 `,
+            "All Needs Lists": "Mit mir geteilt",
             "All Shopping Lists": "Meine Einkaufszettel",
             "by": "von",
             "Change Password": "Passwort ändern",
