@@ -8,7 +8,7 @@ import { withRouter } from 'react-router';
 import { ITEM_TYPE_NEED } from '../../../constants/items';
 import NeedsList from '../../Needs/ionic/NeedsList';
 import Avatar from '../../Reusables/ionic/Avatar';
-import { IonItem, IonList, IonLIonLabel, IonLabel, IonGrid, IonRow, IonHeader, IonTitle, IonCol } from '@ionic/react';
+import { IonItem, IonList, IonGrid, IonRow, IonTitle } from '@ionic/react';
 import { Trans } from 'react-i18next';
 
 class FinishShopping extends Component {

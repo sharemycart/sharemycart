@@ -98,7 +98,7 @@ class ShoppingPage extends ShoppingModel {
         </IonContent>
         <IonFooter>
           {currentShoppingList &&
-            this.props.location.pathname == SHOPPING
+            this.props.location.pathname === SHOPPING
             ? <ShoppingActions />
             :   <IonFab vertical="bottom" horizontal="end">
                 <FinishShoppingAction />
