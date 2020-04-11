@@ -191,7 +191,7 @@ class Shopping extends Component {
     this.setState({ editingListName: event.target.value });
   };
 
-  onCreateShoppingList = (event) => {
+  handleCreateShoppingList = (event) => {
     event.preventDefault();
 
     this.props.firebase.createShoppingList({
@@ -199,6 +199,12 @@ class Shopping extends Component {
     });
 
     this.setState({ editingListName: '' });
+  };
+
+  onCreateShoppingList = (name) => {
+    this.props.firebase.createShoppingList({
+      name
+    });
   };
 
   onEditShoppingList = (shoppingList, editingListName) => {

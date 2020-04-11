@@ -57,7 +57,7 @@ class ShoppingPage extends ShoppingModel {
     const AllListsButton = () => (
       <IonButton fill="clear"
         href={SHOPPING_LISTS}>
-        <Trans>All Shopping lists</Trans>
+        <Trans>All Shopping Lists</Trans>
         <IonIcon slot="start" icon={listOutline} />
       </IonButton>
     )
