@@ -7,11 +7,11 @@ import { SHOPPING } from "../../../constants/routes";
 const Lists = (props) => (
     <IonList>
         {
-            props.lists && props.lists.length && props.lists.map(list => (
+            props.lists && props.lists.map(list => (
                 <IonItem 
                     key={list.uid}
                     onClick={() => {
-                    props.model.onSetCurrentShoppingList(list.uid)
+                    props.onSetCurrentList(list.uid)
                     props.history.push(SHOPPING)
                 }}>
                     <IonLabel>
@@ -19,7 +19,7 @@ const Lists = (props) => (
                     </IonLabel>
                     <IonIcon icon={arrowForwardOutline} slot="start" />
                     <IonIcon icon={trashBinOutline} slot="end" color="danger" onClick={() => {
-                        props.model.onRemoveShoppingList(list.uid)
+                        props.onRemoveList(list.uid)
                     }
                     } />
                 </IonItem>

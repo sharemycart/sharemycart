@@ -8,10 +8,11 @@ import { withEmailVerification } from '../../Session';
 import { inject, observer } from 'mobx-react';
 
 import { IonButton, IonIcon, IonPage, IonHeader, IonToolbar, IonButtons, IonTitle, IonContent, IonFooter } from '@ionic/react';
-import { createOutline, saveOutline } from 'ionicons/icons';
+import { createOutline, saveOutline, listOutline } from 'ionicons/icons';
 
 import { Trans } from 'react-i18next';
 import ShoppingActions from './ShoppingActions';
+import { SHOPPING_LISTS } from '../../../constants/routes';
 
 class ShoppingPage extends ShoppingModel {
 
@@ -53,6 +54,14 @@ class ShoppingPage extends ShoppingModel {
       </IonButton>
     )
 
+    const AllListsButton = () => (
+      <IonButton fill="clear"
+        href={SHOPPING_LISTS}>
+        <Trans>All Shopping lists</Trans>
+        <IonIcon slot="start" icon={listOutline} />
+      </IonButton>
+    )
+
 
     return (
       <IonPage>
@@ -65,6 +74,9 @@ class ShoppingPage extends ShoppingModel {
             <IonButtons slot="primary">
               <EditButton />
               <SaveButton />
+            </IonButtons>
+            <IonButtons slot="secondary">
+              <AllListsButton />
             </IonButtons>
           </IonToolbar>
         </IonHeader>

@@ -28,7 +28,8 @@ class ShoppingListsPage extends ShoppingModel {
           {this.props.sessionStore.dbAuthenticated
             && <Lists
               lists={this.props.shoppingStore.shoppingListsArray}
-              model={this}
+              onSetCurrentList={(listId)=>this.onSetCurrentShoppingList(listId)}
+              onRemoveList={(listId)=>this.onRemoveShoppingList(listId)}
             />}
 
         </IonContent>
