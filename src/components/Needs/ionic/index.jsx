@@ -22,9 +22,9 @@ class NeedsPage extends NeedsModel {
         const owner = userStore.users[needsStore.currentNeedsList.shoppingListOwnerId]
         if (owner) return (
           <IonTitle size="large">
-            {/* 
-              // TODO: Display the Avatar of the owner
-              <Avatar
+            
+              {/* // TODO: Display the Avatar of the owner */}
+              {/* <Avatar
               size="35px"
               user={owner}
             /> */}

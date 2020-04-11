@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import Item from '../../Reusables/ionic/Item';
-import EditItem from '../../Reusables/ionic/EditItem';
 import { IonList, IonItem, IonReorderGroup } from '@ionic/react';
-import { ITEM_TYPE_NEW_SHOPPING } from '../../../constants/items';
+import CreateShoppingItem from './CreateShoppingItem';
 
 class ShoppingList extends Component {
   constructor(props) {
@@ -36,15 +35,15 @@ class ShoppingList extends Component {
   }
 
   doReorder(event) {
-    console.log('Dragged from index', event.detail.from, 'to', event.detail.to);
-
     event.detail.complete()
 
     const { children } = event.srcElement
     let order = {}
     event.detail.complete();
     let position = 0
-    for (let k in children) {
+    
+    // eslint-disable-next-line
+    for (const k in children) {
       position++;
       if (children.hasOwnProperty(k)) {
         if (children[k].id) {
@@ -76,9 +75,8 @@ class ShoppingList extends Component {
       <>
         <IonList>
           <IonItem>
-            <EditItem
+            <CreateShoppingItem
               onEditingConcluded={this.onCreateComplete.bind(this)}
-              mode={ITEM_TYPE_NEW_SHOPPING}
             />
           </IonItem>
         </IonList>

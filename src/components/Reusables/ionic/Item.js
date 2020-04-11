@@ -47,7 +47,7 @@ class Item extends Component {
       onShopItem
     } = this.props;
 
-    const needIcon = !ownList && mode === ITEM_TYPE_NEED &&
+    const needIcon = !ownList && mode === ITEM_TYPE_POTENTIAL_NEED &&
       <IonButton onClick={() => onCreateNeed(item)} fill="add" size="large" slot="end" color="primary">
         <IonIcon icon={add} />
       </IonButton>

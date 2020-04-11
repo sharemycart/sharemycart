@@ -126,8 +126,6 @@ class Needs extends Component {
   onListenForCurrentNeedsListItems = uid => {
     this.unsubscribeItems = this.props.firebase
       .listItems(uid)
-      // .orderBy('createdAt', 'desc')
-      // .limit(this.state.limit)
       .onSnapshot(snapshot => {
         if (snapshot.size) {
           let neededItems = [];
