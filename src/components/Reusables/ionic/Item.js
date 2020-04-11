@@ -6,6 +6,7 @@ import { ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_SHOPPING, ITEM_TYPE_NEW_SHOPPING, ITEM
 import { compose } from "recompose";
 import { inject, observer } from "mobx-react";
 import Avatar from "./Avatar";
+import { toJS } from "mobx";
 
 class Item extends Component {
   constructor(props) {
@@ -88,7 +89,7 @@ class Item extends Component {
 
     const itemDisplay = this.state.inEdit ?
       <EditItem
-        item={item}
+        item={toJS(item)}
         onEditingConcluded={(item) => {
           this.setEditMode(false)
           onEditingConcluded(item)

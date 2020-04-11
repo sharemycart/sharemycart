@@ -40,7 +40,7 @@ class EditItem extends Component {
   }
 
   componentDidMount() {
-    setTimeout(() => this.quantityInput.current.setFocus(), 200 )
+    setTimeout(() => this.quantityInput.current.setFocus(), 500 )
   }
 
   onChange(event) {
