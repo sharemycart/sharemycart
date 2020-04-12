@@ -341,6 +341,7 @@ class Firebase {
                   isCurrent: true,
                   name,
                   userId: this.auth.currentUser.uid,
+                  lifecycleStatus: shoppingList.lifecycleStatus,
                   createdAt: this.fieldValue.serverTimestamp()
                 })
             }

@@ -7,7 +7,7 @@ import ShoppingModel from '../../../models/Shopping'
 
 import { IonHeader, IonToolbar, IonButtons, IonContent, IonIcon, IonFooter, IonFab, IonFabButton, IonPage, IonTitle } from '@ionic/react';
 
-import { GO_SHOPPING, SHOPPING, SHOPPING_LISTS } from '../../../constants/routes';
+import { GO_SHOPPING, SHOPPING } from '../../../constants/routes';
 import { withEmailVerification } from '../../Session';
 import { withFirebase } from '../../Firebase';
 import { checkmarkDoneOutline } from 'ionicons/icons';

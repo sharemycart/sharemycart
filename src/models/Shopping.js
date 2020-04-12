@@ -1,5 +1,4 @@
 import { Component } from 'react';
-import { SHOPPING, SHOPPING_LISTS } from '../constants/routes';
 
 /**
  * This component represent the complete state of the needs section of the app.
