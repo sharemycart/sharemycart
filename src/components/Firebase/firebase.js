@@ -1,7 +1,7 @@
 import app from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-import { LIST_TYPE_SHOPPING, LIST_TYPE_NEED, LIFECYCLE_STATUS_OPEN } from '../../constants/lists';
+import { LIST_TYPE_SHOPPING, LIST_TYPE_NEED, LIFECYCLE_STATUS_OPEN, LIFECYCLE_STATUS_SHOPPING, LIFECYCLE_STATUS_FINISHED, LIFECYCLE_STATUS_ARCHIVED } from '../../constants/lists';
 
 const INVALID_DUMMY_UID = 'idonotexist'; // can be used in order to create queries which intentionally don't match anything
 
@@ -121,7 +121,7 @@ class Firebase {
       ? this.auth.currentUser.uid
       : INVALID_DUMMY_UID);
 
-  createList = ({ name }, type) => this.lists().add({
+  createList = ({ name = new Date().toLocaleDateString() }, type) => this.lists().add({
     name,
     type,
     userId: this.auth.currentUser.uid,
@@ -129,6 +129,7 @@ class Firebase {
     lifecycleStatus: LIFECYCLE_STATUS_OPEN,
     createdAt: this.fieldValue.serverTimestamp(),
   })
+
   editList = (uid, list) => this.list(uid)
     .set(Object.assign(list,
       {
@@ -156,6 +157,28 @@ class Firebase {
         )
       }
     }
+  }
+
+  createListFromTemplate = async (template, excludeShoppedItems = true) => {
+    const newList = await this.createList({}, template.type)
+
+    template.type === LIST_TYPE_SHOPPING
+      ? this.setCurrentShoppingList(newList.id)
+      : this.setCurrentNeedsList(newList.id)
+
+    const templateItems = await this.listItems(template.uid).get()
+    templateItems.forEach(itemSnapshot => {
+      const item = itemSnapshot.data()
+      if (!item.shopped || !excludeShoppedItems) {
+        delete item.id;
+        delete item.shopped;
+        delete item.shoppedAt;
+        delete item.shoppedBy;
+        this.createItem(newList.id, item)
+      }
+    })
+
+    return newList
   }
 
   listItems = listId => this.db.doc(`lists/${listId}`)
@@ -191,6 +214,8 @@ class Firebase {
     .update(
       {
         shopped,
+        shoppedBy: this.auth.currentUser.uid,
+        shoppedAt: this.fieldValue.serverTimestamp(),
         editedAt: this.fieldValue.serverTimestamp()
       }
     )
@@ -218,6 +243,44 @@ class Firebase {
 
     return this.createList({ name }, LIST_TYPE_SHOPPING);
   };
+
+  _setShoppingListLifecycleStatusPropagating = async (uid, targetStatus) => {
+    const batch = this.db.batch()
+    batch.update(this.list(uid), 'lifecycleStatus', targetStatus)
+    const dependentShoppingLists = await this.dependentNeedsListOfShoppingList(uid).get()
+    dependentShoppingLists.forEach(needsList => {
+      batch.update(needsList.ref, 'lifecycleStatus', targetStatus)
+    })
+    return batch.commit()
+  }
+
+  openShopping = async (shoppingList) => {
+    if (shoppingList.lifecycleStatus !== LIFECYCLE_STATUS_OPEN
+      && shoppingList.lifecycleStatus !== LIFECYCLE_STATUS_ARCHIVED) {
+      this._setShoppingListLifecycleStatusPropagating(shoppingList.uid, LIFECYCLE_STATUS_OPEN)
+    }
+  }
+
+  goShopping = async (shoppingList) => {
+    if (shoppingList.lifecycleStatus !== LIFECYCLE_STATUS_SHOPPING
+      && shoppingList.lifecycleStatus !== LIFECYCLE_STATUS_ARCHIVED) {
+      this._setShoppingListLifecycleStatusPropagating(shoppingList.uid, LIFECYCLE_STATUS_SHOPPING)
+    }
+  }
+
+  finishShopping = async (shoppingList) => {
+    if (shoppingList.lifecycleStatus !== LIFECYCLE_STATUS_FINISHED
+      && shoppingList.lifecycleStatus !== LIFECYCLE_STATUS_ARCHIVED) {
+      this._setShoppingListLifecycleStatusPropagating(shoppingList.uid, LIFECYCLE_STATUS_FINISHED)
+    }
+  }
+
+  archiveShoppingList = async (shoppingList) => {
+    if (shoppingList.lifecycleStatus !== LIFECYCLE_STATUS_ARCHIVED) {
+      this._setShoppingListLifecycleStatusPropagating(shoppingList.uid, LIFECYCLE_STATUS_ARCHIVED)
+    }
+  }
+
 
   // *** Needs API ***
   myCurrentNeedsList = () => this.myCurrentList(LIST_TYPE_NEED);
@@ -278,6 +341,7 @@ class Firebase {
                   isCurrent: true,
                   name,
                   userId: this.auth.currentUser.uid,
+                  lifecycleStatus: shoppingList.lifecycleStatus,
                   createdAt: this.fieldValue.serverTimestamp()
                 })
             }

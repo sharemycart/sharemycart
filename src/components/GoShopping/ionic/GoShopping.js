@@ -2,27 +2,21 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { compose } from 'recompose';
 
-import ShoppingList from './ShoppingList';
-
 import LoadingAnimation from '../../Reusables/ionic/LoadingAnimation';
 import { withRouter } from 'react-router';
-import { GO_SHOPPING } from '../../../constants/routes';
-import { ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_SHOPPING } from '../../../constants/items';
+import { ITEM_TYPE_IN_SHOPPING } from '../../../constants/items';
+import ShoppingList from '../../Shopping/ionic/ShoppingList';
 
-class Shopping extends Component {
-  constructor(props) {
-    super(props);
+class GoShopping extends Component {
 
-    this.state = {
-      editingListName: '',
-    };
-
+  constructor(props){
+    super(props)
     this.statusTransitionTriggered = false;
   }
 
   componentDidUpdate() {
     if (!this.statusTransitionTriggered && this.props.shoppingStore.currentShoppingList) {
-      this.props.model.onOpenShopping(this.props.shoppingStore.currentShoppingList)
+      this.props.model.onGoShopping(this.props.shoppingStore.currentShoppingList)
       this.statusTransitionTriggered = true
     }
   }
@@ -38,10 +32,6 @@ class Shopping extends Component {
       initializationDone,
     } = shoppingStore;
 
-    const mode = this.props.location.pathname === GO_SHOPPING
-      ? ITEM_TYPE_IN_SHOPPING
-      : ITEM_TYPE_SHOPPING
-
     if (!initializationDone) return <LoadingAnimation loading={initializationDone} />
 
     return (
@@ -51,17 +41,14 @@ class Shopping extends Component {
           authUser={sessionStore.authUser}
           list={currentShoppingList}
           items={currentShoppingListItems}
-          mode={mode}
+          mode={ITEM_TYPE_IN_SHOPPING}
           dependentNeedLists={currentDependentNeedsLists}
           bringAlongItems={currentDependentNeedsListsItems}
-          onEditList={this.props.model.onEditShoppingList}
           onCreateItem={this.props.model.onCreateItemForCurrentShoppingList}
           onEditItem={this.props.model.onEditShoppingItem}
           onShopItem={this.props.model.onShopShoppingItem}
           onDeleteItem={this.props.model.onRemoveShoppingItem}
           onReorderItems={this.props.model.onReorderItems}
-          editMode={this.props.editMode}
-          addSaveEditHandler={this.props.addSaveEditHandler}
         />
       </>
     );
@@ -72,4 +59,4 @@ export default compose(
   withRouter,
   inject('shoppingStore', 'sessionStore'),
   observer,
-)(Shopping);
+)(GoShopping);

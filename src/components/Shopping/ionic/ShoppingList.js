@@ -11,7 +11,9 @@ class ShoppingList extends Component {
       editName: this.props.list.name,
     };
 
-    this.props.addSaveEditHandler(this.saveEdit.bind(this))
+    if(this.props.addSaveEditHandler){
+      this.props.addSaveEditHandler(this.saveEdit.bind(this))
+    }
   }
 
   onChangeEditName = event => {

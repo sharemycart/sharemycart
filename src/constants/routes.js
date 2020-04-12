@@ -8,6 +8,7 @@ export const ADMIN = '/admin';
 export const ADMIN_DETAILS = '/admin/:id';
 export const SHOPPING = '/shopping';
 export const GO_SHOPPING = '/go-shopping';
+export const FINISH_SHOPPING = '/finish-shopping';
 export const SHOPPING_LISTS = '/shopping-lists';
 export const NEEDS = '/needs';
 export const NEEDS_LISTS = '/needs-lists';
