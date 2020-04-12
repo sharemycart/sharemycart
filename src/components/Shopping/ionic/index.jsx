@@ -42,7 +42,7 @@ class ShoppingPage extends ShoppingModel {
     const EditButton = () => (
       !this.state.editMode && <IonButton color="danger" fill="clear"
         onClick={() => this.setState({ editMode: true })}>
-        <Trans>Edit</Trans>
+        <span className="hide-sm-down"><Trans>Edit</Trans></span>
         <IonIcon slot="end" icon={createOutline} />
       </IonButton>
     )
@@ -50,7 +50,7 @@ class ShoppingPage extends ShoppingModel {
     const SaveButton = () => (
       this.state.editMode && <IonButton color="danger" fill="clear"
         onClick={() => this.saveEdit()}>
-        <Trans>Save</Trans>
+        <span className="hide-sm-down"><Trans >Save</Trans></span>
         <IonIcon slot="end" icon={saveOutline} />
       </IonButton>
     )

@@ -28,6 +28,9 @@ import '../../../theme/variables.css';
 import { compose } from 'recompose';
 import { inject } from 'mobx-react';
 
+/* Global styles */
+import '../../Reusables/page.scss'
+
 // const App: React.FC = () => (
 //   <IonApp>
 //     <IonReactRouter>

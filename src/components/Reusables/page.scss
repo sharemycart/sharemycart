@@ -1,0 +1,9 @@
+ion-content ion-toolbar {
+  --background: translucent;
+}
+
+@media (max-width: 576px) {
+  .hide-sm-down {
+    display: none;
+  }
+}

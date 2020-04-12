@@ -5,10 +5,10 @@ import { listOutline } from 'ionicons/icons';
 
 import { Trans } from 'react-i18next';
 
-const AllListsButton = ({href, label}) => (
+const AllListsButton = ({ href, label }) => (
     <IonButton fill="clear"
         href={href}>
-        <Trans>{label}</Trans>
+        <span className="hide-sm-down"><Trans>{label}</Trans></span>
         <IonIcon slot="start" icon={listOutline} />
     </IonButton>
 )
