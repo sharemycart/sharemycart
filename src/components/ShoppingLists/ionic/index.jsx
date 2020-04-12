@@ -16,7 +16,7 @@ import LabelledBackButton from '../../Reusables/ionic/LabelledBackButton';
 
 const CreateShoppingListButton = ({ onCreateShoppingList, history }) => (
   <IonFabButton onClick={() => {
-    onCreateShoppingList(new Date().toLocaleDateString())
+    onCreateShoppingList()
     history.push(SHOPPING)
   }}>
     <IonIcon icon={addOutline} />

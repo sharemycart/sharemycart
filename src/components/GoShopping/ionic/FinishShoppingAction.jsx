@@ -4,8 +4,6 @@ import { IonFabButton, IonIcon } from '@ionic/react';
 import { receiptOutline } from 'ionicons/icons';
 import { withRouter } from 'react-router-dom';
 
-import '../../Reusables/fabButtonTitle.scss'
-
 const GoShoppingAction = () => {
         return (
             <IonFabButton fill="clear" href={FINISH_SHOPPING}>
