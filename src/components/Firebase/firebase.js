@@ -1,7 +1,7 @@
 import app from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-import { LIST_TYPE_SHOPPING, LIST_TYPE_NEED, LIFECYCLE_STATUS_OPEN } from '../../constants/lists';
+import { LIST_TYPE_SHOPPING, LIST_TYPE_NEED, LIFECYCLE_STATUS_OPEN, LIFECYCLE_STATUS_SHOPPING, LIFECYCLE_STATUS_FINISHED } from '../../constants/lists';
 
 const INVALID_DUMMY_UID = 'idonotexist'; // can be used in order to create queries which intentionally don't match anything
 
@@ -129,6 +129,7 @@ class Firebase {
     lifecycleStatus: LIFECYCLE_STATUS_OPEN,
     createdAt: this.fieldValue.serverTimestamp(),
   })
+
   editList = (uid, list) => this.list(uid)
     .set(Object.assign(list,
       {
@@ -191,6 +192,8 @@ class Firebase {
     .update(
       {
         shopped,
+        shoppedBy: this.auth.currentUser.uid,
+        shoppedAt: this.fieldValue.serverTimestamp(),
         editedAt: this.fieldValue.serverTimestamp()
       }
     )
@@ -218,6 +221,35 @@ class Firebase {
 
     return this.createList({ name }, LIST_TYPE_SHOPPING);
   };
+
+  _setShoppingListLifecycleStatusPropagating = async (uid, targetStatus) => {
+    const batch = this.db.batch()
+    batch.update(this.list(uid), 'lifecycleStatus', targetStatus)
+    const dependentShoppingLists = await this.dependentNeedsListOfShoppingList(uid).get()
+    dependentShoppingLists.forEach(needsList => {
+      batch.update(needsList.ref, 'lifecycleStatus', targetStatus)
+    })
+    return batch.commit()
+  }
+
+  openShopping = async (shoppingList) => {
+    if(shoppingList.lifecycleStatus !== LIFECYCLE_STATUS_OPEN){
+    this._setShoppingListLifecycleStatusPropagating(shoppingList.uid, LIFECYCLE_STATUS_OPEN)
+    }
+  }
+
+  goShopping = async (shoppingList) => {
+    if(shoppingList.lifecycleStatus !== LIFECYCLE_STATUS_SHOPPING){
+    this._setShoppingListLifecycleStatusPropagating(shoppingList.uid, LIFECYCLE_STATUS_SHOPPING)
+    }
+  }
+
+  finishShopping = async (shoppingList) => {
+    if(shoppingList.lifecycleStatus !== LIFECYCLE_STATUS_FINISHED){
+    this._setShoppingListLifecycleStatusPropagating(shoppingList.uid, LIFECYCLE_STATUS_FINISHED)
+    }
+  }
+
 
   // *** Needs API ***
   myCurrentNeedsList = () => this.myCurrentList(LIST_TYPE_NEED);

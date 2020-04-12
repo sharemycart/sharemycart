@@ -7,15 +7,13 @@ import { withFirebase } from '../../Firebase';
 import { withEmailVerification } from '../../Session';
 import { inject, observer } from 'mobx-react';
 
-import { IonButton, IonIcon, IonPage, IonHeader, IonToolbar, IonButtons, IonTitle, IonContent, IonFooter, IonFab } from '@ionic/react';
+import { IonButton, IonIcon, IonPage, IonHeader, IonToolbar, IonButtons, IonTitle, IonContent, IonFooter } from '@ionic/react';
 import { createOutline, saveOutline } from 'ionicons/icons';
 
 import { Trans } from 'react-i18next';
 import ShoppingActions from './ShoppingActions';
-import { SHOPPING_LISTS, SHOPPING, GO_SHOPPING } from '../../../constants/routes';
+import { SHOPPING_LISTS } from '../../../constants/routes';
 import AllListsButton from '../../Reusables/ionic/AllListsButton';
-import LabelledBackButton from '../../Reusables/ionic/LabelledBackButton';
-import FinishShoppingAction from './FinishShoppingAction';
 
 class ShoppingPage extends ShoppingModel {
 
@@ -68,13 +66,10 @@ class ShoppingPage extends ShoppingModel {
               <SaveButton />
             </IonButtons>
             <IonButtons slot="secondary">
-              {this.props.location.pathname === GO_SHOPPING &&
-                <LabelledBackButton defaultHref={SHOPPING} />}
-              {this.props.location.pathname !== GO_SHOPPING &&
-                <AllListsButton
-                  label="All Shopping Lists"
-                  href={SHOPPING_LISTS}
-                />}
+              <AllListsButton
+                label="All Shopping Lists"
+                href={SHOPPING_LISTS}
+              />
             </IonButtons>
           </IonToolbar>
         </IonHeader>
@@ -82,9 +77,9 @@ class ShoppingPage extends ShoppingModel {
           <IonHeader collapse="condense">
             <IonToolbar>
               <IonTitle size="large">{
-              (this.props.shoppingStore.currentShoppingList && this.props.shoppingStore.currentShoppingList.name)
-              || 'Shopping'
-            }</IonTitle>
+                (this.props.shoppingStore.currentShoppingList && this.props.shoppingStore.currentShoppingList.name)
+                || 'Shopping'
+              }</IonTitle>
             </IonToolbar>
           </IonHeader>
 
@@ -98,20 +93,14 @@ class ShoppingPage extends ShoppingModel {
         </IonContent>
         <IonFooter>
           {currentShoppingList &&
-            this.props.location.pathname === SHOPPING
-            ? <ShoppingActions />
-            :   <IonFab vertical="bottom" horizontal="end">
-                <FinishShoppingAction />
-              </IonFab>
-            }
+            <ShoppingActions model={this} /> //TODO: make model injectable
+          }
         </IonFooter>
       </IonPage>
     );
   }
 };
 
-
-// const condition = (authUser) => !!authUser;
 
 export default compose(
   withFirebase,

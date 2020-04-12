@@ -10,7 +10,7 @@ import { IonHeader, IonToolbar, IonButtons, IonContent, IonIcon, IonFooter, IonF
 import { GO_SHOPPING } from '../../../constants/routes';
 import { withEmailVerification } from '../../Session';
 import { withFirebase } from '../../Firebase';
-import {  checkmarkDoneOutline } from 'ionicons/icons';
+import { checkmarkDoneOutline } from 'ionicons/icons';
 import LabelledBackButton from '../../Reusables/ionic/LabelledBackButton';
 import FinishShopping from './FinishShopping';
 import { Trans } from 'react-i18next';
@@ -37,7 +37,8 @@ class FinishShoppingPage extends ShoppingModel {
         </IonHeader>
         <IonContent>
 
-        {this.props.sessionStore.dbAuthenticated && <FinishShopping />}
+        {this.props.sessionStore.dbAuthenticated 
+        && <FinishShopping model={this}/>}
 
         </IonContent>
         <IonFooter>

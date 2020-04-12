@@ -12,6 +12,17 @@ import { IonItem, IonList, IonGrid, IonRow, IonTitle } from '@ionic/react';
 import { Trans } from 'react-i18next';
 
 class FinishShopping extends Component {
+  constructor(props){
+    super(props)
+    this.statusTransitionTriggered = false;
+  }
+
+  componentDidUpdate() {
+    if (!this.statusTransitionTriggered && this.props.shoppingStore.currentShoppingList) {
+      this.props.model.onFinishShopping(this.props.shoppingStore.currentShoppingList)
+      this.statusTransitionTriggered = true
+    }
+  }
 
   render() {
     const { shoppingStore } = this.props;

@@ -11,6 +11,7 @@ import PasswordChangePage from '../../PasswordChange/ionic';
 import AccountPage from '../../Account/ionic';
 import AdminPage from '../../Admin/simple-ui';
 import ShoppingPage from '../../Shopping/ionic';
+import GoShoppingPage from '../../GoShopping/ionic';
 import FinishShoppingPage from '../../FinishShopping/ionic';
 import ShoppingListsPage from '../../ShoppingLists/ionic';
 import NeedsPage from '../../Needs/ionic';
@@ -44,7 +45,7 @@ export const NavigationAuth = ({ authUser }) => (
                 <Route path={ROUTES.SHOPPING_LISTS} component={ShoppingListsPage} />
                 <Route path={ROUTES.SHOPPING} component={ShoppingPage} />
                 <Route path={ROUTES.FINISH_SHOPPING} component={FinishShoppingPage} />
-                <Route path={ROUTES.GO_SHOPPING} component={ShoppingPage} />
+                <Route path={ROUTES.GO_SHOPPING} component={GoShoppingPage} />
                 <Route path={ROUTES.NEEDS_LISTS} component={NeedsListsPage} />
                 <Route path={ROUTES.NEEDS} component={NeedsPage} />
                 <Route path={ROUTES.SHARED_SHOPPING_LIST} component={SharedShoppingList} />

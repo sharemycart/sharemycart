@@ -6,14 +6,14 @@ import ShareFabButton from './ShareAction';
 import GoShoppingAction from './GoShoppingAction';
 
 
-const ShoppingActions = () => (
+const ShoppingActions = ({model}) => (
   <IonFab vertical="bottom" horizontal="end">
     <IonFabButton>
       <IonIcon icon={ellipsisVerticalOutline} />
     </IonFabButton>
     <IonFabList side="top">
       <ShareFabButton />
-      <GoShoppingAction />
+      <GoShoppingAction model={model} />
     </IonFabList>
   </IonFab>
 )

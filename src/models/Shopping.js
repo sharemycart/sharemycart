@@ -228,6 +228,18 @@ class Shopping extends Component {
     this.props.firebase.setItemsOrder(listId, items, order)
   }
 
+  onOpenShopping = shoppingList =>{
+    this.props.firebase.openShopping(shoppingList)
+  }
+
+  onGoShopping = shoppingList =>{
+    this.props.firebase.goShopping(shoppingList)
+  }
+
+  onFinishShopping = shoppingList =>{
+    this.props.firebase.finishShopping(shoppingList)
+  }
+
   // event handlers for items
   onCreateItemForCurrentShoppingList = (item) => {
     const { currentShoppingList } = this.props.shoppingStore;
@@ -261,6 +273,7 @@ class Shopping extends Component {
       this.props.firebase.shopItem(listId, uid, shopped)
   };
 
+  // helpers
   ensureExistingCurrentShoppingList = async () => {
     const currentShoppingListSnapshot = await this.props.firebase.myCurrentShoppingList().get()
     if (!currentShoppingListSnapshot.size) {
