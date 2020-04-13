@@ -78,6 +78,7 @@ class Needs extends Component {
                 item={itemInCreation}
                 onChange={this.onCreatingItemChange.bind(this)}
                 onEditingConcluded={this.onCreateComplete.bind(this)}
+                mode={ITEM_TYPE_NEED}
               />
             </IonItem>
           </IonList>}

@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { IonItem, IonButton, IonInput, IonSelect, IonSelectOption, IonIcon, IonToast } from "@ionic/react";
+import { IonItem, IonButton, IonInput, IonSelect, IonSelectOption, IonIcon, IonToast, IonLabel } from "@ionic/react";
 
 import { withTranslation } from 'react-i18next';
 import { cartOutline } from "ionicons/icons";
 import { ENTER } from "../../Reusables/keys";
+import { ITEM_TYPE_NEED } from "../../../constants/items";
 
 const EMPTY_ITEM = {
   name: '',
@@ -26,11 +27,11 @@ class CreateItem extends Component {
   _setFocus() {
     if (!this.props.item.name) {
       setTimeout(() =>
-      this.nameInput.current && this.nameInput.current.setFocus()
+        this.nameInput.current && this.nameInput.current.setFocus()
         , 500)
     } else {
       setTimeout(() =>
-      this.quantityInput.current && this.quantityInput.current.setFocus()
+        this.quantityInput.current && this.quantityInput.current.setFocus()
         , 500)
     }
   }
@@ -55,7 +56,7 @@ class CreateItem extends Component {
   }
 
   onChange(event) {
-      this.props.onChange(event)
+    this.props.onChange(event)
   }
 
   onKeyPress = (event) => {
@@ -82,16 +83,18 @@ class CreateItem extends Component {
     const { t } = this.props;
 
     const unitOfMeasure =
-      <IonSelect
-        value={unit}
-        required="true"
-        onIonChange={e => this.setUnit(e.detail.value)}>
-        <IonSelectOption>pc</IonSelectOption>
-        <IonSelectOption>g</IonSelectOption>
-        <IonSelectOption>kg</IonSelectOption>
-        <IonSelectOption>l</IonSelectOption>
-        <IonSelectOption>ml</IonSelectOption>
-      </IonSelect>
+      this.props.mode === ITEM_TYPE_NEED
+        ? <IonLabel>{unit}</IonLabel>
+        : <IonSelect
+          value={unit}
+          required="true"
+          onIonChange={e => this.setUnit(e.detail.value)}>
+          <IonSelectOption>pc</IonSelectOption>
+          <IonSelectOption>g</IonSelectOption>
+          <IonSelectOption>kg</IonSelectOption>
+          <IonSelectOption>l</IonSelectOption>
+          <IonSelectOption>ml</IonSelectOption>
+        </IonSelect>
 
     return (
       <>
@@ -100,6 +103,7 @@ class CreateItem extends Component {
             placeholder={t('Item name')}
             name="name"
             value={name}
+            readonly={this.props.mode === ITEM_TYPE_NEED}
             onKeyUp={this.onKeyPress}
             onIonInput={event => this.onKeyPress(event)}
             onIonChange={event => this.onChange(event)}
