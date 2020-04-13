@@ -8,13 +8,17 @@ import { compose } from 'recompose';
 import { inject, observer } from 'mobx-react';
 // import Avatar from '../../Reusables/ionic/Avatar';
 
-import { Trans } from 'react-i18next';
+import { Trans, withTranslation } from 'react-i18next';
 import { withEmailVerification } from '../../Session';
 import AllListsButton from '../../Reusables/ionic/AllListsButton';
 import { NEEDS_LISTS } from '../../../constants/routes';
+import { LIFECYCLE_STATUS_OPEN } from '../../../constants/lists';
 
 class NeedsPage extends NeedsModel {
   render() {
+
+    const { t } = this.props;
+
     const ListHeader = ({
       needsStore,
       userStore,
@@ -31,6 +35,8 @@ class NeedsPage extends NeedsModel {
               user={owner}
             /> */}
             <span>
+              {needsStore.currentNeedsList.lifecycleStatus !== LIFECYCLE_STATUS_OPEN && t(needsStore.currentNeedsList.lifecycleStatus) + ': '}
+
               <Trans>by</Trans> {owner.username}
             </span>
           </IonTitle>
@@ -78,6 +84,7 @@ class NeedsPage extends NeedsModel {
 export default compose(
   withFirebase,
   withEmailVerification,
+  withTranslation(),
   inject('needsStore', 'userStore', 'sessionStore'),
   observer,
 )(NeedsPage);

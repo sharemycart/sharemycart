@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { IonList } from '@ionic/react';
 import Item from '../../Reusables/ionic/Item';
+import { LIFECYCLE_STATUS_OPEN } from '../../../constants/lists';
 
 class NeedsList extends Component {
   constructor(props) {
@@ -31,6 +32,7 @@ class NeedsList extends Component {
 
   render() {
     const {
+      list,
       ownList,
       items,
       mode,
@@ -50,6 +52,7 @@ class NeedsList extends Component {
             onCreateNeed={onCreateItem}
             mode={mode}
             ownList={ownList}
+            readOnly={list && list.lifecycleStatus !== LIFECYCLE_STATUS_OPEN}
           />))
         }
       </IonList>
