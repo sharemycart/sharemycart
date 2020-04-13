@@ -18,6 +18,7 @@ class Shopping extends Component {
 
     this.state = {
       editingListName: '',
+      itemInCreation: {},
     };
 
     this.statusTransitionTriggered = false;
@@ -30,6 +31,11 @@ class Shopping extends Component {
     }
   }
 
+  onCreatingItemChange(event){
+    this.setState({ itemInCreation: 
+      Object.assign(this.state.itemInCreation, {[event.target.name]: event.target.value} )
+    });
+  }
 
   onCreateComplete(newItem) {
     if (!newItem.name || !newItem.quantity) {
@@ -37,8 +43,9 @@ class Shopping extends Component {
     }
 
     this.props.model.onCreateItemForCurrentShoppingList(newItem)
+    this.setState({itemInCreation: {}})
   }
-  
+
   render() {
     const { shoppingStore, sessionStore } = this.props;
     const {
@@ -63,6 +70,8 @@ class Shopping extends Component {
           <IonList>
             <IonItem>
               <CreateItem
+                item={this.state.itemInCreation}
+                onChange={this.onCreatingItemChange.bind(this)}
                 onEditingConcluded={this.onCreateComplete.bind(this)}
               />
             </IonItem>

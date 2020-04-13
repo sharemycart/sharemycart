@@ -14,9 +14,7 @@ const EMPTY_ITEM = {
 class CreateItem extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      ...EMPTY_ITEM,
       showToast: false,
       message: "",
     }
@@ -25,16 +23,27 @@ class CreateItem extends Component {
     this.quantityInput = React.createRef()
   }
 
+  _setFocus() {
+    if (!this.props.item.name) {
+      setTimeout(() =>
+      this.nameInput.current && this.nameInput.current.setFocus()
+        , 500)
+    } else {
+      setTimeout(() =>
+      this.quantityInput.current && this.quantityInput.current.setFocus()
+        , 500)
+    }
+  }
+
   concludeEditing() {
     const { t } = this.props;
-    const { name, quantity, unit = ''} = this.state
+    const { name, quantity, unit = '' } = this.props.item
     if (name) {
       this.props.onEditingConcluded({
         name,
         quantity: quantity || 1,
         unit,
       })
-      this.setState({ ...EMPTY_ITEM })
     } else {
       this.setState({
         showToast: true,
@@ -42,11 +51,11 @@ class CreateItem extends Component {
       })
     }
 
-    this.nameInput.current.setFocus()
+    this._setFocus()
   }
 
   onChange(event) {
-    this.setState({ [event.target.name]: event.target.value });
+      this.props.onChange(event)
   }
 
   onKeyPress = (event) => {
@@ -63,12 +72,16 @@ class CreateItem extends Component {
     this.setState({ unit });
   }
 
+  componentDidMount() {
+    this._setFocus()
+  }
+
   render() {
-    const { name, quantity, unit } = this.state;
+    const { name, quantity, unit } = this.props.item;
 
     const { t } = this.props;
 
-    const unitOfMeasure = 
+    const unitOfMeasure =
       <IonSelect
         value={unit}
         required="true"
