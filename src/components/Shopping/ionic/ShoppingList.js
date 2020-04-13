@@ -25,18 +25,6 @@ class ShoppingList extends Component {
     this.props.onEditList(this.props.list, this.state.editName);
   };
 
-  onChangeNewItem(newItem) {
-    this.setState({ newItem });
-  }
-
-  onCreateComplete(newItem) {
-    if (!newItem.name || !newItem.quantity) {
-      return;
-    }
-
-    this.props.onCreateItem(newItem)
-  }
-
   doReorder(event) {
     event.detail.complete()
 
@@ -77,14 +65,6 @@ class ShoppingList extends Component {
 
     return (
       <>
-{        list.lifecycleStatus === LIFECYCLE_STATUS_OPEN && 
-        <IonList>
-          <IonItem>
-            <CreateItem
-              onEditingConcluded={this.onCreateComplete.bind(this)}
-            />
-          </IonItem>
-        </IonList>}
         <IonList>
           {/* // The following component is actually a hack. I expected the IonReorderGroup to 
         // toggle "disabled" based on the edit mode.
