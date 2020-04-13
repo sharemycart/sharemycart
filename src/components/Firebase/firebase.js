@@ -192,6 +192,7 @@ class Firebase {
   createItem = (listId, item) => this.listItems(listId)
     .add(Object.assign(item,
       {
+        order: item.order || -1,
         createdAt: this.fieldValue.serverTimestamp()
       }));
 
@@ -340,6 +341,7 @@ class Firebase {
                   shoppingListOwnerId: shoppingList.userId,
                   isCurrent: true,
                   name,
+                  order: -1,
                   userId: this.auth.currentUser.uid,
                   lifecycleStatus: shoppingList.lifecycleStatus,
                   createdAt: this.fieldValue.serverTimestamp()

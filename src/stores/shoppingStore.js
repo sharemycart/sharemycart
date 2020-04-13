@@ -16,7 +16,7 @@ class ShoppingStore {
     this.rootStore = rootStore;
   }
 
-  @action setInitializationDone(done){
+  @action setInitializationDone(done) {
     this.initializationDone = done;
   }
 
@@ -52,7 +52,9 @@ class ShoppingStore {
       uid: this.currentShoppingListItems[key].uid,
     }))
       .sort((a, b) => {
-        if (a.order && b.order) return a.order - b.order;
+        if (a.order && b.order && a.order !== b.order) return a.order - b.order;
+        if (a.order && !b.order) return a.order;
+        if (!a.order && b.order) return -1 * b.order;
         if (a.createdAt && b.createdAt) return b.createdAt.seconds - a.createdAt.seconds;
         if (!a.createdAt) return -1
         if (!b.createdAt) return 1
@@ -73,8 +75,8 @@ class ShoppingStore {
       const ownerId = this.currentDependentNeedsLists[key].userId;
       const neededItems = toJS(this.currentDependentNeedsLists)[key].items;
       return allItems.concat(neededItems || []).map(
-        neededItem => Object.assign(neededItem, {needsListId, ownerId}
-      ))
+        neededItem => Object.assign(neededItem, { needsListId, ownerId }
+        ))
     }, []);
   }
 }
