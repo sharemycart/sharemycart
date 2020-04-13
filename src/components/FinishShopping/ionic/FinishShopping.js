@@ -12,19 +12,19 @@ import { Trans } from 'react-i18next';
 import ShoppingList from '../../Shopping/ionic/ShoppingList';
 
 class FinishShopping extends Component {
-  constructor(props){
+  constructor (props) {
     super(props)
     this.statusTransitionTriggered = false;
   }
 
-  componentDidUpdate() {
+  componentDidUpdate () {
     if (!this.statusTransitionTriggered && this.props.shoppingStore.currentShoppingList) {
       this.props.model.onFinishShopping(this.props.shoppingStore.currentShoppingList)
       this.statusTransitionTriggered = true
     }
   }
 
-  render() {
+  render () {
     const { shoppingStore } = this.props;
     const {
       currentShoppingList,
@@ -34,7 +34,7 @@ class FinishShopping extends Component {
       initializationDone,
     } = shoppingStore;
 
-    if (!initializationDone) return <LoadingAnimation loading={initializationDone} />
+    if (!initializationDone) return <LoadingAnimation loading={initializationDone}/>
 
     return (
       currentShoppingList &&
@@ -42,12 +42,12 @@ class FinishShopping extends Component {
         <IonListHeader lines="inset">
           <IonLabel><h1><Trans>My own shopped items</Trans></h1></IonLabel>
         </IonListHeader>
-         <NeedsList
+         <ShoppingList
            key={currentShoppingList.userId}
            list={currentShoppingList}
            items={currentShoppingListItems.filter(item => !!item.shopped)}
            ownList={false}
-                mode={ITEM_TYPE_SHOPPING}
+           mode={ITEM_TYPE_SHOPPING}
          />
         {currentDependentNeedsLists && currentDependentNeedsLists.map(dependentNeedsList => {
           const broughtAlongItems = currentDependentNeedsListsItems
