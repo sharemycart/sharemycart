@@ -4,26 +4,27 @@ import { compose } from 'recompose';
 
 import LoadingAnimation from '../../Reusables/ionic/LoadingAnimation';
 import { withRouter } from 'react-router';
-import { ITEM_TYPE_NEED } from '../../../constants/items';
+import { ITEM_TYPE_NEED, ITEM_TYPE_SHOPPING } from '../../../constants/items';
 import NeedsList from '../../Needs/ionic/NeedsList';
 import Avatar from '../../Reusables/ionic/Avatar';
 import { IonItem, IonList, IonListHeader, IonLabel } from '@ionic/react';
 import { Trans } from 'react-i18next';
+import ShoppingList from '../../Shopping/ionic/ShoppingList';
 
 class FinishShopping extends Component {
-  constructor (props) {
+  constructor(props){
     super(props)
     this.statusTransitionTriggered = false;
   }
 
-  componentDidUpdate () {
+  componentDidUpdate() {
     if (!this.statusTransitionTriggered && this.props.shoppingStore.currentShoppingList) {
       this.props.model.onFinishShopping(this.props.shoppingStore.currentShoppingList)
       this.statusTransitionTriggered = true
     }
   }
 
-  render () {
+  render() {
     const { shoppingStore } = this.props;
     const {
       currentShoppingList,
@@ -33,7 +34,7 @@ class FinishShopping extends Component {
       initializationDone,
     } = shoppingStore;
 
-    if (!initializationDone) return <LoadingAnimation loading={initializationDone}/>
+    if (!initializationDone) return <LoadingAnimation loading={initializationDone} />
 
     return (
       currentShoppingList &&
@@ -46,7 +47,7 @@ class FinishShopping extends Component {
            list={currentShoppingList}
            items={currentShoppingListItems.filter(item => !!item.shopped)}
            ownList={false}
-           mode={ITEM_TYPE_NEED}
+                mode={ITEM_TYPE_SHOPPING}
          />
         {currentDependentNeedsLists && currentDependentNeedsLists.map(dependentNeedsList => {
           const broughtAlongItems = currentDependentNeedsListsItems

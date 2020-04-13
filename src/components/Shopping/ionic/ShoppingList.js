@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Item from '../../Reusables/ionic/Item';
 import { IonList, IonItem, IonReorderGroup } from '@ionic/react';
 import CreateShoppingItem from './CreateShoppingItem';
+import { LIFECYCLE_STATUS_OPEN } from '../../../constants/lists';
 
 class ShoppingList extends Component {
   constructor(props) {
@@ -66,6 +67,7 @@ class ShoppingList extends Component {
 
   render() {
     const {
+      list,
       items,
       onEditItem,
       onDeleteItem,
@@ -75,13 +77,14 @@ class ShoppingList extends Component {
 
     return (
       <>
+{        list.lifecycleStatus === LIFECYCLE_STATUS_OPEN && 
         <IonList>
           <IonItem>
             <CreateShoppingItem
               onEditingConcluded={this.onCreateComplete.bind(this)}
             />
           </IonItem>
-        </IonList>
+        </IonList>}
         <IonList>
           {/* // The following component is actually a hack. I expected the IonReorderGroup to 
         // toggle "disabled" based on the edit mode.
@@ -107,6 +110,7 @@ class ShoppingList extends Component {
                   onDeleteItem={onDeleteItem}
                   onShopItem={onShopItem}
                   mode={this.props.mode}
+                  readOnly={this.props.list.lifecycleStatus !== LIFECYCLE_STATUS_OPEN}
                 />)
             })
           }
@@ -119,7 +123,9 @@ class ShoppingList extends Component {
                   ownList={true}
                   onEditingConcluded={onEditItem}
                   onDeleteItem={onDeleteItem}
+                  onShopItem={onShopItem}
                   mode={this.props.mode}
+                  readOnly={this.props.list.lifecycleStatus !== LIFECYCLE_STATUS_OPEN}
                 />))}
             </IonReorderGroup>
           }
