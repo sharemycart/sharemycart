@@ -8,6 +8,9 @@ import LoadingAnimation from '../../Reusables/ionic/LoadingAnimation';
 import { withRouter } from 'react-router';
 import { GO_SHOPPING } from '../../../constants/routes';
 import { ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_SHOPPING } from '../../../constants/items';
+import { LIFECYCLE_STATUS_OPEN } from '../../../constants/lists';
+import { IonList, IonItem } from '@ionic/react';
+import CreateItem from '../../Item/ionic/CreateItem';
 
 class Shopping extends Component {
   constructor(props) {
@@ -15,6 +18,7 @@ class Shopping extends Component {
 
     this.state = {
       editingListName: '',
+      itemInCreation: {},
     };
 
     this.statusTransitionTriggered = false;
@@ -25,6 +29,21 @@ class Shopping extends Component {
       this.props.model.onOpenShopping(this.props.shoppingStore.currentShoppingList)
       this.statusTransitionTriggered = true
     }
+  }
+
+  onCreatingItemChange(event){
+    this.setState({ itemInCreation: 
+      Object.assign(this.state.itemInCreation, {[event.target.name]: event.target.value} )
+    });
+  }
+
+  onCreateComplete(newItem) {
+    if (!newItem.name || !newItem.quantity) {
+      return;
+    }
+
+    this.props.model.onCreateItemForCurrentShoppingList(newItem)
+    this.setState({itemInCreation: {}})
   }
 
   render() {
@@ -47,6 +66,16 @@ class Shopping extends Component {
     return (
       currentShoppingList &&
       <>
+        {currentShoppingList.lifecycleStatus === LIFECYCLE_STATUS_OPEN &&
+          <IonList>
+            <IonItem>
+              <CreateItem
+                item={this.state.itemInCreation}
+                onChange={this.onCreatingItemChange.bind(this)}
+                onEditingConcluded={this.onCreateComplete.bind(this)}
+              />
+            </IonItem>
+          </IonList>}
         <ShoppingList
           authUser={sessionStore.authUser}
           list={currentShoppingList}
@@ -55,7 +84,6 @@ class Shopping extends Component {
           dependentNeedLists={currentDependentNeedsLists}
           bringAlongItems={currentDependentNeedsListsItems}
           onEditList={this.props.model.onEditShoppingList}
-          onCreateItem={this.props.model.onCreateItemForCurrentShoppingList}
           onEditItem={this.props.model.onEditShoppingItem}
           onShopItem={this.props.model.onShopShoppingItem}
           onDeleteItem={this.props.model.onRemoveShoppingItem}

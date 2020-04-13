@@ -192,6 +192,7 @@ class Firebase {
   createItem = (listId, item) => this.listItems(listId)
     .add(Object.assign(item,
       {
+        order: item.order || -1,
         createdAt: this.fieldValue.serverTimestamp()
       }));
 
@@ -340,6 +341,7 @@ class Firebase {
                   shoppingListOwnerId: shoppingList.userId,
                   isCurrent: true,
                   name,
+                  order: -1,
                   userId: this.auth.currentUser.uid,
                   lifecycleStatus: shoppingList.lifecycleStatus,
                   createdAt: this.fieldValue.serverTimestamp()
@@ -361,15 +363,18 @@ class Firebase {
     return needsListsRef;
   }
 
-  addNeededItemFromShoppingListItem = (needsListId, shoppingListItem) => {
+  addNeededItemFromShoppingListItem = (needsListId, shoppingListItem, quantity = '') => {
     const neededItem = shoppingListItem;
 
     neededItem.OriginShoppingItemUid = shoppingListItem.uid;
-    neededItem.quantity = '';
+    neededItem.quantity = quantity;
     delete neededItem.createdAt;
     delete neededItem.editedAt;
     delete neededItem.uid;
     delete neededItem.parentId;
+    delete neededItem.shopped;
+    delete neededItem.shoppedAt;
+    delete neededItem.shoppedBy;
     //TODO: prevent creation of duplicate needs
     return this.createItem(needsListId, neededItem)
   }

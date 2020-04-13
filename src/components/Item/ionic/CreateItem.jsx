@@ -1,17 +1,15 @@
 import React, { Component } from "react";
-import { IonItem, IonButton, IonInput, IonSelect, IonSelectOption, IonLabel, IonIcon, IonToast } from "@ionic/react";
-import { ITEM_TYPE_SHOPPING, ITEM_TYPE_NEED } from "../../../constants/items";
+import { IonItem, IonButton, IonInput, IonSelect, IonSelectOption, IonIcon, IonToast, IonLabel } from "@ionic/react";
 
 import { withTranslation } from 'react-i18next';
 import { cartOutline } from "ionicons/icons";
-import { ENTER } from "../keys";
+import { ENTER } from "../../Reusables/keys";
+import { ITEM_TYPE_NEED } from "../../../constants/items";
 
-class EditItem extends Component {
+class CreateItem extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      ...props.item,
       showToast: false,
       message: "",
     }
@@ -20,33 +18,39 @@ class EditItem extends Component {
     this.quantityInput = React.createRef()
   }
 
+  _setFocus() {
+    if (!this.props.item.name) {
+      setTimeout(() =>
+        this.nameInput.current && this.nameInput.current.setFocus()
+        , 500)
+    } else {
+      setTimeout(() =>
+        this.quantityInput.current && this.quantityInput.current.setFocus()
+        , 500)
+    }
+  }
+
   concludeEditing() {
     const { t } = this.props;
-    const { name, quantity, unit } = this.state
-    if (name && quantity) {
+    const { name, quantity, unit = '' } = this.props.item
+    if (name) {
       this.props.onEditingConcluded({
-        uid: this.props.item.uid,
         name,
-        quantity,
+        quantity: quantity || 1,
         unit,
       })
     } else {
       this.setState({
         showToast: true,
-        message: t('Name_and_quantity_mandatory')
+        message: t('Name_mandatory')
       })
     }
-    this.quantityInput.current.setFocus()
-  }
 
-  componentDidMount() {
-    setTimeout(() => {
-      if (this.quantityInput.current) { this.quantityInput.current.setFocus() }
-    }, 500)
+    this._setFocus()
   }
 
   onChange(event) {
-    this.setState({ [event.target.name]: event.target.value });
+    this.props.onChange(event)
   }
 
   onKeyPress = (event) => {
@@ -63,37 +67,41 @@ class EditItem extends Component {
     this.setState({ unit });
   }
 
+  componentDidMount() {
+    this._setFocus()
+  }
+
   render() {
-    const { name, quantity, unit } = this.state;
+    const { name, quantity, unit } = this.props.item;
 
     const { t } = this.props;
 
-    const unitOfMeasure = this.props.mode === ITEM_TYPE_SHOPPING
-      ? <IonSelect
-        value={unit}
-        required="true"
-        onIonChange={e => this.setUnit(e.detail.value)}
-      >
-        <IonSelectOption>pc</IonSelectOption>
-        <IonSelectOption>g</IonSelectOption>
-        <IonSelectOption>kg</IonSelectOption>
-        <IonSelectOption>l</IonSelectOption>
-        <IonSelectOption>ml</IonSelectOption>
-      </IonSelect>
-      : <IonLabel>{unit}</IonLabel>
+    const unitOfMeasure =
+      this.props.mode === ITEM_TYPE_NEED
+        ? <IonLabel>{unit}</IonLabel>
+        : <IonSelect
+          value={unit}
+          required="true"
+          onIonChange={e => this.setUnit(e.detail.value)}>
+          <IonSelectOption>pc</IonSelectOption>
+          <IonSelectOption>g</IonSelectOption>
+          <IonSelectOption>kg</IonSelectOption>
+          <IonSelectOption>l</IonSelectOption>
+          <IonSelectOption>ml</IonSelectOption>
+        </IonSelect>
 
     return (
       <>
         <IonItem style={{ width: "100%" }}>
           <IonInput
-            // autofocus={this.props.mode === ITEM_TYPE_NEW_SHOPPING && !name}
             placeholder={t('Item name')}
             name="name"
             value={name}
+            readonly={this.props.mode === ITEM_TYPE_NEED}
+            onKeyUp={this.onKeyPress}
             onIonInput={event => this.onKeyPress(event)}
             onIonChange={event => this.onChange(event)}
             onIonBlur={event => this.onBlur(event)}
-            readonly={this.props.mode === ITEM_TYPE_NEED}
             required="true"
             autocapitalize
             autocorrect="on"
@@ -101,7 +109,6 @@ class EditItem extends Component {
             ref={this.nameInput}
           />
           <IonInput
-            // autofocus={(this.props.mode === ITEM_TYPE_NEED) || (this.props.mode === ITEM_TYPE_SHOPPING && name)}
             placeholder={t("Quantity")}
             name="quantity"
             type="number"
@@ -111,7 +118,7 @@ class EditItem extends Component {
             onKeyUp={this.onKeyPress}
             onIonChange={event => this.onChange(event)}
             onIonBlur={event => this.onBlur(event)}
-            required="true"
+            required="false"
             ref={this.quantityInput}
           />
           {unitOfMeasure}
@@ -130,4 +137,4 @@ class EditItem extends Component {
   }
 }
 
-export default withTranslation()(EditItem)
+export default withTranslation()(CreateItem)

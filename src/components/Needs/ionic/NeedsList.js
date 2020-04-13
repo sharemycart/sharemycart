@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { IonList } from '@ionic/react';
-import Item from '../../Reusables/ionic/Item';
+import Item from '../../Item/ionic/Item';
 import { LIFECYCLE_STATUS_OPEN } from '../../../constants/lists';
 
 class NeedsList extends Component {

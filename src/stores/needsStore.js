@@ -1,5 +1,6 @@
 import { observable, action, computed } from 'mobx';
 import toObject from '../lib/convertArrayToObject';
+import sortItems from '../components/Reusables/functions/sortItems';
 
 // This store holds all information needed to create and manage needs lists 
 // and their items
@@ -50,10 +51,7 @@ class NeedsStore {
       ...this.currentNeedsListItems[key],
       uid: this.currentNeedsListItems[key].uid,
     }))
-    .sort((a, b)=>{
-      if(a.order && b.order) return a.order - b.order;
-      return a.createdAt - b.createdAt;
-    });
+    .sort((a, b)=> sortItems(a, b));
   }
 
   @computed get potentiallyNeededItemsArray() {
@@ -71,10 +69,7 @@ class NeedsStore {
         uid: this.currentOriginShoppingListItems[key].uid,
       }))
       .filter(item => !needsByName[item.name])
-      .sort((a, b)=>{
-        if(a.order && b.order) return a.order - b.order;
-        return a.createdAt - b.createdAt;
-      });
+      .sort((a, b)=> sortItems(a, b));
   }
 }
 
