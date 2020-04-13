@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import Item from '../../Reusables/ionic/Item';
+import Item from '../../Item/ionic/Item';
 import { IonList, IonItem, IonReorderGroup } from '@ionic/react';
-import CreateShoppingItem from './CreateShoppingItem';
+import CreateItem from '../../Item/ionic/CreateItem';
 import { LIFECYCLE_STATUS_OPEN } from '../../../constants/lists';
 
 class ShoppingList extends Component {
@@ -80,7 +80,7 @@ class ShoppingList extends Component {
 {        list.lifecycleStatus === LIFECYCLE_STATUS_OPEN && 
         <IonList>
           <IonItem>
-            <CreateShoppingItem
+            <CreateItem
               onEditingConcluded={this.onCreateComplete.bind(this)}
             />
           </IonItem>

@@ -11,7 +11,7 @@ const EMPTY_ITEM = {
   unit: '',
 }
 
-class CreateShoppingItem extends Component {
+class CreateItem extends Component {
   constructor(props) {
     super(props);
 
@@ -126,4 +126,4 @@ class CreateShoppingItem extends Component {
   }
 }
 
-export default withTranslation()(CreateShoppingItem)
+export default withTranslation()(CreateItem)

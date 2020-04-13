@@ -5,7 +5,7 @@ import { trash, add, shareSocialOutline } from 'ionicons/icons';
 import { ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_SHOPPING, ITEM_TYPE_NEW_SHOPPING, ITEM_TYPE_NEED, ITEM_TYPE_POTENTIAL_NEED, ITEM_TYPE_BRING_ALONG } from "../../../constants/items";
 import { compose } from "recompose";
 import { inject, observer } from "mobx-react";
-import Avatar from "./Avatar";
+import Avatar from "../../Reusables/ionic/Avatar";
 import { toJS } from "mobx";
 
 class Item extends Component {

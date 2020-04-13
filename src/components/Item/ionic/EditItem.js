@@ -4,7 +4,7 @@ import { ITEM_TYPE_SHOPPING, ITEM_TYPE_NEED } from "../../../constants/items";
 
 import { withTranslation } from 'react-i18next';
 import { cartOutline } from "ionicons/icons";
-import { ENTER } from "../keys";
+import { ENTER } from "../../Reusables/keys";
 
 class EditItem extends Component {
   constructor(props) {
