@@ -17,7 +17,9 @@ class Item extends Component {
   }
 
   setEditMode(inEdit) {
-    this.setState({ inEdit })
+    if (!this.props.readOnly) {
+      this.setState({ inEdit })
+    }
   }
 
   onItemClick() {
@@ -45,16 +47,17 @@ class Item extends Component {
       onCreateNeed,
       onDeleteItem,
       onEditingConcluded,
-      onShopItem
+      onShopItem,
+      readOnly,
     } = this.props;
 
-    const needIcon = !ownList && mode === ITEM_TYPE_POTENTIAL_NEED &&
+    const needIcon = !ownList && !readOnly && mode === ITEM_TYPE_POTENTIAL_NEED &&
       <IonButton onClick={() => onCreateNeed(item)} fill="add" size="large" slot="end" color="primary">
         <IonIcon icon={add} />
       </IonButton>
 
     const showQuantityLabel = [ITEM_TYPE_NEED, ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_BRING_ALONG].includes(mode) ||
-                              ([ITEM_TYPE_SHOPPING, ITEM_TYPE_NEW_SHOPPING].includes(mode) && (item.quantity > 1 || item.unit))
+      ([ITEM_TYPE_SHOPPING, ITEM_TYPE_NEW_SHOPPING].includes(mode) && (item.quantity > 1 || item.unit))
     const quantityLabel = showQuantityLabel &&
       <IonChip
         onClick={() => this.setEditMode(true)}
@@ -64,7 +67,7 @@ class Item extends Component {
         </IonLabel>
       </IonChip>
 
-    const showDeleteButton = ownList && mode !== ITEM_TYPE_IN_SHOPPING
+    const showDeleteButton = ownList && !readOnly && mode !== ITEM_TYPE_IN_SHOPPING
     const deleteIcon = showDeleteButton && <IonButton className="button-end" fill="clear" size="large" slot="end" color="danger" onClick={() => onDeleteItem(item.uid)}>
       <IonIcon icon={trash} />
     </IonButton>
@@ -100,15 +103,15 @@ class Item extends Component {
       />
       :
       <>
-        {[ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_BRING_ALONG].includes(mode) && 
-        <IonCheckbox 
-          slot="start"
-          style={mode === ITEM_TYPE_BRING_ALONG ? {marginLeft: "40px"} : null}
-          value={item.name}
-          checked={item.shopped}
-          onClick={() => this.onItemClick()}
-          color="primary"
-        />}
+        {[ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_BRING_ALONG].includes(mode) &&
+          <IonCheckbox
+            slot="start"
+            style={mode === ITEM_TYPE_BRING_ALONG ? { marginLeft: "40px" } : null}
+            value={item.name}
+            checked={item.shopped}
+            onClick={() => this.onItemClick()}
+            color="primary"
+          />}
         <IonLabel onClick={() => this.onItemClick()}
           style={{
             cursor: 'pointer',

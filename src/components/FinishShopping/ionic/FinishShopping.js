@@ -5,11 +5,12 @@ import { compose } from 'recompose';
 
 import LoadingAnimation from '../../Reusables/ionic/LoadingAnimation';
 import { withRouter } from 'react-router';
-import { ITEM_TYPE_NEED } from '../../../constants/items';
+import { ITEM_TYPE_NEED, ITEM_TYPE_SHOPPING } from '../../../constants/items';
 import NeedsList from '../../Needs/ionic/NeedsList';
 import Avatar from '../../Reusables/ionic/Avatar';
 import { IonItem, IonList, IonGrid, IonRow, IonTitle } from '@ionic/react';
 import { Trans } from 'react-i18next';
+import ShoppingList from '../../Shopping/ionic/ShoppingList';
 
 class FinishShopping extends Component {
   constructor(props){
@@ -45,11 +46,11 @@ class FinishShopping extends Component {
               <IonTitle><Trans>My own shopped items</Trans></IonTitle>
             </IonRow>
             <IonRow>
-              <NeedsList
+              <ShoppingList
                 list={currentShoppingList}
                 items={currentShoppingListItems.filter(item => !!item.shopped)}
                 ownList={false}
-                mode={ITEM_TYPE_NEED}
+                mode={ITEM_TYPE_SHOPPING}
               />
             </IonRow>
           </IonGrid>
