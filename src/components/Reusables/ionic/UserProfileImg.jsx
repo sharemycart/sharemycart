@@ -13,7 +13,7 @@ const UserProfileImg = ({
         ? userImage
         : (`https://www.gravatar.com/avatar/${emailMd5}?s=${size}&d=https%3A%2F%2Fui-avatars.com%2Fapi%2F/${namePathComponent}/${size}%3Frounded%3Dtrue%26bold%3Dtrue`);
 
-    return <img src={src} alt="User Profile" />
+    return <img src={src} alt="User Profile" style={{borderRadius: "50%"}} />
 }
 
 export default UserProfileImg

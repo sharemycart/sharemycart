@@ -4,7 +4,7 @@ import { withFirebase } from '../../Firebase';
 import { inject, observer } from 'mobx-react';
 import { NEEDS } from '../../../constants/routes';
 
-import { IonButton, IonContent, IonToolbar, IonPage, IonHeader, IonTitle, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent } from '@ionic/react';
+import { IonButton, IonContent, IonToolbar, IonPage, IonHeader, IonTitle, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonFooter } from '@ionic/react';
 
 import { Trans } from 'react-i18next';
 
@@ -67,14 +67,14 @@ class NeedsInSharedShoppingList extends Component {
                             <IonCardTitle>{sharingUser.username}&nbsp;({sharingUser.email})</IonCardTitle>
                             <IonCardSubtitle><Trans>has shared a shopping list with you</Trans></IonCardSubtitle>
                         </IonCardHeader>
-                        <IonCardContent>
-                            <CreateNeedsListButton
-                              {...props}
-                              shoppingListId={shoppingListId}
-                              sharingUser={sharingUser}
-                            />
-                        </IonCardContent>
                     </IonCard>
+                    <IonFooter>
+                        <CreateNeedsListButton
+                          {...props}
+                          shoppingListId={shoppingListId}
+                          sharingUser={sharingUser}
+                        />
+                    </IonFooter>
                 </>
             )
             return null
