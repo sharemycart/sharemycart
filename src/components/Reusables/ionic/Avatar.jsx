@@ -5,6 +5,7 @@ import md5 from 'md5'
 const Avatar = ({
     user,
     size = 200,
+    slot = ''
 }) => {
     let userImage = user ? user.photoURL : null;
     const emailMd5 = md5(user.email);
@@ -15,7 +16,7 @@ const Avatar = ({
         : (`https://www.gravatar.com/avatar/${emailMd5}&s=${size}?d=https%3A%2F%2Fui-avatars.com%2Fapi%2F/${namePathComponent}/${size}%3Frounded%3Dtrue%26bold%3Dtrue`);
 
     return (
-        <IonAvatar style={{ width: size, height: size }}>
+        <IonAvatar style={{ width: size, height: size }} slot={slot}>
             <img src={src} alt="User Profile" />
         </IonAvatar>
     )
