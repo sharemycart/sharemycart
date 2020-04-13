@@ -1,6 +1,5 @@
 import React from 'react'
 import { IonAvatar } from '@ionic/react'
-import md5 from 'md5'
 import UserProfileImg from './UserProfileImg';
 
 const Avatar = ({
