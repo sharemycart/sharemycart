@@ -13,7 +13,7 @@ const Avatar = ({
     // const colorPathComponent = encodeURIComponent(`color=${ff0000}`);
     let src = userImage
         ? userImage
-        : (`https://www.gravatar.com/avatar/${emailMd5}&s=${size}?d=https%3A%2F%2Fui-avatars.com%2Fapi%2F/${namePathComponent}/${size}%3Frounded%3Dtrue%26bold%3Dtrue`);
+        : (`https://www.gravatar.com/avatar/${emailMd5}?s=${size}&d=https%3A%2F%2Fui-avatars.com%2Fapi%2F/${namePathComponent}/${size}%3Frounded%3Dtrue%26bold%3Dtrue`);
 
     return (
         <IonAvatar style={{ width: size, height: size }} slot={slot}>
