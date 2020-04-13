@@ -6,12 +6,6 @@ import { cartOutline } from "ionicons/icons";
 import { ENTER } from "../../Reusables/keys";
 import { ITEM_TYPE_NEED } from "../../../constants/items";
 
-const EMPTY_ITEM = {
-  name: '',
-  quantity: '',
-  unit: '',
-}
-
 class CreateItem extends Component {
   constructor(props) {
     super(props);

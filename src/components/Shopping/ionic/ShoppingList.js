@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Item from '../../Item/ionic/Item';
-import { IonList, IonItem, IonReorderGroup } from '@ionic/react';
-import CreateItem from '../../Item/ionic/CreateItem';
+import { IonList, IonReorderGroup } from '@ionic/react';
 import { LIFECYCLE_STATUS_OPEN } from '../../../constants/lists';
 
 class ShoppingList extends Component {
@@ -55,7 +54,6 @@ class ShoppingList extends Component {
 
   render() {
     const {
-      list,
       items,
       onEditItem,
       onDeleteItem,
