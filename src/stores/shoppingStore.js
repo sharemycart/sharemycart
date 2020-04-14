@@ -52,7 +52,7 @@ class ShoppingStore {
       ...this.currentShoppingListItems[key],
       uid: this.currentShoppingListItems[key].uid,
     }))
-    .sort((a, b)=> sortItems(a, b));
+      .sort((a, b) => sortItems(a, b));
   }
 
   @computed get currentDependentNeedsListsArray() {
@@ -63,14 +63,24 @@ class ShoppingStore {
   }
 
   @computed get currentDependentNeedsListsItemsArray() {
-    return Object.keys(this.currentDependentNeedsLists || {}).reduce((allItems, key) => {
-      const needsListId = this.currentDependentNeedsLists[key].uid;
-      const ownerId = this.currentDependentNeedsLists[key].userId;
-      const neededItems = toJS(this.currentDependentNeedsLists)[key].items;
-      return allItems.concat(neededItems || []).map(
-        neededItem => Object.assign(neededItem, { needsListId, ownerId }
-        ))
-    }, []);
+    if (!this.currentDependentNeedsLists) return []
+
+    let allDependentNeededItems = []
+    
+    Object.keys(this.currentDependentNeedsLists || {}).forEach((key) => {
+      const neededItems = this.currentDependentNeedsLists[key].items;
+      if (neededItems && neededItems.length) {
+        const needsList = this.currentDependentNeedsLists[key];
+        allDependentNeededItems = allDependentNeededItems.concat(neededItems.map(
+          neededItem => Object.assign(toJS(neededItem),
+            {
+              needsListId: toJS(needsList.uid),
+              ownerId: toJS(needsList.userId)
+            }
+          )));
+      }
+    })
+    return allDependentNeededItems
   }
 }
 
