@@ -29,6 +29,7 @@ import { compose } from 'recompose';
 import { inject } from 'mobx-react';
 
 /* Global styles */
+import '../../../theme/app.scss'
 import '../../Reusables/page.scss'
 
 // const App: React.FC = () => (
