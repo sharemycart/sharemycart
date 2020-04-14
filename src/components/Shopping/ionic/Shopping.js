@@ -73,6 +73,7 @@ class Shopping extends Component {
                 item={this.state.itemInCreation}
                 onChange={this.onCreatingItemChange.bind(this)}
                 onEditingConcluded={this.onCreateComplete.bind(this)}
+                mode={ITEM_TYPE_SHOPPING}
               />
             </IonItem>
           </IonList>}
