@@ -19,14 +19,14 @@ class CreateItem extends Component {
   }
 
   _setFocus() {
-    if (!this.props.item.name) {
-      setTimeout(() =>
-        this.nameInput.current && this.nameInput.current.setFocus()
-        , 500)
-    } else {
+    if (this.props.mode === ITEM_TYPE_NEED) {
       setTimeout(() =>
         this.quantityInput.current && this.quantityInput.current.setFocus()
-        , 500)
+        , 100)
+    } else {
+      setTimeout(() =>
+        this.nameInput.current && this.nameInput.current.setFocus()
+        , 100)
     }
   }
 

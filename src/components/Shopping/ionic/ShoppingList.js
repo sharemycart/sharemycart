@@ -62,10 +62,14 @@ class ShoppingList extends Component {
     } = this.props;
 
     const ItemSlidingOptions = ({ item }) => (
-      <IonItemOptions>
+      <IonItemOptions
+        onIonSwipe={
+          () => onDeleteItem(item.uid)
+        }
+      >
         <IonItemOption color="danger" expandable
-          onIonSwipe={() => onDeleteItem(item.uid)}
-          onClick={() => onDeleteItem(item.uid)}>
+        // onClick={() => onDeleteItem(item.uid)}
+        >
           <IonIcon slot="icon-only" icon={trashOutline} />
         </IonItemOption>
       </IonItemOptions>
@@ -89,10 +93,9 @@ class ShoppingList extends Component {
                   ) && neededItem.quantity
                 )
               return (
-                <IonItemSliding onIonSwipe={() => onDeleteItem(item.uid)}>
+                <IonItemSliding key={item.id || key}>
                   <ItemSlidingOptions item={item} />
                   <Item
-                    key={item.id || key}
                     item={item}
                     bringAlongItems={relatedBringAlongItems}
                     ownList={true}
