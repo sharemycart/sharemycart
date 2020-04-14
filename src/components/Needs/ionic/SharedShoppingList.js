@@ -108,7 +108,7 @@ class NeedsInSharedShoppingList extends Component {
 const CreateNeedsListButton = ({ shoppingListId, sharingUser, onCreateNeedsListForShoppingList }) => (
     <IonButton
         type="button"
-        expand="full"
+        expand="block"
         onClick={() => onCreateNeedsListForShoppingList(shoppingListId, sharingUser.username)}
     >
         <Trans>Open shared shopping list</Trans>
