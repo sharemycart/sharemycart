@@ -36,7 +36,7 @@ class ShoppingPage extends ShoppingModel {
   }
 
   render() {
-    const { currentShoppingList } = this.props.shoppingStore;
+    const { currentShoppingList, currentShoppingListItemsArray: currentShoppingListItems } = this.props.shoppingStore;
 
     const EditButton = () => (
       !this.state.editMode && <IonButton color="danger" fill="clear"
@@ -58,7 +58,7 @@ class ShoppingPage extends ShoppingModel {
         <IonHeader>
           <IonToolbar>
             <IonTitle>{
-              (this.props.shoppingStore.currentShoppingList && this.props.shoppingStore.currentShoppingList.name)
+              (currentShoppingList && currentShoppingList.name)
               || 'Shopping'
             }</IonTitle>
             <IonButtons slot="primary">
@@ -77,7 +77,7 @@ class ShoppingPage extends ShoppingModel {
           <IonHeader collapse="condense">
             <IonToolbar>
               <IonTitle size="large">{
-                (this.props.shoppingStore.currentShoppingList && this.props.shoppingStore.currentShoppingList.name)
+                (currentShoppingList && currentShoppingList.name)
                 || 'Shopping'
               }</IonTitle>
             </IonToolbar>
@@ -92,7 +92,7 @@ class ShoppingPage extends ShoppingModel {
 
         </IonContent>
         <IonFooter>
-          {currentShoppingList &&
+          {currentShoppingList && currentShoppingListItems && currentShoppingListItems.length &&
             <ShoppingActions model={this} /> //TODO: make model injectable
           }
         </IonFooter>

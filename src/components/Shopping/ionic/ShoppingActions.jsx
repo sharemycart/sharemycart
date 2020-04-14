@@ -5,9 +5,10 @@ import { ellipsisVerticalOutline } from 'ionicons/icons';
 import ShareFabButton from './ShareAction';
 import GoShoppingAction from './GoShoppingAction';
 
+import './shoppingActions.css'
 
 const ShoppingActions = ({model}) => (
-  <IonFab vertical="bottom" horizontal="end">
+  <IonFab vertical="bottom" horizontal="end" className="shopping-actions">
     <IonFabButton>
       <IonIcon icon={ellipsisVerticalOutline} />
     </IonFabButton>
