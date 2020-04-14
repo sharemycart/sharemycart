@@ -58,6 +58,7 @@ class ShoppingList extends Component {
       onEditItem,
       onDeleteItem,
       onShopItem,
+      editMode,
     } = this.props;
 
 
@@ -70,7 +71,7 @@ class ShoppingList extends Component {
         // the oder is destroyed until loaded from the database for the next time */}
 
           {
-            !this.props.editMode && items.map((item, key) => {
+            !editMode && items.map((item, key) => {
               const relatedBringAlongItems = (this.props.bringAlongItems || [])
                 .filter(
                   neededItem => (
@@ -93,7 +94,7 @@ class ShoppingList extends Component {
             })
           }
           {
-            this.props.editMode && <IonReorderGroup disabled={false} onIonItemReorder={this.doReorder.bind(this)}>
+            editMode && <IonReorderGroup disabled={false} onIonItemReorder={this.doReorder.bind(this)}>
               {items.map((item, key) => (
                 <Item
                   key={item.id || key}
@@ -104,6 +105,7 @@ class ShoppingList extends Component {
                   onShopItem={onShopItem}
                   mode={this.props.mode}
                   readOnly={this.props.list.lifecycleStatus !== LIFECYCLE_STATUS_OPEN}
+                  listEditMode={editMode}
                 />))}
             </IonReorderGroup>
           }

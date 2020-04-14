@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { IonItem, IonLabel, IonButton, IonIcon, IonReorder, IonCheckbox, IonList, IonChip } from "@ionic/react";
 import EditItem from './EditItem';
-import { trash, add, shareSocialOutline } from 'ionicons/icons';
+import { trash, add, shareSocialOutline, createOutline } from 'ionicons/icons';
 import { ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_SHOPPING, ITEM_TYPE_NEW_SHOPPING, ITEM_TYPE_NEED, ITEM_TYPE_POTENTIAL_NEED, ITEM_TYPE_BRING_ALONG } from "../../../constants/items";
 import { compose } from "recompose";
 import { inject, observer } from "mobx-react";
@@ -42,6 +42,7 @@ class Item extends Component {
       item,
       bringAlongItems,
       mode,
+      listEditMode,
       ownList,
       owner,
       onCreateNeed,
@@ -67,10 +68,21 @@ class Item extends Component {
         </IonLabel>
       </IonChip>
 
-    const showDeleteButton = ownList && !readOnly && mode !== ITEM_TYPE_IN_SHOPPING
+    const showDeleteButton = ownList && !readOnly
+      && (!mode === ITEM_TYPE_SHOPPING || listEditMode)
+      && mode !== ITEM_TYPE_IN_SHOPPING
+
     const deleteIcon = showDeleteButton && <IonButton className="button-end" fill="clear" size="large" slot="end" color="danger" onClick={() => onDeleteItem(item.uid)}>
       <IonIcon icon={trash} />
     </IonButton>
+
+    const showEditButton = ownList && !readOnly
+      && [ITEM_TYPE_NEED, ITEM_TYPE_SHOPPING].includes(mode)
+
+    const editIcon = showEditButton && !showDeleteButton && <IonButton className="button-end" fill="clear" size="large" slot="end" onClick={() => this.setEditMode(true)}>
+      <IonIcon icon={createOutline} />
+    </IonButton>
+
 
     const ownerIcon = owner && <IonButton fill="clear" size="large" slot="start"><Avatar size="30px" user={owner} /></IonButton>
 
@@ -125,6 +137,7 @@ class Item extends Component {
         {quantityLabel}
         {needIcon}
         {deleteIcon}
+        {editIcon}
       </>
 
     const dependentNeededItems = mode === ITEM_TYPE_IN_SHOPPING && bringAlongItems && (
