@@ -92,7 +92,7 @@ class ShoppingPage extends ShoppingModel {
 
         </IonContent>
         <IonFooter>
-          {currentShoppingList && currentShoppingListItems && currentShoppingListItems.length &&
+          {currentShoppingList && currentShoppingListItems && currentShoppingListItems.length >= 1 &&
             <ShoppingActions model={this} /> //TODO: make model injectable
           }
         </IonFooter>
