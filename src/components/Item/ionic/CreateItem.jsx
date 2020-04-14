@@ -2,9 +2,11 @@ import React, { Component } from "react";
 import { IonItem, IonButton, IonInput, IonSelect, IonSelectOption, IonIcon, IonToast, IonLabel } from "@ionic/react";
 
 import { withTranslation } from 'react-i18next';
-import { cartOutline } from "ionicons/icons";
+import { addOutline } from "ionicons/icons";
 import { ENTER } from "../../Reusables/keys";
 import { ITEM_TYPE_NEED } from "../../../constants/items";
+
+import './createItem.css'
 
 class CreateItem extends Component {
   constructor(props) {
@@ -74,7 +76,7 @@ class CreateItem extends Component {
   render() {
     const { name, quantity, unit } = this.props.item;
 
-    const { t } = this.props;
+    const { t, isFirstItem } = this.props;
 
     const unitOfMeasure =
       this.props.mode === ITEM_TYPE_NEED
@@ -92,7 +94,7 @@ class CreateItem extends Component {
 
     return (
       <>
-        <IonItem style={{ width: "100%" }}>
+        <IonItem style={{ width: "100%" }} className={isFirstItem && "first-item"}>
           <IonInput
             placeholder={t('Item name')}
             name="name"
@@ -123,7 +125,7 @@ class CreateItem extends Component {
           />
           {unitOfMeasure}
           <IonButton onClick={() => this.concludeEditing()} style={{ 'marginLeft': '10px' }}>
-            <IonIcon icon={cartOutline} />
+            <IonIcon icon={addOutline} />
           </IonButton>
         </IonItem>
         <IonToast

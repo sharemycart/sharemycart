@@ -1,0 +1,20 @@
+.first-item{
+    border: 4px solid transparent;
+    -webkit-animation: pulse 4ss;
+    -webkit-animation-iteration-count: infinite;
+    animation: pulse 4s;
+    animation-iteration-count: infinite;
+    background: white;
+    outline: 0;
+  }
+  
+  @-webkit-keyframes pulse {
+    from { border-color: transparent; }
+    50% { border-color: var(--ion-color-primary-tint); }
+    to { border-color: transparent; }
+  }
+  @keyframes pulse {
+    from { border-color: transparent; }
+    50% { border-color: var(--ion-color-primary-tint); }
+    to { border-color: transparent; }
+  }
