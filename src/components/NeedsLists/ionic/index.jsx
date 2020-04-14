@@ -40,8 +40,9 @@ class NeedsListsPage extends NeedsModel {
           {this.props.sessionStore.dbAuthenticated
             && <Lists
               lists={this.props.needsStore.needsListsArray}
-              onSetCurrentList={(listId) => this.onSetCurrentNeedsList(listId)}
-              onRemoveList={(listId) => this.onRemoveNeedsList(listId)}
+              onSetCurrentList={(list) => this.onSetCurrentNeedsList(list.uid)}
+              onRemoveList={(list) => this.onArchiveNeedsList(list)}
+              includeArchived={this.state.includeArchived}
               hrefOnClick={NEEDS}
             />}
 

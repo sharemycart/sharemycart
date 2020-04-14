@@ -1,7 +1,7 @@
 import React from 'react';
 import { LIFECYCLE_STATUS_SHOPPING, LIFECYCLE_STATUS_FINISHED, LIFECYCLE_STATUS_ARCHIVED } from '../../../constants/lists';
 import { IonIcon } from '@ionic/react';
-import { cartOutline, receiptOutline, checkmarkDoneCircleOutline } from 'ionicons/icons';
+import { cartOutline, receiptOutline, trashBinOutline } from 'ionicons/icons';
 
 const ListLifecycleIcon = ({ list, slot = "", defaultIcon = null }) => {
     if (!list) return null;
@@ -12,7 +12,7 @@ const ListLifecycleIcon = ({ list, slot = "", defaultIcon = null }) => {
         case LIFECYCLE_STATUS_FINISHED:
             return <IonIcon slot={slot} icon={receiptOutline} />
         case LIFECYCLE_STATUS_ARCHIVED:
-            return <IonIcon slot={slot} icon={checkmarkDoneCircleOutline} />
+            return <IonIcon slot={slot} icon={trashBinOutline} />
         default:
             return defaultIcon && <IonIcon slot={slot} icon={defaultIcon} />
     }

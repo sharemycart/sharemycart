@@ -50,8 +50,8 @@ class ShoppingListsPage extends ShoppingModel {
           {this.props.sessionStore.dbAuthenticated
             && <Lists
               lists={this.props.shoppingStore.shoppingListsArray}
-              onSetCurrentList={(listId) => this.onSetCurrentShoppingList(listId)}
-              onRemoveList={(listId) => this.onRemoveShoppingList(listId)}
+              onSetCurrentList={(list) => this.onSetCurrentShoppingList(list.uid)}
+              onRemoveList={(list) => this.onArchiveShoppingList(list, false)}
               includeArchived={this.state.includeArchived}
               hrefOnClick={SHOPPING}
             />}

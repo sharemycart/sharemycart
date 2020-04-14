@@ -210,6 +210,10 @@ class Needs extends Component {
     });
   };
 
+  onArchiveNeedsList = list => {
+    this.props.firebase.archiveNeedsList(list);
+  };
+
   onRemoveNeedsList = uid => {
     this.props.firebase.deleteList(uid);
   };

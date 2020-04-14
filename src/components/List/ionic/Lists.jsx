@@ -13,22 +13,22 @@ const Lists = (props) => {
                 props.lists && props.lists
                     .filter(l => props.includeArchived ? true : l.lifecycleStatus !== LIFECYCLE_STATUS_ARCHIVED)
                     .map(list => (
-                    <IonItem
-                        key={list.uid}
-                        onClick={() => {
-                            props.onSetCurrentList(list.uid)
-                            props.history.push(props.hrefOnClick)
-                        }}>
-                        <IonLabel>
-                            <ListTitle list={list} />
-                    </IonLabel>
-                        <ListLifecycleIcon list={list} slot="start" defaultIcon={documentTextOutline}/>
-                        <IonIcon icon={trashBinOutline} slot="end" color="danger" onClick={() => {
-                            props.onRemoveList(list.uid)
-                        }
-                        } />
-                    </IonItem>
-                ))
+                        <IonItem
+                            key={list.uid}
+                            onClick={() => {
+                                props.onSetCurrentList(list)
+                                props.history.push(props.hrefOnClick)
+                            }}>
+                            <IonLabel>
+                                <ListTitle list={list} />
+                            </IonLabel>
+                            <ListLifecycleIcon list={list} slot="start" defaultIcon={documentTextOutline} />
+                            {list.lifecycleStatus !== LIFECYCLE_STATUS_ARCHIVED &&
+                                <IonIcon icon={trashBinOutline} slot="end" color="danger" onClick={() => {
+                                    props.onRemoveList(list)
+                                }} />}
+                        </IonItem>
+                    ))
             }
         </IonList>
     )

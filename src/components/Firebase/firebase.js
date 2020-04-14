@@ -149,6 +149,7 @@ class Firebase {
         const otherListOfSameType = await this.lists()
           .where('userId', '==', deleted.userId)
           .where('type', '==', deleted.type)
+          .where('lifecycleStatus', "==", LIFECYCLE_STATUS_OPEN)
           .limit(1)
           .get()
 
