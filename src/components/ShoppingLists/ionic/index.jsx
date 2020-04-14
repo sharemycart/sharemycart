@@ -13,6 +13,7 @@ import { withEmailVerification } from '../../Session';
 import { withFirebase } from '../../Firebase';
 import { addOutline } from 'ionicons/icons';
 import LabelledBackButton from '../../Reusables/ionic/LabelledBackButton';
+import { Trans } from 'react-i18next';
 
 const CreateShoppingListButton = ({ onCreateShoppingList, history }) => (
   <IonFabButton onClick={() => {
@@ -40,7 +41,7 @@ class ShoppingListsPage extends ShoppingModel {
               <LabelledBackButton defaultHref={SHOPPING} />
             </IonButtons>
             <IonItem lines="none" slot="end">
-              <IonLabel>Include archived</IonLabel>
+            <IonLabel><Trans>Include archived</Trans></IonLabel>
               <IonToggle checked={this.state.includeArchived} onIonChange={e => this.setState({ includeArchived: e.detail.checked })} />
             </IonItem>
           </IonToolbar>

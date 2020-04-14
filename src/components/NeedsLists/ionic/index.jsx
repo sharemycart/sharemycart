@@ -12,6 +12,7 @@ import Lists from '../../List/ionic/Lists';
 import { withEmailVerification } from '../../Session';
 import { withFirebase } from '../../Firebase';
 import LabelledBackButton from '../../Reusables/ionic/LabelledBackButton';
+import { Trans } from 'react-i18next';
 
 class NeedsListsPage extends NeedsModel {
   
@@ -30,7 +31,7 @@ class NeedsListsPage extends NeedsModel {
               <LabelledBackButton defaultHref={NEEDS} />
             </IonButtons>
             <IonItem lines="none" slot="end">
-              <IonLabel>Include archived</IonLabel>
+              <IonLabel><Trans>Include archived</Trans></IonLabel>
               <IonToggle checked={this.state.includeArchived} onIonChange={e => this.setState({ includeArchived: e.detail.checked })} />
             </IonItem>
           </IonToolbar>
