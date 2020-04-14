@@ -21,15 +21,14 @@ class EditItem extends Component {
   }
 
   concludeEditing() {
-    const { t } = this.props;
+    const { item, t } = this.props;
     const { name, quantity, unit } = this.state
     if (name && quantity) {
-      this.props.onEditingConcluded({
-        uid: this.props.item.uid,
+      this.props.onEditingConcluded(Object.assign(item, {
         name,
         quantity,
         unit,
-      })
+      }))
     } else {
       this.setState({
         showToast: true,
