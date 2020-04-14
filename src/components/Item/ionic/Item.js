@@ -3,7 +3,6 @@ import { IonItem, IonLabel, IonButton, IonIcon, IonReorder, IonCheckbox, IonList
 import EditItem from './EditItem';
 import { trash, add, shareSocialOutline } from 'ionicons/icons';
 import { ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_SHOPPING, ITEM_TYPE_NEW_SHOPPING, ITEM_TYPE_NEED, ITEM_TYPE_POTENTIAL_NEED, ITEM_TYPE_BRING_ALONG } from "../../../constants/items";
-import { isPlatform } from '@ionic/react';
 import { compose } from "recompose";
 import { inject, observer } from "mobx-react";
 import Avatar from "../../Reusables/ionic/Avatar";
@@ -50,7 +49,6 @@ class Item extends Component {
       onEditingConcluded,
       onShopItem,
       readOnly,
-      listEditMode,
     } = this.props;
 
     const needIcon = !ownList && !readOnly && mode === ITEM_TYPE_POTENTIAL_NEED &&
@@ -69,9 +67,7 @@ class Item extends Component {
         </IonLabel>
       </IonChip>
 
-    const showDeleteButton = ownList && !readOnly
-      && (!(isPlatform("mobile") && mode === ITEM_TYPE_SHOPPING) || listEditMode)
-      && mode !== ITEM_TYPE_IN_SHOPPING
+    const showDeleteButton = ownList && !readOnly && mode !== ITEM_TYPE_IN_SHOPPING
     const deleteIcon = showDeleteButton && <IonButton className="button-end" fill="clear" size="large" slot="end" color="danger" onClick={() => onDeleteItem(item.uid)}>
       <IonIcon icon={trash} />
     </IonButton>
@@ -154,7 +150,7 @@ class Item extends Component {
     return (
       <>
         <IonItem id={item.uid}>
-          {this.props.listEditMode && <IonReorder slot="start" />}
+          <IonReorder slot="start" />
           {itemDisplay}
         </IonItem>
         {dependentNeededItems}

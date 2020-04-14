@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import Item from '../../Item/ionic/Item';
-import { IonList, IonReorderGroup, IonItemOptions, IonItemOption, IonItemSliding, IonIcon } from '@ionic/react';
+import { IonList, IonReorderGroup } from '@ionic/react';
 import { LIFECYCLE_STATUS_OPEN } from '../../../constants/lists';
-import { trashOutline } from 'ionicons/icons';
 
 class ShoppingList extends Component {
   constructor(props) {
@@ -12,7 +11,7 @@ class ShoppingList extends Component {
       editName: this.props.list.name,
     };
 
-    if (this.props.addSaveEditHandler) {
+    if(this.props.addSaveEditHandler){
       this.props.addSaveEditHandler(this.saveEdit.bind(this))
     }
   }
@@ -32,7 +31,7 @@ class ShoppingList extends Component {
     let order = {}
     event.detail.complete();
     let position = 0
-
+    
     // eslint-disable-next-line
     for (const k in children) {
       position++;
@@ -61,15 +60,6 @@ class ShoppingList extends Component {
       onShopItem,
     } = this.props;
 
-    const ItemSlidingOptions = ({ item }) => (
-      <IonItemOptions>
-        <IonItemOption color="danger" expandable
-          onIonSwipe={() => onDeleteItem(item.uid)}
-          onClick={() => onDeleteItem(item.uid)}>
-          <IonIcon slot="icon-only" icon={trashOutline} />
-        </IonItemOption>
-      </IonItemOptions>
-    )
 
     return (
       <>
@@ -89,22 +79,17 @@ class ShoppingList extends Component {
                   ) && neededItem.quantity
                 )
               return (
-                <IonItemSliding onIonSwipe={() => onDeleteItem(item.uid)}>
-                  <ItemSlidingOptions item={item} />
-                  <Item
-                    key={item.id || key}
-                    item={item}
-                    bringAlongItems={relatedBringAlongItems}
-                    ownList={true}
-                    onEditingConcluded={onEditItem}
-                    onDeleteItem={onDeleteItem}
-                    onShopItem={onShopItem}
-                    mode={this.props.mode}
-                    readOnly={this.props.list.lifecycleStatus !== LIFECYCLE_STATUS_OPEN}
-                    listEditMode={this.props.editMode}
-                  />
-                </IonItemSliding>
-              )
+                <Item
+                  key={item.id || key}
+                  item={item}
+                  bringAlongItems={relatedBringAlongItems}
+                  ownList={true}
+                  onEditingConcluded={onEditItem}
+                  onDeleteItem={onDeleteItem}
+                  onShopItem={onShopItem}
+                  mode={this.props.mode}
+                  readOnly={this.props.list.lifecycleStatus !== LIFECYCLE_STATUS_OPEN}
+                />)
             })
           }
           {
@@ -119,7 +104,6 @@ class ShoppingList extends Component {
                   onShopItem={onShopItem}
                   mode={this.props.mode}
                   readOnly={this.props.list.lifecycleStatus !== LIFECYCLE_STATUS_OPEN}
-                  listEditMode={this.props.editMode}
                 />))}
             </IonReorderGroup>
           }
