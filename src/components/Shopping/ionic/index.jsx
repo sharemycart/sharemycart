@@ -78,7 +78,7 @@ class ShoppingPage extends ShoppingModel {
             <IonToolbar>
               <IonTitle size="large">{
                 (currentShoppingList && currentShoppingList.name)
-                || 'Shopping'
+                || <Trans>Shopping list</Trans>
               }</IonTitle>
             </IonToolbar>
           </IonHeader>
