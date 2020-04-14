@@ -76,7 +76,7 @@ class Item extends Component {
     </IonButton>
 
     const showEditButton = ownList && !readOnly
-      && [ITEM_TYPE_NEED, ITEM_TYPE_SHOPPING].includes(mode)
+      && [ITEM_TYPE_SHOPPING].includes(mode)
       && !(mode === ITEM_TYPE_SHOPPING && listEditMode)
 
     const editIcon = showEditButton && <IonButton className="button-end" fill="clear" size="large" slot="end" onClick={() => this.setEditMode(true)}>
