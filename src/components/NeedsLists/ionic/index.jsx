@@ -8,7 +8,7 @@ import NeedsModel from '../../../models/Needs'
 import { IonHeader, IonToolbar, IonButtons, IonContent, IonFooter, IonPage } from '@ionic/react';
 
 import { NEEDS } from '../../../constants/routes';
-import Lists from '../../Reusables/ionic/Lists';
+import Lists from '../../List/ionic/Lists';
 import { withEmailVerification } from '../../Session';
 import { withFirebase } from '../../Firebase';
 import LabelledBackButton from '../../Reusables/ionic/LabelledBackButton';

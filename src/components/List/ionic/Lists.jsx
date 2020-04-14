@@ -1,12 +1,11 @@
 import React from "react";
 import { IonItem, IonLabel, IonIcon, IonList } from "@ionic/react";
-import { arrowForwardOutline, trashBinOutline } from 'ionicons/icons';
+import { trashBinOutline, documentTextOutline } from 'ionicons/icons';
 import { withRouter } from "react-router";
-import { useTranslation } from "react-i18next";
-import { LIFECYCLE_STATUS_OPEN } from "../../../constants/lists";
+import ListTitle from "./ListTitle";
+import ListLifecycleIcon from "./ListLifecycleIcon";
 
 const Lists = (props) => {
-    const { t } = useTranslation()
     return (
         <IonList>
             {
@@ -18,10 +17,9 @@ const Lists = (props) => {
                             props.history.push(props.hrefOnClick)
                         }}>
                         <IonLabel>
-                            {list.name} 
-                            {list.lifecycleStatus !== LIFECYCLE_STATUS_OPEN && ' (' + t(list.lifecycleStatus) + ')'}
+                            <ListTitle list={list} />
                     </IonLabel>
-                        <IonIcon icon={arrowForwardOutline} slot="start" />
+                        <ListLifecycleIcon list={list} slot="start" defaultIcon={documentTextOutline}/>
                         <IonIcon icon={trashBinOutline} slot="end" color="danger" onClick={() => {
                             props.onRemoveList(list.uid)
                         }

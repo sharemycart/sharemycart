@@ -12,6 +12,8 @@ import { IonPage, IonHeader, IonToolbar, IonButtons, IonTitle, IonContent, IonFo
 import { SHOPPING } from '../../../constants/routes';
 import LabelledBackButton from '../../Reusables/ionic/LabelledBackButton';
 import FinishShoppingAction from './FinishShoppingAction';
+import ListLifecycleIcon from '../../List/ionic/ListLifecycleIcon';
+import ListTitle from '../../List/ionic/ListTitle';
 
 class ShoppingPage extends ShoppingModel {
 
@@ -22,24 +24,22 @@ class ShoppingPage extends ShoppingModel {
       <IonPage>
         <IonHeader>
           <IonToolbar>
-            <IonTitle>{
-              (this.props.shoppingStore.currentShoppingList && this.props.shoppingStore.currentShoppingList.name)
-              || 'Shopping'
-            }</IonTitle>
+            <IonTitle>
+              <ListLifecycleIcon list={currentShoppingList} />&nbsp;<ListTitle list={currentShoppingList} />
+            </IonTitle>
             <IonButtons slot="primary">
             </IonButtons>
             <IonButtons slot="secondary">
-                <LabelledBackButton defaultHref={SHOPPING} />
+              <LabelledBackButton defaultHref={SHOPPING} />
             </IonButtons>
           </IonToolbar>
         </IonHeader>
         <IonContent>
           <IonHeader collapse="condense">
             <IonToolbar>
-              <IonTitle size="large">{
-              (this.props.shoppingStore.currentShoppingList && this.props.shoppingStore.currentShoppingList.name)
-              || 'Shopping'
-            }</IonTitle>
+              <IonTitle size="large">
+                <ListLifecycleIcon list={currentShoppingList} />&nbsp;<ListTitle list={currentShoppingList} />
+              </IonTitle>
             </IonToolbar>
           </IonHeader>
 
@@ -51,9 +51,9 @@ class ShoppingPage extends ShoppingModel {
         <IonFooter>
           {currentShoppingList &&
             <IonFab vertical="bottom" horizontal="end">
-                <FinishShoppingAction />
-              </IonFab>
-            }
+              <FinishShoppingAction />
+            </IonFab>
+          }
         </IonFooter>
       </IonPage>
     );

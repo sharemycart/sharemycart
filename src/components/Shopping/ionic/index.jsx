@@ -13,7 +13,9 @@ import { createOutline, saveOutline } from 'ionicons/icons';
 import { Trans } from 'react-i18next';
 import ShoppingActions from './ShoppingActions';
 import { SHOPPING_LISTS } from '../../../constants/routes';
-import AllListsButton from '../../Reusables/ionic/AllListsButton';
+import AllListsButton from '../../List/ionic/AllListsButton';
+import ListTitle from '../../List/ionic/ListTitle';
+import ListLifecycleIcon from '../../List/ionic/ListLifecycleIcon';
 
 class ShoppingPage extends ShoppingModel {
 
@@ -57,10 +59,9 @@ class ShoppingPage extends ShoppingModel {
       <IonPage>
         <IonHeader>
           <IonToolbar>
-            <IonTitle>{
-              (currentShoppingList && currentShoppingList.name)
-              || <Trans>Shopping list</Trans>
-            }</IonTitle>
+            <IonTitle>
+              <ListLifecycleIcon list={currentShoppingList} slot={""}/>&nbsp;<ListTitle list={currentShoppingList} />
+            </IonTitle>
             <IonButtons slot="primary">
               <EditButton />
               <SaveButton />
