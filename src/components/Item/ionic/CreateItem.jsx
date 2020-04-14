@@ -6,7 +6,7 @@ import { addOutline } from "ionicons/icons";
 import { ENTER } from "../../Reusables/keys";
 import { ITEM_TYPE_NEED } from "../../../constants/items";
 
-import './createItem.css'
+import './createItem.scss'
 
 class CreateItem extends Component {
   constructor(props) {
@@ -94,7 +94,7 @@ class CreateItem extends Component {
 
     return (
       <>
-        <IonItem style={{ width: "100%" }} className={isFirstItem && "first-item"}>
+        <IonItem style={{ width: "100%" }} lines="none" className={`create-item ${isFirstItem && "first-item"}`}>
           <IonInput
             placeholder={t('Item name')}
             name="name"
