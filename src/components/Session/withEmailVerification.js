@@ -62,6 +62,14 @@ const withEmailVerification = Component => {
                   >
                     <Trans>Send confirmation E-Mail</Trans>
                   </IonButton>
+                  <IonButton
+                    type="button"
+                    onClick={()=>location.reload()} //eslint-disable-line
+                    expand="block"
+                    color="secondary"
+                  >
+                    <Trans>Is confirmed. Reload</Trans>
+                  </IonButton>
                 </IonCol>
               </IonRow>
             </IonGrid>
