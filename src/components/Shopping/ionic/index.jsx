@@ -59,7 +59,7 @@ class ShoppingPage extends ShoppingModel {
           <IonToolbar>
             <IonTitle>{
               (currentShoppingList && currentShoppingList.name)
-              || 'Shopping'
+              || <Trans>Shopping list</Trans>
             }</IonTitle>
             <IonButtons slot="primary">
               <EditButton />
