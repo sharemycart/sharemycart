@@ -4,12 +4,15 @@ import { trashBinOutline, documentTextOutline } from 'ionicons/icons';
 import { withRouter } from "react-router";
 import ListTitle from "./ListTitle";
 import ListLifecycleIcon from "./ListLifecycleIcon";
+import { LIFECYCLE_STATUS_ARCHIVED } from "../../../constants/lists";
 
 const Lists = (props) => {
     return (
         <IonList>
             {
-                props.lists && props.lists.map(list => (
+                props.lists && props.lists
+                    .filter(l => props.includeArchived ? true : l.lifecycleStatus !== LIFECYCLE_STATUS_ARCHIVED)
+                    .map(list => (
                     <IonItem
                         key={list.uid}
                         onClick={() => {

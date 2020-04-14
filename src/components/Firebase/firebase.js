@@ -224,11 +224,16 @@ class Firebase {
   // *** Shopping API ***
   myCurrentShoppingList = () => this.myCurrentList(LIST_TYPE_SHOPPING);
 
-  myShoppingLists = () => this.lists()
-    .where('userId', '==', this.auth.currentUser
-      ? this.auth.currentUser.uid
-      : INVALID_DUMMY_UID)
-    .where('type', '==', LIST_TYPE_SHOPPING)
+  myShoppingLists = (includeArchived = false) => {
+    const status = [LIFECYCLE_STATUS_OPEN, LIFECYCLE_STATUS_SHOPPING, LIFECYCLE_STATUS_FINISHED, LIFECYCLE_STATUS_ARCHIVED]
+    if (includeArchived) status.push(LIFECYCLE_STATUS_ARCHIVED)
+    return this.lists()
+      .where('userId', '==', this.auth.currentUser
+        ? this.auth.currentUser.uid
+        : INVALID_DUMMY_UID)
+      .where('type', '==', LIST_TYPE_SHOPPING)
+      // .where('lifecycleStatus', "in", status) yields an empty list, though it should work as per the spec
+  }
 
   setCurrentShoppingList = uid => {
     this.myCurrentShoppingList().get()
@@ -301,12 +306,18 @@ class Firebase {
     return this.createList({ name }, LIST_TYPE_NEED)
   }
 
-  myNeedsLists = () => this.lists()
-    .where('userId', '==', this.auth.currentUser
-      ? this.auth.currentUser.uid
-      : INVALID_DUMMY_UID)
-    .where('type', '==', LIST_TYPE_NEED)
+  myNeedsLists = (includeArchived = false) => {
+    const status = [LIFECYCLE_STATUS_OPEN, LIFECYCLE_STATUS_SHOPPING, LIFECYCLE_STATUS_FINISHED]
+    if (includeArchived) status.push(LIFECYCLE_STATUS_ARCHIVED)
 
+    return this.lists()
+      .where('userId', '==', this.auth.currentUser
+        ? this.auth.currentUser.uid
+        : INVALID_DUMMY_UID)
+      .where('type', '==', LIST_TYPE_NEED)
+// .where('lifecycleStatus', "in", status) yields an empty list, though it should work as per the spec  }
+  }
+  
   dependentNeedsListOfShoppingList = (shoppingListId) => this.lists()
     .where('shoppingListId', '==', shoppingListId)
 

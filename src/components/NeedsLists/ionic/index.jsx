@@ -5,7 +5,7 @@ import { inject, observer } from 'mobx-react';
 
 import NeedsModel from '../../../models/Needs'
 
-import { IonHeader, IonToolbar, IonButtons, IonContent, IonFooter, IonPage } from '@ionic/react';
+import { IonHeader, IonToolbar, IonButtons, IonContent, IonFooter, IonPage, IonItem, IonLabel, IonToggle } from '@ionic/react';
 
 import { NEEDS } from '../../../constants/routes';
 import Lists from '../../List/ionic/Lists';
@@ -14,6 +14,13 @@ import { withFirebase } from '../../Firebase';
 import LabelledBackButton from '../../Reusables/ionic/LabelledBackButton';
 
 class NeedsListsPage extends NeedsModel {
+  
+  constructor(props) {
+    super(props)
+
+    this.state = { ...this.state, includeArchived: false }
+  }
+
   render() {
     return (
       <IonPage>
@@ -22,6 +29,10 @@ class NeedsListsPage extends NeedsModel {
             <IonButtons slot="start">
               <LabelledBackButton defaultHref={NEEDS} />
             </IonButtons>
+            <IonItem lines="none" slot="end">
+              <IonLabel>Include archived</IonLabel>
+              <IonToggle checked={this.state.includeArchived} onIonChange={e => this.setState({ includeArchived: e.detail.checked })} />
+            </IonItem>
           </IonToolbar>
         </IonHeader>
         <IonContent>

@@ -5,7 +5,7 @@ import { inject, observer } from 'mobx-react';
 
 import ShoppingModel from '../../../models/Shopping'
 
-import { IonHeader, IonToolbar, IonButtons, IonContent, IonIcon, IonFooter, IonFab, IonFabButton, IonPage } from '@ionic/react';
+import { IonHeader, IonToolbar, IonButtons, IonContent, IonIcon, IonFooter, IonFab, IonFabButton, IonPage, IonToggle, IonLabel, IonItem } from '@ionic/react';
 
 import { SHOPPING } from '../../../constants/routes';
 import Lists from '../../List/ionic/Lists';
@@ -24,6 +24,13 @@ const CreateShoppingListButton = ({ onCreateShoppingList, history }) => (
 )
 
 class ShoppingListsPage extends ShoppingModel {
+
+  constructor(props) {
+    super(props)
+
+    this.state = { ...this.state, includeArchived: false }
+  }
+
   render() {
     return (
       <IonPage>
@@ -32,6 +39,10 @@ class ShoppingListsPage extends ShoppingModel {
             <IonButtons slot="start">
               <LabelledBackButton defaultHref={SHOPPING} />
             </IonButtons>
+            <IonItem lines="none" slot="end">
+              <IonLabel>Include archived</IonLabel>
+              <IonToggle checked={this.state.includeArchived} onIonChange={e => this.setState({ includeArchived: e.detail.checked })} />
+            </IonItem>
           </IonToolbar>
         </IonHeader>
         <IonContent>
@@ -41,6 +52,7 @@ class ShoppingListsPage extends ShoppingModel {
               lists={this.props.shoppingStore.shoppingListsArray}
               onSetCurrentList={(listId) => this.onSetCurrentShoppingList(listId)}
               onRemoveList={(listId) => this.onRemoveShoppingList(listId)}
+              includeArchived={this.state.includeArchived}
               hrefOnClick={SHOPPING}
             />}
 
