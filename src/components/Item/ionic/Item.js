@@ -69,8 +69,7 @@ class Item extends Component {
       </IonChip>
 
     const showDeleteButton = ownList && !readOnly
-      && (!mode === ITEM_TYPE_SHOPPING || listEditMode)
-      && mode !== ITEM_TYPE_IN_SHOPPING
+      && ((mode === ITEM_TYPE_SHOPPING && listEditMode) || mode === ITEM_TYPE_NEED )
 
     const deleteIcon = showDeleteButton && <IonButton className="button-end" fill="clear" size="large" slot="end" color="danger" onClick={() => onDeleteItem(item.uid)}>
       <IonIcon icon={trash} />
@@ -78,8 +77,9 @@ class Item extends Component {
 
     const showEditButton = ownList && !readOnly
       && [ITEM_TYPE_NEED, ITEM_TYPE_SHOPPING].includes(mode)
+      && !(mode === ITEM_TYPE_SHOPPING && !listEditMode)
 
-    const editIcon = showEditButton && !showDeleteButton && <IonButton className="button-end" fill="clear" size="large" slot="end" onClick={() => this.setEditMode(true)}>
+    const editIcon = showEditButton && <IonButton className="button-end" fill="clear" size="large" slot="end" onClick={() => this.setEditMode(true)}>
       <IonIcon icon={createOutline} />
     </IonButton>
 
@@ -136,8 +136,8 @@ class Item extends Component {
         {ownerIcon}
         {quantityLabel}
         {needIcon}
-        {deleteIcon}
         {editIcon}
+        {deleteIcon}
       </>
 
     const dependentNeededItems = mode === ITEM_TYPE_IN_SHOPPING && bringAlongItems && (
