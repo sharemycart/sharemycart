@@ -60,7 +60,7 @@ class ShoppingPage extends ShoppingModel {
         <IonHeader>
           <IonToolbar>
             <IonTitle>
-              <ListLifecycleIcon list={currentShoppingList} slot={""}/>&nbsp;<ListTitle list={currentShoppingList} />
+              <ListLifecycleIcon list={currentShoppingList} slot={""} />&nbsp;<ListTitle list={currentShoppingList} />
             </IonTitle>
             <IonButtons slot="primary">
               <EditButton />
@@ -77,7 +77,7 @@ class ShoppingPage extends ShoppingModel {
         <IonContent>
           <IonHeader collapse="condense">
             <IonToolbar>
-            <ListLifecycleIcon list={currentShoppingList} slot={""}/>&nbsp;<ListTitle list={currentShoppingList} />
+              <ListLifecycleIcon list={currentShoppingList} slot={""} />&nbsp;<ListTitle list={currentShoppingList} />
             </IonToolbar>
           </IonHeader>
 
@@ -91,7 +91,9 @@ class ShoppingPage extends ShoppingModel {
         </IonContent>
         <IonFooter>
           {initializationDone &&
-            <ShoppingActions model={this} /> //TODO: make model injectable
+            <ShoppingActions
+              model={this}
+              hasItems={currentShoppingListItems && currentShoppingListItems.length} /> //TODO: make model injectable
           }
         </IonFooter>
       </IonPage>

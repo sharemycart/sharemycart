@@ -12,7 +12,7 @@ import { LIFECYCLE_STATUS_ARCHIVED } from '../../../constants/lists';
 import CreateListAction from '../../List/ionic/CreateListAction';
 import { useTranslation } from 'react-i18next';
 
-const ShoppingActions = ({ model, shoppingStore }) => {
+const ShoppingActions = ({ model, shoppingStore, hasItems }) => {
   const { t } = useTranslation()
   const { initializationDone, currentShoppingList } = shoppingStore
 
@@ -23,6 +23,7 @@ const ShoppingActions = ({ model, shoppingStore }) => {
 
 
   if (!initializationDone) return null
+  if (currentShoppingList && currentShoppingList.lifecycleStatus !== LIFECYCLE_STATUS_ARCHIVED && !hasItems) return null
 
   return (
     <IonFab vertical="bottom" horizontal="end" className="shopping-actions">
