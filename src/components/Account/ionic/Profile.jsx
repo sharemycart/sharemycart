@@ -11,7 +11,7 @@ const Profile = (props) => {
             padding: '30px',
         }}>
             <IonCardHeader class="ion-text-center">
-                <UserProfileImg user={user} size={200} />
+                <UserProfileImg user={user} size={150} />
                 <IonCardSubtitle >{user.username}</IonCardSubtitle>
                 <IonCardTitle>{user.email}</IonCardTitle>
             </IonCardHeader>
