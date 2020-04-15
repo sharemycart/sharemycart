@@ -18,7 +18,7 @@ const ShoppingActions = ({ model, shoppingStore, hasItems }) => {
 
   const CreateShoppingListAction = () => <CreateListAction
     title={t('Create Shopping List')}
-    onClick={() => model.onCreateShoppingList(`${t('Shopping list')} (${new Date().toLocaleDateString()})`)}
+    onClick={() => model.onCreateShoppingList(`${t('Shopping list')}`)}
   />
 
 
