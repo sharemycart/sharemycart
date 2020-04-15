@@ -80,10 +80,12 @@ class CreateItem extends Component {
 
     const unitOfMeasure =
       this.props.mode === ITEM_TYPE_NEED
-        ? <IonLabel>{unit}</IonLabel>
+        ? <IonLabel slot="end">{unit}</IonLabel>
         : <IonSelect
           value={unit}
           required="true"
+          slot="start"
+          style={{marginRight: "0px"}}
           onIonChange={e => this.setUnit(e.detail.value)}>
           <IonSelectOption>pc</IonSelectOption>
           <IonSelectOption>g</IonSelectOption>
@@ -94,21 +96,25 @@ class CreateItem extends Component {
 
     return (
       <>
-        <IonItem style={{ width: "100%" }} lines="none" className={`create-item ${isFirstItem && "first-item"}`}>
+        <IonItem lines="none" className={`create-item ${isFirstItem && "first-item"}`}>
           <IonInput
             placeholder={t('Item name')}
             name="name"
             value={name}
+            type="text"
             readonly={this.props.mode === ITEM_TYPE_NEED}
+            required="true"
+            autocapitalize
+            autocorrect="on"
+            debounce={100}
+            style={{marginRight: "0px", minWidth:"135px"}}
+            size={16}
+            ref={this.nameInput}
+            slot="start"
             onKeyUp={this.onKeyPress}
             onIonInput={event => this.onKeyPress(event)}
             onIonChange={event => this.onChange(event)}
             onIonBlur={event => this.onBlur(event)}
-            required="true"
-            autocapitalize
-            autocorrect="on"
-            debounce="100"
-            ref={this.nameInput}
           />
           <IonInput
             placeholder={t("Quantity")}
@@ -117,14 +123,18 @@ class CreateItem extends Component {
             min="0"
             pattern="\d+,?\d*"
             value={quantity}
+            style={{marginRight: "0px"}}
             onKeyUp={this.onKeyPress}
             onIonChange={event => this.onChange(event)}
             onIonBlur={event => this.onBlur(event)}
             required="false"
             ref={this.quantityInput}
+            slot="start"
           />
           {unitOfMeasure}
-          <IonButton onClick={() => this.concludeEditing()} style={{ 'marginLeft': '10px' }}>
+          <IonButton 
+            slot="end"
+            onClick={() => this.concludeEditing()} style={{ 'marginLeft': '10px' }}>
             <IonIcon icon={addOutline} />
           </IonButton>
         </IonItem>
