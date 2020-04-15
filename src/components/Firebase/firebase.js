@@ -136,6 +136,12 @@ class Firebase {
         editedAt: this.fieldValue.serverTimestamp()
       }));
 
+  updateList = (uid, update) => this.list(uid)
+    .update(Object.assign(update,
+      {
+        editedAt: this.fieldValue.serverTimestamp()
+      }));
+
   deleteList = async uid => {
     const toBeDeleted = await this.list(uid).get()
 

@@ -7,7 +7,7 @@ import { withFirebase } from '../../Firebase';
 import { withEmailVerification } from '../../Session';
 import { inject, observer } from 'mobx-react';
 
-import { IonButton, IonIcon, IonPage, IonHeader, IonToolbar, IonButtons, IonTitle, IonContent, IonFooter } from '@ionic/react';
+import { IonButton, IonIcon, IonPage, IonHeader, IonToolbar, IonButtons, IonTitle, IonContent, IonFooter, IonInput } from '@ionic/react';
 import { createOutline, saveOutline } from 'ionicons/icons';
 
 import { Trans } from 'react-i18next';
@@ -22,7 +22,8 @@ class ShoppingPage extends ShoppingModel {
   constructor(props) {
     super(props);
     this.state = Object.assign(this.state, {
-      editMode: false
+      editMode: false,
+      editingName: '',
     })
 
     this.saveHandler = []
@@ -37,6 +38,10 @@ class ShoppingPage extends ShoppingModel {
     this.saveHandler.push(handlerFn)
   }
 
+  onChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
+
   render() {
     const { currentShoppingList, currentShoppingListItemsArray: currentShoppingListItems, initializationDone } = this.props.shoppingStore;
 
@@ -47,6 +52,12 @@ class ShoppingPage extends ShoppingModel {
         <IonIcon slot="end" icon={createOutline} />
       </IonButton>
     )
+
+    this.addSaveEditHandler(() => {
+      if (this.state.editingName) {
+        this.updateShoppingListName(currentShoppingList.uid, this.state.editingName)
+      }
+    })
 
     const SaveButton = () => (
       this.state.editMode && <IonButton color="danger" fill="clear"
@@ -77,9 +88,19 @@ class ShoppingPage extends ShoppingModel {
         <IonContent>
           <IonHeader collapse="condense">
             <IonToolbar>
-              <IonTitle size="large">
-                <ListLifecycleIcon list={currentShoppingList} slot={""} />&nbsp;<ListTitle list={currentShoppingList} />
-              </IonTitle>
+              {this.state.editMode
+                ? <IonInput
+                  size="large"
+                  name="editingName"
+                  value={this.state.editingName || currentShoppingList.name}
+                  onIonChange={this.onChange}
+                  onIonBlur={() => this.onEditShoppingList(currentShoppingList, this.state.editingName)}
+                  debounce="100"
+                />
+                : <IonTitle size="large">
+                  <ListLifecycleIcon list={currentShoppingList} slot={""} />&nbsp;<ListTitle list={currentShoppingList} />
+                </IonTitle>
+              }
             </IonToolbar>
           </IonHeader>
 

@@ -187,10 +187,6 @@ class Shopping extends Component {
   }
 
   // event handlers for lists
-  onChangeText = event => {
-    this.setState({ editingListName: event.target.value });
-  };
-
   handleCreateShoppingList = (event) => {
     event.preventDefault();
 
@@ -206,6 +202,10 @@ class Shopping extends Component {
       name
     });
   };
+
+  updateShoppingListName = (uid, name) => {
+    this.props.firebase.updateList(uid, {name})
+  }
 
   onEditShoppingList = (shoppingList, editingListName) => {
     const { uid, ...shoppingListSnapshot } = shoppingList;
