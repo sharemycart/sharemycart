@@ -77,7 +77,9 @@ class ShoppingPage extends ShoppingModel {
         <IonContent>
           <IonHeader collapse="condense">
             <IonToolbar>
-              <ListLifecycleIcon list={currentShoppingList} slot={""} />&nbsp;<ListTitle list={currentShoppingList} />
+              <IonTitle size="large">
+                <ListLifecycleIcon list={currentShoppingList} slot={""} />&nbsp;<ListTitle list={currentShoppingList} />
+              </IonTitle>
             </IonToolbar>
           </IonHeader>
 
