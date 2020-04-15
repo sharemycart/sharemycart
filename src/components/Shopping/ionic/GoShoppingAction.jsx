@@ -10,7 +10,7 @@ import '../../Reusables/fabButtonTitle.scss'
 const GoShoppingAction = () => {
     const { t } = useTranslation()
         return (
-            <IonFabButton fill="clear" href={GO_SHOPPING} title={t('Go Shopping')}>
+            <IonFabButton color="primary" href={GO_SHOPPING} title={t('Go Shopping')}>
                 <IonIcon icon={cartOutline} />
             </IonFabButton>
         )

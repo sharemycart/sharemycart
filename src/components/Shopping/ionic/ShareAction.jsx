@@ -42,7 +42,7 @@ class ShareListFab extends Component {
         return (
             <>
                 <CopyToClipboard text={this.generateShareLink()}>
-                    <IonFabButton title={t('Share')} onClick={() => {
+                    <IonFabButton title={t('Share')} color="primary" onClick={() => {
                         this.setState({
                             showToast: true,
                             message: t('Sharing_link_copied')

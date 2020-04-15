@@ -6,17 +6,43 @@ import ShareFabButton from './ShareAction';
 import GoShoppingAction from './GoShoppingAction';
 
 import './shoppingActions.scss'
+import { compose } from 'recompose';
+import { inject } from 'mobx-react';
+import { LIFECYCLE_STATUS_ARCHIVED } from '../../../constants/lists';
+import CreateListAction from '../../List/ionic/CreateListAction';
+import { useTranslation } from 'react-i18next';
 
-const ShoppingActions = ({model}) => (
-  <IonFab vertical="bottom" horizontal="end" className="shopping-actions">
-    <IonFabButton>
-      <IonIcon icon={ellipsisVerticalOutline} />
-    </IonFabButton>
-    <IonFabList side="top">
-      <ShareFabButton />
-      <GoShoppingAction model={model} />
-    </IonFabList>
-  </IonFab>
-)
+const ShoppingActions = ({ model, shoppingStore }) => {
+  const { t } = useTranslation()
+  const { initializationDone, currentShoppingList } = shoppingStore
 
-export default ShoppingActions;
+  const CreateShoppingListAction = () => <CreateListAction
+    title={t('Create Shopping List')}
+    onClick={() => model.onCreateShoppingList(`${t('Shopping list')} (${new Date().toLocaleDateString()})`)}
+  />
+
+
+  if (!initializationDone) return null
+
+  return (
+    <IonFab vertical="bottom" horizontal="end" className="shopping-actions">
+      {currentShoppingList && currentShoppingList.lifecycleStatus !== LIFECYCLE_STATUS_ARCHIVED
+        ? <>
+          <IonFabButton>
+            <IonIcon icon={ellipsisVerticalOutline} />
+          </IonFabButton>
+          <IonFabList side="top">
+            <ShareFabButton />
+            <GoShoppingAction model={model} />
+            <CreateShoppingListAction />
+          </IonFabList>
+        </>
+        : <CreateShoppingListAction />
+      }
+    </IonFab>
+  )
+}
+
+export default compose(
+  inject('shoppingStore')
+)(ShoppingActions);

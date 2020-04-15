@@ -121,8 +121,8 @@ class Firebase {
       ? this.auth.currentUser.uid
       : INVALID_DUMMY_UID);
 
-  createList = ({ name = new Date().toLocaleDateString() }, type) => this.lists().add({
-    name,
+  createList = ({name}, type) => this.lists().add({
+    name: name || '',
     type,
     userId: this.auth.currentUser.uid,
     isCurrent: true,
