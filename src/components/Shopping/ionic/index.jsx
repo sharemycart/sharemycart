@@ -82,7 +82,6 @@ class ShoppingPage extends ShoppingModel {
               </IonTitle>
             </IonToolbar>
           </IonHeader>
-
           {this.props.sessionStore.dbAuthenticated &&
             <Shopping model={this}
               editMode={this.state.editMode}

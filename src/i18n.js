@@ -24,6 +24,7 @@ const resources = {
             "by": "by",
             "Change Password": "Change Password",
             "Create Shopping List": "New Shopping List",
+            "Created on": "Created on",
             "Edit": "Edit",
             "Email": "Email",
             "Email_confirmation_sent": `E-Mail confirmation sent: \n
@@ -87,6 +88,7 @@ const resources = {
             "by": "von",
             "Change Password": "Passwort ändern",
             "Create Shopping List": "Neuer Einkauszettel",
+            "Created on": "Angelegt am",
             "Edit": "Bearbeiten",
             "Email": "Email",
             "Email_confirmation_sent": `Bestätigungs-E-Mail wurde gesendet: \n
