@@ -1,5 +1,5 @@
 import React from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonItem } from '@ionic/react';
 import NeedsModel from '../../../models/Needs';
 import Needs from './Needs';
 import './page.css';
@@ -14,6 +14,7 @@ import AllListsButton from '../../List/ionic/AllListsButton';
 import { NEEDS_LISTS } from '../../../constants/routes';
 import ListTitle from '../../List/ionic/ListTitle';
 import ListLifecycleIcon from '../../List/ionic/ListLifecycleIcon';
+import Avatar from '../../Reusables/ionic/Avatar';
 
 class NeedsPage extends NeedsModel {
   render() {
@@ -23,20 +24,20 @@ class NeedsPage extends NeedsModel {
       needsStore,
       userStore,
     }) => {
-      const {currentNeedsList} = needsStore
+      const { currentNeedsList } = needsStore
       if (currentNeedsList
         && userStore.users) {
         const owner = userStore.users[currentNeedsList.shoppingListOwnerId]
         if (owner) return (
-          <IonTitle size="large">
-
-            {/* // TODO: Display the Avatar of the owner */}
-            {/* <Avatar
+          <IonItem lines="none">
+            <Avatar
               size="35px"
               user={owner}
-            /> */}
-            <ListLifecycleIcon list={currentNeedsList} />&nbsp;<ListTitle list={currentNeedsList} />
-          </IonTitle>
+            />
+            <IonTitle size="large">
+              <ListLifecycleIcon list={currentNeedsList} />&nbsp;<ListTitle list={currentNeedsList} />
+            </IonTitle>
+          </IonItem>
         )
       }
       return null
