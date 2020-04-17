@@ -50,6 +50,8 @@ export const NavigationAuth = ({ authUser }) => (
                 <Route path={ROUTES.NEEDS} component={NeedsPage} />
                 <Route path={ROUTES.SHARED_SHOPPING_LIST} component={SharedShoppingList} />
                 <Route path={ROUTES.ADMIN} component={AdminPage} />
+                <Redirect exact from={ROUTES.SIGN_IN} to={ROUTES.SHOPPING} />
+                <Redirect exact from={ROUTES.SIGN_UP} to={ROUTES.SHOPPING} />
                 <Redirect exact from="/" to={ROUTES.SHOPPING} />
             </IonRouterOutlet>
             <IonTabBar slot="bottom">
