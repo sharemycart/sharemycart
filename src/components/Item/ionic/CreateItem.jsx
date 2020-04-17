@@ -84,7 +84,7 @@ class CreateItem extends Component {
         : <IonSelect
           value={unit}
           required="true"
-          slot="start"
+          slot="end"
           style={{marginRight: "0px"}}
           onIonChange={e => this.setUnit(e.detail.value)}>
           <IonSelectOption>pc</IonSelectOption>
@@ -96,7 +96,7 @@ class CreateItem extends Component {
 
     return (
       <>
-        <IonItem lines="none" className={`create-item ${isFirstItem && "first-item"}`}>
+        <IonItem lines="none" style={{width:"100%"}} className={`create-item ${isFirstItem && "first-item"}`}>
           <IonInput
             placeholder={t('Item name')}
             name="name"
@@ -123,13 +123,13 @@ class CreateItem extends Component {
             min="0"
             pattern="\d+,?\d*"
             value={quantity}
-            style={{marginRight: "0px"}}
+            style={{marginRight: "0px", minWidth:"63px"}}
             onKeyUp={this.onKeyPress}
             onIonChange={event => this.onChange(event)}
             onIonBlur={event => this.onBlur(event)}
             required="false"
             ref={this.quantityInput}
-            slot="start"
+            slot="end"
           />
           {unitOfMeasure}
           <IonButton 
