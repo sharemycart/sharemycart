@@ -8,7 +8,7 @@ import { withEmailVerification } from '../../Session';
 import { inject, observer } from 'mobx-react';
 
 import { IonButton, IonIcon, IonPage, IonHeader, IonToolbar, IonButtons, IonTitle, IonContent, IonFooter } from '@ionic/react';
-import { createOutline, saveOutline } from 'ionicons/icons';
+import { createOutline, saveOutline, lockOpen, lockClosed } from 'ionicons/icons';
 
 import { Trans } from 'react-i18next';
 import ShoppingActions from './ShoppingActions';
@@ -60,6 +60,13 @@ class ShoppingPage extends ShoppingModel {
         <IonHeader>
           <IonToolbar>
             <IonTitle>
+              {
+                currentShoppingList && <IonIcon icon={
+                  currentShoppingList.allowCreateOwnNeeds
+                    ? lockOpen
+                    : lockClosed
+                } />
+              }
               <ListLifecycleIcon list={currentShoppingList} slot={""} />&nbsp;<ListTitle list={currentShoppingList} />
             </IonTitle>
             <IonButtons slot="primary">

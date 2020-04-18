@@ -207,13 +207,10 @@ class Shopping extends Component {
     });
   };
 
-  onEditShoppingList = (shoppingList, editingListName) => {
+  onEditShoppingList = (shoppingList) => {
     const { uid, ...shoppingListSnapshot } = shoppingList;
 
-    this.props.firebase.editList(shoppingList.uid, {
-      ...shoppingListSnapshot,
-      name: editingListName,
-    });
+    this.props.firebase.editList(shoppingList.uid, shoppingListSnapshot);
   };
 
   onRemoveShoppingList = uid => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonIcon } from '@ionic/react';
 import NeedsModel from '../../../models/Needs';
 import Needs from './Needs';
 import './page.css';
@@ -14,6 +14,7 @@ import AllListsButton from '../../List/ionic/AllListsButton';
 import { NEEDS_LISTS } from '../../../constants/routes';
 import ListTitle from '../../List/ionic/ListTitle';
 import ListLifecycleIcon from '../../List/ionic/ListLifecycleIcon';
+import { lockOpen, lockClosed } from 'ionicons/icons';
 
 class NeedsPage extends NeedsModel {
   render() {
@@ -23,7 +24,7 @@ class NeedsPage extends NeedsModel {
       needsStore,
       userStore,
     }) => {
-      const {currentNeedsList} = needsStore
+      const {currentNeedsList, currentOriginShoppingList} = needsStore
       if (currentNeedsList
         && userStore.users) {
         const owner = userStore.users[currentNeedsList.shoppingListOwnerId]
@@ -35,6 +36,13 @@ class NeedsPage extends NeedsModel {
               size="35px"
               user={owner}
             /> */}
+            {/* { TODO: Display sharing state
+                currentOriginShoppingList && <IonIcon icon={
+                  currentOriginShoppingList.allowCreateOwnNeeds
+                    ? lockOpen
+                    : lockClosed
+                } />
+              } */}
             <ListLifecycleIcon list={currentNeedsList} />&nbsp;<ListTitle list={currentNeedsList} />
           </IonTitle>
         )

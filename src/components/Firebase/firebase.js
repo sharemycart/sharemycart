@@ -121,8 +121,9 @@ class Firebase {
       ? this.auth.currentUser.uid
       : INVALID_DUMMY_UID);
 
-  createList = ({ name }, type) => this.lists().add({
-    name: name || '',
+  createList = ({ name = '', allowCreateOwnNeeds = true }, type) => this.lists().add({
+    name,
+    allowCreateOwnNeeds,
     type,
     userId: this.auth.currentUser.uid,
     isCurrent: true,
@@ -384,7 +385,9 @@ class Firebase {
   addNeededItemFromShoppingListItem = (needsListId, shoppingListItem, quantity = '') => {
     const neededItem = shoppingListItem;
 
-    neededItem.originShoppingItemUid = shoppingListItem.uid;
+    if (shoppingListItem.uid) {
+      neededItem.originShoppingItemUid = shoppingListItem.uid;
+    }
     neededItem.quantity = quantity;
     delete neededItem.createdAt;
     delete neededItem.editedAt;

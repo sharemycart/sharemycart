@@ -21,7 +21,7 @@ class CreateItem extends Component {
   }
 
   _setFocus() {
-    if (this.props.mode === ITEM_TYPE_NEED) {
+    if (this.state.name) {
       setTimeout(() =>
         this.quantityInput.current && this.quantityInput.current.setFocus()
         , 100)
@@ -74,7 +74,7 @@ class CreateItem extends Component {
   }
 
   render() {
-    const { name, quantity, unit } = this.props.item;
+    const { name, quantity, unit, originShoppingItemUid } = this.props.item;
 
     const { t, isFirstItem } = this.props;
 
@@ -102,7 +102,7 @@ class CreateItem extends Component {
             name="name"
             value={name}
             type="text"
-            readonly={this.props.mode === ITEM_TYPE_NEED}
+            readonly={!!originShoppingItemUid}
             required="true"
             autocapitalize
             autocorrect="on"
