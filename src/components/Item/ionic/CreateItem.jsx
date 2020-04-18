@@ -86,13 +86,18 @@ class CreateItem extends Component {
 
     const unitOfMeasure =
       this.props.mode === ITEM_TYPE_NEED
-        ? <IonLabel slot="end">{unit}</IonLabel>
+        ? <IonLabel
+          slot="end"
+          className="hide-sm-down"
+        >{unit}</IonLabel>
         : <IonSelect
           value={unit}
           required="true"
           slot="end"
           style={{ marginRight: "0px" }}
-          onIonChange={e => this.setUnit(e.detail.value)}>
+          onIonChange={e => this.setUnit(e.detail.value)}
+          className="hide-sm-down"
+          >
           {units.map(unit => <IonSelectOption>{unit}</IonSelectOption>)}
         </IonSelect>
 
@@ -132,6 +137,7 @@ class CreateItem extends Component {
             required="false"
             ref={this.quantityInput}
             slot="end"
+            className="hide-sm-down"
           />
           {unitOfMeasure}
           <IonButton

@@ -43,7 +43,7 @@ const resources = {
             "Go Shopping": "Go shopping",
             "has shared a shopping list with you": "has shared a shopping list with you",
             "Include archived": "Include archived lists",
-            "Item name": "Item name",
+            "Item name": "Item",
             "Is confirmed. Reload": "Is confirmed. Reload",
             "Loading_message": "Loading...",
             "My own shopped items": "My own shopped items",
