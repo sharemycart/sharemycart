@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Item from '../../Item/ionic/Item';
-import { IonList, IonReorderGroup, IonToggle, IonLabel, IonItem, IonHeader, IonListHeader } from '@ionic/react';
+import { IonList, IonReorderGroup, IonToggle, IonLabel, IonItem} from '@ionic/react';
 import { LIFECYCLE_STATUS_OPEN } from '../../../constants/lists';
 import { Trans } from 'react-i18next';
 import { compose } from 'recompose';
