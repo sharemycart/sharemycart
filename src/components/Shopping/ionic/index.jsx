@@ -8,7 +8,7 @@ import { withEmailVerification } from '../../Session';
 import { inject, observer } from 'mobx-react';
 
 import { IonButton, IonIcon, IonPage, IonHeader, IonToolbar, IonButtons, IonTitle, IonContent, IonFooter } from '@ionic/react';
-import { createOutline, saveOutline, lockOpen, lockClosed } from 'ionicons/icons';
+import { createOutline, saveOutline } from 'ionicons/icons';
 
 import { Trans } from 'react-i18next';
 import ShoppingActions from './ShoppingActions';
@@ -16,6 +16,7 @@ import { SHOPPING_LISTS } from '../../../constants/routes';
 import AllListsButton from '../../List/ionic/AllListsButton';
 import ListTitle from '../../List/ionic/ListTitle';
 import ListLifecycleIcon from '../../List/ionic/ListLifecycleIcon';
+import AllowCreateOwnNeedsIcon from '../../Reusables/ionic/AllowCreateOwnNeedsIcon';
 
 class ShoppingPage extends ShoppingModel {
 
@@ -55,18 +56,13 @@ class ShoppingPage extends ShoppingModel {
         <IonIcon slot="end" icon={saveOutline} />
       </IonButton>
     )
+
     return (
       <IonPage>
         <IonHeader>
           <IonToolbar>
             <IonTitle>
-              {
-                currentShoppingList && <IonIcon icon={
-                  currentShoppingList.allowCreateOwnNeeds
-                    ? lockOpen
-                    : lockClosed
-                } />
-              }
+              <AllowCreateOwnNeedsIcon shoppingList={currentShoppingList} />
               <ListLifecycleIcon list={currentShoppingList} slot={""} />&nbsp;<ListTitle list={currentShoppingList} />
             </IonTitle>
             <IonButtons slot="primary">

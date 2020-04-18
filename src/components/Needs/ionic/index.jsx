@@ -17,13 +17,11 @@ import ListLifecycleIcon from '../../List/ionic/ListLifecycleIcon';
 
 class NeedsPage extends NeedsModel {
   render() {
-
+    const { currentNeedsList } = this.props.needsStore
 
     const ListHeader = ({
-      needsStore,
       userStore,
     }) => {
-      const {currentNeedsList} = needsStore
       if (currentNeedsList
         && userStore.users) {
         const owner = userStore.users[currentNeedsList.shoppingListOwnerId]
@@ -35,13 +33,6 @@ class NeedsPage extends NeedsModel {
               size="35px"
               user={owner}
             /> */}
-            {/* { TODO: Display sharing state
-                currentOriginShoppingList && <IonIcon icon={
-                  currentOriginShoppingList.allowCreateOwnNeeds
-                    ? lockOpen
-                    : lockClosed
-                } />
-              } */}
             <ListLifecycleIcon list={currentNeedsList} />&nbsp;<ListTitle list={currentNeedsList} />
           </IonTitle>
         )

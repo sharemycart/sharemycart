@@ -4,10 +4,11 @@ import { compose } from 'recompose';
 import NeedsList from './NeedsList';
 import { ITEM_TYPE_NEED, ITEM_TYPE_POTENTIAL_NEED } from '../../../constants/items';
 import SplashLogo from '../../Reusables/ionic/SplashLogo';
-import { IonGrid, IonCol, IonRow, IonItem, IonList } from '@ionic/react';
+import { IonGrid, IonCol, IonRow, IonItem, IonList, IonLabel, IonText } from '@ionic/react';
 import LoadingAnimation from '../../Reusables/ionic/LoadingAnimation';
 import { LIFECYCLE_STATUS_OPEN } from '../../../constants/lists';
 import CreateItem from '../../Item/ionic/CreateItem';
+import { Trans } from 'react-i18next';
 
 const INITIAL_ITEM = {
   name: '',
@@ -20,7 +21,7 @@ class Needs extends Component {
 
     this.state = {
       editingListName: '',
-      itemInCreation: {...INITIAL_ITEM},
+      itemInCreation: { ...INITIAL_ITEM },
     }
   }
 
@@ -36,7 +37,7 @@ class Needs extends Component {
       return;
     }
     this.props.model.onCreateItemForCurrentNeedsList(this.state.itemInCreation, newItem.quantity)
-    this.setState({ itemInCreation: {...INITIAL_ITEM} })
+    this.setState({ itemInCreation: { ...INITIAL_ITEM } })
   }
 
   copyPotentialNeed(potentialNeed) {
@@ -73,6 +74,14 @@ class Needs extends Component {
         </IonItem>
       </IonList>
 
+    const createNeedsNotAllowed = currentOriginShoppingList && !currentOriginShoppingList.allowCreateOwnNeeds
+      &&
+      <IonItem>
+      <IonText color="primary">
+        <Trans>Creating_own_items_disabled</Trans>
+      </IonText>
+      </IonItem>
+
     const NothingSharedYet = () => (
       <IonGrid>
         <IonRow>
@@ -95,7 +104,6 @@ class Needs extends Component {
     return (
       <>
         {createNeedsVisible}
-
         {/* Needs */}
         {currentNeedsList &&
           <NeedsList
@@ -127,6 +135,9 @@ class Needs extends Component {
             mode={ITEM_TYPE_POTENTIAL_NEED}
           />
         }
+
+        {createNeedsNotAllowed}
+
       </>
     );
   }
