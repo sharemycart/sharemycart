@@ -97,13 +97,17 @@ class CreateItem extends Component {
           style={{ marginRight: "0px" }}
           onIonChange={e => this.setUnit(e.detail.value)}
           className="hide-sm-down"
-          >
+        >
           {units.map(unit => <IonSelectOption>{unit}</IonSelectOption>)}
         </IonSelect>
 
     return (
       <>
-        <IonItem lines="none" style={{ width: "100%" }} className={`create-item ${isFirstItem && "first-item"}`}>
+        <IonItem
+          key="createItemWrapper"
+          lines="none"
+          style={{ width: "100%" }}
+          className={`create-item ${isFirstItem && "first-item"}`}>
           <IonInput
             placeholder={t('Item name')}
             name="name"

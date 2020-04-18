@@ -4,7 +4,7 @@ import { compose } from 'recompose';
 import NeedsList from './NeedsList';
 import { ITEM_TYPE_NEED, ITEM_TYPE_POTENTIAL_NEED } from '../../../constants/items';
 import SplashLogo from '../../Reusables/ionic/SplashLogo';
-import { IonGrid, IonCol, IonRow, IonItem, IonList, IonLabel, IonText } from '@ionic/react';
+import { IonGrid, IonCol, IonRow, IonItem, IonList, IonText } from '@ionic/react';
 import LoadingAnimation from '../../Reusables/ionic/LoadingAnimation';
 import { LIFECYCLE_STATUS_OPEN } from '../../../constants/lists';
 import CreateItem from '../../Item/ionic/CreateItem';
