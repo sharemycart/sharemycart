@@ -128,9 +128,9 @@ class Item extends Component {
           style={{
             cursor: 'pointer',
             textDecoration: (item.shopped ? 'line-through' : 'none'),
-            color: (item.shopped ? 'grey' : 'black')
+            color: ((item.shopped || mode === ITEM_TYPE_BRING_ALONG ) ? 'grey' : 'black')
           }}>
-          {!(mode === ITEM_TYPE_BRING_ALONG) && item.name}
+          {item.name}
         </IonLabel>
         <BringAlongQuantity />
         {ownerIcon}
