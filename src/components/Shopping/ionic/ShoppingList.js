@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import Item from '../../Item/ionic/Item';
-import { IonList, IonReorderGroup, IonToggle, IonLabel, IonItem } from '@ionic/react';
+import { IonList, IonReorderGroup, IonToggle, IonLabel, IonItem, IonHeader, IonListHeader } from '@ionic/react';
 import { LIFECYCLE_STATUS_OPEN } from '../../../constants/lists';
 import { Trans } from 'react-i18next';
+import { compose } from 'recompose';
+import { inject, observer } from 'mobx-react';
+import sortItems from '../../Reusables/functions/sortItems';
 
 class ShoppingList extends Component {
   constructor(props) {
@@ -50,6 +53,20 @@ class ShoppingList extends Component {
     this.onSaveEditName()
     if (this.state.order) {
       this.props.onReorderItems(this.props.list.uid, this.props.items, this.state.order)
+
+      // also re-order all items to bring along
+      const {
+        currentDependentNeedsListsArray: currentDependentNeedsLists,
+        currentDependentNeedsListsItemsArray: currentDependentNeedsListsItems,
+      } = this.props.shoppingStore;
+
+      currentDependentNeedsLists.forEach(needsList => {
+        this.props.onReorderItems(
+          needsList.uid, 
+          currentDependentNeedsListsItems.filter(item=>item.parentId === needsList.uid),
+          this.state.order)
+      })
+
     }
   }
 
@@ -62,8 +79,35 @@ class ShoppingList extends Component {
       onDeleteItem,
       onShopItem,
       editMode,
+      userStore,
     } = this.props;
 
+    // we need to visualize the items to bring along differently
+    // whether they are related to a shopping list item or not
+    // the following lines determine the relationship between shopping items
+    // and the ones from dependent needs lists
+    const bringAlongItemsByShoppingItem = {} // Map with key shopping item id
+    const otherUsersOwnNeededItems = []; // additional items without any relation
+
+    (this.props.bringAlongItems || []).forEach((neededItem) => {
+      if (neededItem.quantity <= 0) return false
+      const originItem =
+        items.find(item => item.uid === neededItem.originShoppingItemId) ||
+        items.find(item => item.name === neededItem.name)
+
+      if (originItem) {
+        bringAlongItemsByShoppingItem[originItem.uid] &&
+          bringAlongItemsByShoppingItem[originItem.uid].length
+          ? bringAlongItemsByShoppingItem[originItem.uid].push(neededItem)
+          : bringAlongItemsByShoppingItem[originItem.uid] = [neededItem]
+      } else {
+        const owner = userStore.users[neededItem.ownerId]
+        otherUsersOwnNeededItems.push({
+            ...neededItem, 
+            owner, 
+            ownedByOtherUser: true})
+      }
+    })
 
     return (
       <>
@@ -74,28 +118,43 @@ class ShoppingList extends Component {
         // the oder is destroyed until loaded from the database for the next time */}
 
           {
-            !editMode && items.map((item, key) => {
-              const relatedBringAlongItems = (this.props.bringAlongItems || [])
-                .filter(
-                  neededItem => (
-                    (item.uid === neededItem.originShoppingItemId)
-                    || (item.name === neededItem.name)
-                  ) && neededItem.quantity
-                )
+            !editMode
+            && items.concat(otherUsersOwnNeededItems || [])
+              .sort((a, b) => sortItems(a, b))
+              .map((item, key) => {
+              const relatedBringAlongItems = bringAlongItemsByShoppingItem[item.uid]
               return (
                 <Item
                   key={item.id || key}
                   item={item}
+                  owner={item.owner}
                   bringAlongItems={relatedBringAlongItems}
-                  ownList={true}
+                  ownList={!item.ownedByOtherUser}
                   onEditingConcluded={onEditItem}
                   onDeleteItem={onDeleteItem}
                   onShopItem={onShopItem}
                   mode={this.props.mode}
-                  readOnly={this.props.list.lifecycleStatus !== LIFECYCLE_STATUS_OPEN}
+                  readOnly={this.props.list.lifecycleStatus !== LIFECYCLE_STATUS_OPEN || item.ownedByOtherUser}
                 />)
             })
           }
+          {/* { 
+            !editMode && otherUsersOwnNeededItems && !!otherUsersOwnNeededItems.length
+            && <IonListHeader lines="inset"><h3><Trans>Needed items of friends</Trans></h3></IonListHeader>
+          }
+          {
+            !editMode && otherUsersOwnNeededItems.map((item, key) => {
+            return (
+              <Item
+                key={item.id || key}
+                item={item}
+                ownList={false}
+                onShopItem={onShopItem}
+                mode={this.props.mode}
+                readOnly={true}
+              />)
+          })
+          } */}
           {
             editMode &&
             <>
@@ -110,7 +169,9 @@ class ShoppingList extends Component {
                 />
               </IonItem>
               <IonReorderGroup disabled={false} onIonItemReorder={this.doReorder.bind(this)}>
-                {items.map((item, key) => (
+                {items.concat(otherUsersOwnNeededItems || [])
+                  .sort((a, b) => sortItems(a, b))
+                  .map((item, key) => (
                   <Item
                     key={item.id || key}
                     item={item}
@@ -131,4 +192,7 @@ class ShoppingList extends Component {
   }
 }
 
-export default ShoppingList;
+export default compose(
+  inject('shoppingStore', 'userStore'),
+  observer,
+  )(ShoppingList);

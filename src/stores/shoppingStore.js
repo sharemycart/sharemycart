@@ -1,6 +1,7 @@
 import { observable, action, computed, toJS } from 'mobx';
 import toObject from '../lib/convertArrayToObject';
 import sortItems from '../components/Reusables/functions/sortItems';
+import { LIFECYCLE_STATUS_ARCHIVED } from '../constants/lists';
 
 // This store holds all information needed to create and manage shopping lists 
 // and their items
@@ -56,7 +57,9 @@ class ShoppingStore {
   }
 
   @computed get currentDependentNeedsListsArray() {
-    return Object.keys(this.currentDependentNeedsLists || {}).map(key => ({
+    return Object.keys(this.currentDependentNeedsLists || {})
+    .filter(needsList => needsList.lifecycleStatus !== LIFECYCLE_STATUS_ARCHIVED)
+    .map(key => ({
       ...this.currentDependentNeedsLists[key],
       uid: this.currentDependentNeedsLists[key].uid,
     }));
