@@ -384,7 +384,9 @@ class Firebase {
   addNeededItemFromShoppingListItem = (needsListId, shoppingListItem, quantity = '') => {
     const neededItem = shoppingListItem;
 
-    neededItem.originShoppingItemUid = shoppingListItem.uid;
+    if (shoppingListItem.uid) {
+      neededItem.originShoppingItemUid = shoppingListItem.uid;
+    }
     neededItem.quantity = quantity;
     delete neededItem.createdAt;
     delete neededItem.editedAt;

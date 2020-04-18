@@ -8,19 +8,26 @@ import { IonGrid, IonCol, IonRow, IonItem, IonList } from '@ionic/react';
 import LoadingAnimation from '../../Reusables/ionic/LoadingAnimation';
 import { LIFECYCLE_STATUS_OPEN } from '../../../constants/lists';
 import CreateItem from '../../Item/ionic/CreateItem';
+
+const INITIAL_ITEM = {
+  name: '',
+  quantity: '',
+  unit: ''
+}
 class Needs extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       editingListName: '',
-      itemInCreation: null,
+      itemInCreation: {...INITIAL_ITEM},
     }
   }
 
-  onCreatingItemChange(event){
-    this.setState({ itemInCreation: 
-      Object.assign(this.state.itemInCreation, {[event.target.name]: event.target.value} )
+  onCreatingItemChange(event) {
+    this.setState({
+      itemInCreation:
+        Object.assign(this.state.itemInCreation, { [event.target.name]: event.target.value })
     });
   }
 
@@ -29,12 +36,12 @@ class Needs extends Component {
       return;
     }
     this.props.model.onCreateItemForCurrentNeedsList(this.state.itemInCreation, newItem.quantity)
-    this.setState({ itemInCreation: null })
+    this.setState({ itemInCreation: {...INITIAL_ITEM} })
   }
 
   copyPotentialNeed(potentialNeed) {
     this.setState({
-      itemInCreation: {...potentialNeed, quantity: ''}
+      itemInCreation: { ...potentialNeed, quantity: '' }
     })
   }
 
@@ -47,6 +54,24 @@ class Needs extends Component {
       currentOriginShoppingList,
       initializationDone,
     } = needsStore;
+
+    const { itemInCreation } = this.state
+
+    const createNeedsVisible =
+      currentNeedsList && currentNeedsList.lifecycleStatus === LIFECYCLE_STATUS_OPEN
+      && ((itemInCreation && itemInCreation.name) //an item has been copied
+        || (currentOriginShoppingList && currentOriginShoppingList.allowCreateOwnNeeds)) // user is allowed to define own needs
+      &&
+      <IonList>
+        <IonItem>
+          <CreateItem
+            item={itemInCreation}
+            onChange={this.onCreatingItemChange.bind(this)}
+            onEditingConcluded={this.onCreateComplete.bind(this)}
+            mode={ITEM_TYPE_NEED}
+          />
+        </IonItem>
+      </IonList>
 
     const NothingSharedYet = () => (
       <IonGrid>
@@ -67,21 +92,9 @@ class Needs extends Component {
 
     if (!initializationDone) return <LoadingAnimation loading={initializationDone} />
 
-    const { itemInCreation } = this.state
     return (
       <>
-        {currentNeedsList && currentNeedsList.lifecycleStatus === LIFECYCLE_STATUS_OPEN 
-            && itemInCreation && itemInCreation.name &&
-          <IonList>
-            <IonItem>
-              <CreateItem
-                item={itemInCreation}
-                onChange={this.onCreatingItemChange.bind(this)}
-                onEditingConcluded={this.onCreateComplete.bind(this)}
-                mode={ITEM_TYPE_NEED}
-              />
-            </IonItem>
-          </IonList>}
+        {createNeedsVisible}
 
         {/* Needs */}
         {currentNeedsList &&
