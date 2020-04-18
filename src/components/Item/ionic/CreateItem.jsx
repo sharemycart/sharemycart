@@ -7,6 +7,8 @@ import { ENTER } from "../../Reusables/keys";
 import { ITEM_TYPE_NEED } from "../../../constants/items";
 
 import './createItem.scss'
+import units from "../units";
+import parseName from "../parseName";
 
 class CreateItem extends Component {
   constructor(props) {
@@ -36,11 +38,15 @@ class CreateItem extends Component {
     const { t } = this.props;
     const { name, quantity, unit = '' } = this.props.item
     if (name) {
-      this.props.onEditingConcluded({
-        name,
-        quantity: quantity || 1,
-        unit,
-      })
+      if (!quantity && !unit) {
+        this.props.onEditingConcluded(parseName(name))
+      } else {
+        this.props.onEditingConcluded({
+          name,
+          quantity: quantity || 1,
+          unit,
+        })
+      }
     } else {
       this.setState({
         showToast: true,
@@ -85,18 +91,14 @@ class CreateItem extends Component {
           value={unit}
           required="true"
           slot="end"
-          style={{marginRight: "0px"}}
+          style={{ marginRight: "0px" }}
           onIonChange={e => this.setUnit(e.detail.value)}>
-          <IonSelectOption>pc</IonSelectOption>
-          <IonSelectOption>g</IonSelectOption>
-          <IonSelectOption>kg</IonSelectOption>
-          <IonSelectOption>l</IonSelectOption>
-          <IonSelectOption>ml</IonSelectOption>
+          {units.map(unit => <IonSelectOption>{unit}</IonSelectOption>)}
         </IonSelect>
 
     return (
       <>
-        <IonItem lines="none" style={{width:"100%"}} className={`create-item ${isFirstItem && "first-item"}`}>
+        <IonItem lines="none" style={{ width: "100%" }} className={`create-item ${isFirstItem && "first-item"}`}>
           <IonInput
             placeholder={t('Item name')}
             name="name"
@@ -107,7 +109,7 @@ class CreateItem extends Component {
             autocapitalize
             autocorrect="on"
             debounce={100}
-            style={{marginRight: "0px", minWidth:"135px"}}
+            style={{ marginRight: "0px", minWidth: "135px" }}
             size={16}
             ref={this.nameInput}
             slot="start"
@@ -123,7 +125,7 @@ class CreateItem extends Component {
             min="0"
             pattern="\d+,?\d*"
             value={quantity}
-            style={{marginRight: "0px", minWidth:"63px"}}
+            style={{ marginRight: "0px", minWidth: "63px" }}
             onKeyUp={this.onKeyPress}
             onIonChange={event => this.onChange(event)}
             onIonBlur={event => this.onBlur(event)}
@@ -132,7 +134,7 @@ class CreateItem extends Component {
             slot="end"
           />
           {unitOfMeasure}
-          <IonButton 
+          <IonButton
             slot="end"
             onClick={() => this.concludeEditing()} style={{ 'marginLeft': '10px' }}>
             <IonIcon icon={addOutline} />
