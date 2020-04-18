@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import Item from '../../Item/ionic/Item';
-import { IonList, IonReorderGroup } from '@ionic/react';
+import { IonList, IonReorderGroup, IonToggle, IonLabel, IonItem } from '@ionic/react';
 import { LIFECYCLE_STATUS_OPEN } from '../../../constants/lists';
+import { Trans } from 'react-i18next';
 
 class ShoppingList extends Component {
   constructor(props) {
@@ -11,7 +12,7 @@ class ShoppingList extends Component {
       editName: this.props.list.name,
     };
 
-    if(this.props.addSaveEditHandler){
+    if (this.props.addSaveEditHandler) {
       this.props.addSaveEditHandler(this.saveEdit.bind(this))
     }
   }
@@ -31,7 +32,7 @@ class ShoppingList extends Component {
     let order = {}
     event.detail.complete();
     let position = 0
-    
+
     // eslint-disable-next-line
     for (const k in children) {
       position++;
@@ -55,6 +56,8 @@ class ShoppingList extends Component {
   render() {
     const {
       items,
+      list,
+      onEditList,
       onEditItem,
       onDeleteItem,
       onShopItem,
@@ -94,20 +97,33 @@ class ShoppingList extends Component {
             })
           }
           {
-            editMode && <IonReorderGroup disabled={false} onIonItemReorder={this.doReorder.bind(this)}>
-              {items.map((item, key) => (
-                <Item
-                  key={item.id || key}
-                  item={item}
-                  ownList={true}
-                  onEditingConcluded={onEditItem}
-                  onDeleteItem={onDeleteItem}
-                  onShopItem={onShopItem}
-                  mode={this.props.mode}
-                  readOnly={this.props.list.lifecycleStatus !== LIFECYCLE_STATUS_OPEN}
-                  listEditMode={editMode}
-                />))}
-            </IonReorderGroup>
+            editMode &&
+            <>
+              <IonItem lines="none">
+                <IonLabel><Trans>Allow friends to add own needs</Trans></IonLabel>
+                <IonToggle
+                  name="allowCreateOwnNeeds"
+                  checked={list.allowCreateOwnNeeds}
+                  onIonChange={() => {
+                    onEditList(Object.assign(list, { allowCreateOwnNeeds: !list.allowCreateOwnNeeds }))
+                  }}
+                />
+              </IonItem>
+              <IonReorderGroup disabled={false} onIonItemReorder={this.doReorder.bind(this)}>
+                {items.map((item, key) => (
+                  <Item
+                    key={item.id || key}
+                    item={item}
+                    ownList={true}
+                    onEditingConcluded={onEditItem}
+                    onDeleteItem={onDeleteItem}
+                    onShopItem={onShopItem}
+                    mode={this.props.mode}
+                    readOnly={this.props.list.lifecycleStatus !== LIFECYCLE_STATUS_OPEN}
+                    listEditMode={editMode}
+                  />))}
+              </IonReorderGroup>
+            </>
           }
         </IonList>
       </>
