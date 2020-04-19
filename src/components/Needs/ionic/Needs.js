@@ -76,8 +76,8 @@ class Needs extends Component {
 
     const createNeedsNotAllowed = currentOriginShoppingList && !currentOriginShoppingList.allowCreateOwnNeeds
       &&
-      <IonItem>
-      <IonText color="primary">
+      <IonItem color="warning">
+      <IonText>
         <Trans>Creating_own_items_disabled</Trans>
       </IonText>
       </IonItem>
