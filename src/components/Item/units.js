@@ -4,7 +4,9 @@ const UNITS = [
     'kg',
     'l',
     'ml',
-    'oz'
+    'oz',
+    'Stück',
+    'Packungen'
 ]
 
 module.exports = UNITS

@@ -5,7 +5,7 @@ export default function (itemDescription) {
     //prefix: 100ml Milk
     //postfix: Milk 100ml
     try {
-        const prefixRegex = new RegExp(`^((\\d)+)\\s?(${units.join('|')})?\\s((.)+)$`)
+        const prefixRegex = new RegExp(`^((\\d)+)\\s?(${units.join('|')})?\\s((.)+)$`, 'i')
         const prefixMatch = itemDescription.match(prefixRegex)
         if (prefixMatch) {
             return {
@@ -15,7 +15,7 @@ export default function (itemDescription) {
             }
         }
 
-        const postfixRegex = new RegExp(`^((.)+)\\s((\\d)+)\\s?(${units.join('|')})?$`)
+        const postfixRegex = new RegExp(`^((.)+)\\s((\\d)+)\\s?(${units.join('|')})?$`,'i')
         const postfixMatch = itemDescription.match(postfixRegex)
         if (postfixMatch) {
             return {
