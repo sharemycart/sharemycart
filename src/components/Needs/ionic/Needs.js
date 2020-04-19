@@ -64,7 +64,7 @@ class Needs extends Component {
         || (currentOriginShoppingList && currentOriginShoppingList.allowCreateOwnNeeds)) // user is allowed to define own needs
       &&
       <IonList>
-        <IonItem>
+        <IonItem key="createItem">
           <CreateItem
             item={itemInCreation}
             onChange={this.onCreatingItemChange.bind(this)}
@@ -77,9 +77,9 @@ class Needs extends Component {
     const createNeedsNotAllowed = currentOriginShoppingList && !currentOriginShoppingList.allowCreateOwnNeeds
       &&
       <IonItem color="warning">
-      <IonText>
-        <Trans>Creating_own_items_disabled</Trans>
-      </IonText>
+        <IonText>
+          <Trans>Creating_own_items_disabled</Trans>
+        </IonText>
       </IonItem>
 
     const NothingSharedYet = () => (

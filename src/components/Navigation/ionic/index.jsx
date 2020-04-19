@@ -99,7 +99,6 @@ export const NavigationNonAuth = (props) => {
 }
 
 const Navigation = ({ sessionStore }) => {
-    console.log('Basename', process.env.REACT_APP_BASENAME)
     return sessionStore.authUser ? (
         <NavigationAuth authUser={sessionStore.authUser} />
     ) : (

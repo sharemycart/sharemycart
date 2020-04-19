@@ -98,7 +98,7 @@ class CreateItem extends Component {
           onIonChange={e => this.setUnit(e.detail.value)}
           className="hide-sm-down"
         >
-          {units.map(unit => <IonSelectOption>{unit}</IonSelectOption>)}
+          {units.map(unit => <IonSelectOption key={unit}>{unit}</IonSelectOption>)}
         </IonSelect>
 
     return (
