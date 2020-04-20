@@ -62,6 +62,7 @@ const resources = {
             "Share": "Share",
             "Sharing_message": "Hi there! I'm about to go for shopping. Is there something on my shopping list which I shall bring along for you as well? Here's a link to my shopping list:",
             "Sharing_link_copied": "A link to your shopping list has been copied to the clipboard.\nSend it to people you like so that they ask you to bring something along for you!",
+            "Sharing_link_received": "You received a link to a shared shopping list! Just sign-in or -up quickly to see what items your friend is going to shop!",
             "Sign In": "Sign In",
             "Sign Out": "Sign Out",
             "Sign Up": "Sign Up",
@@ -138,6 +139,7 @@ const resources = {
                 Ein Link zu Deinem Einkaufszettel wurde in die Zwischenablage kopiert.\n
                 Schicke ihn an Leute, denen Du etwas, das ohnehin schon auf Deinem Zettel steht, mitbringen möchtest.
                 `,
+            "Sharing_link_received": "Ein Freund hat einen Einkaufszettel mit Dir geteilt! \nMelde Dich flott an, um zu erfahren, was drauf steht!",
             "shopping": "wird eingekauft",
             "Shopping": "Einkaufen",
             "Shopping list": "Einkaufszettel",

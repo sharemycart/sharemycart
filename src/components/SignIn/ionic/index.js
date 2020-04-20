@@ -4,7 +4,7 @@ import { compose } from 'recompose';
 
 import { withFirebase } from '../../Firebase';
 import { SHOPPING } from '../../../constants/routes';
-import { IonGrid, IonRow, IonCol, IonContent, IonInput, IonIcon, IonButton } from '@ionic/react';
+import { IonGrid, IonRow, IonCol, IonContent, IonInput, IonIcon, IonButton, IonItem, IonText } from '@ionic/react';
 
 import { logoGoogle, logoFacebook, logoTwitter } from 'ionicons/icons';
 import SplashLogo from '../../Reusables/ionic/SplashLogo';
@@ -17,30 +17,35 @@ import '../../Reusables/sign-in-up-page.scss'
 import '../../Reusables/components.scss'
 import { withEmailVerification } from '../../Session';
 
-const SignInPage = () => (
-  <>
-    <IonContent className="login-page">
-      <SplashLogo maxWidth="150px" />
-      <IonGrid>
-        <SignInForm />
-        <div className="separator">
-          <Trans>or with</Trans>
-        </div>
-        <SignInGoogle />
-        {/* <SignInFacebook /> */}
-        {/* <SignInTwitter /> */}
-        <IonRow>
-          <IonCol>
-            <PasswordForgetLink />
-          </IonCol>
-          <IonCol>
-            <SignUpLink />
-          </IonCol>
-        </IonRow>
-      </IonGrid>
-    </IonContent>
-  </>
-);
+const SignInPage = (props) => {
+  const isShareRedirect = !!(props.location.state && props.location.state.from && props.location.state.from.pathname.match('^/share/'))
+  return (
+    <>
+      <IonContent className="login-page">
+        <SplashLogo maxWidth={isShareRedirect ? "100px" : "150px"} />
+        {isShareRedirect && <IonItem color="success">
+          <IonText><h5><Trans>Sharing_link_received</Trans></h5></IonText>
+        </IonItem>}
+        <IonGrid>
+          <SignInForm />
+          <IonRow>
+            <IonCol>
+              <PasswordForgetLink />
+              <br />
+              <SignUpLink />
+            </IonCol>
+          </IonRow>
+          <div className="separator">
+            <Trans>or with</Trans>
+          </div>
+          <SignInGoogle />
+          {/* <SignInFacebook /> */}
+          {/* <SignInTwitter /> */}
+        </IonGrid>
+      </IonContent>
+    </>
+  )
+}
 
 const INITIAL_STATE = {
   email: '',
