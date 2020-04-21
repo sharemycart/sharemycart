@@ -22,7 +22,7 @@ class EditItem extends Component {
 
   concludeEditing() {
     const { item, t } = this.props;
-    const { name, quantity, unit } = this.state
+    const { name, quantity, unit = ''} = this.state
     if (name && quantity) {
       this.props.onEditingConcluded(Object.assign(item, {
         name,
