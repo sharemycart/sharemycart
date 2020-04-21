@@ -1,6 +1,8 @@
 const admin = require("firebase-admin");
 const cypressFirebasePlugin = require("cypress-firebase").plugin;
 
+require('dotenv').config()
+
 module.exports = (on, config) => {
   // Pass on function, config, and admin instance. Returns extended config
  cypressFirebasePlugin(on, config, admin);
