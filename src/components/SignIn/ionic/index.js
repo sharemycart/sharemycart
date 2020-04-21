@@ -87,8 +87,21 @@ class SignInFormBase extends Component {
   onSubmit = event => {
     const { email, password } = this.state;
 
+    event.preventDefault();
+
     this.props.firebase
       .doSignInWithEmailAndPassword(email, password)
+      // .then(authUser => {
+
+      //   // Instantiate PasswordCredential with the form
+      //   if (window.PasswordCredential) {
+      //     // eslint-disable-next-line no-undef
+      //     var c = new PasswordCredential(event.target);
+      //     return navigator.credentials.store(c);
+      //   } else {
+      //     return Promise.resolve(authUser);
+      //   }
+      // })
       .then(() => {
         this.setState({
           redirectToReferrer: true
@@ -99,7 +112,6 @@ class SignInFormBase extends Component {
         this.setState({ error });
       });
 
-    event.preventDefault();
   };
 
   onChange = event => {
@@ -129,7 +141,7 @@ class SignInFormBase extends Component {
               className="input"
               padding-horizontal
               clear-input="true"
-              autocomplete
+              autocomplete="username email"
             >
             </IonInput>
           </IonCol>
@@ -144,6 +156,7 @@ class SignInFormBase extends Component {
               type="password"
               placeholder={t('Password')}
               className="input"
+              autocomplete="current-password"
               padding-horizontal>
             </IonInput>
           </IonCol>

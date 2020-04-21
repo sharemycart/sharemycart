@@ -36,7 +36,6 @@ const INITIAL_STATE = {
   username: '',
   email: '',
   passwordOne: '',
-  passwordTwo: '',
   isAdmin: false,
   error: null,
 };
@@ -109,12 +108,10 @@ class SignUpFormBase extends Component {
       username,
       email,
       passwordOne,
-      passwordTwo,
       error,
     } = this.state;
 
     const isInvalid =
-      passwordOne !== passwordTwo ||
       passwordOne === '' ||
       email === '' ||
       username === '';
@@ -134,7 +131,7 @@ class SignUpFormBase extends Component {
                 className="input"
                 padding-horizontal
                 clear-input="true"
-                autocomplete
+                autocomplete="name"
               />
             </IonCol>
           </IonRow>
@@ -150,7 +147,7 @@ class SignUpFormBase extends Component {
                 className="input"
                 padding-horizontal
                 clear-input="true"
-                autocomplete
+                autocomplete="username email"
               />
             </IonCol>
           </IonRow>
@@ -164,21 +161,8 @@ class SignUpFormBase extends Component {
                 type="password"
                 placeholder={t('Password')}
                 className="input"
-                padding-horizontal>
-              </IonInput>
-            </IonCol>
-          </IonRow>
-          <IonRow>
-            <IonCol>
-              <IonInput
-                clearInput
-                name="passwordTwo"
-                value={passwordTwo}
-                onIonChange={this.onChange}
-                type="password"
-                placeholder={t('Repeat Password')}
-                className="input"
-                padding-horizontal>
+                padding-horizontal
+                autocomplete="new-password">
               </IonInput>
             </IonCol>
           </IonRow>
