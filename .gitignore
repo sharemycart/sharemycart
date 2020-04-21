@@ -106,9 +106,10 @@ dist
 # Jetbrains IDE
 .idea/
 
+# Secrets
+serviceAccount.json
 
 # Build artifacts
 build
-
 # Secrets
 serviceAccount.json
