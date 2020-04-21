@@ -39,10 +39,14 @@ class ShareListFab extends Component {
 
     render() {
         const { t } = this.props;
+        const sharingMessageTextTranslation = t('Sharing_message')
+        const sharingMessageText = sharingMessageTextTranslation !== 'Sharing_message'
+            ? sharingMessageTextTranslation + ' '
+            : ''
         return (
             <>
-                <CopyToClipboard text={this.generateShareLink()}>
-                    <IonFabButton title={t('Share')} onClick={() => {
+                <CopyToClipboard text={sharingMessageText + this.generateShareLink()}>
+                    <IonFabButton title={t('Share')} color="primary" onClick={() => {
                         this.setState({
                             showToast: true,
                             message: t('Sharing_link_copied')

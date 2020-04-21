@@ -11,7 +11,11 @@ import PasswordChangePage from '../../PasswordChange/ionic';
 import AccountPage from '../../Account/ionic';
 import AdminPage from '../../Admin/simple-ui';
 import ShoppingPage from '../../Shopping/ionic';
+import GoShoppingPage from '../../GoShopping/ionic';
+import FinishShoppingPage from '../../FinishShopping/ionic';
+import ShoppingListsPage from '../../ShoppingLists/ionic';
 import NeedsPage from '../../Needs/ionic';
+import NeedsListsPage from '../../NeedsLists/ionic';
 import SharedShoppingList from '../../Needs/ionic/SharedShoppingList';
 
 import { useLocation } from 'react-router-dom'
@@ -38,11 +42,16 @@ export const NavigationAuth = ({ authUser }) => (
                 <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
                 <Route path={ROUTES.PASSWORD_CHANGE} component={PasswordChangePage} />
                 <Route path={ROUTES.ACCOUNT} component={AccountPage} />
+                <Route path={ROUTES.SHOPPING_LISTS} component={ShoppingListsPage} />
                 <Route path={ROUTES.SHOPPING} component={ShoppingPage} />
-                <Route path={ROUTES.GO_SHOPPING} component={ShoppingPage} />
+                <Route path={ROUTES.FINISH_SHOPPING} component={FinishShoppingPage} />
+                <Route path={ROUTES.GO_SHOPPING} component={GoShoppingPage} />
+                <Route path={ROUTES.NEEDS_LISTS} component={NeedsListsPage} />
                 <Route path={ROUTES.NEEDS} component={NeedsPage} />
                 <Route path={ROUTES.SHARED_SHOPPING_LIST} component={SharedShoppingList} />
                 <Route path={ROUTES.ADMIN} component={AdminPage} />
+                <Redirect exact from={ROUTES.SIGN_IN} to={ROUTES.SHOPPING} />
+                <Redirect exact from={ROUTES.SIGN_UP} to={ROUTES.SHOPPING} />
                 <Redirect exact from="/" to={ROUTES.SHOPPING} />
             </IonRouterOutlet>
             <IonTabBar slot="bottom">
@@ -90,7 +99,6 @@ export const NavigationNonAuth = (props) => {
 }
 
 const Navigation = ({ sessionStore }) => {
-    console.log('Basename', process.env.REACT_APP_BASENAME)
     return sessionStore.authUser ? (
         <NavigationAuth authUser={sessionStore.authUser} />
     ) : (

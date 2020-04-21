@@ -4,13 +4,13 @@ import { withFirebase } from '../../Firebase';
 import { inject, observer } from 'mobx-react';
 import { NEEDS } from '../../../constants/routes';
 
-import { IonButton, IonContent, IonFooter, IonToolbar, IonPage, IonHeader, IonTitle, IonCard, IonCardHeader, IonCardTitle } from '@ionic/react';
-import Avatar from '../../Reusables/ionic/Avatar';
+import { IonButton, IonContent, IonToolbar, IonPage, IonHeader, IonTitle, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonFooter } from '@ionic/react';
 
 import { Trans } from 'react-i18next';
 
 import './page.css'
 import LoadingAnimation from '../../Reusables/ionic/LoadingAnimation';
+import UserProfileImg from '../../Reusables/ionic/UserProfileImg';
 
 class NeedsInSharedShoppingList extends Component {
     constructor(props) {
@@ -59,34 +59,21 @@ class NeedsInSharedShoppingList extends Component {
             if (!loading && !isValid) return <div>The list with id {shoppingListId} does not exist</div>
             if (!loading && isValid) return (
                 <>
-                    <div style={{
-                        height: "300px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
+                    <IonCard style={{
+                        padding: '30px',
                     }}>
-                        <IonCard style={{
-                            padding: '30px',
-                        }}>
-
-                            <div>
-                                <Avatar user={sharingUser} />
-                            </div>
-                            <div>
-                                <IonCardHeader class="ion-text-center">
-                                    <IonCardTitle>{sharingUser.username}&nbsp;({sharingUser.email})&nbsp;<Trans>has shared a shopping list with you</Trans></IonCardTitle>
-                                </IonCardHeader>
-                            </div>
-                        </IonCard>
-                    </div>
+                        <IonCardHeader class="ion-text-center">
+                            <UserProfileImg user={sharingUser} size={150} />
+                            <IonCardTitle>{sharingUser.username}&nbsp;({sharingUser.email})</IonCardTitle>
+                            <IonCardSubtitle><Trans>has shared a shopping list with you</Trans></IonCardSubtitle>
+                        </IonCardHeader>
+                    </IonCard>
                     <IonFooter>
-                        <IonToolbar>
-                            <CreateNeedsListButton
-                                {...props}
-                                shoppingListId={shoppingListId}
-                                sharingUser={sharingUser}
-                            />
-                        </IonToolbar>
+                        <CreateNeedsListButton
+                          {...props}
+                          shoppingListId={shoppingListId}
+                          sharingUser={sharingUser}
+                        />
                     </IonFooter>
                 </>
             )
@@ -121,7 +108,7 @@ class NeedsInSharedShoppingList extends Component {
 const CreateNeedsListButton = ({ shoppingListId, sharingUser, onCreateNeedsListForShoppingList }) => (
     <IonButton
         type="button"
-        expand="full"
+        expand="block"
         onClick={() => onCreateNeedsListForShoppingList(shoppingListId, sharingUser.username)}
     >
         <Trans>Open shared shopping list</Trans>

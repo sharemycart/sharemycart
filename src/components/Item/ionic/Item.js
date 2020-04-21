@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { IonItem, IonLabel, IonButton, IonIcon, IonReorder, IonCheckbox, IonList, IonChip } from "@ionic/react";
 import EditItem from './EditItem';
-import { trash, add, shareSocialOutline } from 'ionicons/icons';
+import { trash, add, shareSocialOutline, createOutline } from 'ionicons/icons';
 import { ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_SHOPPING, ITEM_TYPE_NEW_SHOPPING, ITEM_TYPE_NEED, ITEM_TYPE_POTENTIAL_NEED, ITEM_TYPE_BRING_ALONG } from "../../../constants/items";
 import { compose } from "recompose";
 import { inject, observer } from "mobx-react";
-import Avatar from "./Avatar";
+import Avatar from "../../Reusables/ionic/Avatar";
+import { toJS } from "mobx";
 
 class Item extends Component {
   constructor(props) {
@@ -16,7 +17,9 @@ class Item extends Component {
   }
 
   setEditMode(inEdit) {
-    this.setState({ inEdit })
+    if (!this.props.readOnly) {
+      this.setState({ inEdit })
+    }
   }
 
   onItemClick() {
@@ -39,21 +42,24 @@ class Item extends Component {
       item,
       bringAlongItems,
       mode,
+      listEditMode,
       ownList,
       owner,
       onCreateNeed,
       onDeleteItem,
       onEditingConcluded,
-      onShopItem
+      onShopItem,
+      readOnly,
     } = this.props;
 
-    const needIcon = !ownList && mode === ITEM_TYPE_POTENTIAL_NEED &&
+    const needIcon = !ownList && !readOnly && mode === ITEM_TYPE_POTENTIAL_NEED &&
       <IonButton onClick={() => onCreateNeed(item)} fill="add" size="large" slot="end" color="primary">
         <IonIcon icon={add} />
       </IonButton>
 
-    const showQuantityLabel = [ITEM_TYPE_SHOPPING, ITEM_TYPE_NEW_SHOPPING, ITEM_TYPE_NEED, ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_BRING_ALONG].includes(mode)
-    const quantityLabel = showQuantityLabel && (item.quantity > 1 || item.unit) &&
+    const showQuantityLabel = [ITEM_TYPE_NEED, ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_BRING_ALONG].includes(mode) ||
+      ([ITEM_TYPE_SHOPPING, ITEM_TYPE_NEW_SHOPPING].includes(mode) && (item.quantity > 1 || item.unit))
+    const quantityLabel = showQuantityLabel &&
       <IonChip
         onClick={() => this.setEditMode(true)}
         color={!item.shopped ? "primary" : "success"}>
@@ -62,10 +68,21 @@ class Item extends Component {
         </IonLabel>
       </IonChip>
 
-    const showDeleteButton = ownList && mode !== ITEM_TYPE_IN_SHOPPING
+    const showDeleteButton = ownList && !readOnly
+      && ((mode === ITEM_TYPE_SHOPPING && listEditMode) || mode === ITEM_TYPE_NEED )
+
     const deleteIcon = showDeleteButton && <IonButton className="button-end" fill="clear" size="large" slot="end" color="danger" onClick={() => onDeleteItem(item.uid)}>
       <IonIcon icon={trash} />
     </IonButton>
+
+    const showEditButton = ownList && !readOnly
+      && [ITEM_TYPE_SHOPPING].includes(mode)
+      && !(mode === ITEM_TYPE_SHOPPING && listEditMode)
+
+    const editIcon = showEditButton && <IonButton className="button-end" fill="clear" size="large" slot="end" onClick={() => this.setEditMode(true)}>
+      <IonIcon icon={createOutline} />
+    </IonButton>
+
 
     const ownerIcon = owner && <IonButton fill="clear" size="large" slot="start"><Avatar size="30px" user={owner} /></IonButton>
 
@@ -88,7 +105,7 @@ class Item extends Component {
 
     const itemDisplay = this.state.inEdit ?
       <EditItem
-        item={item}
+        item={toJS(item)}
         onEditingConcluded={(item) => {
           this.setEditMode(false)
           onEditingConcluded(item)
@@ -98,27 +115,28 @@ class Item extends Component {
       />
       :
       <>
-        {[ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_BRING_ALONG].includes(mode) && 
-        <IonCheckbox 
-          slot="start"
-          style={mode === ITEM_TYPE_BRING_ALONG ? {marginLeft: "40px"} : null}
-          value={item.name}
-          checked={item.shopped}
-          onClick={() => this.onItemClick()}
-          color="primary"
-        />}
+        {[ITEM_TYPE_IN_SHOPPING, ITEM_TYPE_BRING_ALONG].includes(mode) &&
+          <IonCheckbox
+            slot="start"
+            style={mode === ITEM_TYPE_BRING_ALONG ? { marginLeft: "40px" } : null}
+            value={item.name}
+            checked={item.shopped}
+            onClick={() => this.onItemClick()}
+            color="primary"
+          />}
         <IonLabel onClick={() => this.onItemClick()}
           style={{
             cursor: 'pointer',
             textDecoration: (item.shopped ? 'line-through' : 'none'),
-            color: (item.shopped ? 'grey' : 'black')
+            color: ((item.shopped || mode === ITEM_TYPE_BRING_ALONG ) ? 'grey' : 'black')
           }}>
-          {!(mode === ITEM_TYPE_BRING_ALONG) && item.name}
+          {item.name}
         </IonLabel>
         <BringAlongQuantity />
         {ownerIcon}
         {quantityLabel}
         {needIcon}
+        {editIcon}
         {deleteIcon}
       </>
 

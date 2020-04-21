@@ -1,7 +1,7 @@
 import app from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-import { LIST_TYPE_SHOPPING, LIST_TYPE_NEED, LIFECYCLE_STATUS_OPEN } from '../../constants/lists';
+import { LIST_TYPE_SHOPPING, LIST_TYPE_NEED, LIFECYCLE_STATUS_OPEN, LIFECYCLE_STATUS_SHOPPING, LIFECYCLE_STATUS_FINISHED, LIFECYCLE_STATUS_ARCHIVED } from '../../constants/lists';
 
 const INVALID_DUMMY_UID = 'idonotexist'; // can be used in order to create queries which intentionally don't match anything
 
@@ -121,14 +121,16 @@ class Firebase {
       ? this.auth.currentUser.uid
       : INVALID_DUMMY_UID);
 
-  createList = ({ name }, type) => this.lists().add({
+  createList = ({ name = '', allowCreateOwnNeeds = true }, type) => this.lists().add({
     name,
+    allowCreateOwnNeeds,
     type,
     userId: this.auth.currentUser.uid,
     isCurrent: true,
     lifecycleStatus: LIFECYCLE_STATUS_OPEN,
     createdAt: this.fieldValue.serverTimestamp(),
   })
+
   editList = (uid, list) => this.list(uid)
     .set(Object.assign(list,
       {
@@ -148,6 +150,7 @@ class Firebase {
         const otherListOfSameType = await this.lists()
           .where('userId', '==', deleted.userId)
           .where('type', '==', deleted.type)
+          .where('lifecycleStatus', "==", LIFECYCLE_STATUS_OPEN)
           .limit(1)
           .get()
 
@@ -156,6 +159,28 @@ class Firebase {
         )
       }
     }
+  }
+
+  createListFromTemplate = async (template, excludeShoppedItems = true) => {
+    const newList = await this.createList({}, template.type)
+
+    template.type === LIST_TYPE_SHOPPING
+      ? this.setCurrentShoppingList(newList.id)
+      : this.setCurrentNeedsList(newList.id)
+
+    const templateItems = await this.listItems(template.uid).get()
+    templateItems.forEach(itemSnapshot => {
+      const item = itemSnapshot.data()
+      if (!item.shopped || !excludeShoppedItems) {
+        delete item.id;
+        delete item.shopped;
+        delete item.shoppedAt;
+        delete item.shoppedBy;
+        this.createItem(newList.id, item)
+      }
+    })
+
+    return newList
   }
 
   listItems = listId => this.db.doc(`lists/${listId}`)
@@ -169,6 +194,7 @@ class Firebase {
   createItem = (listId, item) => this.listItems(listId)
     .add(Object.assign(item,
       {
+        order: item.order || -1,
         createdAt: this.fieldValue.serverTimestamp()
       }));
 
@@ -191,6 +217,8 @@ class Firebase {
     .update(
       {
         shopped,
+        shoppedBy: this.auth.currentUser.uid,
+        shoppedAt: this.fieldValue.serverTimestamp(),
         editedAt: this.fieldValue.serverTimestamp()
       }
     )
@@ -198,11 +226,16 @@ class Firebase {
   // *** Shopping API ***
   myCurrentShoppingList = () => this.myCurrentList(LIST_TYPE_SHOPPING);
 
-  myShoppingLists = () => this.lists()
-    .where('userId', '==', this.auth.currentUser
-      ? this.auth.currentUser.uid
-      : INVALID_DUMMY_UID)
-    .where('type', '==', LIST_TYPE_SHOPPING)
+  myShoppingLists = (includeArchived = false) => {
+    const status = [LIFECYCLE_STATUS_OPEN, LIFECYCLE_STATUS_SHOPPING, LIFECYCLE_STATUS_FINISHED, LIFECYCLE_STATUS_ARCHIVED]
+    if (includeArchived) status.push(LIFECYCLE_STATUS_ARCHIVED)
+    return this.lists()
+      .where('userId', '==', this.auth.currentUser
+        ? this.auth.currentUser.uid
+        : INVALID_DUMMY_UID)
+      .where('type', '==', LIST_TYPE_SHOPPING)
+    // .where('lifecycleStatus', "in", status) yields an empty list, though it should work as per the spec
+  }
 
   setCurrentShoppingList = uid => {
     this.myCurrentShoppingList().get()
@@ -218,6 +251,44 @@ class Firebase {
 
     return this.createList({ name }, LIST_TYPE_SHOPPING);
   };
+
+  _setShoppingListLifecycleStatusPropagating = async (uid, targetStatus) => {
+    const batch = this.db.batch()
+    batch.update(this.list(uid), 'lifecycleStatus', targetStatus)
+    const dependentShoppingLists = await this.dependentNeedsListOfShoppingList(uid).get()
+    dependentShoppingLists.forEach(needsList => {
+      batch.update(needsList.ref, 'lifecycleStatus', targetStatus)
+    })
+    return batch.commit()
+  }
+
+  openShopping = async (shoppingList) => {
+    if (shoppingList.lifecycleStatus !== LIFECYCLE_STATUS_OPEN
+      && shoppingList.lifecycleStatus !== LIFECYCLE_STATUS_ARCHIVED) {
+      this._setShoppingListLifecycleStatusPropagating(shoppingList.uid, LIFECYCLE_STATUS_OPEN)
+    }
+  }
+
+  goShopping = async (shoppingList) => {
+    if (shoppingList.lifecycleStatus !== LIFECYCLE_STATUS_SHOPPING
+      && shoppingList.lifecycleStatus !== LIFECYCLE_STATUS_ARCHIVED) {
+      this._setShoppingListLifecycleStatusPropagating(shoppingList.uid, LIFECYCLE_STATUS_SHOPPING)
+    }
+  }
+
+  finishShopping = async (shoppingList) => {
+    if (shoppingList.lifecycleStatus !== LIFECYCLE_STATUS_FINISHED
+      && shoppingList.lifecycleStatus !== LIFECYCLE_STATUS_ARCHIVED) {
+      this._setShoppingListLifecycleStatusPropagating(shoppingList.uid, LIFECYCLE_STATUS_FINISHED)
+    }
+  }
+
+  archiveShoppingList = async (shoppingList) => {
+    if (shoppingList.lifecycleStatus !== LIFECYCLE_STATUS_ARCHIVED) {
+      this._setShoppingListLifecycleStatusPropagating(shoppingList.uid, LIFECYCLE_STATUS_ARCHIVED)
+    }
+  }
+
 
   // *** Needs API ***
   myCurrentNeedsList = () => this.myCurrentList(LIST_TYPE_NEED);
@@ -237,11 +308,23 @@ class Firebase {
     return this.createList({ name }, LIST_TYPE_NEED)
   }
 
-  myNeedsLists = () => this.lists()
-    .where('userId', '==', this.auth.currentUser
-      ? this.auth.currentUser.uid
-      : INVALID_DUMMY_UID)
-    .where('type', '==', LIST_TYPE_NEED)
+  archiveNeedsList = async (needsList) => {
+    if (needsList.lifecycleStatus !== LIFECYCLE_STATUS_ARCHIVED) {
+      this.list(needsList.uid).update('lifecycleStatus', LIFECYCLE_STATUS_ARCHIVED)
+    }
+  }
+
+  myNeedsLists = (includeArchived = false) => {
+    const status = [LIFECYCLE_STATUS_OPEN, LIFECYCLE_STATUS_SHOPPING, LIFECYCLE_STATUS_FINISHED]
+    if (includeArchived) status.push(LIFECYCLE_STATUS_ARCHIVED)
+
+    return this.lists()
+      .where('userId', '==', this.auth.currentUser
+        ? this.auth.currentUser.uid
+        : INVALID_DUMMY_UID)
+      .where('type', '==', LIST_TYPE_NEED)
+    // .where('lifecycleStatus', "in", status) yields an empty list, though it should work as per the spec  }
+  }
 
   dependentNeedsListOfShoppingList = (shoppingListId) => this.lists()
     .where('shoppingListId', '==', shoppingListId)
@@ -277,7 +360,9 @@ class Firebase {
                   shoppingListOwnerId: shoppingList.userId,
                   isCurrent: true,
                   name,
+                  order: -1,
                   userId: this.auth.currentUser.uid,
+                  lifecycleStatus: shoppingList.lifecycleStatus,
                   createdAt: this.fieldValue.serverTimestamp()
                 })
             }
@@ -297,15 +382,20 @@ class Firebase {
     return needsListsRef;
   }
 
-  addNeededItemFromShoppingListItem = (needsListId, shoppingListItem) => {
+  addNeededItemFromShoppingListItem = (needsListId, shoppingListItem, quantity = '') => {
     const neededItem = shoppingListItem;
 
-    neededItem.OriginShoppingItemUid = shoppingListItem.uid;
-    neededItem.quantity = '';
+    if (shoppingListItem.uid) {
+      neededItem.originShoppingItemUid = shoppingListItem.uid;
+    }
+    neededItem.quantity = quantity;
     delete neededItem.createdAt;
     delete neededItem.editedAt;
     delete neededItem.uid;
     delete neededItem.parentId;
+    delete neededItem.shopped;
+    delete neededItem.shoppedAt;
+    delete neededItem.shoppedBy;
     //TODO: prevent creation of duplicate needs
     return this.createItem(needsListId, neededItem)
   }

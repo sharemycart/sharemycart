@@ -1,0 +1,27 @@
+.shopping-actions::before {
+    animation: pulse-grow 1s linear 5;
+    position: absolute;
+    z-index: -1;
+    content: '';
+    display: block;
+    width: 56px;
+    height: 56px;
+    -moz-border-radius: 28px;
+    -webkit-border-radius: 28px;
+    border-radius: 28px;
+    background-color: var(--ion-color-primary-tint);;
+}
+
+@keyframes pulse-grow {
+    0% {
+        transform: scale(1, 1);
+    }
+
+    50% {
+        transform: scale(1.2, 1.2);
+    }
+
+    100% {
+        transform: scale(1, 1);
+    }
+}

@@ -1,5 +1,7 @@
 import { observable, action, computed, toJS } from 'mobx';
 import toObject from '../lib/convertArrayToObject';
+import sortItems from '../components/Reusables/functions/sortItems';
+import { LIFECYCLE_STATUS_ARCHIVED } from '../constants/lists';
 
 // This store holds all information needed to create and manage shopping lists 
 // and their items
@@ -16,7 +18,7 @@ class ShoppingStore {
     this.rootStore = rootStore;
   }
 
-  @action setInitializationDone(done){
+  @action setInitializationDone(done) {
     this.initializationDone = done;
   }
 
@@ -51,31 +53,37 @@ class ShoppingStore {
       ...this.currentShoppingListItems[key],
       uid: this.currentShoppingListItems[key].uid,
     }))
-      .sort((a, b) => {
-        if (a.order && b.order) return a.order - b.order;
-        if (a.createdAt && b.createdAt) return b.createdAt.seconds - a.createdAt.seconds;
-        if (!a.createdAt) return -1
-        if (!b.createdAt) return 1
-        return 0
-      })
+      .sort((a, b) => sortItems(a, b));
   }
 
   @computed get currentDependentNeedsListsArray() {
-    return Object.keys(this.currentDependentNeedsLists || {}).map(key => ({
+    return Object.keys(this.currentDependentNeedsLists || {})
+    .filter(needsList => needsList.lifecycleStatus !== LIFECYCLE_STATUS_ARCHIVED)
+    .map(key => ({
       ...this.currentDependentNeedsLists[key],
       uid: this.currentDependentNeedsLists[key].uid,
     }));
   }
 
   @computed get currentDependentNeedsListsItemsArray() {
-    return Object.keys(this.currentDependentNeedsLists || {}).reduce((allItems, key) => {
-      const needsListId = this.currentDependentNeedsLists[key].uid;
-      const ownerId = this.currentDependentNeedsLists[key].userId;
-      const neededItems = toJS(this.currentDependentNeedsLists)[key].items;
-      return allItems.concat(neededItems || []).map(
-        neededItem => Object.assign(neededItem, {needsListId, ownerId}
-      ))
-    }, []);
+    if (!this.currentDependentNeedsLists) return []
+
+    let allDependentNeededItems = []
+    
+    Object.keys(this.currentDependentNeedsLists || {}).forEach((key) => {
+      const neededItems = this.currentDependentNeedsLists[key].items;
+      if (neededItems && neededItems.length) {
+        const needsList = this.currentDependentNeedsLists[key];
+        allDependentNeededItems = allDependentNeededItems.concat(neededItems.map(
+          neededItem => Object.assign(toJS(neededItem),
+            {
+              needsListId: toJS(needsList.uid),
+              ownerId: toJS(needsList.userId)
+            }
+          )));
+      }
+    })
+    return allDependentNeededItems
   }
 }
 

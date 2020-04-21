@@ -47,7 +47,7 @@ class Shopping extends ShoppingModel {
 
           <form
             onSubmit={event =>
-              this.onCreateShoppingList(event, sessionStore.authUser)
+              this.handleCreateShoppingList(event, sessionStore.authUser)
             }
           >
             <input

@@ -12,6 +12,11 @@ import { createOutline, saveOutline } from 'ionicons/icons';
 
 import { Trans } from 'react-i18next';
 import ShoppingActions from './ShoppingActions';
+import { SHOPPING_LISTS } from '../../../constants/routes';
+import AllListsButton from '../../List/ionic/AllListsButton';
+import ListTitle from '../../List/ionic/ListTitle';
+import ListLifecycleIcon from '../../List/ionic/ListLifecycleIcon';
+import AllowCreateOwnNeedsIcon from '../../Reusables/ionic/AllowCreateOwnNeedsIcon';
 
 class ShoppingPage extends ShoppingModel {
 
@@ -34,13 +39,12 @@ class ShoppingPage extends ShoppingModel {
   }
 
   render() {
-
-    const {currentShoppingList} = this.props.shoppingStore;
+    const { currentShoppingList, currentShoppingListItemsArray: currentShoppingListItems, initializationDone } = this.props.shoppingStore;
 
     const EditButton = () => (
       !this.state.editMode && <IonButton color="danger" fill="clear"
         onClick={() => this.setState({ editMode: true })}>
-        <Trans>Edit</Trans>
+        <span className="hide-sm-down"><Trans>Edit</Trans></span>
         <IonIcon slot="end" icon={createOutline} />
       </IonButton>
     )
@@ -48,33 +52,39 @@ class ShoppingPage extends ShoppingModel {
     const SaveButton = () => (
       this.state.editMode && <IonButton color="danger" fill="clear"
         onClick={() => this.saveEdit()}>
-        <Trans>Save</Trans>
+        <span className="hide-sm-down"><Trans >Save</Trans></span>
         <IonIcon slot="end" icon={saveOutline} />
       </IonButton>
     )
-
 
     return (
       <IonPage>
         <IonHeader>
           <IonToolbar>
-            <IonTitle>{
-              (this.props.shoppingStore.currentShoppingList && this.props.shoppingStore.currentShoppingList.name)
-              || 'Shopping'
-            }</IonTitle>
+            <IonTitle>
+              <AllowCreateOwnNeedsIcon shoppingList={currentShoppingList} />
+              <ListLifecycleIcon list={currentShoppingList} slot={""} />&nbsp;<ListTitle list={currentShoppingList} />
+            </IonTitle>
             <IonButtons slot="primary">
               <EditButton />
               <SaveButton />
+            </IonButtons>
+            <IonButtons slot="secondary">
+              <AllListsButton
+                label="All Shopping Lists"
+                href={SHOPPING_LISTS}
+              />
             </IonButtons>
           </IonToolbar>
         </IonHeader>
         <IonContent>
           <IonHeader collapse="condense">
             <IonToolbar>
-              <IonTitle size="large">Shopping</IonTitle>
+              <IonTitle size="large">
+                <ListLifecycleIcon list={currentShoppingList} slot={""} />&nbsp;<ListTitle list={currentShoppingList} />
+              </IonTitle>
             </IonToolbar>
           </IonHeader>
-
           {this.props.sessionStore.dbAuthenticated &&
             <Shopping model={this}
               editMode={this.state.editMode}
@@ -84,15 +94,17 @@ class ShoppingPage extends ShoppingModel {
 
         </IonContent>
         <IonFooter>
-          {currentShoppingList && <ShoppingActions />}
+          {initializationDone &&
+            <ShoppingActions
+              model={this}
+              hasItems={currentShoppingListItems && currentShoppingListItems.length} /> //TODO: make model injectable
+          }
         </IonFooter>
       </IonPage>
     );
   }
 };
 
-
-// const condition = (authUser) => !!authUser;
 
 export default compose(
   withFirebase,

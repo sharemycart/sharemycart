@@ -111,7 +111,7 @@ class Shopping extends Component {
         if (snapshot.size) {
           let shoppingItems = [];
           snapshot.forEach(doc =>
-            shoppingItems.push({ ...doc.data(), uid: doc.id, parentId: doc.ref.parent.parent.id  }),
+            shoppingItems.push({ ...doc.data(), uid: doc.id, parentId: doc.ref.parent.parent.id }),
           );
 
           this.props.shoppingStore.setCurrentShoppingListItems(shoppingItems);
@@ -191,7 +191,7 @@ class Shopping extends Component {
     this.setState({ editingListName: event.target.value });
   };
 
-  onCreateShoppingList = (event) => {
+  handleCreateShoppingList = (event) => {
     event.preventDefault();
 
     this.props.firebase.createShoppingList({
@@ -201,13 +201,16 @@ class Shopping extends Component {
     this.setState({ editingListName: '' });
   };
 
-  onEditShoppingList = (shoppingList, editingListName) => {
+  onCreateShoppingList = (name) => {
+    this.props.firebase.createShoppingList({
+      name
+    });
+  };
+
+  onEditShoppingList = (shoppingList) => {
     const { uid, ...shoppingListSnapshot } = shoppingList;
 
-    this.props.firebase.editList(shoppingList.uid, {
-      ...shoppingListSnapshot,
-      name: editingListName,
-    });
+    this.props.firebase.editList(shoppingList.uid, shoppingListSnapshot);
   };
 
   onRemoveShoppingList = uid => {
@@ -220,6 +223,27 @@ class Shopping extends Component {
 
   onReorderItems = (listId, items, order) => {
     this.props.firebase.setItemsOrder(listId, items, order)
+  }
+
+  onOpenShopping = shoppingList => {
+    this.props.firebase.openShopping(shoppingList)
+  }
+
+  onGoShopping = shoppingList => {
+    this.props.firebase.goShopping(shoppingList)
+  }
+
+  onFinishShopping = shoppingList => {
+    this.props.firebase.finishShopping(shoppingList)
+  }
+
+  onArchiveShoppingList = async (shoppingList, carryForwardToNewList = true) => {
+    let newList;
+    if(carryForwardToNewList){
+      newList = await this.props.firebase.createListFromTemplate(shoppingList, true)
+    }
+    this.props.firebase.archiveShoppingList(shoppingList)
+    return newList
   }
 
   // event handlers for items
@@ -252,9 +276,10 @@ class Shopping extends Component {
   };
 
   onShopShoppingItem = (listId, uid, shopped = true) => {
-      this.props.firebase.shopItem(listId, uid, shopped)
+    this.props.firebase.shopItem(listId, uid, shopped)
   };
 
+  // helpers
   ensureExistingCurrentShoppingList = async () => {
     const currentShoppingListSnapshot = await this.props.firebase.myCurrentShoppingList().get()
     if (!currentShoppingListSnapshot.size) {

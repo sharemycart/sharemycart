@@ -210,6 +210,10 @@ class Needs extends Component {
     });
   };
 
+  onArchiveNeedsList = list => {
+    this.props.firebase.archiveNeedsList(list);
+  };
+
   onRemoveNeedsList = uid => {
     this.props.firebase.deleteList(uid);
   };
@@ -219,10 +223,10 @@ class Needs extends Component {
   }
 
   // event handlers for items
-  onCreateItemForCurrentNeedsList = (item) => {
+  onCreateItemForCurrentNeedsList = (item, quantity = '') => {
     const { currentNeedsList } = this.props.needsStore;
     if (currentNeedsList) {
-      this.props.firebase.addNeededItemFromShoppingListItem(currentNeedsList.uid, item);
+      this.props.firebase.addNeededItemFromShoppingListItem(currentNeedsList.uid, item, quantity);
     } else {
       console.error('Cannot create item for non-existing needsList');
     }

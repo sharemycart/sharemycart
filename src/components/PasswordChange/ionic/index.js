@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 
 import { withFirebase } from '../../Firebase';
-import { IonHeader, IonButtons, IonToolbar, IonBackButton, IonContent, IonGrid, IonRow, IonCol, IonInput, IonButton, IonIcon } from '@ionic/react';
+import { IonHeader, IonButtons, IonToolbar, IonContent, IonGrid, IonRow, IonCol, IonInput, IonButton, IonIcon } from '@ionic/react';
 import { ACCOUNT, PASSWORD_CHANGE } from '../../../constants/routes';
 import SplashLogo from '../../Reusables/ionic/SplashLogo';
 import { pencilOutline } from 'ionicons/icons';
 
 import {Trans} from 'react-i18next';
+import LabelledBackButton from '../../Reusables/ionic/LabelledBackButton';
 
 const INITIAL_STATE = {
   passwordOne: '',
@@ -19,7 +20,7 @@ const PasswordChangePage = () => (
     <IonHeader>
       <IonToolbar>
         <IonButtons slot="start">
-          <IonBackButton defaultHref={ACCOUNT} />
+          <LabelledBackButton defaultHref={ACCOUNT} />
         </IonButtons>
       </IonToolbar>
     </IonHeader>

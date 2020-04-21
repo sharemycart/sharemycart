@@ -3,17 +3,18 @@ import { Link } from 'react-router-dom';
 
 import { withFirebase } from '../../Firebase';
 import * as ROUTES from '../../../constants/routes';
-import { IonContent, IonGrid, IonButton, IonRow, IonCol, IonInput, IonHeader, IonToolbar, IonButtons, IonBackButton } from '@ionic/react';
+import { IonContent, IonGrid, IonButton, IonRow, IonCol, IonInput, IonHeader, IonToolbar, IonButtons } from '@ionic/react';
 import SplashLogo from '../../Reusables/ionic/SplashLogo';
 
 import {Trans} from 'react-i18next';
+import LabelledBackButton from '../../Reusables/ionic/LabelledBackButton';
 
 const PasswordForgetPage = () => (
     <>
         <IonHeader>
             <IonToolbar>
                 <IonButtons slot="start">
-                    <IonBackButton defaultHref={ROUTES.SIGN_IN} />
+                    <LabelledBackButton defaultHref={ROUTES.SIGN_IN} />
                 </IonButtons>
             </IonToolbar>
         </IonHeader>

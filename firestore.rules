@@ -16,6 +16,10 @@ service cloud.firestore {
       // restrict writing to our own data
       allow update, delete: if resource.data.userId == request.auth.uid;
 
+      // Allow updating needs lists which depend on the auth user's shopping lists
+      // in order to set the lifecycle status
+      allow update: if resource.data.shoppingListOwnerId == request.auth.uid;
+
       // since there's no userId on the newly created list, we need to allow this if signed in
       allow create: if isSignedIn();
       

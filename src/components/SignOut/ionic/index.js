@@ -8,7 +8,7 @@ import { Trans } from 'react-i18next';
 
 const SignOutButton = ({ firebase }) => (
   <IonButton
-    expand="full"
+    expand="block"
     onClick={firebase.doSignOut}
   >
     <Trans>Sign Out</Trans>
