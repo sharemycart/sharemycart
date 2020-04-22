@@ -38,7 +38,7 @@ class CreateItem extends Component {
     const { t } = this.props;
     const { name, quantity, unit = '' } = this.props.item
     if (name) {
-      if (!quantity && !unit) {
+      if (!quantity) {
         this.props.onEditingConcluded(parseName(name))
       } else {
         this.props.onEditingConcluded({

@@ -36,7 +36,7 @@ class Needs extends Component {
     if (!newItem.name || !newItem.quantity) {
       return;
     }
-    this.props.model.onCreateItemForCurrentNeedsList(this.state.itemInCreation, newItem.quantity)
+    this.props.model.onCreateItemForCurrentNeedsList(this.state.itemInCreation, newItem)
     this.setState({ itemInCreation: { ...INITIAL_ITEM } })
   }
 
