@@ -58,9 +58,11 @@ class Needs extends Component {
 
     const { itemInCreation } = this.state
 
+    const itemHasBeenCopied = (itemInCreation && itemInCreation.name)
+
     const createNeedsVisible =
       currentNeedsList && currentNeedsList.lifecycleStatus === LIFECYCLE_STATUS_OPEN
-      && ((itemInCreation && itemInCreation.name) //an item has been copied
+      && ( itemHasBeenCopied
         || (currentOriginShoppingList && currentOriginShoppingList.allowCreateOwnNeeds)) // user is allowed to define own needs
       &&
       <IonList>
@@ -69,6 +71,7 @@ class Needs extends Component {
             item={itemInCreation}
             onChange={this.onCreatingItemChange.bind(this)}
             onEditingConcluded={this.onCreateComplete.bind(this)}
+            highlight={itemHasBeenCopied}
             mode={ITEM_TYPE_NEED}
           />
         </IonItem>

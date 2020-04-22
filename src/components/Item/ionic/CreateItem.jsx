@@ -82,7 +82,7 @@ class CreateItem extends Component {
   render() {
     const { name, quantity, unit, originShoppingItemUid } = this.props.item;
 
-    const { t, isFirstItem } = this.props;
+    const { t, isFirstItem, highlight } = this.props;
 
     const unitOfMeasure =
       this.props.mode === ITEM_TYPE_NEED
@@ -107,7 +107,7 @@ class CreateItem extends Component {
           key="createItemWrapper"
           lines="none"
           style={{ width: "100%" }}
-          className={`create-item ${isFirstItem && "highlight"}`}>
+          className={`create-item ${(isFirstItem || highlight) && "highlight"}`}>
           <IonInput
             placeholder={t('Item name')}
             name="name"
