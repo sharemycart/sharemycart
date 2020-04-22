@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { IonItem, IonButton, IonInput, IonSelect, IonSelectOption, IonLabel, IonIcon, IonToast } from "@ionic/react";
-import { ITEM_TYPE_SHOPPING, ITEM_TYPE_NEED } from "../../../constants/items";
+import { ITEM_TYPE_SHOPPING } from "../../../constants/items";
 
 import { withTranslation } from 'react-i18next';
 import { cartOutline } from "ionicons/icons";
@@ -85,14 +85,12 @@ class EditItem extends Component {
       <>
         <IonItem style={{ width: "100%" }}>
           <IonInput
-            // autofocus={this.props.mode === ITEM_TYPE_NEW_SHOPPING && !name}
             placeholder={t('Item name')}
             name="name"
             value={name}
-            onIonInput={event => this.onKeyPress(event)}
+            onKeyUp={this.onKeyPress}
             onIonChange={event => this.onChange(event)}
             onIonBlur={event => this.onBlur(event)}
-            readonly={this.props.mode === ITEM_TYPE_NEED}
             required="true"
             autocapitalize
             autocorrect="on"
