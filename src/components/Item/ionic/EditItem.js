@@ -3,7 +3,7 @@ import { IonItem, IonButton, IonInput, IonSelect, IonSelectOption, IonLabel, Ion
 import { ITEM_TYPE_SHOPPING } from "../../../constants/items";
 
 import { withTranslation } from 'react-i18next';
-import { cartOutline } from "ionicons/icons";
+import { checkmarkOutline, closeOutline } from "ionicons/icons";
 import { ENTER } from "../../Reusables/keys";
 
 class EditItem extends Component {
@@ -20,22 +20,27 @@ class EditItem extends Component {
     this.quantityInput = React.createRef()
   }
 
-  concludeEditing() {
+  concludeEditing(confirm = true) {
     const { item, t } = this.props;
-    const { name, quantity, unit = ''} = this.state
-    if (name && quantity) {
-      this.props.onEditingConcluded(Object.assign(item, {
-        name,
-        quantity,
-        unit,
-      }))
+    if (confirm) {
+      const { name, quantity, unit = '' } = this.state
+      if (name && quantity) {
+        this.props.onEditingConcluded(Object.assign(item, {
+          name,
+          quantity,
+          unit,
+        }))
+      } else {
+        this.setState({
+          showToast: true,
+          message: t('Name_and_quantity_mandatory')
+        })
+      }
+      this.quantityInput.current.setFocus()
     } else {
-      this.setState({
-        showToast: true,
-        message: t('Name_and_quantity_mandatory')
-      })
+      // reset it
+      this.props.onEditingConcluded(item)
     }
-    this.quantityInput.current.setFocus()
   }
 
   componentDidMount() {
@@ -71,6 +76,7 @@ class EditItem extends Component {
       ? <IonSelect
         value={unit}
         required="true"
+        slot="end"
         onIonChange={e => this.setUnit(e.detail.value)}
       >
         <IonSelectOption>pc</IonSelectOption>
@@ -79,7 +85,12 @@ class EditItem extends Component {
         <IonSelectOption>l</IonSelectOption>
         <IonSelectOption>ml</IonSelectOption>
       </IonSelect>
-      : <IonLabel>{unit}</IonLabel>
+      : <IonLabel
+        marginLeft="2px"
+        slot="end"
+      >
+        {unit}
+      </IonLabel>
 
     return (
       <>
@@ -88,13 +99,16 @@ class EditItem extends Component {
             placeholder={t('Item name')}
             name="name"
             value={name}
-            onKeyUp={this.onKeyPress}
-            onIonChange={event => this.onChange(event)}
-            onIonBlur={event => this.onBlur(event)}
-            required="true"
             autocapitalize
             autocorrect="on"
-            debounce="100"
+            debounce={100}
+            style={{ marginRight: "0px", minWidth: "135px" }}
+            size={16}
+            slot=""
+            onKeyUp={this.onKeyPress}
+            onIonInput={event => this.onKeyPress(event)}
+            onIonChange={event => this.onChange(event)}
+            onIonBlur={event => this.onBlur(event)}
             ref={this.nameInput}
           />
           <IonInput
@@ -108,12 +122,25 @@ class EditItem extends Component {
             onKeyUp={this.onKeyPress}
             onIonChange={event => this.onChange(event)}
             onIonBlur={event => this.onBlur(event)}
-            required="true"
+            required="false"
+            slot="end"
+            style={{ marginRight: "0px", maxWidth: "42px", textAlign: "right" }}
             ref={this.quantityInput}
           />
           {unitOfMeasure}
-          <IonButton onClick={() => this.concludeEditing()} style={{ 'marginLeft': '10px' }}>
-            <IonIcon icon={cartOutline} />
+          <IonButton
+            color="danger"
+            slot="end"
+            onClick={() => this.concludeEditing(false)}
+          // style={{ 'marginLeft': '10px' }}
+          >
+            <IonIcon icon={closeOutline} />
+          </IonButton>
+          <IonButton color="success"
+            slot="end"
+            onClick={() => this.concludeEditing()}
+            style={{ 'marginLeft': '10px' }}>
+            <IonIcon icon={checkmarkOutline} />
           </IonButton>
         </IonItem>
         <IonToast

@@ -107,7 +107,7 @@ class CreateItem extends Component {
           key="createItemWrapper"
           lines="none"
           style={{ width: "100%" }}
-          className={`create-item ${isFirstItem && "first-item"}`}>
+          className={`create-item ${isFirstItem && "highlight"}`}>
           <IonInput
             placeholder={t('Item name')}
             name="name"
@@ -134,14 +134,14 @@ class CreateItem extends Component {
             min="0"
             pattern="\d+,?\d*"
             value={quantity}
-            style={{ marginRight: "0px", minWidth: "63px" }}
             onKeyUp={this.onKeyPress}
             onIonChange={event => this.onChange(event)}
             onIonBlur={event => this.onBlur(event)}
             required="false"
-            ref={this.quantityInput}
             slot="end"
+            style={{ marginRight: "0px", minWidth: "63px" }}
             className="hide-sm-down"
+            ref={this.quantityInput}
           />
           {unitOfMeasure}
           <IonButton
