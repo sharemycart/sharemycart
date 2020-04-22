@@ -109,3 +109,6 @@ dist
 
 # Build artifacts
 build
+
+# Secrets
+serviceAccount.json
