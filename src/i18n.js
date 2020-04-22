@@ -28,6 +28,9 @@ const resources = {
             "Created on": "Created on",
             "Creating_own_items_disabled": "The shopping list owner does not allow to add items which he does not shop anyway",
             "Edit": "Edit",
+            "Edit_not_possible_shopping": "Editing ist not possible: It's currently being shopped! If you want to change something, better give the shopper a call ;)",
+            "Edit_not_possible_finished": "Editing ist not possible: Shopping has already been completed.",
+            "Edit_not_possible_archived": "Editing ist not possible: The shopping list has been archived.",
             "Email": "Email",
             "Email_confirmation_sent": `E-Mail confirmation sent: \n
                 Check you E-Mails (Spam folder included) for a confirmation E-Mail.\n
@@ -95,6 +98,9 @@ const resources = {
             "Created on": "Angelegt am",
             "Creating_own_items_disabled": "Der Eigentümer des Einkaufszettels erlaubt es nicht, dass Du weitere Artikel ergänzt",
             "Edit": "Bearbeiten",
+            "Edit_not_possible_shopping": "Bearbeiten ist nicht mehr möglich: Es wird gerade eingekauft! Wenn Du noch etwas ändern möchtest, ruf lieber an ;)",
+            "Edit_not_possible_finished": "Bearbeiten ist nicht mehr möglich: Der Einkauf ist schon beendet!",
+            "Edit_not_possible_archived": "Bearbeiten ist nicht mehr möglich: Der Einkaufszettel wurde archiviert",
             "Email": "Email",
             "Email_confirmation_sent": `Bestätigungs-E-Mail wurde gesendet: \n
                 Prüfe Deine E-Mails (inklusive des Spam-Ordners) für eine Bestätigungs-E-Mail.\n

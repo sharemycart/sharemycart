@@ -6,7 +6,7 @@ import { ITEM_TYPE_NEED, ITEM_TYPE_POTENTIAL_NEED } from '../../../constants/ite
 import SplashLogo from '../../Reusables/ionic/SplashLogo';
 import { IonGrid, IonCol, IonRow, IonItem, IonList, IonText } from '@ionic/react';
 import LoadingAnimation from '../../Reusables/ionic/LoadingAnimation';
-import { LIFECYCLE_STATUS_OPEN } from '../../../constants/lists';
+import { LIFECYCLE_STATUS_OPEN, LIFECYCLE_STATUS_SHOPPING, LIFECYCLE_STATUS_FINISHED, LIFECYCLE_STATUS_ARCHIVED } from '../../../constants/lists';
 import CreateItem from '../../Item/ionic/CreateItem';
 import { Trans } from 'react-i18next';
 
@@ -74,7 +74,9 @@ class Needs extends Component {
         </IonItem>
       </IonList>
 
-    const createNeedsNotAllowed = currentOriginShoppingList && !currentOriginShoppingList.allowCreateOwnNeeds
+    const createNeedsNotAllowed = currentOriginShoppingList 
+      && !currentOriginShoppingList.allowCreateOwnNeeds
+      && currentOriginShoppingList.lifecycleStatus === LIFECYCLE_STATUS_OPEN
       &&
       <IonItem color="warning">
         <IonText>
@@ -99,10 +101,24 @@ class Needs extends Component {
       </IonGrid>
     )
 
+    const StatusMessage = ({ lifecycleStatus }) => {
+
+      if (lifecycleStatus === LIFECYCLE_STATUS_OPEN) return null
+      const messageMapping = {}
+      messageMapping[LIFECYCLE_STATUS_SHOPPING] = <Trans>Edit_not_possible_shopping</Trans>
+      messageMapping[LIFECYCLE_STATUS_FINISHED] = <Trans>Edit_not_possible_finished</Trans>
+      messageMapping[LIFECYCLE_STATUS_ARCHIVED] = <Trans>Edit_not_possible_archived</Trans>
+
+      return <IonItem color="warning">
+        {messageMapping[lifecycleStatus]}
+      </IonItem>
+    }
+
     if (!initializationDone) return <LoadingAnimation loading={initializationDone} />
 
     return (
       <>
+        {currentOriginShoppingList && <StatusMessage lifecycleStatus={currentOriginShoppingList.lifecycleStatus} />}
         {createNeedsVisible}
         {/* Needs */}
         {currentNeedsList &&
