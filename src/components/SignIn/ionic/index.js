@@ -23,7 +23,7 @@ const SignInPage = (props) => {
     <>
       <IonContent className="login-page">
         <SplashLogo maxWidth={isShareRedirect ? "100px" : "150px"} />
-        {isShareRedirect && <IonItem color="success">
+        {isShareRedirect && <IonItem color="success" className="permanent-message">
           <IonText><h5><Trans>Sharing_link_received</Trans></h5></IonText>
         </IonItem>}
         <IonGrid>

@@ -62,7 +62,7 @@ class Needs extends Component {
 
     const createNeedsVisible =
       currentNeedsList && currentNeedsList.lifecycleStatus === LIFECYCLE_STATUS_OPEN
-      && ( itemHasBeenCopied
+      && (itemHasBeenCopied
         || (currentOriginShoppingList && currentOriginShoppingList.allowCreateOwnNeeds)) // user is allowed to define own needs
       &&
       <IonList>
@@ -77,11 +77,11 @@ class Needs extends Component {
         </IonItem>
       </IonList>
 
-    const createNeedsNotAllowed = currentOriginShoppingList 
+    const createNeedsNotAllowed = currentOriginShoppingList
       && !currentOriginShoppingList.allowCreateOwnNeeds
       && currentOriginShoppingList.lifecycleStatus === LIFECYCLE_STATUS_OPEN
       &&
-      <IonItem color="warning">
+      <IonItem color="warning" className="permanent-message">
         <IonText>
           <Trans>Creating_own_items_disabled</Trans>
         </IonText>
@@ -112,7 +112,7 @@ class Needs extends Component {
       messageMapping[LIFECYCLE_STATUS_FINISHED] = <Trans>Edit_not_possible_finished</Trans>
       messageMapping[LIFECYCLE_STATUS_ARCHIVED] = <Trans>Edit_not_possible_archived</Trans>
 
-      return <IonItem color="warning">
+      return <IonItem color="warning" className="permanent-message">
         {messageMapping[lifecycleStatus]}
       </IonItem>
     }
