@@ -3,7 +3,6 @@ import { Link, withRouter } from 'react-router-dom';
 
 import { withFirebase } from '../../Firebase';
 import * as ROUTES from '../../../constants/routes';
-import * as ROLES from '../../../constants/roles';
 import { IonPage, IonHeader, IonToolbar, IonButtons, IonButton, IonContent, IonRow, IonCol, IonInput } from '@ionic/react';
 
 import { withTranslation, Trans } from 'react-i18next'
@@ -50,16 +49,12 @@ class SignUpFormBase extends Component {
   }
 
   onSubmit = event => {
-    const { username, email, passwordOne, isAdmin } = this.state;
+    const { username, email, passwordOne } = this.state;
     const roles = {};
 
     const { t } = this.props;
 
     const ERROR_MSG_ACCOUNT_EXISTS = t('Account_already_exists');
-
-    if (isAdmin) {
-      roles[ROLES.ADMIN] = ROLES.ADMIN;
-    }
 
     this.props.firebase
       .doCreateUserWithEmailAndPassword(email, passwordOne)
@@ -79,7 +74,13 @@ class SignUpFormBase extends Component {
       })
       .then(() => {
         this.setState({ ...INITIAL_STATE });
-        this.props.history.push(ROUTES.LANDING);
+        const {location} = this.props
+        const isShareRedirect = !!(location.state && location.state.from && location.state.from.pathname.match('^/share/'))
+        if(isShareRedirect){
+          this.props.history.push(location.state.from.pathname);
+        } else {
+        this.props.history.push(ROUTES.SHOPPING);
+        }
       })
       .catch(error => {
         if (error.code === ERROR_CODE_ACCOUNT_EXISTS) {
@@ -176,11 +177,11 @@ class SignUpFormBase extends Component {
   }
 }
 
-const SignUpLink = () => (
+const SignUpLink = ({state}) => (
   <span>
     <Trans>No account yet?</Trans>
     &nbsp;
-    <Link to={ROUTES.SIGN_UP}>
+    <Link to={{pathname: ROUTES.SIGN_UP, state}} >
       <Trans>Sign Up</Trans>
     </Link></span>
 );

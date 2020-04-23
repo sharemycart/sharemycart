@@ -32,7 +32,7 @@ const SignInPage = (props) => {
             <IonCol>
               <PasswordForgetLink />
               <br />
-              <SignUpLink />
+              <SignUpLink state={props.location.state} />
             </IonCol>
           </IonRow>
           <div className="separator">
@@ -125,6 +125,7 @@ class SignInFormBase extends Component {
 
     const { t } = this.props;
 
+    // trigger a navigation instead of rendering if necessary (after successful log-in)
     navigateIfRequested.call(this);
 
     return (

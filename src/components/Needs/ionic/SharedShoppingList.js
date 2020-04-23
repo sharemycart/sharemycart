@@ -11,6 +11,7 @@ import { Trans } from 'react-i18next';
 import './page.css'
 import LoadingAnimation from '../../Reusables/ionic/LoadingAnimation';
 import UserProfileImg from '../../Reusables/ionic/UserProfileImg';
+import { withEmailVerification } from '../../Session';
 
 class NeedsInSharedShoppingList extends Component {
     constructor(props) {
@@ -117,6 +118,7 @@ const CreateNeedsListButton = ({ shoppingListId, sharingUser, onCreateNeedsListF
 
 export default compose(
     withFirebase,
+    withEmailVerification,
     inject('needsStore', 'sessionStore'),
     observer,
 )(NeedsInSharedShoppingList);
