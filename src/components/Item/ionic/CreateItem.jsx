@@ -85,7 +85,7 @@ class CreateItem extends Component {
     const { t, isFirstItem, highlight } = this.props;
 
     const unitOfMeasure =
-      this.props.mode === ITEM_TYPE_NEED
+      this.props.mode === ITEM_TYPE_NEED && unit
         ? <IonLabel
           slot="end"
           className="hide-sm-down"

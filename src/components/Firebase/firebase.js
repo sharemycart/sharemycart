@@ -382,7 +382,7 @@ class Firebase {
     return needsListsRef;
   }
 
-  addNeededItemFromShoppingListItem = (needsListId, shoppingListItem, {name, quantity = ''}) => {
+  addNeededItemFromShoppingListItem = (needsListId, shoppingListItem, {name, quantity = '', unit = ''}) => {
     const neededItem = shoppingListItem;
 
     if (shoppingListItem.uid) {
@@ -392,6 +392,7 @@ class Firebase {
       neededItem.name = name
     }
     neededItem.quantity = quantity;
+    neededItem.unit = unit || ''
     delete neededItem.createdAt;
     delete neededItem.editedAt;
     delete neededItem.uid;

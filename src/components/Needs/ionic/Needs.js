@@ -41,9 +41,13 @@ class Needs extends Component {
   }
 
   copyPotentialNeed(potentialNeed) {
-    this.setState({
-      itemInCreation: { ...potentialNeed, quantity: '' }
-    })
+    // this.setState({
+    //   itemInCreation: { ...potentialNeed, quantity: '' }
+    // })
+    const quantity = potentialNeed.unit && potentialNeed.quantity >= 100
+      ? 100
+      : 1
+      this.props.model.onCreateItemForCurrentNeedsList(potentialNeed, Object.assign(potentialNeed, {quantity}))
   }
 
   render() {
