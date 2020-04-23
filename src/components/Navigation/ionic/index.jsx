@@ -39,17 +39,17 @@ export const NavigationAuth = ({ authUser }) => (
     <>
         <IonTabs>
             <IonRouterOutlet>
-                <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
-                <Route path={ROUTES.PASSWORD_CHANGE} component={PasswordChangePage} />
-                <Route path={ROUTES.ACCOUNT} component={AccountPage} />
-                <Route path={ROUTES.SHOPPING_LISTS} component={ShoppingListsPage} />
-                <Route path={ROUTES.SHOPPING} component={ShoppingPage} />
-                <Route path={ROUTES.FINISH_SHOPPING} component={FinishShoppingPage} />
-                <Route path={ROUTES.GO_SHOPPING} component={GoShoppingPage} />
-                <Route path={ROUTES.NEEDS_LISTS} component={NeedsListsPage} />
-                <Route path={ROUTES.NEEDS} component={NeedsPage} />
+                <Route path={ROUTES.PASSWORD_FORGET} render={() => <PasswordForgetPage />} />
+                <Route path={ROUTES.PASSWORD_CHANGE} render={() => <PasswordChangePage />} />
+                <Route path={ROUTES.ACCOUNT} render={() => <AccountPage />} />
+                <Route path={ROUTES.SHOPPING_LISTS} render={() => <ShoppingListsPage />} />
+                <Route path={ROUTES.SHOPPING} render={() => <ShoppingPage />} />
+                <Route path={ROUTES.FINISH_SHOPPING} render={() => <FinishShoppingPage />} />
+                <Route path={ROUTES.GO_SHOPPING} render={() => <GoShoppingPage />} />
+                <Route path={ROUTES.NEEDS_LISTS} render={() => <NeedsListsPage />} />
+                <Route path={ROUTES.NEEDS} render={() => <NeedsPage />} />
                 <Route path={ROUTES.SHARED_SHOPPING_LIST} component={SharedShoppingList} />
-                <Route path={ROUTES.ADMIN} component={AdminPage} />
+                <Route path={ROUTES.ADMIN} render={() => <AdminPage />} />
                 <Redirect exact from={ROUTES.SIGN_IN} to={ROUTES.SHOPPING} />
                 <Redirect exact from={ROUTES.SIGN_UP} to={ROUTES.SHOPPING} />
                 <Redirect exact from="/" to={ROUTES.SHOPPING} />
@@ -81,7 +81,7 @@ export const NavigationNonAuth = (props) => {
                 <Switch>
                     <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
                     <Route path={ROUTES.SIGN_IN} component={SignInPage} />
-                    <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
+                    <Route path={ROUTES.PASSWORD_FORGET} render={() => <PasswordForgetPage />} />
                     <Redirect from="/" to={{
                         pathname: ROUTES.SIGN_IN,
                         state: { from: currentLocation }
@@ -119,14 +119,14 @@ export default compose(
 //     <>
 //         <IonTabs>
 //             <IonRouterOutlet>
-//                 <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
-//                 <Route path={ROUTES.SIGN_IN} component={SignInPage} />
-//                 <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
-//                 <PrivateRoute path={ROUTES.ACCOUNT} component={AccountPage} />
-//                 <PrivateRoute path={ROUTES.SHOPPING} component={ShoppingPage} />
-//                 <PrivateRoute path={ROUTES.NEEDS} component={NeedsPage} />
-//                 <PrivateRoute path={ROUTES.SHARED_SHOPPING_LIST} component={SharedShoppingList} />
-//                 <PrivateRoute path={ROUTES.ADMIN} component={AdminPage} />
+//                 <Route path={ROUTES.SIGN_UP} render={() => <SignUpPage />} />
+//                 <Route path={ROUTES.SIGN_IN} render={() => <SignInPage />} />
+//                 <Route path={ROUTES.PASSWORD_FORGET} render={() => <PasswordForgetPage />} />
+//                 <PrivateRoute path={ROUTES.ACCOUNT} render={() => <AccountPage />} />
+//                 <PrivateRoute path={ROUTES.SHOPPING} render={() => <ShoppingPage />} />
+//                 <PrivateRoute path={ROUTES.NEEDS} render={() => <NeedsPage />} />
+//                 <PrivateRoute path={ROUTES.SHARED_SHOPPING_LIST} render={() => <SharedShoppingList />} />
+//                 <PrivateRoute path={ROUTES.ADMIN} render={() => <AdminPage />} />
 //                 <Redirect exact from="/" to={ROUTES.SHOPPING} />
 //             </IonRouterOutlet>
 //             <IonTabBar slot="bottom">
