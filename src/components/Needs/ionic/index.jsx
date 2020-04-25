@@ -48,7 +48,7 @@ class NeedsPage extends NeedsModel {
             <ListHeader
               needsStore={this.props.needsStore}
               userStore={this.props.userStore}
-              size="small"
+              size="medium"
             />
             <IonButtons slot="secondary">
               <AllListsButton
