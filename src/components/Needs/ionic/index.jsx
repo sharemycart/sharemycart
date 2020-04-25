@@ -21,12 +21,13 @@ class NeedsPage extends NeedsModel {
 
     const ListHeader = ({
       userStore,
+      size
     }) => {
       if (currentNeedsList
         && userStore.users) {
         const owner = userStore.users[currentNeedsList.shoppingListOwnerId]
         if (owner) return (
-          <IonTitle>
+          <IonTitle size={size}>
 
             {/* // TODO: Display the Avatar of the owner */}
             {/* <Avatar
@@ -47,6 +48,7 @@ class NeedsPage extends NeedsModel {
             <ListHeader
               needsStore={this.props.needsStore}
               userStore={this.props.userStore}
+              size="small"
             />
             <IonButtons slot="secondary">
               <AllListsButton
@@ -62,6 +64,7 @@ class NeedsPage extends NeedsModel {
               <ListHeader
                 needsStore={this.props.needsStore}
                 userStore={this.props.userStore}
+                size="large"
               />
             </IonToolbar>
           </IonHeader>
