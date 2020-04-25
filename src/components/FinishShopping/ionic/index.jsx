@@ -10,7 +10,7 @@ import { IonHeader, IonToolbar, IonButtons, IonContent, IonIcon, IonFooter, IonF
 import { GO_SHOPPING, SHOPPING } from '../../../constants/routes';
 import { withEmailVerification } from '../../Session';
 import { withFirebase } from '../../Firebase';
-import { trashBinOutline } from 'ionicons/icons';
+import { checkmarkDoneOutline } from 'ionicons/icons';
 import LabelledBackButton from '../../Reusables/ionic/LabelledBackButton';
 import FinishShopping from './FinishShopping';
 import { Trans } from 'react-i18next';
@@ -23,7 +23,7 @@ const DoneButton = ({ currentShoppingList, onArchiveShoppingList, history }) =>
         onArchiveShoppingList(currentShoppingList)
         history.push(SHOPPING)
       }}>
-        <IonIcon icon={trashBinOutline} />
+        <IonIcon icon={checkmarkDoneOutline} />
       </IonFabButton>
     )
     : null
