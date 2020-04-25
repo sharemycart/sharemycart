@@ -80,7 +80,7 @@ class Item extends Component {
       && !(mode === ITEM_TYPE_SHOPPING && listEditMode)
 
     const editIcon = showEditButton && <IonButton className="button-end" fill="clear" size="large" slot="end" onClick={() => this.setEditMode(true)}>
-      <IonIcon icon={createOutline} />
+      <IonIcon icon={createOutline} slot="end" />
     </IonButton>
 
 

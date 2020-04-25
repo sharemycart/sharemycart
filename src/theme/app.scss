@@ -1,4 +1,22 @@
-.fab-button-in-list{
-    width: 50px;
-    height: 50px;
+.fab-button-in-list {
+  width: 50px;
+  height: 50px;
+}
+
+
+ion-title {
+  ion-icon {
+    font-size: 80%;
   }
+}
+
+@media only screen and (min-width: 768px) {
+  body {
+    background-color: #333333;
+
+    ion-app {
+      max-width: 768px;
+      margin: auto;
+    }
+  }
+}

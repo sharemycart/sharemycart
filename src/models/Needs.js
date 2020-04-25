@@ -223,10 +223,10 @@ class Needs extends Component {
   }
 
   // event handlers for items
-  onCreateItemForCurrentNeedsList = (item, quantity = '') => {
+  onCreateItemForCurrentNeedsList = (potentiallyNeededItem, {name, quantity = '', unit = ''}) => {
     const { currentNeedsList } = this.props.needsStore;
     if (currentNeedsList) {
-      this.props.firebase.addNeededItemFromShoppingListItem(currentNeedsList.uid, item, quantity);
+      this.props.firebase.addNeededItemFromShoppingListItem(currentNeedsList.uid, potentiallyNeededItem, {name, quantity, unit});
     } else {
       console.error('Cannot create item for non-existing needsList');
     }

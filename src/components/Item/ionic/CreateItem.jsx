@@ -38,7 +38,7 @@ class CreateItem extends Component {
     const { t } = this.props;
     const { name, quantity, unit = '' } = this.props.item
     if (name) {
-      if (!quantity && !unit) {
+      if (!quantity) {
         this.props.onEditingConcluded(parseName(name))
       } else {
         this.props.onEditingConcluded({
@@ -82,10 +82,10 @@ class CreateItem extends Component {
   render() {
     const { name, quantity, unit, originShoppingItemUid } = this.props.item;
 
-    const { t, isFirstItem } = this.props;
+    const { t, isFirstItem, highlight } = this.props;
 
     const unitOfMeasure =
-      this.props.mode === ITEM_TYPE_NEED
+      this.props.mode === ITEM_TYPE_NEED && unit
         ? <IonLabel
           slot="end"
           className="hide-sm-down"
@@ -107,7 +107,7 @@ class CreateItem extends Component {
           key="createItemWrapper"
           lines="none"
           style={{ width: "100%" }}
-          className={`create-item ${isFirstItem && "first-item"}`}>
+          className={`create-item ${(isFirstItem || highlight) && "highlight"}`}>
           <IonInput
             placeholder={t('Item name')}
             name="name"
@@ -134,14 +134,14 @@ class CreateItem extends Component {
             min="0"
             pattern="\d+,?\d*"
             value={quantity}
-            style={{ marginRight: "0px", minWidth: "63px" }}
             onKeyUp={this.onKeyPress}
             onIonChange={event => this.onChange(event)}
             onIonBlur={event => this.onBlur(event)}
             required="false"
-            ref={this.quantityInput}
             slot="end"
+            style={{ marginRight: "0px", minWidth: "63px" }}
             className="hide-sm-down"
+            ref={this.quantityInput}
           />
           {unitOfMeasure}
           <IonButton
