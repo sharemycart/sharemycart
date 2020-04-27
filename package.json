@@ -109,7 +109,7 @@
     "cypress": "^4.4.1",
     "cypress-firebase": "^1.1.0",
     "eslint-plugin-chai-friendly": "^0.6.0",
-    "eslint-plugin-react": "^7.11.1",
+    "eslint-plugin-react": "^7.19.0",
     "firebase-admin": "^8.10.0",
     "firebase-tools-extra": "^1.0.0",
     "node-sass": "^4.13.1"
