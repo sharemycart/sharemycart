@@ -3,10 +3,10 @@
 import app from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
-import { LIST_TYPE_SHOPPING, LIST_TYPE_NEED, LIFECYCLE_STATUS_OPEN, LIFECYCLE_STATUS_SHOPPING, LIFECYCLE_STATUS_FINISHED, LIFECYCLE_STATUS_ARCHIVED } from '../../constants/lists'
-
-const INVALID_DUMMY_UID = 'idonotexist' // can be used in order to create queries which intentionally don't match anything
+import { LIST_TYPE_SHOPPING, LIST_TYPE_NEED, LIFECYCLE_STATUS_OPEN, LIFECYCLE_STATUS_SHOPPING, LIFECYCLE_STATUS_FINISHED, LIFECYCLE_STATUS_ARCHIVED } from '../../constants/lists' // can be used in order to create queries which intentionally don't match anything
 import config from './config'
+
+const INVALID_DUMMY_UID = 'idonotexist'
 
 class Firebase {
 	constructor() {

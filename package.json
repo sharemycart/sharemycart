@@ -88,8 +88,8 @@
   },
   "scripts": {
     "cypr": "cross-env CYPRESS_REMOTE_DEBUGGING_PORT=9222 cypress open",
-    "lint": "eslint src",
-    "lint:fix": "eslint src --fix",
+    "lint": "EXTEND_ESLINT=true eslint src",
+    "lint:fix": "EXTEND_ESLINT=true eslint src --fix",
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "build:staging": "env-cmd -f .env.staging npm run build",
