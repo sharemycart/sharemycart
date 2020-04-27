@@ -1,17 +1,17 @@
-import { observable, action, computed } from 'mobx'
+import { decorate, observable, action, computed } from 'mobx'
 import toObject from '../lib/convertArrayToObject'
 class UserStore {
-	@observable users = {};
+	users = {};
 
 	constructor(rootStore) {
 		this.rootStore = rootStore
 	}
 
-	@action setUsers = users => {
+	setUsers = users => {
 		this.users = toObject(users)
 	};
 
-	@action setUser = (uid, user) => {
+	setUser = (uid, user) => {
 		if (!this.users) {
 			this.users = {}
 		}
@@ -19,12 +19,21 @@ class UserStore {
 		this.users[uid] = user
 	};
 
-	@computed get userList() {
+	get userList() {
 		return Object.keys(this.users || {}).map(key => ({
 			...this.users[key],
 			uid: key,
 		}))
 	}
 }
+
+decorate(UserStore, {
+	users: observable,
+
+	setUser: action,
+	setUsers: action,
+
+	userList: computed,
+})
 
 export default UserStore
