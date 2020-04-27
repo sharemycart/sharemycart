@@ -27,12 +27,12 @@ const withAuthentication = Component => {
 				authUser => {
 					localStorage.setItem('authUser', JSON.stringify(authUser))
 					this.props.sessionStore.setAuthUser(authUser)
-					this.listener && this.listener(authUser)
+					if (this.listener) this.listener(authUser)
 				},
 				() => {
 					localStorage.removeItem('authUser')
 					this.props.sessionStore.setAuthUser(null)
-					this.listener && this.listener(null)
+					if (this.listener) this.listener(null)
 				},
 			)
 		}

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Component } from 'react'
 
 /**
@@ -56,9 +57,9 @@ class Shopping extends Component {
 	}
 
 	unregisterAllListeners() {
-		this.unsubscribeLists && this.unsubscribeLists()
-		this.unsubscribeItems && this.unsubscribeItems()
-		this.unsubscribeDependentNeedsLists && this.unsubscribeDependentNeedsLists()
+		if (this.unsubscribeLists) this.unsubscribeLists()
+		if (this.unsubscribeItems) this.unsubscribeItems()
+		if (this.unsubscribeDependentNeedsLists) this.unsubscribeDependentNeedsLists()
 		this.unsubscribeAllDependentNeedsListItems()
 	}
 
@@ -93,11 +94,11 @@ class Shopping extends Component {
 				}
 
 				// register for item updates - this should actually be done implicitly, but it seems it isn't
-				this.unsubscribeItems && this.unsubscribeItems()
+				if (this.unsubscribeItems) this.unsubscribeItems()
 				this.onListenForCurrentShoppingListItems(currentShoppingListId)
 
 				// register for dependent needs list items
-				this.unsubscribeDependentNeedsLists && this.unsubscribeDependentNeedsLists()
+				if (this.unsubscribeDependentNeedsLists) this.unsubscribeDependentNeedsLists()
 				this.unsubscribeAllDependentNeedsListItems()
 				this.onListenForDependentNeedsLists(currentShoppingListId)
 
@@ -166,8 +167,8 @@ class Shopping extends Component {
 	}
 
 	unsubscribeAllDependentNeedsListItems() {
-		this.unsubscribeDependentNeedsListsItems && this.unsubscribeDependentNeedsListsItems.length
-			&& this.unsubscribeDependentNeedsListsItems.forEach(handler => handler())
+		if (this.unsubscribeDependentNeedsListsItems
+			&& this.unsubscribeDependentNeedsListsItems.length) this.unsubscribeDependentNeedsListsItems.forEach(handler => handler())
 	}
 
 	onListenForDependentNeedsListsItems = (needsListId) => {

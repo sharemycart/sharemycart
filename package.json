@@ -112,8 +112,15 @@
     "eslint-plugin-react": "^7.19.0",
     "firebase-admin": "^8.10.0",
     "firebase-tools-extra": "^1.0.0",
+    "husky": "^4.2.5",
     "node-sass": "^4.13.1"
-  },
+	},
+		"husky": {
+			"hooks": {
+				"pre-commit": "npm run lint",
+				"pre-push": "npm test"
+			}
+	},
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}",

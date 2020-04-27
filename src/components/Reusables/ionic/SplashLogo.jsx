@@ -1,7 +1,7 @@
 import React from 'react'
 import { IonImg, IonGrid, IonRow, IonCol, IonLabel } from '@ionic/react'
 
-export default (props) => (
+const SplashLogo = (props) => (
 	<>
 		<IonImg className="image-login" src="logo-cart_1000.png" style={{ maxWidth: props.maxWidth }} />
 		<IonGrid>
@@ -14,3 +14,5 @@ export default (props) => (
 		</IonGrid>
 	</>
 )
+
+export default SplashLogo

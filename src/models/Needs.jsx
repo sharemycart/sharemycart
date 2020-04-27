@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Component } from 'react'
 
 /**
@@ -52,10 +53,10 @@ class Needs extends Component {
 	}
 
 	unregisterAllListeners() {
-		this.unsubscribeLists && this.unsubscribeLists()
-		this.unsubscribeItems && this.unsubscribeItems()
-		this.unsubscribeOriginShoppingList && this.unsubscribeOriginShoppingList()
-		this.unsubscribeOriginShoppingListItems && this.unsubscribeOriginShoppingListItems()
+		if (this.unsubscribeLists) this.unsubscribeLists()
+		if (this.unsubscribeItems) this.unsubscribeItems()
+		if (this.unsubscribeOriginShoppingList) this.unsubscribeOriginShoppingList()
+		if (this.unsubscribeOriginShoppingListItems) this.unsubscribeOriginShoppingListItems()
 	}
 
 	// listeners to the database
@@ -105,13 +106,13 @@ class Needs extends Component {
 				}
 
 				// react on item updates - this should actually be done implicitly, but it seems it isn't
-				this.unsubscribeItems && this.unsubscribeItems()
-				currentNeedsListId && this.onListenForCurrentNeedsListItems(currentNeedsListId)
+				if (this.unsubscribeItems) this.unsubscribeItems()
+				if (currentNeedsListId) this.onListenForCurrentNeedsListItems(currentNeedsListId)
 
 				//* react on changes of the origin shopping list
 				//  remove obsolete listeners first (if exist)
-				this.unsubscribeOriginShoppingList && this.unsubscribeOriginShoppingList()
-				this.unsubscribeOriginShoppingListItems && this.unsubscribeOriginShoppingListItems()
+				if (this.unsubscribeOriginShoppingList) this.unsubscribeOriginShoppingList()
+				if (this.unsubscribeOriginShoppingListItems) this.unsubscribeOriginShoppingListItems()
 
 				// register for changes in the origin shopping list
 				if (currentOriginShoppingListId) {
@@ -152,7 +153,7 @@ class Needs extends Component {
 					const shoppingList = snapshot.data()
 					this.props.needsStore.setCurrentOriginShoppingList(shoppingList)
 
-					this.unsubscribeOriginShoppingListItems && this.unsubscribeOriginShoppingListItems()
+					if (this.unsubscribeOriginShoppingListItems) this.unsubscribeOriginShoppingListItems()
 					this.onListenForOriginShoppingListItems(uid)
 
 				} else {

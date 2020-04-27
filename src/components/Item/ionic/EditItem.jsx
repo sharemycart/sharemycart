@@ -54,7 +54,7 @@ class EditItem extends Component {
 	}
 
 	onKeyPress = (event) => {
-		event.which === ENTER && this.concludeEditing()
+		if (event.which === ENTER) this.concludeEditing()
 	}
 
 	onBlur(event) {

@@ -96,10 +96,13 @@ class ShoppingList extends Component {
 				items.find(item => item.name === neededItem.name)
 
 			if (originItem) {
-				bringAlongItemsByShoppingItem[originItem.uid] &&
+				if (bringAlongItemsByShoppingItem[originItem.uid] &&
 					bringAlongItemsByShoppingItem[originItem.uid].length
-					? bringAlongItemsByShoppingItem[originItem.uid].push(neededItem)
-					: bringAlongItemsByShoppingItem[originItem.uid] = [neededItem]
+				) {
+					bringAlongItemsByShoppingItem[originItem.uid].push(neededItem)
+				} else {
+					bringAlongItemsByShoppingItem[originItem.uid] = [neededItem]
+				}
 			} else {
 				const owner = userStore.users[neededItem.ownerId]
 				otherUsersOwnNeededItems.push({
