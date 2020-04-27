@@ -43,7 +43,6 @@
     "eslint-plugin-flowtype": "2.50.1",
     "eslint-plugin-import": "2.14.0",
     "eslint-plugin-jsx-a11y": "6.1.2",
-    "eslint-plugin-react": "7.11.1",
     "file-loader": "2.0.0",
     "firebase": "^7.14.0",
     "fork-ts-checker-webpack-plugin-alt": "0.4.14",
@@ -89,6 +88,8 @@
   },
   "scripts": {
     "cypr": "cross-env CYPRESS_REMOTE_DEBUGGING_PORT=9222 cypress open",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "build:staging": "env-cmd -f .env.staging npm run build",
@@ -107,6 +108,8 @@
     "cross-env": "^7.0.2",
     "cypress": "^4.4.1",
     "cypress-firebase": "^1.1.0",
+    "eslint-plugin-chai-friendly": "^0.6.0",
+    "eslint-plugin-react": "^7.11.1",
     "firebase-admin": "^8.10.0",
     "firebase-tools-extra": "^1.0.0",
     "node-sass": "^4.13.1"
