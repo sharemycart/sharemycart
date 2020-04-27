@@ -9,4 +9,4 @@ const UNITS = [
 	'Packungen'
 ]
 
-module.exports = UNITS
+export default UNITS
