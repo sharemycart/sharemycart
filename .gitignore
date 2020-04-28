@@ -111,5 +111,7 @@ serviceAccount.json
 
 # Build artifacts
 build
+.firebase
+
 # Secrets
 serviceAccount.json

@@ -8,7 +8,8 @@ const config = {
 	authDomain: `${projectId}.firebaseapp.com`,
 	databaseURL: `https://${projectId}.firebaseio.com`,
 	projectId: `${projectId}`,
-	storageBucket: `${projectId}.appspot.com`
+	storageBucket: `${projectId}.appspot.com`,
+	emailRedirect: process.env.REACT_APP_CONFIRMATION_EMAIL_REDIRECT,
 }
 
 export default config

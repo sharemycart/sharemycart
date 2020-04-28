@@ -34,8 +34,7 @@
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
     "react-scripts": "2.1.1",
-    "recompose": "^0.30.0",
-    "undefined": "^0.1.0"
+    "recompose": "^0.30.0"
   },
   "scripts": {
     "cypr": "cross-env CYPRESS_REMOTE_DEBUGGING_PORT=9222 cypress open",
@@ -70,7 +69,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint"
+      "pre-commit": "npm run lint",
+			"pre-push": "CI=true npm run build"
     }
   },
   "jest": {

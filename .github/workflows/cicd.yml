@@ -44,22 +44,23 @@ jobs:
       - name: Lint
         run: |
           npm run lint
-      # - run: |
-      #     npm run test
-      - name: Setup env
+      - name: Setup env for automated test
+        uses: SpicyPizza/create-envfile@v1
+        with:
+          envkey_REACT_APP_BASENAME: "http://localhost:3000"
+          envkey_REACT_APP_BACKEND_API_KEY: ${{secrets.CI_BACKEND_API_KEY}}
+          envkey_REACT_APP_BACKEND_PROJECT_ID: ${{secrets.CI_BACKEND_PROJECT_ID}}
+          envkey_REACT_APP_CONFIRMATION_EMAIL_REDIRECT: "http://localhost:3000"
+          file_name: .env.test
+      - name: Setup env for build
         uses: SpicyPizza/create-envfile@v1
         with:
           envkey_REACT_APP_BASENAME: ${{ steps.vars.outputs.PUBLIC_URL }}
           envkey_REACT_APP_BACKEND_API_KEY: ${{secrets.STAGING_BACKEND_API_KEY}}
-          envkey_REACT_APP_BACKEND_AUTH_DOMAIN: ${{secrets.STAGING_BACKEND_PROJECT_ID}}.firebaseapp.com
-          envkey_REACT_APP_BACKEND_DATABASE_URL: https://${{secrets.STAGING_BACKEND_PROJECT_ID}}.firebaseio.com
           envkey_REACT_APP_BACKEND_PROJECT_ID: ${{secrets.STAGING_BACKEND_PROJECT_ID}}
-          envkey_REACT_APP_BACKEND_STORAGE_BUCKET: ${{secrets.STAGING_BACKEND_PROJECT_ID}}.appspot.com
-          envkey_REACT_APP_BACKEND_MESSAGE_SENDER_ID: ${{secrets.STAGING_BACKEND_MESSAGE_SENDER_ID}}
-          envkey_REACT_APP_BACKEND_SENDER_APP_ID: ${{secrets.STAGING_BACKEND_SENDER_APP_ID}}
-          envkey_REACT_APP_BACKEND_MEASUREMENT_ID: ${{secrets.STAGING_BACKEND_MEASUREMENT_ID}}
           envkey_REACT_APP_CONFIRMATION_EMAIL_REDIRECT: ${{ steps.vars.outputs.PUBLIC_URL }}
           file_name: .env.staging
+      
       - run: |
           npm run build:staging
       - name: Upload build
