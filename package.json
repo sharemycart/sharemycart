@@ -1,134 +1,140 @@
 {
-  "name": "share-my-cart",
-  "homepage": "https://app.sharemycart.com",
-  "version": "0.2.1",
-  "private": true,
-  "engines": {
-    "node": ">=10.0.0",
-    "npm": ">=6.0.0"
-  },
-  "dependencies": {
-    "@babel/core": "7.1.0",
-    "@capacitor/core": "1.5.2",
-    "@ionic/react": "^5.0.0",
-    "@ionic/react-router": "^5.0.0",
-    "@types/jest": "^25.2.1",
-    "@types/node": "^13.13.4",
-    "@types/react": "^16.9.34",
-    "@types/react-dom": "^16.9.7",
-    "@types/react-router": "^5.1.7",
-    "@types/react-router-dom": "^5.1.5",
-    "@types/recompose": "^0.30.7",
-    "firebase": "^7.14.0",
-    "html-webpack-plugin": "4.0.0-alpha.2",
-    "i18next": "^19.3.4",
-    "i18next-browser-languagedetector": "^4.0.2",
-    "ionicons": "^5.0.0",
-    "md5": "^2.2.1",
-    "mobx": "^5.15.4",
-    "mobx-react": "^5.4.2",
-    "react": "^16.6.3",
-    "react-copy-to-clipboard": "^5.0.2",
-    "react-dom": "^16.6.3",
-    "react-i18next": "^11.4.0",
-    "react-router": "^5.1.2",
-    "react-router-dom": "^5.1.2",
-    "react-scripts": "2.1.1",
-    "recompose": "^0.30.0"
-  },
-  "scripts": {
-    "cypr": "cross-env CYPRESS_REMOTE_DEBUGGING_PORT=9222 cypress open",
-    "lint": "EXTEND_ESLINT=true eslint src",
-    "lint:fix": "EXTEND_ESLINT=true eslint src --fix",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "build:staging": "env-cmd -f .env.staging npm run build",
-    "test": "cross-env CYPRESS_baseUrl=http://localhost:3000 cypress run",
-    "test:ui": "cross-env CYPRESS_baseUrl=http://localhost:3000 cypress open"
-  },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ],
-  "devDependencies": {
-    "@babel/plugin-proposal-decorators": "^7.2.0",
-    "@capacitor/cli": "1.5.2",
-    "cross-env": "^7.0.2",
-    "cypress": "^4.4.1",
-    "cypress-firebase": "^1.1.0",
-    "dotenv-flow": "^3.1.0",
-    "eslint-plugin-chai-friendly": "^0.6.0",
-    "eslint-plugin-cypress": "^2.10.3",
-    "eslint-plugin-react": "^7.19.0",
-    "firebase-admin": "^8.10.0",
-    "firebase-tools-extra": "^1.0.0",
-    "husky": "^4.2.5",
-    "node-sass": "^4.13.1",
-    "typescript": "^3.8.3"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint",
-      "pre-push": "CI=true npm run build"
-    }
-  },
-  "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}",
-      "!src/**/*.d.ts"
-    ],
-    "resolver": "jest-pnp-resolver",
-    "setupFiles": [
-      "react-app-polyfill/jsdom"
-    ],
-    "testMatch": [
-      "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
-      "<rootDir>/src/**/?(*.)(spec|test).{js,jsx,ts,tsx}"
-    ],
-    "testEnvironment": "jsdom",
-    "testURL": "http://localhost",
-    "transform": {
-      "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest",
-      "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
-      "^(?!.*\\.(js|jsx|ts|tsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
-    },
-    "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$",
-      "^.+\\.module\\.(css|sass|scss)$"
-    ],
-    "moduleNameMapper": {
-      "^react-native$": "react-native-web",
-      "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
-    },
-    "moduleFileExtensions": [
-      "web.js",
-      "js",
-      "web.ts",
-      "ts",
-      "web.tsx",
-      "tsx",
-      "json",
-      "web.jsx",
-      "jsx",
-      "node"
-    ]
-  },
-  "babel": {
-    "presets": [
-      "react-app"
-    ],
-    "plugins": [
-      [
-        "@babel/plugin-proposal-decorators",
-        {
-          "legacy": true
-        }
-      ]
-    ]
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  }
+	"name": "share-my-cart",
+	"homepage": "https://app.sharemycart.com",
+	"version": "0.2.1",
+	"private": true,
+	"engines": {
+		"node": ">=10.0.0",
+		"npm": ">=6.0.0"
+	},
+	"dependencies": {
+		"@babel/core": "7.1.0",
+		"@capacitor/core": "1.5.2",
+		"@ionic/react": "^5.0.0",
+		"@ionic/react-router": "^5.0.0",
+		"@types/jest": "^25.2.1",
+		"@types/node": "^13.13.4",
+		"@types/react": "^16.9.34",
+		"@types/react-dom": "^16.9.7",
+		"@types/react-router": "^5.1.7",
+		"@types/react-router-dom": "^5.1.5",
+		"@types/recompose": "^0.30.7",
+		"firebase": "^7.14.0",
+		"html-webpack-plugin": "4.0.0-alpha.2",
+		"i18next": "^19.3.4",
+		"i18next-browser-languagedetector": "^4.0.2",
+		"ionicons": "^5.0.0",
+		"md5": "^2.2.1",
+		"mobx": "^5.15.4",
+		"mobx-react": "^5.4.2",
+		"react": "^16.6.3",
+		"react-copy-to-clipboard": "^5.0.2",
+		"react-dom": "^16.6.3",
+		"react-i18next": "^11.4.0",
+		"react-router": "^5.1.2",
+		"react-router-dom": "^5.1.2",
+		"react-scripts": "3.4.1",
+		"recompose": "^0.30.0"
+	},
+	"scripts": {
+		"lint": "EXTEND_ESLINT=true eslint src",
+		"lint:fix": "EXTEND_ESLINT=true eslint src --fix",
+		"start": "react-scripts -r @cypress/instrument-cra start --coverage",
+		"build": "react-scripts build",
+		"build:staging": "env-cmd -f .env.staging npm run build",
+		"test": "cross-env CYPRESS_baseUrl=http://localhost:3000 cypress run",
+		"test:debug": "cross-env CYPRESS_REMOTE_DEBUGGING_PORT=9222 cypress open",
+		"test:ui": "cross-env CYPRESS_baseUrl=http://localhost:3000 cypress open",
+		"ci": "cross-env NODE_ENV=test start-test 3000 test:ui"
+	},
+	"browserslist": [
+		">0.2%",
+		"not dead",
+		"not ie <= 11",
+		"not op_mini all"
+	],
+	"devDependencies": {
+		"@babel/plugin-proposal-decorators": "^7.2.0",
+		"@capacitor/cli": "1.5.2",
+		"@cypress/code-coverage": "^3.6.0",
+		"@cypress/instrument-cra": "^1.1.1",
+		"cross-env": "^7.0.2",
+		"cypress": "^4.4.1",
+		"cypress-firebase": "^1.1.0",
+		"dotenv-flow": "^3.1.0",
+		"eslint-plugin-chai-friendly": "^0.6.0",
+		"eslint-plugin-cypress": "^2.10.3",
+		"eslint-plugin-react": "^7.19.0",
+		"firebase-admin": "^8.10.0",
+		"firebase-tools-extra": "^1.0.0",
+		"husky": "^4.2.5",
+		"istanbul-lib-coverage": "^3.0.0",
+		"node-sass": "^4.13.1",
+		"nyc": "^15.0.1",
+		"start-server-and-test": "^1.11.0",
+		"typescript": "^3.8.3"
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "npm run lint",
+			"pre-push": "CI=true npm run build"
+		}
+	},
+	"jest": {
+		"collectCoverageFrom": [
+			"src/**/*.{js,jsx,ts,tsx}",
+			"!src/**/*.d.ts"
+		],
+		"resolver": "jest-pnp-resolver",
+		"setupFiles": [
+			"react-app-polyfill/jsdom"
+		],
+		"testMatch": [
+			"<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
+			"<rootDir>/src/**/?(*.)(spec|test).{js,jsx,ts,tsx}"
+		],
+		"testEnvironment": "jsdom",
+		"testURL": "http://localhost",
+		"transform": {
+			"^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest",
+			"^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
+			"^(?!.*\\.(js|jsx|ts|tsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
+		},
+		"transformIgnorePatterns": [
+			"[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$",
+			"^.+\\.module\\.(css|sass|scss)$"
+		],
+		"moduleNameMapper": {
+			"^react-native$": "react-native-web",
+			"^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
+		},
+		"moduleFileExtensions": [
+			"web.js",
+			"js",
+			"web.ts",
+			"ts",
+			"web.tsx",
+			"tsx",
+			"json",
+			"web.jsx",
+			"jsx",
+			"node"
+		]
+	},
+	"babel": {
+		"presets": [
+			"react-app"
+		],
+		"plugins": [
+			[
+				"@babel/plugin-proposal-decorators",
+				{
+					"legacy": true
+				}
+			]
+		]
+	},
+	"eslintConfig": {
+		"extends": "react-app"
+	}
 }

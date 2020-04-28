@@ -15,7 +15,6 @@ const fbConfig = {
 	storageBucket: `${projectId}.appspot.com`
 }
 
-console.log('fbConfig', fbConfig)
 firebase.initializeApp(fbConfig)
 
 attachCustomCommands({ Cypress, cy, firebase }) 
