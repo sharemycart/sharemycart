@@ -16,6 +16,7 @@ const Lists = (props) => {
 					.map(list => (
 						<IonItem
 							key={list.uid}
+							data-test="list"
 							onClick={() => {
 								props.onSetCurrentList(list)
 								props.history.push(props.hrefOnClick)

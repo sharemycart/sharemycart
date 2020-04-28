@@ -53,7 +53,14 @@ class Item extends Component {
 		} = this.props
 
 		const needIcon = !ownList && !readOnly && mode === ITEM_TYPE_POTENTIAL_NEED &&
-			<IonButton onClick={() => onCreateNeed(item)} fill="add" size="large" slot="end" color="primary">
+			<IonButton
+				fill="add"
+				size="large"
+				slot="end"
+				color="primary"
+				data-test="btn-create-need"
+				onClick={() => onCreateNeed(item)}
+			>
 				<IonIcon icon={add} />
 			</IonButton>
 
@@ -63,7 +70,10 @@ class Item extends Component {
 			<IonChip
 				onClick={() => this.setEditMode(true)}
 				color={!item.shopped ? 'primary' : 'success'}>
-				<IonLabel color={!item.shopped ? 'dark' : 'success'}>
+				<IonLabel
+					color={!item.shopped ? 'dark' : 'success'}
+					data-test="label-quantity"
+				>
 					{mode === ITEM_TYPE_BRING_ALONG && '+'}{item.quantity} {item.unit}
 				</IonLabel>
 			</IonChip>
@@ -71,20 +81,43 @@ class Item extends Component {
 		const showDeleteButton = ownList && !readOnly
 			&& ((mode === ITEM_TYPE_SHOPPING && listEditMode) || mode === ITEM_TYPE_NEED)
 
-		const deleteIcon = showDeleteButton && <IonButton className="button-end" fill="clear" size="large" slot="end" color="danger" onClick={() => onDeleteItem(item.uid)}>
-			<IonIcon icon={trash} />
-		</IonButton>
+		const deleteIcon = showDeleteButton &&
+			<IonButton
+				className="button-end"
+				fill="clear"
+				size="large"
+				slot="end"
+				color="danger"
+				onClick={() => onDeleteItem(item.uid)}
+				data-test="btn-delete-item"
+			>
+				<IonIcon icon={trash} />
+			</IonButton>
 
 		const showEditButton = ownList && !readOnly
 			&& [ITEM_TYPE_SHOPPING].includes(mode)
 			&& !(mode === ITEM_TYPE_SHOPPING && listEditMode)
 
-		const editIcon = showEditButton && <IonButton className="button-end" fill="clear" size="large" slot="end" onClick={() => this.setEditMode(true)}>
-			<IonIcon icon={createOutline} slot="end" />
-		</IonButton>
+		const editIcon = showEditButton &&
+			<IonButton
+				className="button-end"
+				fill="clear"
+				size="large"
+				slot="end"
+				onClick={() => this.setEditMode(true)}
+				data-test="btn-edit-item"
+			>
+				<IonIcon icon={createOutline} slot="end" />
+			</IonButton>
 
 
-		const ownerIcon = owner && <IonButton fill="clear" size="large" slot="start"><Avatar size="30px" user={owner} /></IonButton>
+		const ownerIcon = owner &&
+			<IonButton
+				fill="clear"
+				size="large"
+				slot="start"
+				data-test="btn-owner"
+			><Avatar size="30px" user={owner} /></IonButton>
 
 		const BringAlongQuantity = () => {
 			if (mode === ITEM_TYPE_SHOPPING && bringAlongItems && bringAlongItems.length) {
@@ -93,7 +126,10 @@ class Item extends Component {
 					<span style={{ display: 'flex' }}>
 						<IonChip color="secondary">
 							<IonIcon icon={shareSocialOutline} />
-							<IonLabel color="secondary">
+							<IonLabel
+								color="secondary"
+								data-test="label-bring-along-quantity"
+							>
 								+{totalQuantity} {item.unit}
 							</IonLabel>
 						</IonChip>
@@ -123,13 +159,16 @@ class Item extends Component {
 						checked={item.shopped}
 						onClick={() => this.onItemClick()}
 						color="primary"
+						data-test="check-shopped"
 					/>}
-				<IonLabel onClick={() => this.onItemClick()}
+				<IonLabel
 					style={{
 						cursor: 'pointer',
 						textDecoration: (item.shopped ? 'line-through' : 'none'),
 						color: ((item.shopped || mode === ITEM_TYPE_BRING_ALONG) ? 'grey' : 'black')
-					}}>
+					}}
+					onClick={() => this.onItemClick()}
+					data-test="label-item-name">
 					{item.name}
 				</IonLabel>
 				<BringAlongQuantity />
@@ -141,7 +180,8 @@ class Item extends Component {
 			</>
 
 		const dependentNeededItems = mode === ITEM_TYPE_IN_SHOPPING && bringAlongItems && (
-			<IonList>
+			<IonList data-test="dependent-items"
+			>
 				{bringAlongItems
 					.map(neededItem => {
 						const owner = this.props.userStore.users[neededItem.ownerId]
@@ -162,7 +202,7 @@ class Item extends Component {
 
 		return (
 			<>
-				<IonItem id={item.uid}>
+				<IonItem id={item.uid} data-test="item">
 					<IonReorder slot="start" />
 					{itemDisplay}
 				</IonItem>

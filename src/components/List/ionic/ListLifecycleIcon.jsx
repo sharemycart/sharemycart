@@ -14,7 +14,7 @@ const ListLifecycleIcon = ({ list, slot = '', defaultIcon = null }) => {
 	case LIFECYCLE_STATUS_ARCHIVED:
 		return <IonIcon color="danger" slot={slot} icon={trashBinOutline} />
 	default:
-		return defaultIcon && <IonIcon color="primary" slot={slot} icon={defaultIcon} />
+		return defaultIcon && <IonIcon color="primary" slot={slot} icon={defaultIcon}  data-test="icon-lifecycle" />
 	}
 }
 
