@@ -58,6 +58,7 @@
     "cross-env": "^7.0.2",
     "cypress": "^4.4.1",
     "cypress-firebase": "^1.1.0",
+    "dotenv-flow": "^3.1.0",
     "eslint-plugin-chai-friendly": "^0.6.0",
     "eslint-plugin-cypress": "^2.10.3",
     "eslint-plugin-react": "^7.19.0",
@@ -70,7 +71,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "npm run lint",
-			"pre-push": "CI=true npm run build"
+      "pre-push": "CI=true npm run build"
     }
   },
   "jest": {
