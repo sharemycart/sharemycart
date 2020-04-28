@@ -40,13 +40,14 @@
 		"lint": "EXTEND_ESLINT=true eslint src",
 		"lint:fix": "EXTEND_ESLINT=true eslint src --fix",
 		"start": "react-scripts -r @cypress/instrument-cra start",
+		"start:testmode": "cross-env NODE_ENV=test npm run start",
 		"build": "react-scripts build",
 		"build:staging": "env-cmd -f .env.staging npm run build",
 		"test": "cross-env NODE_ENV=test start-test 3000 test:ui",
 		"test:ci": "cross-env NODE_ENV=test start-test 3000 test:only",
-		"test:only": "cross-env CYPRESS_baseUrl=http://localhost:3000 cypress run",
-		"test:debug": "cross-env CYPRESS_REMOTE_DEBUGGING_PORT=9222 cypress open",
-		"test:ui": "cross-env CYPRESS_baseUrl=http://localhost:3000 cypress open"
+		"test:only": "cross-env NODE_ENV=test cross-env CYPRESS_baseUrl=http://localhost:3000 cypress run",
+		"test:debug": "cross-env NODE_ENV=test cross-env CYPRESS_REMOTE_DEBUGGING_PORT=9222 cypress open",
+		"test:ui": "cross-env NODE_ENV=test cross-env CYPRESS_baseUrl=http://localhost:3000 cypress open"
 	},
 	"browserslist": [
 		">0.2%",
