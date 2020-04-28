@@ -105,8 +105,8 @@ dist
 # Jetbrains IDE
 .idea/
 
-# Secrets
-serviceAccount.json
+# Other system files
+.DS_Store
 
 # Build artifacts
 build
@@ -114,3 +114,7 @@ build
 
 # Secrets
 serviceAccount.json
+
+# Test artifacts
+cypress/screenshots
+cypress/videos
