@@ -48,7 +48,7 @@ jobs:
         with:
           node-version: '10.x'
       - run: |
-          npm i
+          npm ci
       - name: Cache node modules
         uses: actions/cache@v1
         env:
@@ -67,7 +67,7 @@ jobs:
         uses: SpicyPizza/create-envfile@v1
         with:
           envkey_REACT_APP_BACKEND_API_KEY: ${{secrets.TEST_BACKEND_API_KEY}}
-          file_name: .env.test.local
+          file_name: .env
       - name: Setup env for build
         uses: SpicyPizza/create-envfile@v1
         with:
@@ -79,12 +79,6 @@ jobs:
         run: ./.github/scripts/decrypt_secret.sh
         env:
           LARGE_SECRET_PASSPHRASE: ${{ secrets.LARGE_SECRET_PASSPHRASE }}
-      - name: debug
-        run: |
-          pwd;
-          ls -l;
-          cat .env.test.local;
-          cat .env.build
       - name: Execute integration tests
         run: |
           npm run test:ci
