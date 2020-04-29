@@ -63,11 +63,6 @@ jobs:
       - name: Lint
         run: |
           npm run lint
-      - name: Setup env for automated test
-        uses: SpicyPizza/create-envfile@v1
-        with:
-          envkey_REACT_APP_BACKEND_API_KEY: ${{secrets.TEST_BACKEND_API_KEY}}
-          file_name: .env
       - name: Setup env for build
         uses: SpicyPizza/create-envfile@v1
         with:
@@ -82,6 +77,8 @@ jobs:
       - name: Execute integration tests
         run: |
           npm run test:ci
+        env:
+          REACT_APP_BACKEND_API_KEY: ${{secrets.TEST_BACKEND_API_KEY}}
       - name: Create a build for the target environment
         run: |
           npm run build:for-env
