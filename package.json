@@ -39,10 +39,10 @@
     "eslint": "5.6.0",
     "eslint-config-react-app": "^3.0.5",
     "eslint-loader": "2.1.1",
+    "eslint-plugin-cypress": "^2.10.3",
     "eslint-plugin-flowtype": "2.50.1",
     "eslint-plugin-import": "2.14.0",
     "eslint-plugin-jsx-a11y": "6.1.2",
-    "eslint-plugin-react": "7.11.1",
     "file-loader": "2.0.0",
     "firebase": "^7.14.0",
     "fork-ts-checker-webpack-plugin-alt": "0.4.14",
@@ -87,10 +87,14 @@
     "workbox-webpack-plugin": "3.6.3"
   },
   "scripts": {
+    "cypr": "cross-env CYPRESS_REMOTE_DEBUGGING_PORT=9222 cypress open",
+    "lint": "EXTEND_ESLINT=true eslint src",
+    "lint:fix": "EXTEND_ESLINT=true eslint src --fix",
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "build:staging": "env-cmd -f .env.staging npm run build",
-    "test": "node scripts/test.js --env=jsdom --passWithNoTests"
+    "test": "cross-env CYPRESS_baseUrl=http://localhost:3000 cypress run",
+    "test:ui": "cross-env CYPRESS_baseUrl=http://localhost:3000 cypress open"
   },
   "browserslist": [
     ">0.2%",
@@ -101,8 +105,21 @@
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.2.0",
     "@capacitor/cli": "1.5.2",
+    "cross-env": "^7.0.2",
+    "cypress": "^4.4.1",
+    "cypress-firebase": "^1.1.0",
+    "eslint-plugin-chai-friendly": "^0.6.0",
+    "eslint-plugin-react": "^7.19.0",
+    "firebase-admin": "^8.10.0",
+    "firebase-tools-extra": "^1.0.0",
+    "husky": "^4.2.5",
     "node-sass": "^4.13.1"
-  },
+	},
+		"husky": {
+			"hooks": {
+				"pre-commit": "npm run lint"
+			}
+	},
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}",

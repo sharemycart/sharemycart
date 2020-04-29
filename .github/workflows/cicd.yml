@@ -41,6 +41,9 @@ jobs:
           node-version: '10.x'
       - run: |
           npm i
+      - name: Lint
+        run: |
+          npm run lint
       # - run: |
       #     npm run test
       - name: Setup env
