@@ -64,6 +64,11 @@ jobs:
           envkey_REACT_APP_BACKEND_API_KEY: ${{ steps.vars.outputs.API_KEY }}
           envkey_REACT_APP_CONFIRMATION_EMAIL_REDIRECT: ${{ steps.vars.outputs.PUBLIC_URL }}
           file_name: .env.build
+      - name: Create service account file for firebase access in tests
+        run: |
+          echo $SA > serviceAccount.json
+        env:
+          SA: ${{secrets.TEST_FIREBASE_SERVICE_ACCOUNT}}
       - name: Execute integration tests
         run: |
           npm run test:ci
