@@ -47,8 +47,6 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '10.x'
-      - run: |
-          npm ci
       - name: Cache node modules
         uses: actions/cache@v1
         env:
@@ -60,6 +58,8 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
+      - run: |
+          npm ci
       - name: Lint
         run: |
           npm run lint
