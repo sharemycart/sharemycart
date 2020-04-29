@@ -44,7 +44,7 @@
 		"build": "react-scripts build",
 		"build:for-env": "env-cmd -f .env.build npm run build",
 		"test": "cross-env NODE_ENV=test start-test 3000 test:ui",
-		"test:ci": "cross-env NODE_ENV=test start-test 3000 test:only",
+		"test:ci": "cross-env NODE_ENV=test start-test 3000 test:only --record --key $CYPRESS_KEY",
 		"test:only": "cross-env NODE_ENV=test cross-env CYPRESS_baseUrl=http://localhost:3000 cypress run",
 		"test:debug": "cross-env NODE_ENV=test cross-env CYPRESS_REMOTE_DEBUGGING_PORT=9222 cypress open",
 		"test:ui": "cross-env NODE_ENV=test cross-env CYPRESS_baseUrl=http://localhost:3000 cypress open"

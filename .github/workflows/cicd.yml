@@ -81,6 +81,7 @@ jobs:
           npm run test:ci
         env:
           REACT_APP_BACKEND_API_KEY: ${{secrets.TEST_BACKEND_API_KEY}}
+          CYPRESS_KEY: ${{secrets.CYPRESS_KEY}}
       - name: Create a build for the target environment
         run: |
           npm run build:for-env
