@@ -49,6 +49,17 @@ jobs:
           node-version: '10.x'
       - run: |
           npm i
+      - name: Cache node modules
+        uses: actions/cache@v1
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
       - name: Lint
         run: |
           npm run lint
@@ -67,7 +78,13 @@ jobs:
       - name: Create service account file for firebase access in tests
         run: ./.github/scripts/decrypt_secret.sh
         env:
-          LARGE_SECRET_PASSPHRASE: ${{ secrets.LARGE_SECRET_PASSPHRASE }}
+          LARGE_SECRET_PASSPHRASE: ${{ secrets.LARGE_SECRET_PASSPHRASE }
+      - name: debug
+        run: |
+          pwd;
+          ls -l;
+          cat .env.test.local;
+          cat .env.build
       - name: Execute integration tests
         run: |
           npm run test:ci
