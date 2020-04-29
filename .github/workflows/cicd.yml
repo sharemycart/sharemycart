@@ -78,7 +78,7 @@ jobs:
       - name: Create service account file for firebase access in tests
         run: ./.github/scripts/decrypt_secret.sh
         env:
-          LARGE_SECRET_PASSPHRASE: ${{ secrets.LARGE_SECRET_PASSPHRASE }
+          LARGE_SECRET_PASSPHRASE: ${{ secrets.LARGE_SECRET_PASSPHRASE }}
       - name: debug
         run: |
           pwd;
