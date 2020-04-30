@@ -55,15 +55,15 @@ export const NavigationAuth = () => (
 				<Redirect exact from="/" to={ROUTES.SHOPPING} />
 			</IonRouterOutlet>
 			<IonTabBar slot="bottom">
-				<IonTabButton tab="Shopping" href={ROUTES.SHOPPING}>
+				<IonTabButton tab="Shopping" href={ROUTES.SHOPPING} data-test="tab-btn-shopping">
 					<IonIcon icon={cartOutline} />
 					<IonLabel><Trans>Shopping</Trans></IonLabel>
 				</IonTabButton>
-				<IonTabButton tab="Needs" href={ROUTES.NEEDS}>
+				<IonTabButton tab="Needs" href={ROUTES.NEEDS} data-test="tab-btn-needs">
 					<IonIcon icon={shareSocialOutline} />
 					<IonLabel><Trans>Shared</Trans></IonLabel>
 				</IonTabButton>
-				<IonTabButton tab="Account" href={ROUTES.ACCOUNT}>
+				<IonTabButton tab="Account" href={ROUTES.ACCOUNT} data-test="tab-btn-account">
 					<IonIcon icon={personOutline} />
 					<IonLabel><Trans>Account</Trans></IonLabel>
 				</IonTabButton>
@@ -89,7 +89,7 @@ export const NavigationNonAuth = () => {
 				</Switch>
 			</IonRouterOutlet>
 			<IonTabBar slot="bottom">
-				<IonTabButton tab="Sign In" href={ROUTES.SIGN_IN}>
+				<IonTabButton tab="Sign In" href={ROUTES.SIGN_IN} data-test="tab-btn-signin">
 					<IonIcon icon={lockClosed} />
 					<IonLabel>Sign In</IonLabel>
 				</IonTabButton>

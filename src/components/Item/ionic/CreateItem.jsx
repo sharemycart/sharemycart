@@ -97,6 +97,7 @@ class CreateItem extends Component {
 					style={{ marginRight: '0px' }}
 					onIonChange={e => this.setUnit(e.detail.value)}
 					className="hide-sm-down"
+					data-test="select-unit"
 				>
 					{units.map(unit => <IonSelectOption key={unit}>{unit}</IonSelectOption>)}
 				</IonSelect>
@@ -107,7 +108,8 @@ class CreateItem extends Component {
 					key="createItemWrapper"
 					lines="none"
 					style={{ width: '100%' }}
-					className={`create-item ${(isFirstItem || highlight) && 'highlight'}`}>
+					className={`create-item ${(isFirstItem || highlight) && 'highlight'}`}
+					data-test="create-item">
 					<IonInput
 						placeholder={t('Item name')}
 						name="name"
@@ -122,6 +124,7 @@ class CreateItem extends Component {
 						size={16}
 						ref={this.nameInput}
 						slot="start"
+						data-test="input-name"
 						onKeyUp={this.onKeyPress}
 						onIonInput={event => this.onKeyPress(event)}
 						onIonChange={event => this.onChange(event)}
@@ -134,18 +137,20 @@ class CreateItem extends Component {
 						min="0"
 						pattern="\d+,?\d*"
 						value={quantity}
-						onKeyUp={this.onKeyPress}
-						onIonChange={event => this.onChange(event)}
-						onIonBlur={event => this.onBlur(event)}
 						required="false"
 						slot="end"
 						style={{ marginRight: '0px', minWidth: '63px' }}
 						className="hide-sm-down"
 						ref={this.quantityInput}
+						data-test="input-quantity"
+						onKeyUp={this.onKeyPress}
+						onIonChange={event => this.onChange(event)}
+						onIonBlur={event => this.onBlur(event)}
 					/>
 					{unitOfMeasure}
 					<IonButton
 						slot="end"
+						data-test="btn-create-item"
 						onClick={() => this.concludeEditing()} style={{ 'marginLeft': '10px' }}>
 						<IonIcon icon={addOutline} />
 					</IonButton>

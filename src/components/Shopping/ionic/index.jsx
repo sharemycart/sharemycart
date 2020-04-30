@@ -42,7 +42,11 @@ class ShoppingPage extends ShoppingModel {
 		const { currentShoppingList, currentShoppingListItemsArray: currentShoppingListItems, initializationDone } = this.props.shoppingStore
 
 		const EditButton = () => (
-			!this.state.editMode && <IonButton color="danger" fill="clear"
+			!this.state.editMode &&
+			<IonButton
+				color="danger"
+				fill="clear"
+				data-test="btn-edit-list"
 				onClick={() => this.setState({ editMode: true })}>
 				<span className="hide-sm-down"><Trans>Edit</Trans></span>
 				<IonIcon slot="end" icon={createOutline} />
@@ -50,7 +54,11 @@ class ShoppingPage extends ShoppingModel {
 		)
 
 		const SaveButton = () => (
-			this.state.editMode && <IonButton color="danger" fill="clear"
+			this.state.editMode &&
+			<IonButton
+				color="danger"
+				fill="clear"
+				data-test="btn-save-list"
 				onClick={() => this.saveEdit()}>
 				<span className="hide-sm-down"><Trans >Save</Trans></span>
 				<IonIcon slot="end" icon={saveOutline} />

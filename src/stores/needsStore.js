@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx'
+import { observable, action, computed, decorate } from 'mobx'
 import toObject from '../lib/convertArrayToObject'
 import sortItems from '../components/Reusables/functions/sortItems'
 
@@ -6,22 +6,22 @@ import sortItems from '../components/Reusables/functions/sortItems'
 // and their items
 
 class NeedsStore {
-	@observable needsLists = null;
-	@observable currentNeedsList = null;
-	@observable currentNeedsListItems = null;
-	@observable currentOriginShoppingList = null;
-	@observable currentOriginShoppingListItems = null;
-	@observable initializationDone = false;
+	needsLists = null;
+	currentNeedsList = null;
+	currentNeedsListItems = null;
+	currentOriginShoppingList = null;
+	currentOriginShoppingListItems = null;
+	initializationDone = false;
 
 	constructor(rootStore) {
 		this.rootStore = rootStore
 	}
 
-	@action setInitializationDone(done) {
+	setInitializationDone(done) {
 		this.initializationDone = done
 	}
 
-	@action setNeedsLists = needsLists => {
+	setNeedsLists = needsLists => {
 		this.needsLists = toObject(needsLists)
 
 		const currentNeedsLists = needsLists.filter(needsList => !!needsList.isCurrent)
@@ -29,24 +29,24 @@ class NeedsStore {
 
 	};
 
-	@action setCurrentNeedsListItems = (items) => {
+	setCurrentNeedsListItems = (items) => {
 		this.currentNeedsListItems = toObject(items)
 	}
 
-	@action setCurrentOriginShoppingList = shoppingList => this.currentOriginShoppingList = shoppingList;
+	setCurrentOriginShoppingList = shoppingList => this.currentOriginShoppingList = shoppingList;
 
-	@action setCurrentOriginShoppingListItems = (items) => {
+	setCurrentOriginShoppingListItems = (items) => {
 		this.currentOriginShoppingListItems = toObject(items)
 	}
 
-	@computed get needsListsArray() {
+	get needsListsArray() {
 		return Object.keys(this.needsLists || {}).map(key => ({
 			...this.needsLists[key],
 			uid: this.needsLists[key].uid,
 		}))
 	}
 
-	@computed get currentNeedsListItemsArray() {
+	get currentNeedsListItemsArray() {
 		return Object.keys(this.currentNeedsListItems || {}).map(key => ({
 			...this.currentNeedsListItems[key],
 			uid: this.currentNeedsListItems[key].uid,
@@ -54,7 +54,7 @@ class NeedsStore {
 			.sort((a, b) => sortItems(a, b))
 	}
 
-	@computed get potentiallyNeededItemsArray() {
+	get potentiallyNeededItemsArray() {
 		// all items from the current origin shopping list are potential needs
 		// which are not already moved to the needs list
 		const needsByName = {}
@@ -72,5 +72,24 @@ class NeedsStore {
 			.sort((a, b) => sortItems(a, b))
 	}
 }
+
+decorate(NeedsStore, {
+	needsLists: observable,
+	currentNeedsList: observable,
+	currentNeedsListItems: observable,
+	currentOriginShoppingList: observable,
+	currentOriginShoppingListItems: observable,
+	initializationDone: observable,
+	
+	setInitializationDone: action,
+	setNeedsLists: action,
+	setCurrentNeedsListItems: action,
+	setCurrentOriginShoppingList: action,
+	setCurrentOriginShoppingListItems: action,
+
+	needsListsArray: computed,
+	currentNeedsListItemsArray: computed,
+	potentiallyNeededItemsArray: computed,
+})
 
 export default NeedsStore

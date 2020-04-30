@@ -16,19 +16,29 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: Increase watchers fpr GH actions workflow
+        run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
       - name: Initialize workflow variables
         id: vars
         shell: bash
         run: |
-            SUBDOMAIN="beta"
+            SUBDOMAIN="beta";
+            NODE_ENV="staging";
+            API_KEY=$API_KEY_STAGING;
             if [ "$BRANCH" == "refs/heads/master" ]; then 
-            SUBDOMAIN="app"; 
+              SUBDOMAIN="app"; 
+              NODE_ENV="production";
+              API_KEY=$API_KEY_PRODUCTION;
             fi;
-            echo ::set-output name=SUBDOMAIN::${SUBDOMAIN}
-            echo ::set-output name=DOMAIN::${SUBDOMAIN}.sharemycart.com
-            echo ::set-output name=PUBLIC_URL::https://${SUBDOMAIN}.sharemycart.com
+            echo ::set-output name=NODE_ENV::${NODE_ENV};
+            echo ::set-output name=API_KEY::${API_KEY};
+            echo ::set-output name=SUBDOMAIN::${SUBDOMAIN};
+            echo ::set-output name=DOMAIN::${SUBDOMAIN}.sharemycart.com;
+            echo ::set-output name=PUBLIC_URL::https://${SUBDOMAIN}.sharemycart.com;
         env:
           BRANCH: ${{ github.ref }}
+          API_KEY_STAGING: ${{secrets.STAGING_BACKEND_API_KEY}}
+          API_KEY_PRODUCTION: ${{secrets.PRODUCTION_BACKEND_API_KEY}}
       - name: print vars
         run: |
           echo "Branch: $BRANCH"
@@ -39,29 +49,42 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '10.x'
+      - name: Cache node modules
+        uses: actions/cache@v1
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}-
+            ${{ runner.os }}-
+            ${{ runner.os }}-
       - run: |
-          npm i
+          npm ci
       - name: Lint
         run: |
           npm run lint
-      # - run: |
-      #     npm run test
-      - name: Setup env
+      - name: Setup env for build
         uses: SpicyPizza/create-envfile@v1
         with:
           envkey_REACT_APP_BASENAME: ${{ steps.vars.outputs.PUBLIC_URL }}
-          envkey_REACT_APP_BACKEND_API_KEY: ${{secrets.STAGING_BACKEND_API_KEY}}
-          envkey_REACT_APP_BACKEND_AUTH_DOMAIN: ${{secrets.STAGING_BACKEND_PROJECT_ID}}.firebaseapp.com
-          envkey_REACT_APP_BACKEND_DATABASE_URL: https://${{secrets.STAGING_BACKEND_PROJECT_ID}}.firebaseio.com
-          envkey_REACT_APP_BACKEND_PROJECT_ID: ${{secrets.STAGING_BACKEND_PROJECT_ID}}
-          envkey_REACT_APP_BACKEND_STORAGE_BUCKET: ${{secrets.STAGING_BACKEND_PROJECT_ID}}.appspot.com
-          envkey_REACT_APP_BACKEND_MESSAGE_SENDER_ID: ${{secrets.STAGING_BACKEND_MESSAGE_SENDER_ID}}
-          envkey_REACT_APP_BACKEND_SENDER_APP_ID: ${{secrets.STAGING_BACKEND_SENDER_APP_ID}}
-          envkey_REACT_APP_BACKEND_MEASUREMENT_ID: ${{secrets.STAGING_BACKEND_MEASUREMENT_ID}}
+          envkey_REACT_APP_BACKEND_API_KEY: ${{ steps.vars.outputs.API_KEY }}
           envkey_REACT_APP_CONFIRMATION_EMAIL_REDIRECT: ${{ steps.vars.outputs.PUBLIC_URL }}
-          file_name: .env.staging
-      - run: |
-          npm run build:staging
+          file_name: .env.build
+      - name: Create service account file for firebase access in tests
+        run: ./.github/scripts/decrypt_secret.sh
+        env:
+          LARGE_SECRET_PASSPHRASE: ${{ secrets.LARGE_SECRET_PASSPHRASE }}
+      - name: Execute integration tests
+        run: |
+          npm run test:ci
+        env:
+          REACT_APP_BACKEND_API_KEY: ${{secrets.TEST_BACKEND_API_KEY}}
+          CYPRESS_KEY: ${{secrets.CYPRESS_KEY}}
+      - name: Create a build for the target environment
+        run: |
+          npm run build:for-env
       - name: Upload build
         uses: actions/upload-artifact@v1.0.0
         with:

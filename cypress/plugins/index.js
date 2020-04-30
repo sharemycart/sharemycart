@@ -1,18 +1,25 @@
-const admin = require("firebase-admin");
-const cypressFirebasePlugin = require("cypress-firebase").plugin;
+const admin = require('firebase-admin')
+const cypressFirebasePlugin = require('cypress-firebase').plugin
 
-require('dotenv').config()
+require('dotenv-flow').config()
 
 module.exports = (on, config) => {
-  // Pass on function, config, and admin instance. Returns extended config
- cypressFirebasePlugin(on, config, admin);
+	// custom tasks for sending and reporting code coverage
+	require('@cypress/code-coverage/task')(on, config)
 
-    // we can grab some process environment variables
-  // and stick it into config.env before returning the updated config
-  config.env = process.env || {}
-  console.log('extended config.env with process.env.', JSON.stringify(process.env))
+	// Extend the cypress configuration
+	return Object.assign(config,
+		// functions for interacting with Firestore
+		cypressFirebasePlugin(on, config, admin),
 
-  return config
-
-
-};
+		// propagate ENV-variables
+		{
+			env: {
+				REACT_APP_BACKEND_PROJECT_ID: process.env.REACT_APP_BACKEND_PROJECT_ID,
+				REACT_APP_BACKEND_API_KEY: process.env.REACT_APP_BACKEND_API_KEY,
+				CI: process.env.CI,
+				NODE_ENV: process.env.NODE_ENV,
+				TEST_UID: process.env.TEST_UID,
+			}
+		})
+}

@@ -1,4 +1,4 @@
-import { observable, action, computed, toJS } from 'mobx'
+import { decorate, observable, action, computed, toJS } from 'mobx'
 import toObject from '../lib/convertArrayToObject'
 import sortItems from '../components/Reusables/functions/sortItems'
 import { LIFECYCLE_STATUS_ARCHIVED } from '../constants/lists'
@@ -7,48 +7,48 @@ import { LIFECYCLE_STATUS_ARCHIVED } from '../constants/lists'
 // and their items
 
 class ShoppingStore {
-	@observable shoppingLists = null;
-	@observable currentShoppingList = null;
-	@observable currentShoppingListItems = null;
-	@observable currentDependentNeedsLists = null;
-	@observable currentDependentNeedsListsItems = null;
-	@observable initializationDone = false;
+	shoppingLists = null;
+	currentShoppingList = null;
+	currentShoppingListItems = null;
+	currentDependentNeedsLists = null;
+	currentDependentNeedsListsItems = null;
+	initializationDone = false;
 
 	constructor(rootStore) {
 		this.rootStore = rootStore
 	}
 
-	@action setInitializationDone(done) {
+	setInitializationDone(done) {
 		this.initializationDone = done
 	}
 
-	@action setShoppingLists = shoppingLists => {
+	setShoppingLists = shoppingLists => {
 		this.shoppingLists = toObject(shoppingLists)
 
 		const currentShoppingLists = shoppingLists.filter(shoppingList => !!shoppingList.isCurrent)
 		this.currentShoppingList = (currentShoppingLists.length > 0 && currentShoppingLists[0]) || null
 	};
 
-	@action setCurrentShoppingListItems = (items) => {
+	setCurrentShoppingListItems = (items) => {
 		this.currentShoppingListItems = toObject(items)
 	}
 
-	@action setCurrentDependentNeedsLists = (lists) => {
+	setCurrentDependentNeedsLists = (lists) => {
 		this.currentDependentNeedsLists = toObject(lists)
 	}
 
-	@action setDependentNeedsListItems = (listId, items) => {
+	setDependentNeedsListItems = (listId, items) => {
 		this.currentDependentNeedsLists[listId].items = items
 	}
 
-	@computed get shoppingListsArray() {
+	get shoppingListsArray() {
 		return Object.keys(this.shoppingLists || {}).map(key => ({
 			...this.shoppingLists[key],
 			uid: this.shoppingLists[key].uid,
 		}))
 	}
 
-	@computed get currentShoppingListItemsArray() {
+	get currentShoppingListItemsArray() {
 		return Object.keys(this.currentShoppingListItems || {}).map(key => ({
 			...this.currentShoppingListItems[key],
 			uid: this.currentShoppingListItems[key].uid,
@@ -56,7 +56,7 @@ class ShoppingStore {
 			.sort((a, b) => sortItems(a, b))
 	}
 
-	@computed get currentDependentNeedsListsArray() {
+	get currentDependentNeedsListsArray() {
 		return Object.keys(this.currentDependentNeedsLists || {})
 			.filter(needsList => needsList.lifecycleStatus !== LIFECYCLE_STATUS_ARCHIVED)
 			.map(key => ({
@@ -65,7 +65,7 @@ class ShoppingStore {
 			}))
 	}
 
-	@computed get currentDependentNeedsListsItemsArray() {
+	get currentDependentNeedsListsItemsArray() {
 		if (!this.currentDependentNeedsLists) return []
 
 		let allDependentNeededItems = []
@@ -86,6 +86,26 @@ class ShoppingStore {
 		return allDependentNeededItems
 	}
 }
+
+decorate(ShoppingStore, {
+	shoppingLists: observable,
+	currentShoppingList: observable,
+	currentShoppingListItems: observable,
+	currentDependentNeedsLists: observable,
+	currentDependentNeedsListsItems: observable,
+	initializationDone: observable,
+
+	setInitializationDone: action,
+	setShoppingLists: action,
+	setCurrentShoppingListItems: action,
+	setCurrentDependentNeedsLists: action,
+	setDependentNeedsListItems: action,
+
+	shoppingListsArray: computed,
+	currentShoppingListItemsArray: computed,
+	currentDependentNeedsListsArray: computed,
+	currentDependentNeedsListsItemsArray: computed,
+})
 
 export default ShoppingStore
 
