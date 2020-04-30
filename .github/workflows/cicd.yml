@@ -7,13 +7,15 @@ on:
       - cicd
       - develop
   pull_request:
+
 env:
   CI: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    if: "! contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
+    
     steps:
       - uses: actions/checkout@v2
       - name: Increase watchers fpr GH actions workflow
