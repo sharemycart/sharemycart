@@ -1,30 +1,39 @@
-import { observable, action, computed } from 'mobx';
-import toObject from '../lib/convertArrayToObject';
+import { decorate, observable, action, computed } from 'mobx'
+import toObject from '../lib/convertArrayToObject'
 class UserStore {
-  @observable users = {};
+	users = {};
 
-  constructor(rootStore) {
-    this.rootStore = rootStore;
-  }
+	constructor(rootStore) {
+		this.rootStore = rootStore
+	}
 
-  @action setUsers = users => {
-    this.users = toObject(users);
-  };
+	setUsers = users => {
+		this.users = toObject(users)
+	};
 
-  @action setUser = (uid, user) => {
-    if (!this.users) {
-      this.users = {};
-    }
+	setUser = (uid, user) => {
+		if (!this.users) {
+			this.users = {}
+		}
 
-    this.users[uid] = user;
-  };
+		this.users[uid] = user
+	};
 
-  @computed get userList() {
-    return Object.keys(this.users || {}).map(key => ({
-      ...this.users[key],
-      uid: key,
-    }));
-  }
+	get userList() {
+		return Object.keys(this.users || {}).map(key => ({
+			...this.users[key],
+			uid: key,
+		}))
+	}
 }
 
-export default UserStore;
+decorate(UserStore, {
+	users: observable,
+
+	setUser: action,
+	setUsers: action,
+
+	userList: computed,
+})
+
+export default UserStore

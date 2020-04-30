@@ -1,18 +1,26 @@
-import { observable, action } from 'mobx';
+import { observable, action, decorate } from 'mobx'
 
 class SessionStore {
-  @observable authUser = null;
-  @observable dbAuthenticated = false;
+	authUser = null;
+	dbAuthenticated = false;
 
-  constructor(rootStore) {
-    this.rootStore = rootStore;
-  }
+	constructor(rootStore) {
+		this.rootStore = rootStore
+	}
 
-  @action setAuthUser = authUser => {
-    this.authUser = authUser;
-  };
+	setAuthUser = authUser => {
+		this.authUser = authUser
+	};
 
-  @action setDbAuthenticated = authenticated => this.dbAuthenticated = authenticated
+	setDbAuthenticated = authenticated => this.dbAuthenticated = authenticated
 }
 
-export default SessionStore;
+decorate(SessionStore, {
+	authUser: observable,
+	dbAuthenticated: observable,
+
+	setAuthUser: action,
+	setDbAuthenticated: action,
+})
+
+export default SessionStore
