@@ -6,7 +6,10 @@ import { IonBackButton } from '@ionic/react'
 const LabelledBackButton = ({ defaultHref }) => {
 	const { t } = useTranslation()
 	return (
-		<IonBackButton defaultHref={defaultHref} text={t('Back')}>
+		<IonBackButton
+			defaultHref={defaultHref}
+			text={t('Back')}
+			data-test='back'>
 		</IonBackButton>
 	)
 }

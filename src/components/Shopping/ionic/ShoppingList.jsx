@@ -113,6 +113,9 @@ class ShoppingList extends Component {
 			}
 		})
 
+		const allItems = (items||[]).concat(otherUsersOwnNeededItems || [])
+		if(allItems.length === 0) return null
+
 		return (
 			<>
 				<IonList>
@@ -120,10 +123,9 @@ class ShoppingList extends Component {
         // toggle "disabled" based on the edit mode.
         // However, whit does not work as expected, as when leaving back to non-Edit-mode, 
         // the oder is destroyed until loaded from the database for the next time */}
-
 					{
 						!editMode
-						&& items.concat(otherUsersOwnNeededItems || [])
+						&& allItems
 							.sort((a, b) => sortItems(a, b))
 							.map((item, key) => {
 								const relatedBringAlongItems = bringAlongItemsByShoppingItem[item.uid]

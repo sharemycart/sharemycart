@@ -17,6 +17,8 @@ module.exports = (on, config) => {
 			env: {
 				REACT_APP_BACKEND_PROJECT_ID: process.env.REACT_APP_BACKEND_PROJECT_ID,
 				REACT_APP_BACKEND_API_KEY: process.env.REACT_APP_BACKEND_API_KEY,
+				CI: process.env.CI,
+				NODE_ENV: process.env.NODE_ENV,
 				TEST_UID: process.env.TEST_UID,
 			}
 		})

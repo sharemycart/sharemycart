@@ -14,6 +14,7 @@ import { withFirebase } from '../../Firebase'
 import { addOutline } from 'ionicons/icons'
 import LabelledBackButton from '../../Reusables/ionic/LabelledBackButton'
 import { Trans } from 'react-i18next'
+import { withRouter } from 'react-router'
 
 const CreateShoppingListButton = ({ onCreateShoppingList, history }) => (
 	<IonFabButton onClick={() => {
@@ -73,6 +74,7 @@ class ShoppingListsPage extends ShoppingModel {
 export default compose(
 	withFirebase,
 	withEmailVerification,
+	withRouter,
 	inject('shoppingStore', 'userStore', 'sessionStore'),
 	observer,
 )(ShoppingListsPage)

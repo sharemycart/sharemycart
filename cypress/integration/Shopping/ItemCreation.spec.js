@@ -1,8 +1,9 @@
 describe('Create shopping items', function () {
 	this.beforeAll(() => {
 		cy.login()
-
+		cy.ensureCurrentSingleShoppingList()
 	})
+
 	this.beforeEach(() => {
 		cy.visit('/shopping')
 	})
@@ -11,20 +12,15 @@ describe('Create shopping items', function () {
 		cy.logout()
 	})
 
-	this.afterEach(() => {
-		cy.get('[data-test=btn-edit-list]').click()
-		cy.get('[data-test=label-item-name]').should('not.be.empty')
-		cy.get('[data-test=btn-delete-item]').click()
-		cy.get('[data-test=btn-save-list]').click()
-	})
-
 	it('Creates a new item with unit', function () {
-		cy.get('[data-test=create-item] [data-test=input-name]').type('Wein 10 l')
-		cy.get('[data-test=btn-create-item]').click()
-
+		cy.createShoppingItem({ name: 'Wine 10 l' })
 		//validate parsing
-		cy.get('[data-test=label-item-name]').should('contain', 'Wein')
+		cy.get('[data-test=label-item-name]').should('contain', 'Wine')
 		cy.get('[data-test=label-quantity]').should('contain', '10 l')
-	})
 
+		// delete the item added
+		// TODO: The following creates a rendering issue - no clue why.
+		// cy.get('[data-test=btn-edit-list]').click()
+		// cy.deleteShoppingItem({ name: 'Wine' })
+	})
 })
