@@ -1,15 +1,41 @@
 import app from 'firebase/app'
 
-const DELAY_BEFORE_TYPING = Cypress.env('CI') ? 200 : 0
-const DELAY_BEFORE_CHANGE = Cypress.env('CI') ? 2000 : 1000
+const DELAY_BEFORE_TYPING = Cypress.env('CI') ? 200 : 50
 
-Cypress.Commands.add('createShoppingItem', ({ name }) => {
+Cypress.Commands.add('createShoppingItemParsingName', ({ name }) => {
 	cy
 		.get('[data-test=create-item] [data-test=input-name] input')
 		.wait(DELAY_BEFORE_TYPING) // there seems to be weird re-rendering, TODO: Check why this is cleared 
 		.click()
 		.type(name)
 		.get('[data-test=btn-create-item]').click()
+})
+
+Cypress.Commands.add('createShoppingItemStructured', ({ name, quantity, unit }) => {
+	cy
+		.get('[data-test=create-item] [data-test=input-name] input')
+		.wait(DELAY_BEFORE_TYPING) // there seems to be weird re-rendering, TODO: Check why this is cleared 
+		.click()
+		.type(name)
+
+	cy
+		.get('[data-test=create-item] [data-test=input-quantity] input')
+		.wait(DELAY_BEFORE_TYPING)
+		.click()
+		.type(quantity)
+
+	cy
+		.get('[data-test=create-item] [data-test=select-unit]')
+		.click()
+
+	cy
+		.get('.alert-radio-label')
+		.contains('l')
+		.click()
+	
+		cy.get('button.alert-button').contains('OK').click()
+
+	cy.get('[data-test=btn-create-item]').click()
 })
 
 Cypress.Commands.add('deleteShoppingItem', ({ name }) => {

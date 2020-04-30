@@ -72,7 +72,7 @@ class CreateItem extends Component {
 	}
 
 	setUnit(unit) {
-		this.setState({ unit })
+		this.props.onChange({target: {name: 'unit', value: unit}})
 	}
 
 	componentDidMount() {
@@ -99,7 +99,11 @@ class CreateItem extends Component {
 					className="hide-sm-down"
 					data-test="select-unit"
 				>
-					{units.map(unit => <IonSelectOption key={unit}>{unit}</IonSelectOption>)}
+					{units.map(unit =>
+						<IonSelectOption key={unit}>
+							{unit}
+						</IonSelectOption>)
+					}
 				</IonSelect>
 
 		return (
