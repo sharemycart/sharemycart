@@ -43,6 +43,7 @@
 		"start:testmode": "cross-env NODE_ENV=test npm run start",
 		"build": "react-scripts build",
 		"build:for-env": "env-cmd -f .env.build npm run build",
+		"build:for-staging": "rm .env.build && for f in .env.staging*; do (cat \"${f}\"; echo) >> .env.build; done && npm run build:for-env", 
 		"test": "cross-env NODE_ENV=test start-test 3000 test:ui",
 		"test:ci": "cross-env NODE_ENV=test start-test 3000 test:only",
 		"test:only": "cross-env NODE_ENV=test cross-env CYPRESS_baseUrl=http://localhost:3000 cypress run  --record --key $CYPRESS_KEY",
