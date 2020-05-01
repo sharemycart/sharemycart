@@ -95,7 +95,7 @@ jobs:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
       - name: Execute integration tests
         run: |
-          npm run test:ci
+          npm run test
         env:
           REACT_APP_BACKEND_API_KEY: ${{secrets.TEST_BACKEND_API_KEY}}
           CYPRESS_KEY: ${{secrets.CYPRESS_KEY}}
