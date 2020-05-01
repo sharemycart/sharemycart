@@ -78,6 +78,13 @@ jobs:
         run: ./.github/scripts/decrypt_secret.sh
         env:
           LARGE_SECRET_PASSPHRASE: ${{ secrets.LARGE_SECRET_PASSPHRASE }}
+      - name: Deploy to Firebase in test environment
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy
+        env:
+          PROJECT_ID: sharemycart-ci
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
       - name: Execute integration tests
         run: |
           npm run test:ci
@@ -102,6 +109,7 @@ jobs:
       GITHUB_PAT: ${{ secrets.DEPLOYMENT_PAT }}
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: Download build
         uses: actions/download-artifact@v1.0.0
         with:
@@ -115,15 +123,25 @@ jobs:
         run: |
             SUBDOMAIN="beta"
             REPO="sharemycart/app-staging"
+            PROJECT_ID="collabshop19"
             if [ "$BRANCH" == "refs/heads/master" ]; then 
             SUBDOMAIN="app"; 
             REPO="sharemycart/sharemycart"; 
+            PROJECT_ID="sharemycart-prod"
             fi;
             echo ::set-output name=SUBDOMAIN::${SUBDOMAIN}
             echo ::set-output name=DOMAIN::${SUBDOMAIN}.sharemycart.com
             echo ::set-output name=REPO::${REPO}
+            echo ::set-output name=PROJECT_ID::${PROJECT_ID}
         env:
           BRANCH: ${{ github.ref }}
+      - name: Deploy to Firebase target environment
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy
+        env:
+          PROJECT_ID: ${{ steps.vars.outputs.PROJECT_ID }}
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
       - name: Deploy to GitHub Pages
         uses: crazy-max/ghaction-github-pages@v1.3.0
         with:

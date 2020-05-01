@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "collabshop19"
+    "staging": "collabshop19",
+    "production": "sharemycart-prod",
+    "test": "sharemycart-ci"
   }
 }
