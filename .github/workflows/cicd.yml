@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Increase watchers fpr GH actions workflow
+      - name: Increase watchers for Github actions workflow
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
       - name: Initialize workflow variables
         id: vars
@@ -55,6 +55,7 @@ jobs:
           PUBLIC_URL: ${{ steps.vars.outputs.PUBLIC_URL }}
           PROJECT_ID: ${{ steps.vars.outputs.PROJECT_ID }}
           NODE_ENV: ${{ steps.vars.outputs.NODE_ENV }}
+      #------------- Basic application build setup -------------#
       - uses: actions/setup-node@v1
         with:
           node-version: "10.x"
@@ -63,10 +64,11 @@ jobs:
       - uses: bahmutov/npm-install@v1
         env:
           CYPRESS_INSTALL_BINARY: 0
+      #------------- Perform really fast QA-tasks -------------#
       - name: Lint
         run: |
           npm run lint
-# Prepare tests and test!
+      #------------- Prepare tests and test! -------------#
       - name: Create service account file for firebase access in tests
         run: ./.github/scripts/decrypt_secret.sh
         env:
@@ -78,15 +80,12 @@ jobs:
         env:
           PROJECT_ID: sharemycart-ci
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-      # restore / cache the binary ourselves on Linux
-      # see https://github.com/actions/cache
       - name: Cache Cypress
         id: cache-cypress
         uses: actions/cache@v1
         with:
           path: ~/.cache/Cypress
           key: cypress-cache-v2-${{ runner.os }}-${{ hashFiles('**/package.json') }}
-      # now let's install Cypress binary
       - run: npx cypress install
       - name: Execute integration tests
         run: |
@@ -94,7 +93,7 @@ jobs:
         env:
           REACT_APP_BACKEND_API_KEY: ${{secrets.TEST_BACKEND_API_KEY}}
           CYPRESS_KEY: ${{secrets.CYPRESS_KEY}}
-# Build!
+      #------------- Build! -------------#
       - name: Setup env for build
         uses: SpicyPizza/create-envfile@v1
         with:
@@ -122,9 +121,7 @@ jobs:
       - name: Download build
         uses: actions/download-artifact@v1.0.0
         with:
-          # Artifact name
           name: Build
-          # Destination path
           path: build
       - name: Initialize workflow variables
         id: vars
@@ -158,3 +155,4 @@ jobs:
           target_branch: gh-pages
           build_dir: build
           fqdn: ${{ steps.vars.outputs.DOMAIN }}
+          commit_message: Deploy from CI based on commit ${{ github.sha }}
