@@ -39,8 +39,8 @@
 	"scripts": {
 		"build": "react-scripts build",
 		"build:for-env": "env-cmd -f .env.build npm run build",
-		"build:for-staging": "rm .env.build && for f in .env.staging*; do (cat \"${f}\"; echo) >> .env.build; done && npm run build:for-env",
-		"build:for-test": "rm .env.build && for f in .env.test*; do (cat \"${f}\"; echo) >> .env.build; done && npm run build:for-env",
+		"build:for-staging": "rm -f .env.build && for f in .env.staging*; do (cat \"${f}\"; echo) >> .env.build; done && npm run build:for-env",
+		"build:for-test": "rm -f .env.build && for f in .env.test*; do (cat \"${f}\"; echo) >> .env.build; done && npm run build:for-env",
 		"cy:run": "if [ -z ${CYPRESS_KEY+x} ]; then cypress run; else cypress run --record --key $CYPRESS_KEY; fi",
 		"lint": "EXTEND_ESLINT=true eslint src",
 		"lint:fix": "EXTEND_ESLINT=true eslint src --fix",

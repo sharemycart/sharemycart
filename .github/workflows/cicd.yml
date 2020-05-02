@@ -58,30 +58,15 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: "10.x"
-      - name: Cache node modules
-        uses: actions/cache@v1
+      # install NPM dependencies but SKIP Cypress binary installation
+      # see https://on.cypress.io/installing-cypress#Environment-variables
+      - uses: bahmutov/npm-install@v1
         env:
-          cache-name: cache-node-modules
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ env.cache-name }}-
-            ${{ runner.os }}-
-            ${{ runner.os }}-
-      - run: |
-          npm ci
+          CYPRESS_INSTALL_BINARY: 0
       - name: Lint
         run: |
           npm run lint
-      - name: Setup env for build
-        uses: SpicyPizza/create-envfile@v1
-        with:
-          envkey_REACT_APP_BASENAME: ${{ steps.vars.outputs.PUBLIC_URL }}
-          envkey_REACT_APP_BACKEND_API_KEY: ${{ steps.vars.outputs.API_KEY }}
-          envkey_REACT_APP_BACKEND_PROJECT_ID: ${{ steps.vars.outputs.PROJECT_ID }}
-          envkey_REACT_APP_CONFIRMATION_EMAIL_REDIRECT: ${{ steps.vars.outputs.PUBLIC_URL }}
-          file_name: .env.build
+# Prepare tests and test!
       - name: Create service account file for firebase access in tests
         run: ./.github/scripts/decrypt_secret.sh
         env:
@@ -93,12 +78,31 @@ jobs:
         env:
           PROJECT_ID: sharemycart-ci
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      # restore / cache the binary ourselves on Linux
+      # see https://github.com/actions/cache
+      - name: Cache Cypress
+        id: cache-cypress
+        uses: actions/cache@v1
+        with:
+          path: ~/.cache/Cypress
+          key: cypress-cache-v2-${{ runner.os }}-${{ hashFiles('**/package.json') }}
+      # now let's install Cypress binary
+      - run: npx cypress install
       - name: Execute integration tests
         run: |
           npm test
         env:
           REACT_APP_BACKEND_API_KEY: ${{secrets.TEST_BACKEND_API_KEY}}
           CYPRESS_KEY: ${{secrets.CYPRESS_KEY}}
+# Build!
+      - name: Setup env for build
+        uses: SpicyPizza/create-envfile@v1
+        with:
+          envkey_REACT_APP_BASENAME: ${{ steps.vars.outputs.PUBLIC_URL }}
+          envkey_REACT_APP_BACKEND_API_KEY: ${{ steps.vars.outputs.API_KEY }}
+          envkey_REACT_APP_BACKEND_PROJECT_ID: ${{ steps.vars.outputs.PROJECT_ID }}
+          envkey_REACT_APP_CONFIRMATION_EMAIL_REDIRECT: ${{ steps.vars.outputs.PUBLIC_URL }}
+          file_name: .env.build
       - name: Create a build for the target environment
         run: |
           npm run build:for-env
