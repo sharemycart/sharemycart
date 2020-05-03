@@ -37,16 +37,18 @@
 		"recompose": "^0.30.0"
 	},
 	"scripts": {
+		"build": "react-scripts build",
+		"build:for-env": "env-cmd -f .env.build npm run build",
+		"build:for-staging": "rm -f .env.build && for f in .env.staging*; do (cat \"${f}\"; echo) >> .env.build; done && npm run build:for-env",
+		"build:for-test": "rm -f .env.build && for f in .env.test*; do (cat \"${f}\"; echo) >> .env.build; done && npm run build:for-env",
+		"cy:run": "if [ -z ${CYPRESS_KEY+x} ]; then cypress run; else cypress run --record --key $CYPRESS_KEY; fi",
 		"lint": "EXTEND_ESLINT=true eslint src",
 		"lint:fix": "EXTEND_ESLINT=true eslint src --fix",
 		"start": "react-scripts -r @cypress/instrument-cra start",
-		"start:testmode": "cross-env NODE_ENV=test npm run start",
-		"build": "react-scripts build",
-		"build:for-env": "env-cmd -f .env.build npm run build",
-		"test": "cross-env NODE_ENV=test start-test 3000 test:ui",
-		"test:ci": "cross-env NODE_ENV=test start-test 3000 test:only",
-		"test:only": "cross-env NODE_ENV=test cross-env CYPRESS_baseUrl=http://localhost:3000 cypress run  --record --key $CYPRESS_KEY",
-		"test:ui": "cross-env NODE_ENV=test cross-env CYPRESS_REMOTE_DEBUGGING_PORT=9222 cross-env CYPRESS_baseUrl=http://localhost:3000 cypress open"
+		"start:staging": "npm run build:for-staging && serve -s build",
+		"start:test": "npm run build:for-test && serve -s build",
+		"test": "CY_DELAY_BEFORE_TYPING=1000 cross-env NODE_ENV=test cross-env CYPRESS_baseUrl=http://localhost:5000 start-test start:test http://localhost:5000 cy:run",
+		"test:ui": "cross-env CYPRESS_REMOTE_DEBUGGING_PORT=9222 cross-env CYPRESS_baseUrl=http://localhost:3000 cypress open"
 	},
 	"browserslist": [
 		">0.2%",
@@ -73,6 +75,7 @@
 		"istanbul-lib-coverage": "^3.0.0",
 		"node-sass": "^4.13.1",
 		"nyc": "^15.0.1",
+		"serve": "^11.3.0",
 		"start-server-and-test": "^1.11.0",
 		"typescript": "^3.8.3"
 	},

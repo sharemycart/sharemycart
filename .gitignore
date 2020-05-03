@@ -110,6 +110,7 @@ dist
 
 # Build artifacts
 build
+.env.build
 .firebase
 
 # Secrets

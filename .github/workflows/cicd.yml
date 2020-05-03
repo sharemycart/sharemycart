@@ -15,28 +15,31 @@ jobs:
   build:
     runs-on: ubuntu-latest
     if: "! contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
-    
+
     steps:
       - uses: actions/checkout@v2
-      - name: Increase watchers fpr GH actions workflow
+      - name: Increase watchers for Github actions workflow
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
       - name: Initialize workflow variables
         id: vars
         shell: bash
         run: |
-            SUBDOMAIN="beta";
-            NODE_ENV="staging";
-            API_KEY=$API_KEY_STAGING;
-            if [ "$BRANCH" == "refs/heads/master" ]; then 
-              SUBDOMAIN="app"; 
-              NODE_ENV="production";
-              API_KEY=$API_KEY_PRODUCTION;
-            fi;
-            echo ::set-output name=NODE_ENV::${NODE_ENV};
-            echo ::set-output name=API_KEY::${API_KEY};
-            echo ::set-output name=SUBDOMAIN::${SUBDOMAIN};
-            echo ::set-output name=DOMAIN::${SUBDOMAIN}.sharemycart.com;
-            echo ::set-output name=PUBLIC_URL::https://${SUBDOMAIN}.sharemycart.com;
+          SUBDOMAIN="beta";
+          NODE_ENV="staging";           
+          PROJECT_ID="collabshop19";
+          API_KEY=$API_KEY_STAGING;
+          if [ "$BRANCH" == "refs/heads/master" ]; then 
+            SUBDOMAIN="app"; 
+            NODE_ENV="production";
+            PROJECT_ID="sharemycart-prod";
+            API_KEY=$API_KEY_PRODUCTION;
+          fi;
+          echo ::set-output name=NODE_ENV::${NODE_ENV};
+          echo ::set-output name=API_KEY::${API_KEY};
+          echo ::set-output name=PROJECT_ID::${PROJECT_ID}
+          echo ::set-output name=SUBDOMAIN::${SUBDOMAIN};
+          echo ::set-output name=DOMAIN::${SUBDOMAIN}.sharemycart.com;
+          echo ::set-output name=PUBLIC_URL::https://${SUBDOMAIN}.sharemycart.com;
         env:
           BRANCH: ${{ github.ref }}
           API_KEY_STAGING: ${{secrets.STAGING_BACKEND_API_KEY}}
@@ -44,36 +47,28 @@ jobs:
       - name: print vars
         run: |
           echo "Branch: $BRANCH"
+          echo "Node Env: $NODE_ENV"
           echo "Public URL: $PUBLIC_URL"
+          echo "Project ID: $PROJECT_ID"
         env:
           BRANCH: ${{ github.ref }}
           PUBLIC_URL: ${{ steps.vars.outputs.PUBLIC_URL }}
+          PROJECT_ID: ${{ steps.vars.outputs.PROJECT_ID }}
+          NODE_ENV: ${{ steps.vars.outputs.NODE_ENV }}
+      #------------- Basic application build setup -------------#
       - uses: actions/setup-node@v1
         with:
-          node-version: '10.x'
-      - name: Cache node modules
-        uses: actions/cache@v1
+          node-version: "10.x"
+      # install NPM dependencies but SKIP Cypress binary installation
+      # see https://on.cypress.io/installing-cypress#Environment-variables
+      - uses: bahmutov/npm-install@v1
         env:
-          cache-name: cache-node-modules
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ env.cache-name }}-
-            ${{ runner.os }}-
-            ${{ runner.os }}-
-      - run: |
-          npm ci
+          CYPRESS_INSTALL_BINARY: 0
+      #------------- Perform really fast QA-tasks -------------#
       - name: Lint
         run: |
           npm run lint
-      - name: Setup env for build
-        uses: SpicyPizza/create-envfile@v1
-        with:
-          envkey_REACT_APP_BASENAME: ${{ steps.vars.outputs.PUBLIC_URL }}
-          envkey_REACT_APP_BACKEND_API_KEY: ${{ steps.vars.outputs.API_KEY }}
-          envkey_REACT_APP_CONFIRMATION_EMAIL_REDIRECT: ${{ steps.vars.outputs.PUBLIC_URL }}
-          file_name: .env.build
+      #------------- Prepare tests and test! -------------#
       - name: Create service account file for firebase access in tests
         run: ./.github/scripts/decrypt_secret.sh
         env:
@@ -85,23 +80,37 @@ jobs:
         env:
           PROJECT_ID: sharemycart-ci
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      - name: Cache Cypress
+        id: cache-cypress
+        uses: actions/cache@v1
+        with:
+          path: ~/.cache/Cypress
+          key: cypress-cache-v2-${{ runner.os }}-${{ hashFiles('**/package.json') }}
+      - run: npx cypress install
       - name: Execute integration tests
         run: |
-          npm run test:ci
+          npm test
         env:
           REACT_APP_BACKEND_API_KEY: ${{secrets.TEST_BACKEND_API_KEY}}
           CYPRESS_KEY: ${{secrets.CYPRESS_KEY}}
+          CY_DELAY_BEFORE_TYPING: ${{secrets.CY_DELAY_BEFORE_TYPING}}
+      #------------- Build! -------------#
+      - name: Setup env for build
+        uses: SpicyPizza/create-envfile@v1
+        with:
+          envkey_REACT_APP_BASENAME: ${{ steps.vars.outputs.PUBLIC_URL }}
+          envkey_REACT_APP_BACKEND_API_KEY: ${{ steps.vars.outputs.API_KEY }}
+          envkey_REACT_APP_BACKEND_PROJECT_ID: ${{ steps.vars.outputs.PROJECT_ID }}
+          envkey_REACT_APP_CONFIRMATION_EMAIL_REDIRECT: ${{ steps.vars.outputs.PUBLIC_URL }}
+          file_name: .env.build
       - name: Create a build for the target environment
         run: |
           npm run build:for-env
       - name: Upload build
         uses: actions/upload-artifact@v1.0.0
         with:
-          # Artifact name
           name: Build
-          # Directory containing files to upload
           path: build
-
   deploy:
     needs: [build]
     if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop' #TODO: Switch to real staging once we're out of Beta
@@ -113,26 +122,24 @@ jobs:
       - name: Download build
         uses: actions/download-artifact@v1.0.0
         with:
-          # Artifact name
           name: Build
-          # Destination path
           path: build
       - name: Initialize workflow variables
         id: vars
         shell: bash
         run: |
-            SUBDOMAIN="beta"
-            REPO="sharemycart/app-staging"
-            PROJECT_ID="collabshop19"
-            if [ "$BRANCH" == "refs/heads/master" ]; then 
+          SUBDOMAIN="beta"
+          REPO="sharemycart/app-staging"
+          PROJECT_ID="collabshop19"
+          if [ "$BRANCH" == "refs/heads/master" ]; then 
             SUBDOMAIN="app"; 
             REPO="sharemycart/sharemycart"; 
-            PROJECT_ID="sharemycart-prod"
-            fi;
-            echo ::set-output name=SUBDOMAIN::${SUBDOMAIN}
-            echo ::set-output name=DOMAIN::${SUBDOMAIN}.sharemycart.com
-            echo ::set-output name=REPO::${REPO}
-            echo ::set-output name=PROJECT_ID::${PROJECT_ID}
+            PROJECT_ID="sharemycart-prod";
+          fi;
+          echo ::set-output name=SUBDOMAIN::${SUBDOMAIN}
+          echo ::set-output name=DOMAIN::${SUBDOMAIN}.sharemycart.com
+          echo ::set-output name=REPO::${REPO}
+          echo ::set-output name=PROJECT_ID::${PROJECT_ID}
         env:
           BRANCH: ${{ github.ref }}
       - name: Deploy to Firebase target environment
@@ -149,3 +156,4 @@ jobs:
           target_branch: gh-pages
           build_dir: build
           fqdn: ${{ steps.vars.outputs.DOMAIN }}
+          commit_message: Deploy from CI based on commit ${{ github.sha }}
