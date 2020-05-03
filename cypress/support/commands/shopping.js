@@ -1,6 +1,6 @@
 import app from 'firebase/app'
 
-const DELAY_BEFORE_TYPING = Cypress.env('CI') ? 300 : 50
+const DELAY_BEFORE_TYPING = Cypress.env('CY_DELAY_BEFORE_TYPING') || 100
 
 Cypress.Commands.add('createShoppingItemParsingName', ({ name }) => {
 	cy

@@ -93,6 +93,7 @@ jobs:
         env:
           REACT_APP_BACKEND_API_KEY: ${{secrets.TEST_BACKEND_API_KEY}}
           CYPRESS_KEY: ${{secrets.CYPRESS_KEY}}
+          CY_DELAY_BEFORE_TYPING: ${{secrets.CY_DELAY_BEFORE_TYPING}}
       #------------- Build! -------------#
       - name: Setup env for build
         uses: SpicyPizza/create-envfile@v1
