@@ -40,9 +40,19 @@ const withAuthentication = Component => {
 			this.props.firebase.auth.getRedirectResult()
 				.then((result) => {
 					const authUser = result.user
-					localStorage.setItem('authUser', JSON.stringify(authUser))
-					this.props.sessionStore.setAuthUser(authUser)
-					if (this.listener) this.listener(authUser)
+					// Create a user in your Firebase Realtime Database too
+					if (authUser) {
+						this.props.firebase.user(authUser.uid).set({
+							username: authUser.displayName,
+							email: authUser.email,
+							roles: {},
+						},
+						{ merge: true },
+						)
+						localStorage.setItem('authUser', JSON.stringify(authUser))
+						this.props.sessionStore.setAuthUser(authUser)
+						if (this.listener) this.listener(authUser)
+					}
 				})
 			// .catch(function (error) {
 			// 	// Handle Errors here.
