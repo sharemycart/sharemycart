@@ -4,10 +4,10 @@ on:
   push:
     branches:
       - master
-      - cicd
       - develop
   pull_request:
-
+    branches-ignore: 
+      - develop #No need to build also the PR when PRed from develop
 env:
   CI: true
 
