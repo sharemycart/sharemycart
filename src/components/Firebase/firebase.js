@@ -23,6 +23,7 @@ class Firebase {
 		this.auth = app.auth()
 		this.db = app.firestore()
 
+		this.auth.useDeviceLanguage()
 		/* Social Sign In Method Provider */
 
 		this.googleProvider = new app.auth.GoogleAuthProvider()
@@ -39,7 +40,7 @@ class Firebase {
 		this.auth.signInWithEmailAndPassword(email, password);
 
 	doSignInWithGoogle = () =>
-		this.auth.signInWithPopup(this.googleProvider);
+		this.auth.signInWithRedirect(this.googleProvider);
 
 	doSignInWithFacebook = () =>
 		this.auth.signInWithPopup(this.facebookProvider);
