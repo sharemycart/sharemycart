@@ -1,7 +1,7 @@
 {
 	"name": "share-my-cart",
 	"homepage": "https://app.sharemycart.com",
-	"version": "0.2.2",
+	"version": "0.2.3",
 	"private": true,
 	"engines": {
 		"node": ">=10.0.0",
@@ -44,6 +44,7 @@
 		"cy:run": "if [ -z ${CYPRESS_KEY+x} ]; then cypress run; else cypress run --record --key $CYPRESS_KEY; fi",
 		"lint": "EXTEND_ESLINT=true eslint src",
 		"lint:fix": "EXTEND_ESLINT=true eslint src --fix",
+		"serve": "serve -s build",
 		"start": "react-scripts -r @cypress/instrument-cra start",
 		"start:staging": "npm run build:for-staging && serve -s build",
 		"start:test": "npm run build:for-test && serve -s build",
