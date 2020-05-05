@@ -35,35 +35,6 @@ const withAuthentication = Component => {
 					if (this.listener) this.listener(null)
 				},
 			)
-
-			// for the redirect, setup the hook as well:
-			this.props.firebase.auth.getRedirectResult()
-				.then((result) => {
-					const authUser = result.user
-					// Create a user in your Firebase Realtime Database too
-					if (authUser) {
-						this.props.firebase.user(authUser.uid).set({
-							username: authUser.displayName,
-							email: authUser.email,
-							roles: {},
-						},
-						{ merge: true },
-						)
-						localStorage.setItem('authUser', JSON.stringify(authUser))
-						this.props.sessionStore.setAuthUser(authUser)
-						if (this.listener) this.listener(authUser)
-					}
-				})
-			// .catch(function (error) {
-			// 	// Handle Errors here.
-			// 	var errorCode = error.code;
-			// 	var errorMessage = error.message;
-			// 	// The email of the user's account used.
-			// 	var email = error.email;
-			// 	// The firebase.auth.AuthCredential type that was used.
-			// 	var credential = error.credential;
-			// 	// ...
-			// })
 		}
 
 		componentWillUnmount() {
