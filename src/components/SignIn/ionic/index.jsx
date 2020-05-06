@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom'
 import { compose } from 'recompose'
 
 import { withFirebase } from '../../Firebase'
-import { SHOPPING } from '../../../constants/routes'
+import { SHOPPING, SIGN_IN } from '../../../constants/routes'
 import { IonGrid, IonRow, IonCol, IonContent, IonInput, IonIcon, IonButton, IonItem, IonText } from '@ionic/react'
 
 import { logoGoogle, logoFacebook, logoTwitter } from 'ionicons/icons'
@@ -181,7 +181,7 @@ class SignInGoogleBase extends Component {
 
 	onSubmit = event => {
 		this.props.firebase
-			.doSignInWithGoogle()
+			.doSignInWithGoogle({redirectUri: SIGN_IN ,state: this.props.location.state})
 			.then(socialAuthUser => {
 				//this will be passed only in case of signInWithPopup
 				// Create a user in your Firebase Realtime Database too

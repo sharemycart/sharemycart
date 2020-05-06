@@ -34,31 +34,44 @@ class Firebase {
 	// *** Auth API ***
 
 	doCreateUserWithEmailAndPassword = (email, password) =>
-		this.auth.createUserWithEmailAndPassword(email, password);
+		this.auth.createUserWithEmailAndPassword(email, password)
 
 	doSignInWithEmailAndPassword = (email, password) =>
-		this.auth.signInWithEmailAndPassword(email, password);
+		this.auth.signInWithEmailAndPassword(email, password)
 
-	doSignInWithGoogle = () =>
-		this.auth.signInWithRedirect(this.googleProvider);
+	doSignInWithGoogle = (/*{redirectUri, state}*/) => {
+		// signinWithRedirect is curretly not possible:
+		// since a user might have opened a shopping list from a link as first step, 
+		// we need to redirect to this very same (/share<GUID>)
+		// For this, we'd need to adapt the redirectURI and the state.
+		// However, both are reserved properties and cannot be set by the consumer, 
+		// see https://firebase.google.com/docs/reference/js/firebase.auth.GoogleAuthProvider#setcustomparameters
+		// Leaving the code below for documentation purposes
+		// const provider = new app.auth.GoogleAuthProvider()
+		// provider.setCustomParameters({ redirect_uri: redirectUri || '/', state })
+		// return this.auth.signInWithRedirect(provider)
+		
+		return this.auth.signInWithPopup(this.googleProvider)
+
+	}
 
 	doSignInWithFacebook = () =>
-		this.auth.signInWithPopup(this.facebookProvider);
+		this.auth.signInWithPopup(this.facebookProvider)
 
 	doSignInWithTwitter = () =>
-		this.auth.signInWithPopup(this.twitterProvider);
+		this.auth.signInWithPopup(this.twitterProvider)
 
-	doSignOut = () => this.auth.signOut();
+	doSignOut = () => this.auth.signOut()
 
-	doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
+	doPasswordReset = email => this.auth.sendPasswordResetEmail(email)
 
 	doSendEmailVerification = () =>
 		this.auth.currentUser.sendEmailVerification({
 			url: config.emailRedirect,
-		});
+		})
 
 	doPasswordUpdate = password =>
-		this.auth.currentUser.updatePassword(password);
+		this.auth.currentUser.updatePassword(password)
 
 	// *** Merge Auth and DB User API *** //
 
@@ -92,28 +105,28 @@ class Firebase {
 			} else {
 				fallback()
 			}
-		});
+		})
 
 	// *** User API ***
 
-	user = uid => this.db.doc(`users/${uid}`);
-	users = () => this.db.collection('users');
+	user = uid => this.db.doc(`users/${uid}`)
+	users = () => this.db.collection('users')
 
 	// *** Message API ***
 
-	message = uid => this.db.doc(`messages/${uid}`);
-	messages = () => this.db.collection('messages');
+	message = uid => this.db.doc(`messages/${uid}`)
+	messages = () => this.db.collection('messages')
 
 	// *** Lists API ***
-	list = uid => this.db.doc(`lists/${uid}`);
-	lists = () => this.db.collection('/lists');
+	list = uid => this.db.doc(`lists/${uid}`)
+	lists = () => this.db.collection('/lists')
 
 	myCurrentList = (type) => this.db.collection('/lists')
 		.where('type', '==', type)
 		.where('isCurrent', '==', true)
 		.where('userId', '==', this.auth.currentUser
 			? this.auth.currentUser.uid
-			: INVALID_DUMMY_UID);
+			: INVALID_DUMMY_UID)
 
 	createList = ({ name = '', allowCreateOwnNeeds = true }, type) => this.lists().add({
 		name,
@@ -129,7 +142,7 @@ class Firebase {
 		.set(Object.assign(list,
 			{
 				editedAt: this.fieldValue.serverTimestamp()
-			}));
+			}))
 
 	deleteList = async uid => {
 		const toBeDeleted = await this.list(uid).get()
@@ -158,7 +171,7 @@ class Firebase {
 	createListFromTemplate = async (template, excludeShoppedItems = true) => {
 		const newList = await this.createList({}, template.type)
 
-		if(template.type === LIST_TYPE_SHOPPING) {
+		if (template.type === LIST_TYPE_SHOPPING) {
 			this.setCurrentShoppingList(newList.id)
 		} else {
 			this.setCurrentNeedsList(newList.id)
@@ -180,11 +193,11 @@ class Firebase {
 	}
 
 	listItems = listId => this.db.doc(`lists/${listId}`)
-		.collection('items');
+		.collection('items')
 
 	listItem = (listId, uid) => this.db.doc(`lists/${listId}`)
 		.collection('/items/')
-		.doc(uid);
+		.doc(uid)
 
 	// CRUD
 	createItem = (listId, item) => this.listItems(listId)
@@ -192,13 +205,13 @@ class Firebase {
 			{
 				order: item.order || -1,
 				createdAt: this.fieldValue.serverTimestamp()
-			}));
+			}))
 
 	editItem = (listId, item) => this.listItem(listId, item.uid)
 		.set(Object.assign(item,
 			{
 				editedAt: this.fieldValue.serverTimestamp()
-			}));
+			}))
 
 	deleteItem = (listId, uid) => this.listItem(listId, uid)
 		.delete()
@@ -220,7 +233,7 @@ class Firebase {
 		)
 
 	// *** Shopping API ***
-	myCurrentShoppingList = () => this.myCurrentList(LIST_TYPE_SHOPPING);
+	myCurrentShoppingList = () => this.myCurrentList(LIST_TYPE_SHOPPING)
 
 	myShoppingLists = (includeArchived = false) => {
 		const status = [LIFECYCLE_STATUS_OPEN, LIFECYCLE_STATUS_SHOPPING, LIFECYCLE_STATUS_FINISHED, LIFECYCLE_STATUS_ARCHIVED]
@@ -287,7 +300,7 @@ class Firebase {
 
 
 	// *** Needs API ***
-	myCurrentNeedsList = () => this.myCurrentList(LIST_TYPE_NEED);
+	myCurrentNeedsList = () => this.myCurrentList(LIST_TYPE_NEED)
 
 	setCurrentNeedsList = uid => {
 		this.myCurrentNeedsList().get()
