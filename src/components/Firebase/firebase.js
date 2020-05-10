@@ -169,7 +169,7 @@ class Firebase {
 	}
 
 	createListFromTemplate = async (template, excludeShoppedItems = true) => {
-		const newList = await this.createList({}, template.type)
+		const newList = await this.createList({name: template.name}, template.type)
 
 		if (template.type === LIST_TYPE_SHOPPING) {
 			this.setCurrentShoppingList(newList.id)
