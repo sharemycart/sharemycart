@@ -17,7 +17,6 @@ class Shopping extends Component {
 		super(props)
 
 		this.state = {
-			editingListName: '',
 			itemInCreation: {},
 		}
 
@@ -38,6 +37,12 @@ class Shopping extends Component {
 		})
 	}
 
+	onListNameChange(event) {
+		this.setState({
+			editingListName: event.target.value
+		})
+	}
+
 	onCreateComplete(newItem) {
 		if (!newItem.name || !newItem.quantity) {
 			return
@@ -48,7 +53,7 @@ class Shopping extends Component {
 	}
 
 	render() {
-		const { shoppingStore, sessionStore } = this.props
+		const { shoppingStore, sessionStore, location, editMode } = this.props
 		const {
 			// shoppingListsArray: shoppingLists,
 			currentShoppingList,
@@ -58,7 +63,7 @@ class Shopping extends Component {
 			initializationDone,
 		} = shoppingStore
 
-		const mode = this.props.location.pathname === GO_SHOPPING
+		const mode = location.pathname === GO_SHOPPING
 			? ITEM_TYPE_IN_SHOPPING
 			: ITEM_TYPE_SHOPPING
 
@@ -67,7 +72,8 @@ class Shopping extends Component {
 		return (
 			currentShoppingList &&
 			<>
-				{currentShoppingList.lifecycleStatus === LIFECYCLE_STATUS_OPEN &&
+				{/* In edit mode, swap the item creation for an input to edit the list name */}
+				{!editMode && currentShoppingList.lifecycleStatus === LIFECYCLE_STATUS_OPEN &&
 					<IonList>
 						<IonItem>
 							<CreateItem

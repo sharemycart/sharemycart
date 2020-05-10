@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import Item from '../../Item/ionic/Item'
-import { IonList, IonReorderGroup, IonToggle, IonLabel, IonItem } from '@ionic/react'
+import { IonList, IonReorderGroup, IonToggle, IonLabel, IonItem, IonListHeader } from '@ionic/react'
 import { LIFECYCLE_STATUS_OPEN } from '../../../constants/lists'
 import { Trans } from 'react-i18next'
 import { compose } from 'recompose'
 import { inject, observer } from 'mobx-react'
 import sortItems from '../../Reusables/functions/sortItems'
+import EditListName from '../../List/ionic/EditListName'
 
 class ShoppingList extends Component {
 	constructor(props) {
@@ -25,7 +26,7 @@ class ShoppingList extends Component {
 	};
 
 	onSaveEditName = () => {
-		this.props.onEditList(this.props.list, this.state.editName)
+		this.props.onEditList(Object.assign(this.props.list, { name: this.state.editName }))
 	};
 
 	doReorder(event) {
@@ -113,86 +114,83 @@ class ShoppingList extends Component {
 			}
 		})
 
-		const allItems = (items||[]).concat(otherUsersOwnNeededItems || [])
-		if(allItems.length === 0) return null
+		const allItems = (items || []).concat(otherUsersOwnNeededItems || [])
+
 
 		return (
 			<>
-				<IonList>
-					{/* // The following component is actually a hack. I expected the IonReorderGroup to 
+				{/* Options of the list as a whole */}
+				{editMode && list &&
+					<>
+						<EditListName
+							name={this.state.editName}
+							onChange={(event) => this.onChangeEditName(event)}
+						/>
+						<IonItem>
+							<IonLabel><Trans>Allow friends to add own needs</Trans></IonLabel>
+							<IonToggle
+								name="allowCreateOwnNeeds"
+								checked={list.allowCreateOwnNeeds}
+								onIonChange={() => {
+									onEditList(Object.assign(list, { allowCreateOwnNeeds: !list.allowCreateOwnNeeds }))
+								}}
+							/>
+						</IonItem>
+					</>
+				}
+				{allItems.length > 0 &&
+					<IonList>
+						{/* // The following component is actually a hack. I expected the IonReorderGroup to 
         // toggle "disabled" based on the edit mode.
         // However, whit does not work as expected, as when leaving back to non-Edit-mode, 
         // the oder is destroyed until loaded from the database for the next time */}
-					{
-						!editMode
-						&& allItems
-							.sort((a, b) => sortItems(a, b))
-							.map((item, key) => {
-								const relatedBringAlongItems = bringAlongItemsByShoppingItem[item.uid]
-								return (
-									<Item
-										key={item.id || key}
-										item={item}
-										owner={item.owner}
-										bringAlongItems={relatedBringAlongItems}
-										ownList={!item.ownedByOtherUser}
-										onEditingConcluded={onEditItem}
-										onDeleteItem={onDeleteItem}
-										onShopItem={onShopItem}
-										mode={this.props.mode}
-										readOnly={this.props.list.lifecycleStatus !== LIFECYCLE_STATUS_OPEN || item.ownedByOtherUser}
-									/>)
-							})
-					}
-					{/* { 
-            !editMode && otherUsersOwnNeededItems && !!otherUsersOwnNeededItems.length
-            && <IonListHeader lines="inset"><h3><Trans>Needed items of friends</Trans></h3></IonListHeader>
-          }
-          {
-            !editMode && otherUsersOwnNeededItems.map((item, key) => {
-            return (
-              <Item
-                key={item.id || key}
-                item={item}
-                ownList={false}
-                onShopItem={onShopItem}
-                mode={this.props.mode}
-                readOnly={true}
-              />)
-          })
-          } */}
-					{
-						editMode &&
-						<>
-							<IonItem lines="none">
-								<IonLabel><Trans>Allow friends to add own needs</Trans></IonLabel>
-								<IonToggle
-									name="allowCreateOwnNeeds"
-									checked={list.allowCreateOwnNeeds}
-									onIonChange={() => {
-										onEditList(Object.assign(list, { allowCreateOwnNeeds: !list.allowCreateOwnNeeds }))
-									}}
-								/>
-							</IonItem>
-							<IonReorderGroup disabled={false} onIonItemReorder={this.doReorder.bind(this)}>
-								{items.concat(otherUsersOwnNeededItems || [])
-									.sort((a, b) => sortItems(a, b))
-									.map((item, key) => (
+						{
+							!editMode
+							&& allItems
+								.sort((a, b) => sortItems(a, b))
+								.map((item, key) => {
+									const relatedBringAlongItems = bringAlongItemsByShoppingItem[item.uid]
+									return (
 										<Item
 											key={item.id || key}
 											item={item}
-											ownList={true}
+											owner={item.owner}
+											bringAlongItems={relatedBringAlongItems}
+											ownList={!item.ownedByOtherUser}
 											onEditingConcluded={onEditItem}
 											onDeleteItem={onDeleteItem}
 											onShopItem={onShopItem}
 											mode={this.props.mode}
-											readOnly={this.props.list.lifecycleStatus !== LIFECYCLE_STATUS_OPEN}
-											listEditMode={editMode}
-										/>))}
-							</IonReorderGroup>
-						</>
-					}
-				</IonList>
+											readOnly={this.props.list.lifecycleStatus !== LIFECYCLE_STATUS_OPEN || item.ownedByOtherUser}
+										/>)
+								})
+						}
+						{
+							editMode &&
+							<>
+								<IonListHeader>
+									<IonLabel><h1><Trans>Items</Trans></h1></IonLabel>
+								</IonListHeader>
+								<IonReorderGroup disabled={false} onIonItemReorder={this.doReorder.bind(this)}>
+									{items.concat(otherUsersOwnNeededItems || [])
+										.sort((a, b) => sortItems(a, b))
+										.map((item, key) => (
+											<Item
+												key={item.id || key}
+												item={item}
+												ownList={true}
+												onEditingConcluded={onEditItem}
+												onDeleteItem={onDeleteItem}
+												onShopItem={onShopItem}
+												mode={this.props.mode}
+												readOnly={this.props.list.lifecycleStatus !== LIFECYCLE_STATUS_OPEN}
+												listEditMode={editMode}
+											/>))}
+								</IonReorderGroup>
+							</>
+						}
+					</IonList>
+				}
 			</>
 		)
 	}
