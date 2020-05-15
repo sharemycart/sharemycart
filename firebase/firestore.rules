@@ -2,10 +2,40 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
-
     function isSignedIn() {
       return request.auth != null;
     }
+
+		// ----------- Schema validation functions
+		// Since this code runs inside Firestore, we cannot add dependencies to e. g. SimpleSchema
+		// but need to hardcode them
+		function matchesListSchema(list){
+			return 	
+					list.keys().hasAll(['allowCreateOwnNeeds', 'type', 'userId', 'isCurrent', 'lifecycleStatus', 'createdAt'])
+					&&	list.allowCreateOwnNeeds is bool
+					&&	(list.type == 'shopping' || list.type == 'needs')
+					&&	list.userId is string
+					&&	list.isCurrent is bool
+					&&	(list.lifecycleStatus == 'open' || list.lifecycleStatus == 'shopping' || list.lifecycleStatus ==  'finished' || list.lifecycleStatus ==  'archived')
+					&&	list.createdAt is timestamp
+					|| list.keys().hasAll(['name']) && list.name is string
+					|| list.keys().hasAll(['shoppingListId']) && list.shoppingListId is string
+					|| list.keys().hasAll(['shoppingListOwnerId']) && list.shoppingListOwnerId is string
+		}
+
+		function matchesItemSchema(item){
+			return 	
+					item.keys().hasAll(['name', 'quantity', 'unit', 'order', 'createdAt'])
+					&&	item.name is string
+					&&	item.quantity is number
+					&&	item.unit is string
+					&&	item.order is number
+					&&	item.createdAt is timestamp
+					|| item.keys().hasAll(['originShoppingItemUid']) && item.originShoppingItemUid is string
+					|| item.keys().hasAll(['shopped']) && item.shopped is bool
+					|| item.keys().hasAll(['shoppedBy']) && item.shoppedBy is string
+					|| item.keys().hasAll(['shoppedAt']) && item.shoppedAt is timestamp
+		}
 
     match /lists/{list} {
       // we allow reading all lists knowing th uid as a secret. 
@@ -21,8 +51,10 @@ service cloud.firestore {
       allow update: if resource.data.shoppingListOwnerId == request.auth.uid;
 
       // since there's no userId on the newly created list, we need to allow this if signed in
-      allow create: if isSignedIn();
-      
+      allow create: if isSignedIn() 
+											&& request.resource.data != null
+											&& matchesListSchema(request.resource.data);
+
       // https://stackoverflow.com/a/48447400
       function listData() {
         return get(/databases/$(database)/documents/lists/$(list)).data
@@ -31,7 +63,9 @@ service cloud.firestore {
       match /items/{item} {
         allow read: if isSignedIn();
         allow update: if listData().shoppingListOwnerId == request.auth.uid;
-        allow write: if listData().userId == request.auth.uid;
+        allow write: if listData().userId == request.auth.uid 
+												&& request.resource.data != null
+												&& matchesItemSchema(request.resource.data);
       }
     }
     
