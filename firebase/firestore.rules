@@ -40,7 +40,7 @@ service cloud.firestore {
     match /lists/{list} {
       // we allow reading all lists knowing th uid as a secret. 
       // This can change once we record with whom a list has been shared.
-      allow read: if isSignedIn(); 
+      allow read, write: if isSignedIn(); 
       
       // since we always create own lists in which we record items, we can 
       // restrict writing to our own data
@@ -61,10 +61,10 @@ service cloud.firestore {
       }
       
       match /items/{item} {
-        allow read: if isSignedIn();
+        allow read, write: if isSignedIn();
         allow update: if listData().shoppingListOwnerId == request.auth.uid;
-        allow write: if listData().userId == request.auth.uid 
-												&& request.resource.data != null
+        allow write: if listData().userId == request.auth.uid;
+        allow create: if request.resource.data != null
 												&& matchesItemSchema(request.resource.data);
       }
     }
