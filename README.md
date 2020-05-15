@@ -44,9 +44,9 @@ Since the DB side is schema-less, the client also comprises a larger part which 
 
 Firestore and the backend functions are consumed in the "client side backend", which is responsible for providing data access to the frontend: 
 
-- The [`firebaseService`](https://github.com/sharemycart/hybrid-app/blob/master/src/components/Firebase/firebase.js) provides low-level functions wrapping the firestore API. It ensures the schema and could (and will in future) be provided by server-side functions. The firebase service is only intended to be used from the `models`.
+- The [`firebaseService`](https://github.com/sharemycart/sharemycart/master/src/components/Firebase/firebase.js) provides low-level functions wrapping the firestore API. It ensures the schema and could (and will in future) be provided by server-side functions. The firebase service is only intended to be used from the `models`.
 - The [models](https://github.com/sharemycart/hybrid-app/tree/master/src/models) are React components which can be used as superclasses of the pages displayed on the UI. They hook into the React component lifecycle in order to set up listeners to the database which in turn fill the `stores`. Also, they provide handlers for business functions, wrapping the firebase services.
-- The [`stores`](https://github.com/sharemycart/hybrid-app/blob/master/src/stores) provide singleton caches of the data retrieved from the database. They can be injected into every component which needs it.
+- The [`stores`](https://github.com/sharemycart/sharemycart/blob/master/src/stores) provide singleton caches of the data retrieved from the database. They can be injected into every component which needs it.
 
 The UI components are implemented in React using the [Ionic library for react](https://ionicframework.com/docs/components)
 
@@ -54,7 +54,7 @@ The UI components are implemented in React using the [Ionic library for react](h
 
 The current code is [dased upon the awesome React + Firebase + MobX Tutorial ❤️ by @rwieruch ](https://www.robinwieruch.de/react-firebase-mobx-tutorial)
 
-You can start from the tutorial. You like to get into the code quickly? Then ou are probably best off by launching the app from the `ui` folder using `npm start`. Be sure you provided the credentials either as environment variables (see [`.env.sample`]((https://github.com/mrsimpson/sharemycart/blob/master/ui/.env.sample) for how it has to look like).
+You can start from the tutorial. You like to get into the code quickly? Then ou are probably best off by launching the app from the `ui` folder using `npm start`. Be sure you provided the credentials either as environment variables. For local development, `.env-development` is being used. You need to adapt the `.env.development` to your firebase credentials and add an `.env.development.local` with the API-key (`REACT_APP_BACKEND_API_KEY="AIz...0S8"`).
 
 Then, open VSCode and add a breakpoint in a UI-component, e. g. `App`. Launch the Chrome using the launch target ![ ](./docs/contribute/debugger.png "VS Code debugger launch Chrome").
 
