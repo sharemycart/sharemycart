@@ -44,9 +44,9 @@ Since the DB side is schema-less, the client also comprises a larger part which 
 
 Firestore and the backend functions are consumed in the "client side backend", which is responsible for providing data access to the frontend: 
 
-- The [`firebaseService`](https://github.com/sharemycart/sharemycart/master/src/components/Firebase/firebase.js) provides low-level functions wrapping the firestore API. It ensures the schema and could (and will in future) be provided by server-side functions. The firebase service is only intended to be used from the `models`.
-- The [models](https://github.com/sharemycart/hybrid-app/tree/master/src/models) are React components which can be used as superclasses of the pages displayed on the UI. They hook into the React component lifecycle in order to set up listeners to the database which in turn fill the `stores`. Also, they provide handlers for business functions, wrapping the firebase services.
-- The [`stores`](https://github.com/sharemycart/sharemycart/blob/master/src/stores) provide singleton caches of the data retrieved from the database. They can be injected into every component which needs it.
+- The [`firebaseService`](https://github.com/sharemycart/sharemycart/blob/develop/src/components/Firebase/firebase.js) provides low-level functions wrapping the firestore API. It ensures the schema and could (and will in future) be provided by server-side functions. The firebase service is only intended to be used from the `models`.
+- The [models](https://github.com/sharemycart/sharemycart/tree/develop/src/models) are React components which can be used as superclasses of the pages displayed on the UI. They hook into the React component lifecycle in order to set up listeners to the database which in turn fill the `stores`. Also, they provide handlers for business functions, wrapping the firebase services.
+- The [`stores`](https://github.com/sharemycart/sharemycart/tree/develop/src/stores) provide singleton caches of the data retrieved from the database. They can be injected into every component which needs it.
 
 The UI components are implemented in React using the [Ionic library for react](https://ionicframework.com/docs/components)
 
