@@ -25,16 +25,16 @@ service cloud.firestore {
 
 		function matchesItemSchema(item){
 			return 	
-					item.keys().hasAll(['name', 'quantity', 'unit', 'order', 'createdAt'])
+					item.keys().hasAll(['name', 'quantity', 'order', 'createdAt'])
 					&&	item.name is string
 					&&	item.quantity is number
-					&&	item.unit is string
 					&&	item.order is number
 					&&	item.createdAt is timestamp
-					|| item.keys().hasAll(['originShoppingItemUid']) && item.originShoppingItemUid is string
-					|| item.keys().hasAll(['shopped']) && item.shopped is bool
-					|| item.keys().hasAll(['shoppedBy']) && item.shoppedBy is string
-					|| item.keys().hasAll(['shoppedAt']) && item.shoppedAt is timestamp
+					||	item.keys().hasAll(['unit']) && item.unit is string
+					||	item.keys().hasAll(['originShoppingItemUid']) && item.originShoppingItemUid is string
+					||	item.keys().hasAll(['shopped']) && item.shopped is bool
+					||	item.keys().hasAll(['shoppedBy']) && item.shoppedBy is string
+					||	item.keys().hasAll(['shoppedAt']) && item.shoppedAt is timestamp
 		}
 
     match /lists/{list} {

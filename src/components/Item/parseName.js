@@ -4,13 +4,14 @@ export default function (itemDescription) {
 	//support two formats:
 	//prefix: 100ml Milk
 	//postfix: Milk 100ml
+
 	try {
 		const prefixRegex = new RegExp(`^((\\d)+)\\s?(${units.join('|')})?\\s((.)+)$`, 'i')
 		const prefixMatch = itemDescription.match(prefixRegex)
 		if (prefixMatch) {
 			return {
 				name: prefixMatch[4],
-				quantity: prefixMatch[1],
+				quantity: parseFloat(prefixMatch[1]),
 				unit: prefixMatch[3] || ''
 			}
 		}
@@ -20,7 +21,7 @@ export default function (itemDescription) {
 		if (postfixMatch) {
 			return {
 				name: postfixMatch[1],
-				quantity: postfixMatch[3],
+				quantity: parseFloat(postfixMatch[3]),
 				unit: postfixMatch[5] || ''
 			}
 		}
