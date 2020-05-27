@@ -3,7 +3,7 @@ import { IonImg, IonGrid, IonRow, IonCol, IonLabel } from '@ionic/react'
 
 const SplashLogo = (props) => (
 	<>
-		<IonImg className="image-login" src="logo-cart_1000.png" style={{ maxWidth: props.maxWidth }} />
+		<IonImg className="image-login" src="assets/icon/logo_512.png" style={{ maxWidth: props.maxWidth }} />
 		<IonGrid>
 			<IonRow className="logo-text">
 				<IonCol className="ion-align-self-center">
