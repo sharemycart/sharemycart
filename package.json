@@ -27,6 +27,7 @@
 		"md5": "^2.2.1",
 		"mobx": "^5.15.4",
 		"mobx-react": "^5.4.2",
+		"pwa-ios-invitation": "^1.2.7",
 		"react": "^16.6.3",
 		"react-copy-to-clipboard": "^5.0.2",
 		"react-dom": "^16.6.3",
