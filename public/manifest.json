@@ -20,7 +20,7 @@
     }
   ],
   "start_url": "/?source=pwa",
-  "display": "standalone",
+  "display": "Fullscreen",
   "scope": "/",
   "theme_color": "#ffffff",
   "background_color": "#ffffff"
