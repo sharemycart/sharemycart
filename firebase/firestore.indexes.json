@@ -32,7 +32,7 @@
         },
         {
           "fieldPath": "name",
-          "order": "DESCENDING"
+          "order": "ASCENDING"
         }
       ]
 		},
@@ -46,7 +46,7 @@
         },
         {
           "fieldPath": "name",
-          "order": "DESCENDING"
+          "order": "ASCENDING"
         }
       ]
     }
