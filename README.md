@@ -52,7 +52,7 @@ The UI components are implemented in React using the [Ionic library for react](h
 
 ### How to best understand the current code base
 
-The current code is [dased upon the awesome React + Firebase + MobX Tutorial ❤️ by @rwieruch ](https://www.robinwieruch.de/react-firebase-mobx-tutorial)
+The current code is [based upon the awesome React + Firebase + MobX Tutorial ❤️ by @rwieruch ](https://www.robinwieruch.de/react-firebase-mobx-tutorial)
 
 You can start from the tutorial. You like to get into the code quickly? Then ou are probably best off by launching the app from the `ui` folder using `npm start`. Be sure you provided the credentials either as environment variables. For local development, `.env-development` is being used. You need to adapt the `.env.development` to your firebase credentials and add an `.env.development.local` with the API-key (`REACT_APP_BACKEND_API_KEY="AIz...0S8"`).
 
