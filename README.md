@@ -35,7 +35,7 @@ The UI is implemented using [Ionic Framework](https://ionicframework.com/). For 
 
 The current implementation, [Firebase's Firestore](https://firebase.google.com/docs/reference/js/firebase.firestore) is being used. Firestore supplies mechanisms for reactivity and grants maximal freedom due to being hosted and scaled by Google.
 
-Firestore also allows for implementing functions in Golang. This is waht we currently call the [`backend`](https://github.com/mrsimpson/sharemycart/tree/master/backend).
+Firestore also allows for implementing functions in Golang. This is what we currently call the [`backend`](https://github.com/mrsimpson/sharemycart/tree/master/backend).
 
 ### Client side
 
@@ -56,7 +56,7 @@ The current code is [dased upon the awesome React + Firebase + MobX Tutorial ❤
 
 You can start from the tutorial. You like to get into the code quickly? Then ou are probably best off by launching the app from the `ui` folder using `npm start`. Be sure you provided the credentials either as environment variables. For local development, `.env-development` is being used. You need to adapt the `.env.development` to your firebase credentials and add an `.env.development.local` with the API-key (`REACT_APP_BACKEND_API_KEY="AIz...0S8"`).
 
-Then, open VSCode and add a breakpoint in a UI-component, e. g. `App`. Launch the Chrome using the launch target ![ ](./docs/contribute/debugger.png "VS Code debugger launch Chrome").
+Then, open VSCode and add a breakpoint in a UI-component, e.g. `App`. Launch the Chrome using the launch target ![ ](./docs/contribute/debugger.png "VS Code debugger launch Chrome").
 
 *You are not a coder but still want to help*
 Even more great! Check the issues, comment on epics, write own ideas, join the chat. Looking forward to reading from you.
